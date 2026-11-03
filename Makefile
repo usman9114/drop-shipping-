@@ -1,7 +1,7 @@
 .PHONY: setup lint graph
 
 setup:
-	python3 -m pip install --upgrade pre-commit graphifyy detect-secrets
+	python3 -m pip install --upgrade pre-commit graphifyy detect-secrets -r requirements.txt
 	pre-commit install --install-hooks
 	graphify hook install
 	graphify claude install

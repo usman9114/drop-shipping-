@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 11 files · ~7,623 words
+- 27 files · ~13,266 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: (none) 3, .example 1)
 
 ## Summary
-- 98 nodes · 91 edges · 11 communities (10 shown, 1 thin omitted)
+- 180 nodes · 188 edges · 25 communities (16 shown, 9 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fc664459`
+- Built from commit: `c9becbf1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -24,9 +24,21 @@
 - 03 — Suppliers and their APIs
 - hooks
 - CLAUDE.md
-- .pre-commit-config.yaml
+- llm.py
 - check_no_ai_attribution.py
 - 06 — Image sourcing under zero inventory
+- margin.py
+- AI team operating plan
+- 07 — Data sources and free AI tooling
+- 08 — eBay US category demand, 2025–2026
+- 09 — CJ Dropshipping US warehouses
+- 10 — Category risk ranking (US, zero-inventory eBay dropshipping)
+- creative-producer.md
+- data-analyst.md
+- head-of-marketing.md
+- sales-lead.md
+- compliance-officer.md
+- _team-rules.md
 
 ## God Nodes (most connected - your core abstractions)
 1. `02 — Unit economics, success rates, saturation, tariffs` - 10 edges
@@ -36,17 +48,18 @@
 5. `04 — Tooling, APIs and AI listing pipeline` - 8 edges
 6. `05 — Legal/IP/compliance risks and other platforms` - 8 edges
 7. `06 — Image sourcing under zero inventory` - 8 edges
-8. `03 — Suppliers and their APIs` - 7 edges
-9. `repos` - 4 edges
-10. `PoC plan (feasibility before money)` - 4 edges
+8. `AI team operating plan` - 7 edges
+9. `03 — Suppliers and their APIs` - 7 edges
+10. `07 — Data sources and free AI tooling` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
-- None detected - all connections are within the same source files.
+- `main()` --calls--> `argparse`  [EXTRACTED]
+  scout/llm.py →   _Bridges community 8 → community 11_
 
 ## Import Cycles
 - None detected.
 
-## Communities (11 total, 1 thin omitted)
+## Communities (25 total, 9 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -73,28 +86,50 @@ Cohesion: 0.25
 Nodes (7): 03 — Suppliers and their APIs, API availability (needed for automation), Blind shipping and branding, Quality control, Sources, Stock/price sync risk on eBay, Supplier comparison
 
 ### Community 6 - "hooks"
-Cohesion: 0.25
-Nodes (8): always_run, args, entry, id, language, name, stages, hooks
+Cohesion: 0.13
+Nodes (14): default_install_hook_types, default_stages, exclude, always_run, args, entry, id, language (+6 more)
 
 ### Community 7 - "CLAUDE.md"
 Cohesion: 0.29
 Nodes (5): Commands, Context: graphify knowledge graph, graphify, Hard rules, Project
 
-### Community 8 - ".pre-commit-config.yaml"
-Cohesion: 0.29
-Nodes (6): default_install_hook_types, default_stages, exclude, repos, repo, rev
+### Community 8 - "llm.py"
+Cohesion: 0.16
+Nodes (8): chat(), list_free(), LLMError, main(), _post(), analyze(), _fetch(), main()
 
 ### Community 10 - "06 — Image sourcing under zero inventory"
 Cohesion: 0.18
 Nodes (10): 06 — Image sourcing under zero inventory, 1. Which suppliers license their images to us, 2. What eBay's picture policy allows (fetched), 3. eBay catalog (ePID) images, 4. Checking quality and delivery without stock, 5. CJ follow-up (2026-11-03): supplier decided, Image source for the PoC: **decided 2026-11-03: CJ's own images + AI enhancement of the surroundings** (row 2 below). Google Images look-alikes were rejected for IP and INAD risk., Pipeline rules derived from this (+2 more)
 
+### Community 11 - "margin.py"
+Cohesion: 0.46
+Nodes (4): compute(), evaluate(), Inputs, main()
+
+### Community 12 - "AI team operating plan"
+Cohesion: 0.25
+Nodes (7): 1. Org chart, 2. Operating rules, 3. Pipeline, 4. Model routing and free models, 5. Niche scoring rubric (0–5 per criterion, weighted), 6. What's blocked on the owner, AI team operating plan
+
+### Community 13 - "07 — Data sources and free AI tooling"
+Cohesion: 0.25
+Nodes (7): 07 — Data sources and free AI tooling, 1. Google Trends, 2. eBay Browse API, 3. Other free US demand signals, 4. OpenRouter free models (fetched: https://openrouter.ai/docs/limits), 5. Image tools (for Phase 1), Sources
+
+### Community 14 - "08 — eBay US category demand, 2025–2026"
+Cohesion: 0.29
+Nodes (6): 08 — eBay US category demand, 2025–2026, Candidate categories (eBay's strongest growth areas), Gaps, Macro, Sources, Where eBay beats Amazon and Temu (qualitative)
+
+### Community 15 - "09 — CJ Dropshipping US warehouses"
+Cohesion: 0.33
+Nodes (5): 09 — CJ Dropshipping US warehouses, Category depth, Facts, Implications, Sources
+
+### Community 16 - "10 — Category risk ranking (US, zero-inventory eBay dropshipping)"
+Cohesion: 0.50
+Nodes (3): 10 — Category risk ranking (US, zero-inventory eBay dropshipping), Cross-cutting facts, Sources
+
 ## Knowledge Gaps
-- **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `hooks` connect `hooks` to `.pre-commit-config.yaml`?**
-  _High betweenness centrality (0.015) - this node is a cross-community bridge._
-- **Why does `repos` connect `.pre-commit-config.yaml` to `hooks`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+- **Should `hooks` be split into smaller, more focused modules?**
+  _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._

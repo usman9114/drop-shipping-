@@ -7,7 +7,21 @@
   "5": "03 — Suppliers and their APIs",
   "6": "hooks",
   "7": "CLAUDE.md",
-  "8": ".pre-commit-config.yaml",
+  "8": "llm.py",
   "9": "check_no_ai_attribution.py",
-  "10": "06 — Image sourcing under zero inventory"
+  "10": "06 — Image sourcing under zero inventory",
+  "11": "margin.py",
+  "12": "AI team operating plan",
+  "13": "07 — Data sources and free AI tooling",
+  "14": "08 — eBay US category demand, 2025–2026",
+  "15": "09 — CJ Dropshipping US warehouses",
+  "16": "10 — Category risk ranking (US, zero-inventory eBay dropshipping)",
+  "17": "creative-producer.md",
+  "18": "data-analyst.md",
+  "19": "head-of-marketing.md",
+  "20": "sales-lead.md",
+  "21": "compliance-officer.md",
+  "22": "_team-rules.md",
+  "23": "__init__.py",
+  "24": "market-researcher.md"
 }

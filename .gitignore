@@ -26,3 +26,4 @@ graphify-out/**/.cache/
 .vscode/
 graphify-out/.graphify_build_state.json
 graphify-out/.graphify_root
+data/evidence/**/.cache/
