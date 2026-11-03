@@ -240,15 +240,15 @@
     "semantic_hash": ""
   },
   "docs/plan/data-pipeline.md": {
-    "mtime": 1793724112.2269542,
-    "seen": 1793724113.4707785,
-    "ast_hash": "323513e2da6a4dac04cf938cf52baa8b",
+    "mtime": 1793746213.029827,
+    "seen": 1793746213.572878,
+    "ast_hash": "e13b8cb90c1658ebb635f97dffd0b7dc",
     "semantic_hash": ""
   },
   "docs/decisions/0003-build-vs-reuse.md": {
-    "mtime": 1793724068.8083894,
-    "seen": 1793724088.8524992,
-    "ast_hash": "5502fbbbf226f4050c662c46fd6d5985",
+    "mtime": 1793746213.0303676,
+    "seen": 1793746213.572872,
+    "ast_hash": "4e4895ff4382f4e448bba2b0036c8060",
     "semantic_hash": ""
   },
   ".claude/agents/data-engineer.md": {
@@ -258,15 +258,15 @@
     "semantic_hash": ""
   },
   "docs/plan/warehouse.md": {
-    "mtime": 1793745878.2974133,
-    "seen": 1793745899.3056624,
-    "ast_hash": "03cb0219304f40db242a7951f8dc53a8",
+    "mtime": 1793746213.0302224,
+    "seen": 1793746213.5728796,
+    "ast_hash": "96e06222955a6ebf465ef13b23785f3b",
     "semantic_hash": ""
   },
   "docs/decisions/0004-postgres-warehouse-and-source-terms.md": {
-    "mtime": 1793745878.2971582,
-    "seen": 1793745899.305658,
-    "ast_hash": "c28dc4a61284b2f2533e25e104f6eb3e",
+    "mtime": 1793746213.030678,
+    "seen": 1793746213.5728734,
+    "ast_hash": "f349e592025ff1031ee4c77165a6f4f0",
     "semantic_hash": ""
   },
   "docs/research/15-warehouse-hosting-and-tooling.md": {

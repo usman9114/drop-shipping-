@@ -57,6 +57,6 @@
 3. 🔑 eBay ingester as a **dlt REST source** (OAuth client-credentials helper, no SDK): Browse search per product query, recording the listing count and price distribution.
 4. Scoring view that joins CJ and eBay data with `scout.margin`, giving the product shortlist (stage E).
 5. Terapeak CSV importer.
-6. Scheduled **GitHub Actions** workflow (needs the branch merged to the default branch, plus secrets).
+6. Scheduled **GitHub Actions** workflow (runs from the default branch, which is currently `research/feasibility-poc`; needs secrets).
 
 > Visual of this pipeline and the build-vs-reuse plan: private artifact "Dropship Data Model" (https://claude.ai/artifact/VRe8aSLrYV2g9bc8mwzG5K). Tooling choices: `docs/decisions/0003-build-vs-reuse.md`.

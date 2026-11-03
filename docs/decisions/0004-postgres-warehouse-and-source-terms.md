@@ -73,7 +73,7 @@ Google's terms (effective 2026-07-30) bar automated access that ignores machine-
 | Provision the VPS and follow the runbook; add the GitHub secrets it lists | Needed before any scheduled job |
 | Email eBay developer support for written permission (internal research, statistics, price guidance) | Option A above |
 | Decide the Trends route: SerpApi free tier now | Stop pytrends |
-| Create the Neon project and add `DATABASE_URL` as a secret; merge the branch to the default branch | Needed before any scheduled job |
+| Add secrets in GitHub when a database exists (no merge needed: the default branch is already `research/feasibility-poc`) | Needed before any scheduled job |
 | Apply for the Google Trends alpha | Official route |
 | Review this decision, especially §3 | Changes the evidence strategy |
 

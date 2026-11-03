@@ -121,7 +121,7 @@ A failed critical test stops marts from being rebuilt, so agents never read half
 
 - Same code in both, switched by `DATABASE_URL`. Tests never touch real data.
 - `concurrency` groups prevent overlapping runs. Job timeouts cap cost. Free-tier minutes are the constraint to verify.
-- Scheduled workflows only run from the **default branch**, so the working branch has to be merged first.
+- Scheduled workflows only run from the **default branch**, and the default branch is currently `research/feasibility-poc` (verified 2026-11-03), so no merge is needed. If the default branch is ever changed, workflows must exist on the new one.
 
 ## 10. Durability
 
@@ -155,4 +155,4 @@ Backups: logical dumps of `core` and `meta` (small) on a schedule to a private l
 | M3 | CJ ingester and the shortlist daily facts. | `CJ_API_KEY`, hosted DB |
 | M4 | eBay market stats, within its storage terms. | eBay keys |
 | M5 | Free compliance feeds (CPSC, USPTO and others) and enrichment rules. Mart: candidate scorecard. | none |
-| M6 | Scheduled `ingest` workflow, size and freshness checks. | default branch, secrets |
+| M6 | Scheduled `ingest` workflow, size and freshness checks. | secrets (default branch is already `research/feasibility-poc`) |

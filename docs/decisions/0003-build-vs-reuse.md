@@ -40,7 +40,7 @@
 | Action | Owner |
 |---|---|
 | Approve or amend this plan | owner |
-| Merge the working branch to the default branch so scheduled workflows can run, and add secrets in GitHub | owner |
+| Add the API keys as GitHub secrets (the default branch is already `research/feasibility-poc`, so no merge is needed; corrected 2026-11-03) | owner |
 | One-day spike: dlt REST source for CJ (needs `CJ_API_KEY`) | data-analyst |
 | One-day spike: LiteLLM with Z.ai and OpenRouter | glm-coder, reviewed by sales-lead or main session |
 | Apply for the Google Trends API alpha | owner |
