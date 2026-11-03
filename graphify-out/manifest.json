@@ -336,15 +336,15 @@
     "semantic_hash": ""
   },
   "scout/cj.py": {
-    "mtime": 1793746051.713154,
-    "seen": 1793746059.658481,
-    "ast_hash": "7a003a113dbc884b90a26a9761422686",
+    "mtime": 1793746060.4531536,
+    "seen": 1793746062.1268468,
+    "ast_hash": "828fe352101270945cc59f3d662f6134",
     "semantic_hash": ""
   },
   "tests/test_cj.py": {
-    "mtime": 1793746051.729154,
-    "seen": 1793746059.658489,
-    "ast_hash": "f55565d5b8cd4a6d4ae11a2b8d051876",
+    "mtime": 1793746060.4531536,
+    "seen": 1793746062.126857,
+    "ast_hash": "1d27290f1fcf438177cafa35d18020e9",
     "semantic_hash": ""
   },
   "docs/decisions/0005-cj-client.md": {

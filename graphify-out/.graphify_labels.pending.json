@@ -46,5 +46,7 @@
   "44": "cj.py",
   "45": "test_cj.py",
   "46": "18 — CJ Dropshipping API cheat sheet",
-  "47": "0005-cj-client.md"
+  "47": "0005-cj-client.md",
+  "48": "RuntimeError",
+  "49": "parametrize"
 }
