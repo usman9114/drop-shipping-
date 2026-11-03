@@ -24,3 +24,5 @@ graphify-out/**/.cache/
 .DS_Store
 .idea/
 .vscode/
+graphify-out/.graphify_build_state.json
+graphify-out/.graphify_root
