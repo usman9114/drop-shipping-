@@ -53,10 +53,10 @@
 ## 6. Build order
 
 1. ✅ Lake + store + Trends ingester.
-2. 🔑 CJ ingester (`scout/cj.py`): auth, product search in the niche, US-warehouse variants, stock, cost, shipping quote.
-3. 🔑 eBay ingester (`scout/ebay.py`): client-credentials token; Browse search per product query, recording the listing count and price distribution.
+2. 🔑 CJ ingester as a **dlt REST source** (no custom client; see decision 0003): auth, product search in the niche, US-warehouse variants, stock, cost, shipping quote. Starts with a one-day spike.
+3. 🔑 eBay ingester as a **dlt REST source** (OAuth client-credentials helper, no SDK): Browse search per product query, recording the listing count and price distribution.
 4. Scoring view that joins CJ and eBay data with `scout.margin`, giving the product shortlist (stage E).
 5. Terapeak CSV importer.
-6. Scheduled Routine.
+6. Scheduled **GitHub Actions** workflow (needs the branch merged to the default branch, plus secrets).
 
 > Visual of this pipeline and the build-vs-reuse plan: private artifact "Dropship Data Model" (https://claude.ai/artifact/VRe8aSLrYV2g9bc8mwzG5K). Tooling choices: `docs/decisions/0003-build-vs-reuse.md`.
