@@ -27,5 +27,6 @@
   "25": "3. Candidate cards",
   "26": "2. Per-niche price bands and representative products",
   "27": "12 — Compliance risk cards for the 8 candidate niches",
-  "28": "aggregate_candidates.py"
+  "28": "aggregate_candidates.py",
+  "29": "check_no_ai_attribution.py"
 }

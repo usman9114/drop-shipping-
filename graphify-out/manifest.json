@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   ".pre-commit-config.yaml": {
-    "mtime": 1793702843.9908466,
-    "seen": 1793703016.7823327,
-    "ast_hash": "6474c55ec172b62569318d2826883f3c",
+    "mtime": 1793721670.8873472,
+    "seen": 1793721677.1602433,
+    "ast_hash": "426b16e9be6991ba83843fdd71cbdfca",
     "semantic_hash": ""
   },
   "scripts/hooks/check_no_ai_attribution.py": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "scout/trends.py": {
-    "mtime": 1793709760.1571407,
-    "seen": 1793709766.1400404,
-    "ast_hash": "d5e5375d0905e65f9b6609783465a4f9",
+    "mtime": 1793721671.600497,
+    "seen": 1793721677.1602528,
+    "ast_hash": "ec20ad30dd3a861e4d864d5e6eb5c1b5",
     "semantic_hash": ""
   },
   ".claude/agents/_team-rules.md": {
@@ -198,8 +198,8 @@
     "semantic_hash": ""
   },
   "data/evidence/trends/aggregate_candidates.py": {
-    "mtime": 1793721640.9903495,
-    "seen": 1793721661.2023828,
+    "mtime": 1793721670.888497,
+    "seen": 1793721677.1602464,
     "ast_hash": "3973b697124f7bd43ae371ff3a136cfa",
     "semantic_hash": ""
   },
