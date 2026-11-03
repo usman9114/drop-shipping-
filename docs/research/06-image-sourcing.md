@@ -72,6 +72,37 @@ eBay has no official statement on AI-edited or AI-generated images. Vendor blogs
    - adding accessories that aren't included
 4. Feature claims go into the description and item specifics, sourced from supplier specs only.
 
+## 5. CJ follow-up (2026-11-03): supplier decided
+
+**Decision:** CJ Dropshipping is the automation supplier. Paid CJ photos come later if the PoC works.
+
+### What we found about CJ
+
+- **API image fields (verified from the docs mirror):**
+  - `GET /api2.0/v1/product/query` (header `CJ-Access-Token`) returns `bigImage`, `productImageSet[]` and `variants[].variantImage`.
+  - The product list endpoint returns `productImage`.
+  - Docs: https://developers.cjdropshipping.cn/en/api/api2/api/product.html
+- **eBay store integration** **[unverified]**:
+  - Setup is My CJ → Authorization → Add Store → eBay, then approve on eBay. The store name must match the eBay user ID.
+  - A CJ FAQ snippet says the API is meant for *personal websites*, and eBay stores should connect through the native authorization, not the API. **Confirm before designing order sync.**
+  - Third-party guides say "Import to Store" pushes CJ's images and descriptions into connected stores.
+  - Sources: https://blog.cjdropshipping.cn/detail/how-to-connect-your-ebay-store-to-cj-dropshipping-app ; https://www.shipaid.com/blog/how-to-add-cj-dropshipping-to-shopify-a-comprehensive-guide-for-e-commerce-success
+- **Photography service (verified from CJ's blog):**
+  - Pricing is by quote. Limit of 5 requests per day.
+  - Two rights options:
+    - **"Copyrighted":** private to you, permanent use.
+    - **"No copyright":** public, and anyone can buy a download.
+  - Source: https://blog.cjdropshipping.cn/detail/how-to-use-video-shooting-service-from-cj-dropshipping
+
+### Image source for the PoC (open)
+
+| Option | Cost | IP risk | Accuracy risk (INAD / picture policy) |
+|---|---|---|---|
+| Google Images results → AI "look-alike" images | $0 + ~$0.05/img | **High.** Sources are other people's photos, often competitors' or brands'. A derivative look-alike can still draw VeRO takedowns. | **High.** The image shows a similar product, not the exact CJ unit. |
+| CJ's own images (from API / native push) + AI background/lighting enhancement | $0 + ~$0.02–0.07/img | **Low–medium.** It's the use CJ's own store-push tooling is built for. No explicit license **[unverified]**. | **Low.** The product pixels are the real CJ product. |
+| CJ "No copyright" photo purchase | quote | Low (purchased) | Low |
+| CJ "Copyrighted" photo service | quote | Lowest | Low |
+
 ## Sources
 - Spocket ToS: https://www.spocket.co/terms-of-service
 - Zendrop image use: https://support.zendrop.com/en/articles/11101560-can-i-use-zendrop-product-images-for-marketing-and-social-media-campaigns

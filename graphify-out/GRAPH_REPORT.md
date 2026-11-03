@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 11 files · ~7,209 words
+- 11 files · ~7,518 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: (none) 3, .example 1)
 
 ## Summary
-- 95 nodes · 88 edges · 11 communities (10 shown, 1 thin omitted)
+- 98 nodes · 91 edges · 11 communities (10 shown, 1 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `28c09f9a`
+- Built from commit: `acad2f22`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -35,8 +35,8 @@
 4. `01 — eBay dropshipping policy, enforcement, fees` - 8 edges
 5. `04 — Tooling, APIs and AI listing pipeline` - 8 edges
 6. `05 — Legal/IP/compliance risks and other platforms` - 8 edges
-7. `03 — Suppliers and their APIs` - 7 edges
-8. `06 — Image sourcing under zero inventory` - 7 edges
+7. `06 — Image sourcing under zero inventory` - 8 edges
+8. `03 — Suppliers and their APIs` - 7 edges
 9. `repos` - 4 edges
 10. `PoC plan (feasibility before money)` - 4 edges
 
@@ -85,8 +85,8 @@ Cohesion: 0.29
 Nodes (6): default_install_hook_types, default_stages, exclude, repos, repo, rev
 
 ### Community 10 - "06 — Image sourcing under zero inventory"
-Cohesion: 0.25
-Nodes (7): 06 — Image sourcing under zero inventory, 1. Which suppliers license their images to us, 2. What eBay's picture policy allows (fetched), 3. eBay catalog (ePID) images, 4. Checking quality and delivery without stock, Pipeline rules derived from this, Sources
+Cohesion: 0.18
+Nodes (10): 06 — Image sourcing under zero inventory, 1. Which suppliers license their images to us, 2. What eBay's picture policy allows (fetched), 3. eBay catalog (ePID) images, 4. Checking quality and delivery without stock, 5. CJ follow-up (2026-11-03): supplier decided, Image source for the PoC (open), Pipeline rules derived from this (+2 more)
 
 ## Knowledge Gaps
 - **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
@@ -95,6 +95,6 @@ Nodes (7): 06 — Image sourcing under zero inventory, 1. Which suppliers licens
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `hooks` connect `hooks` to `.pre-commit-config.yaml`?**
-  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+  _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **Why does `repos` connect `.pre-commit-config.yaml` to `hooks`?**
-  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+  _High betweenness centrality (0.012) - this node is a cross-community bridge._
