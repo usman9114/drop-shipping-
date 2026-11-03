@@ -9,14 +9,14 @@
 | Area | Choice | Notes |
 |---|---|---|
 | Database | **PostgreSQL**, layered schemas `meta / raw / stg / enrich / core / mart` | Owner's direction. Replaces DuckDB and SQLite. |
-| Hosting | **Neon Free** for the persistent database. Ephemeral Postgres **service container** in CI for tests. | Neon: 1 GB per project (one FAQ page says 0.5 GB), 100 CU-hours/month, scales to zero after 5 min [fetched]. Our budget is 250 MB, so either figure fits. |
-| Fallback | Aiven Free (1 GB, powers off when idle, 20 connections) | Supabase Free pauses on low activity; avoid. |
+| Hosting | **Postgres in Docker on the owner's VPS**, reached by CI through a restricted SSH tunnel (no database port exposed). Ephemeral Postgres **service container** in CI for tests. | Owner choice 2026-11-03. Runbook: `docs/runbooks/vps-postgres.md`. No storage cap, always on. We own security, patching and backups. |
+| Fallback | Neon Free (1 GB per its docs, scales to zero, 6 h of history), then Aiven Free | `pg_dump` loads into either, so moving is cheap. |
 | Migrations | **dbmate** (MIT, plain SQL) | Atlas if declarative diffs are wanted later. |
 | Transforms and tests | **dbt Core 1.x + dbt-postgres** (Apache-2.0) with dbt tests, plus **pgTAP** for DDL and constraints | Stay off dbt v2/Fusion until licensing and the Postgres adapter are clear. |
 | Ingestion | **dlt** (Postgres destination), one-day spike on the CJ source first | Open question from 0003 stands: can load metadata carry trust, params, sha256? |
 | Scheduling | **GitHub Actions** cron. No pg_cron. | Default-branch only. Free private plan includes $12/month of compute (about 2,000 Linux minutes). |
 | Partitioning and retention | **Native declarative partitioning** (built into Postgres) with a small SQL retention function in a migration | No extension needed. Revisit pg_partman only if it becomes painful. |
-| Backups | Scheduled `pg_dump` of `meta` and `core` to storage we control | Free tiers give 6 hours of history at most. |
+| Backups | Nightly encrypted `pg_dump` of `meta` and `core` copied off the server, plus a weekly CI restore test | Tool choice recorded before it is written (runbook §8). |
 
 ## 2. New rule: terms gate
 
@@ -69,7 +69,7 @@ Google's terms (effective 2026-07-30) bar automated access that ignores machine-
 
 | Action | Why |
 |---|---|
-| Choose hosting: Neon Free (recommended) or the all-in-CI fallback | `docs/plan/warehouse.md` §10 |
+| Provision the VPS and follow the runbook; add the GitHub secrets it lists | Needed before any scheduled job |
 | Email eBay developer support for written permission (internal research, statistics, price guidance) | Option A above |
 | Decide the Trends route: SerpApi free tier now | Stop pytrends |
 | Create the Neon project and add `DATABASE_URL` as a secret; merge the branch to the default branch | Needed before any scheduled job |

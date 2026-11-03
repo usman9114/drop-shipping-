@@ -258,15 +258,15 @@
     "semantic_hash": ""
   },
   "docs/plan/warehouse.md": {
-    "mtime": 1793724965.5440667,
-    "seen": 1793724966.4889257,
-    "ast_hash": "2a4f9e01bfb6cb471f1ff6c178e844cc",
+    "mtime": 1793745616.3777018,
+    "seen": 1793745625.2328236,
+    "ast_hash": "2f371c0b8de3b8fd3039e16758741959",
     "semantic_hash": ""
   },
   "docs/decisions/0004-postgres-warehouse-and-source-terms.md": {
-    "mtime": 1793724954.1122668,
-    "seen": 1793724966.488922,
-    "ast_hash": "ed3fd3cf4079c977e3c199025e3589c5",
+    "mtime": 1793745616.3755553,
+    "seen": 1793745625.23282,
+    "ast_hash": "586c37336f43c83e44d00a5e3c0efb12",
     "semantic_hash": ""
   },
   "docs/research/15-warehouse-hosting-and-tooling.md": {
@@ -285,6 +285,18 @@
     "mtime": 1793724934.0562677,
     "seen": 1793724966.4889421,
     "ast_hash": "14fed06251b8bdbcbb1d46520929d8d3",
+    "semantic_hash": ""
+  },
+  "infra/vps/docker-compose.yml": {
+    "mtime": 1793745586.417175,
+    "seen": 1793745625.2327979,
+    "ast_hash": "89a63bc6d2885ddc0bf8c339b41f3b7a",
+    "semantic_hash": ""
+  },
+  "docs/runbooks/vps-postgres.md": {
+    "mtime": 1793745608.8611739,
+    "seen": 1793745625.2328408,
+    "ast_hash": "d145856f2c284be9983a89c38d01924a",
     "semantic_hash": ""
   }
 }

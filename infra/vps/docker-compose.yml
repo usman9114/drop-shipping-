@@ -1,0 +1,58 @@
+# Postgres for the dropship warehouse, on a small VPS.
+# Official image, nothing custom. See docs/runbooks/vps-postgres.md.
+#
+# - Listens on 127.0.0.1 only. CI and humans reach it through an SSH tunnel.
+# - The owner password comes from a file (never an env var, never in git).
+# - Pin the major version. Upgrade deliberately: dump, test restore, switch.
+
+services:
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_DB: warehouse
+      POSTGRES_USER: warehouse_owner
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_owner_password
+    secrets:
+      - pg_owner_password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    shm_size: 256mb
+    # Starting values for a 2 GB RAM VPS. Revisit with real load.
+    command:
+      - postgres
+      - -c
+      - shared_buffers=256MB
+      - -c
+      - effective_cache_size=768MB
+      - -c
+      - work_mem=16MB
+      - -c
+      - maintenance_work_mem=128MB
+      - -c
+      - max_connections=30
+      - -c
+      - log_min_duration_statement=1000
+      - -c
+      - log_connections=on
+      - -c
+      - timezone=UTC
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U warehouse_owner -d warehouse"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+secrets:
+  pg_owner_password:
+    file: ./secrets/pg_owner_password
+
+volumes:
+  pgdata:

@@ -77,7 +77,7 @@ Every enrichment row stores `method`, `rule_or_model_version`, `confidence`, `in
 
 ## 7. Retention and size budget (starting values)
 
-Targets assume a free hosted Postgres with a 500 MB cap. Keep steady state under **250 MB**. Real limits and the terms-forced retention come from the research wave.
+Soft target **2 GB** on the VPS (CI fails above it; alert at 70% of disk). The 250 MB figure applies if we fall back to a free hosted tier. Real limits and the terms-forced retention come from the research wave.
 
 | Data | Rough volume | Raw kept | Derived kept | Mechanism |
 |---|---|---|---|---|
@@ -128,7 +128,8 @@ The choice is the owner's. Both use the same code.
 
 | Option | Where the data lives | Pros | Cons |
 |---|---|---|---|
-| **A. Hosted free Postgres** (recommended: Neon Free, decision 0004) | Neon, Supabase or similar | Real database, persistent, point-in-time recovery may be included, agents can query it | One more account. Free-tier caps, pausing behaviour and extension support must be checked. |
+| **A. Hosted free Postgres** (fallback: Neon Free, decision 0004) | Neon, Supabase or similar | Real database, persistent, point-in-time recovery may be included, agents can query it | One more account. Free-tier caps, pausing behaviour and extension support must be checked. |
+| **C. Postgres on your own VPS** (chosen 2026-11-03) | Docker on a small Linux VPS, reached by CI through a restricted SSH tunnel | No storage cap, always on, extensions available, full control | We own security, patching and backups. Runbook: `docs/runbooks/vps-postgres.md`. |
 | **B. All in CI** | Postgres rebuilt each run from compact exports committed to git or a release | No accounts, fully reproducible | Git history grows, rebuild time grows, no ad-hoc agent queries between runs. Fine for the first weeks only. |
 
 Backups: logical dumps of `core` and `meta` (small) on a schedule to a private location. Raw is replayable only within its retention, so `core` and its history are the real truth.
