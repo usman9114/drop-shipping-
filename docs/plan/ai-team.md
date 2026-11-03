@@ -47,11 +47,11 @@ Agent definitions live in `.claude/agents/*.md`. Shared rules are in `.claude/ag
 | Stage | Owner | Output | Status |
 |---|---|---|---|
 | A. Evidence wave | market-researcher ×4 | `docs/research/07–10` | ✅ 2026-11-03 |
-| B. Candidate niches + keywords | head-of-marketing | `docs/decisions/0001-niche-candidates.md`, `data/evidence/trends/candidates.txt` | in progress |
-| C. Quantitative check | data-analyst | Google Trends table now; eBay Browse + CJ catalog once keys exist | in progress |
-| C'. Risk cards | compliance-officer | per-niche risk cards | in progress |
-| C''. Economics | sales-lead | max landed cost per price point, per niche | in progress |
-| D. Niche decision | head-of-marketing | `docs/decisions/0002-niche-selection.md` | pending |
+| B. Candidate niches + keywords | head-of-marketing | `docs/decisions/0001-niche-candidates.md`, `data/evidence/trends/candidates.txt` | ✅ |
+| C. Quantitative check | data-analyst | Google Trends table now; eBay Browse + CJ catalog once keys exist | ✅ |
+| C'. Risk cards | compliance-officer | per-niche risk cards | ✅ |
+| C''. Economics | sales-lead | max landed cost per price point, per niche | ✅ |
+| D. Niche decision | head-of-marketing | `docs/decisions/0002-niche-selection.md`: **tcg-supplies** (backups: vinyl-record-care, hobby-modeling-tools) | ✅ 2026-11-03 |
 | E. Product shortlist (20–40 SKUs) | data-analyst + sales-lead + compliance | needs CJ and eBay keys | blocked on keys |
 | F. Listings | creative-producer | needs CJ images + approval | later |
 

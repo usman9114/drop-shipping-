@@ -132,9 +132,9 @@
     "semantic_hash": ""
   },
   "docs/plan/ai-team.md": {
-    "mtime": 1793709619.937147,
-    "seen": 1793709766.1400545,
-    "ast_hash": "036eba8bc1b470ffe6147a29ba7038a8",
+    "mtime": 1793721941.7284849,
+    "seen": 1793721942.151119,
+    "ast_hash": "667c9e6cb07e801c36d39f4842869ead",
     "semantic_hash": ""
   },
   "docs/research/07-data-and-ai-tooling.md": {
@@ -213,6 +213,12 @@
     "mtime": 1793721874.984488,
     "seen": 1793721878.495096,
     "ast_hash": "35ecb30a6336842d53c8d2074eadab58",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0002-niche-selection.md": {
+    "mtime": 1793721929.265171,
+    "seen": 1793721929.730438,
+    "ast_hash": "cf7983382117897a612713067af642c0",
     "semantic_hash": ""
   }
 }

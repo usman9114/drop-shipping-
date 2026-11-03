@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 34 files · ~27,181 words
+- 35 files · ~32,814 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 8 file(s) not represented in the graph (top: .csv 4, (none) 3, .example 1)
 
 ## Summary
-- 267 nodes · 274 edges · 31 communities (21 shown, 10 thin omitted)
+- 288 nodes · 294 edges · 31 communities (22 shown, 9 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.95)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b7c8ebd4`
+- Built from commit: `653105ab`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -42,7 +42,7 @@
 - 3. Candidate cards
 - 2. Per-niche price bands and representative products
 - 12 — Compliance risk cards for the 8 candidate niches
-- aggregate_candidates.py
+- 3. Primary niche: `tcg-supplies`
 - check_no_ai_attribution.py
 - Multichannel plan: one pipeline, eBay + Shopify/Instagram
 
@@ -52,11 +52,11 @@
 3. `02 — Unit economics, success rates, saturation, tariffs` - 10 edges
 4. `hooks` - 9 edges
 5. `3. Candidate cards` - 9 edges
-6. `11 - Google Trends check of Stage B candidates (US)` - 9 edges
-7. `0001 — Candidate niches (Stage B)` - 8 edges
-8. `00 — Research summary and PoC plan` - 8 edges
-9. `01 — eBay dropshipping policy, enforcement, fees` - 8 edges
-10. `04 — Tooling, APIs and AI listing pipeline` - 8 edges
+6. `3. Primary niche: `tcg-supplies`` - 9 edges
+7. `11 - Google Trends check of Stage B candidates (US)` - 9 edges
+8. `0001 — Candidate niches (Stage B)` - 8 edges
+9. `0002 — Niche selection (Stage D)` - 8 edges
+10. `00 — Research summary and PoC plan` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
@@ -69,7 +69,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (31 total, 10 thin omitted)
+## Communities (31 total, 9 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -104,8 +104,8 @@ Cohesion: 0.29
 Nodes (5): Commands, Context: graphify knowledge graph, graphify, Hard rules, Project
 
 ### Community 8 - "llm.py"
-Cohesion: 0.16
-Nodes (8): chat(), list_free(), LLMError, main(), _post(), analyze(), _fetch(), main()
+Cohesion: 0.12
+Nodes (9): med(), chat(), list_free(), LLMError, main(), _post(), analyze(), _fetch() (+1 more)
 
 ### Community 9 - "11 - Google Trends check of Stage B candidates (US)"
 Cohesion: 0.20
@@ -151,12 +151,16 @@ Nodes (18): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost
 Cohesion: 0.10
 Nodes (19): 0.1 Checks that apply to every niche, 0.2 Wording rules that apply to every niche (eBay IP policy), 0.3 SKU-level gate (before any listing in any niche), 0.4 Design-patent / Schedule A finding (checked for this card set), 0.5 Prop 65 finding (checked for this card set), 0.6 "Graded card" / "PSA" wording finding, 0. Shared rules, 12 — Compliance risk cards for the 8 candidate niches (+11 more)
 
+### Community 28 - "3. Primary niche: `tcg-supplies`"
+Cohesion: 0.10
+Nodes (20): 0002 — Niche selection (Stage D), 1. Decision, 2. Evidence table, 2a. Rescore on the §5 rubric (0–5, 5 = best; Risk and Temu/Amazon inverted), 2b. What changed per criterion, and why, 2c. Sensitivity of the primary pick, 2d. Key evidence behind the decision, 3.1 Target buyer (+12 more)
+
 ### Community 30 - "Multichannel plan: one pipeline, eBay + Shopify/Instagram"
 Cohesion: 0.25
 Nodes (7): 1. Why the channels differ, 2. Shared pipeline (generic `scout` core + channel adapters), 3. What the AI team can and can't do, 4. Beauty and cosmetics: the important caveat, 5. Proposed new team roles, 6. Owner decisions needed, Multichannel plan: one pipeline, eBay + Shopify/Instagram
 
 ## Knowledge Gaps
-- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -165,9 +169,13 @@ _Questions this graph is uniquely positioned to answer:_
   _`2. Per-niche price bands and representative products` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
+- **Should `llm.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.1164021164021164 - nodes in this community are weakly interconnected._
 - **Should `3. Candidate cards` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
 - **Should `2. Per-niche price bands and representative products` be split into smaller, more focused modules?**
   _Cohesion score 0.11857707509881422 - nodes in this community are weakly interconnected._
 - **Should `12 — Compliance risk cards for the 8 candidate niches` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
+- **Should `3. Primary niche: `tcg-supplies`` be split into smaller, more focused modules?**
+  _Cohesion score 0.09523809523809523 - nodes in this community are weakly interconnected._
