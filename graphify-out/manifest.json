@@ -240,9 +240,9 @@
     "semantic_hash": ""
   },
   "docs/plan/data-pipeline.md": {
-    "mtime": 1793724088.2483885,
-    "seen": 1793724088.8525014,
-    "ast_hash": "c9a38f8b2e032b442276ddc4ab2808a9",
+    "mtime": 1793724112.2269542,
+    "seen": 1793724113.4707785,
+    "ast_hash": "323513e2da6a4dac04cf938cf52baa8b",
     "semantic_hash": ""
   },
   "docs/decisions/0003-build-vs-reuse.md": {
