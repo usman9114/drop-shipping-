@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793722942.1553042,
-    "seen": 1793722942.8753803,
-    "ast_hash": "e5196e25692c660c4f34de1e9b0e411d",
+    "mtime": 1793723870.569825,
+    "seen": 1793724088.852495,
+    "ast_hash": "448a36d2c881dad1096e8baa6805998c",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
@@ -90,9 +90,9 @@
     "semantic_hash": ""
   },
   ".claude/agents/_team-rules.md": {
-    "mtime": 1793722942.15505,
-    "seen": 1793722942.875371,
-    "ast_hash": "3d70684ed4885c736313cc2f2035603c",
+    "mtime": 1793723870.5702763,
+    "seen": 1793724088.8524861,
+    "ast_hash": "43b4f50625d3ef6182cdde463fd144fd",
     "semantic_hash": ""
   },
   ".claude/agents/compliance-officer.md": {
@@ -240,9 +240,15 @@
     "semantic_hash": ""
   },
   "docs/plan/data-pipeline.md": {
-    "mtime": 1793722932.8124404,
-    "seen": 1793722942.875385,
-    "ast_hash": "bb222cea2c32d6dd87d5d354e93a8523",
+    "mtime": 1793724088.2483885,
+    "seen": 1793724088.8525014,
+    "ast_hash": "c9a38f8b2e032b442276ddc4ab2808a9",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0003-build-vs-reuse.md": {
+    "mtime": 1793724068.8083894,
+    "seen": 1793724088.8524992,
+    "ast_hash": "5502fbbbf226f4050c662c46fd6d5985",
     "semantic_hash": ""
   }
 }

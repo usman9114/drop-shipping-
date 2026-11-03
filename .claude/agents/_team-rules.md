@@ -24,4 +24,5 @@ Every agent in `.claude/agents/` reads this file first. It is not an agent itsel
 6. **Say what you don't know.** A missing number is reported as missing, never invented. Mocked data must be labeled `MOCK` in the filename and the text.
 7. **Numbers come from the evidence store.** Query `python -m scout.store query "SELECT ..."` and cite the `run_id`. Ingest new pulls with `scout.store.record_run` (never hand-edit lake files). Web research explains; the store decides. See `docs/plan/data-pipeline.md`.
 8. **Free models first:** `python -m scout.llm --task {bulk,reasoning,code,vision}` uses Z.ai GLM Flash, then OpenRouter free models. Code drafts can go to `glm-coder`.
-9. **Use the knowledge graph** before reading lots of files: `graphify query "<question>"`.
+9. **Reuse before build.** Before writing any module or script, look for an existing maintained library, SDK, MCP server or hosted tool. Record build-vs-reuse in `docs/decisions/`. Homegrown code needs a stated reason and must be flagged to the owner and the team (see CLAUDE.md).
+10. **Use the knowledge graph** before reading lots of files: `graphify query "<question>"`.

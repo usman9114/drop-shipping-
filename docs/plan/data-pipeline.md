@@ -58,3 +58,5 @@
 4. Scoring view that joins CJ and eBay data with `scout.margin`, giving the product shortlist (stage E).
 5. Terapeak CSV importer.
 6. Scheduled Routine.
+
+> Visual of this pipeline and the build-vs-reuse plan: private artifact "Dropship Data Model" (https://claude.ai/artifact/VRe8aSLrYV2g9bc8mwzG5K). Tooling choices: `docs/decisions/0003-build-vs-reuse.md`.

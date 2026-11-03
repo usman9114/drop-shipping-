@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 39 files · ~34,951 words
+- 40 files · ~35,916 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 10 file(s) not represented in the graph (top: .csv 4, (none) 3, .example 1)
 
 ## Summary
-- 326 nodes · 363 edges · 35 communities (25 shown, 10 thin omitted)
+- 332 nodes · 368 edges · 36 communities (26 shown, 10 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.95)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `007af25d`
+- Built from commit: `df485762`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -49,6 +49,7 @@
 - Data pipeline: feeding the team authentic evidence
 - aggregate_candidates.py
 - glm-coder.md
+- 0003 — Build vs reuse: workflow, data loading, connectors, LLM routing
 
 ## God Nodes (most connected - your core abstractions)
 1. `12 — Compliance risk cards for the 8 candidate niches` - 13 edges
@@ -77,7 +78,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (35 total, 10 thin omitted)
+## Communities (36 total, 10 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -148,7 +149,7 @@ Cohesion: 0.50
 Nodes (3): 10 — Category risk ranking (US, zero-inventory eBay dropshipping), Cross-cutting facts, Sources
 
 ### Community 22 - "store.py"
-Cohesion: 0.16
+Cohesion: 0.17
 Nodes (11): Shared rules for every AI team member, 2. What makes it "authentic", _git_sha(), main(), query(), rebuild(), record_run(), _runs() (+3 more)
 
 ### Community 25 - "3. Candidate cards"
@@ -179,9 +180,13 @@ Nodes (7): ANTHROPIC_AUTH_TOKEN, ANTHROPIC_BASE_URL, ANTHROPIC_DEFAULT_HAIKU_MOD
 Cohesion: 0.29
 Nodes (6): 1. Architecture, 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence
 
+### Community 35 - "0003 — Build vs reuse: workflow, data loading, connectors, LLM routing"
+Cohesion: 0.33
+Nodes (5): 0003 — Build vs reuse: workflow, data loading, connectors, LLM routing, Decision, Home-grown audit (flagged to the team), Next actions, What this does not settle
+
 ## Knowledge Gaps
 - **6 isolated node(s):** `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 241 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 246 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
@@ -198,6 +203,6 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `3. Candidate cards` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
 - **Should `2. Per-niche price bands and representative products` be split into smaller, more focused modules?**
-  _Cohesion score 0.12121212121212122 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11857707509881422 - nodes in this community are weakly interconnected._
 - **Should `12 — Compliance risk cards for the 8 candidate niches` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
