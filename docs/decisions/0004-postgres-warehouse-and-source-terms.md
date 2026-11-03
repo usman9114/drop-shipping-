@@ -5,6 +5,8 @@
 > Inputs: `docs/research/15` (hosting and tools), `16` (trend sources), `17` (free feeds and storage terms). Design: `docs/plan/warehouse.md`.
 > Research, not legal advice.
 
+> **Raw Trends points removed from git 2026-11-03** (PR #1 review): they came from pytrends, whose terms are unclear, and this repository is public, which made the earlier 'internal, not redistributed' statement untrue. The files stay on disk under `data/lake/` (now gitignored). They remain in git history; purging history is an owner decision. Derived summaries (`data/evidence/trends/*.csv`, research 11) stay.
+
 ## 1. Decision
 
 | Area | Choice | Notes |

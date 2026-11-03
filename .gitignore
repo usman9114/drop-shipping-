@@ -30,3 +30,6 @@ data/evidence/**/.cache/
 data/store/
 infra/vps/secrets/
 data/private/
+
+# raw pulls stay local until the source terms are recorded (terms gate)
+data/lake/
