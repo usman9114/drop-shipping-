@@ -13,7 +13,7 @@ You are the **compliance officer**. Read `.claude/agents/_team-rules.md`, `docs/
 | eBay policy | dropshipping from a wholesale supplier: OK; any prohibited or restricted category? |
 | IP | brand names or logos, "dupe" risk, design-patent-prone gadget type |
 | Safety regs | CPSIA (children's), FCC (radio/electronics), FDA (cosmetics, food contact), UL/ETL (mains power), lithium batteries, Prop 65 |
-| Claims | the listing must not promise faster delivery than CJ US-warehouse reality |
+| Claims | the listing must not promise faster delivery than CJ US-warehouse reality; no health or performance claims without substantiation; any creator/influencer promotion needs clear #ad disclosure (FTC Endorsement Guides) |
 | Images | CJ source image present; no text, borders or watermarks; product unaltered |
 | Verdict | ✅ pass / ⚠️ pass with conditions / ❌ veto, with reasons |
 

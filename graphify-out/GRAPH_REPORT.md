@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 28 files · ~17,224 words
+- 29 files · ~17,724 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: (none) 3, .example 1)
 
 ## Summary
-- 200 nodes · 207 edges · 26 communities (17 shown, 9 thin omitted)
+- 207 nodes · 213 edges · 26 communities (17 shown, 9 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ad179625`
+- Built from commit: `27729445`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -27,7 +27,7 @@
 - llm.py
 - check_no_ai_attribution.py
 - 06 — Image sourcing under zero inventory
-- margin.py
+- 14 — External source review: "I tried AI dropshipping for 7 days" (YouTube transcript)
 - AI team operating plan
 - 07 — Data sources and free AI tooling
 - 08 — eBay US category demand, 2025–2026
@@ -44,18 +44,17 @@
 ## God Nodes (most connected - your core abstractions)
 1. `02 — Unit economics, success rates, saturation, tariffs` - 10 edges
 2. `3. Candidate cards` - 9 edges
-3. `0001 — Candidate niches (Stage B)` - 8 edges
-4. `00 — Research summary and PoC plan` - 8 edges
-5. `06 — Image sourcing under zero inventory` - 8 edges
+3. `hooks` - 8 edges
+4. `0001 — Candidate niches (Stage B)` - 8 edges
+5. `00 — Research summary and PoC plan` - 8 edges
 6. `01 — eBay dropshipping policy, enforcement, fees` - 8 edges
 7. `04 — Tooling, APIs and AI listing pipeline` - 8 edges
 8. `05 — Legal/IP/compliance risks and other platforms` - 8 edges
-9. `hooks` - 8 edges
+9. `06 — Image sourcing under zero inventory` - 8 edges
 10. `AI team operating plan` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `main()` --calls--> `json`  [EXTRACTED]
-  scout/margin.py →   _Bridges community 11 → community 8_
+- None detected - all connections are within the same source files.
 
 ## Import Cycles
 - None detected.
@@ -95,16 +94,16 @@ Cohesion: 0.29
 Nodes (5): Commands, Context: graphify knowledge graph, graphify, Hard rules, Project
 
 ### Community 8 - "llm.py"
-Cohesion: 0.16
-Nodes (8): chat(), list_free(), LLMError, main(), _post(), analyze(), _fetch(), main()
+Cohesion: 0.12
+Nodes (12): chat(), list_free(), LLMError, main(), _post(), compute(), evaluate(), Inputs (+4 more)
 
 ### Community 10 - "06 — Image sourcing under zero inventory"
 Cohesion: 0.18
 Nodes (10): 06 — Image sourcing under zero inventory, 1. Which suppliers license their images to us, 2. What eBay's picture policy allows (fetched), 3. eBay catalog (ePID) images, 4. Checking quality and delivery without stock, 5. CJ follow-up (2026-11-03): supplier decided, Image source for the PoC: **decided 2026-11-03: CJ's own images + AI enhancement of the surroundings** (row 2 below). Google Images look-alikes were rejected for IP and INAD risk., Pipeline rules derived from this (+2 more)
 
-### Community 11 - "margin.py"
-Cohesion: 0.46
-Nodes (4): compute(), evaluate(), Inputs, main()
+### Community 11 - "14 — External source review: "I tried AI dropshipping for 7 days" (YouTube transcript)"
+Cohesion: 0.29
+Nodes (6): 14 — External source review: "I tried AI dropshipping for 7 days" (YouTube transcript), His numbers, checked, Plan impact, Red flags, What's useful to us, What the video did
 
 ### Community 12 - "AI team operating plan"
 Cohesion: 0.25
@@ -138,5 +137,7 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._
+- **Should `llm.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.12473118279569892 - nodes in this community are weakly interconnected._
 - **Should `3. Candidate cards` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._

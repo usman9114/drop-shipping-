@@ -96,9 +96,9 @@
     "semantic_hash": ""
   },
   ".claude/agents/compliance-officer.md": {
-    "mtime": 1793709467.1651537,
-    "seen": 1793709766.1400456,
-    "ast_hash": "df73034707b221f3d4bac3a64ad0c91f",
+    "mtime": 1793721458.4477122,
+    "seen": 1793721458.8834112,
+    "ast_hash": "216cf69377e4125064cc86e7cdf5c8f9",
     "semantic_hash": ""
   },
   ".claude/agents/creative-producer.md": {
@@ -177,6 +177,12 @@
     "mtime": 1793709890.5971348,
     "seen": 1793721406.5690281,
     "ast_hash": "ae62ec3582cb88d90178641ee5d8800f",
+    "semantic_hash": ""
+  },
+  "docs/research/14-video-ai-dropshipping-7-days.md": {
+    "mtime": 1793721458.437623,
+    "seen": 1793721458.8834386,
+    "ast_hash": "3fdba5b5e32b67efefc30c99504adf52",
     "semantic_hash": ""
   }
 }
