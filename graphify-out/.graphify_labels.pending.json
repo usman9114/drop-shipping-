@@ -1,0 +1,12 @@
+{
+  "0": "00 — Research summary and PoC plan",
+  "1": "02 — Unit economics, success rates, saturation, tariffs",
+  "2": "01 — eBay dropshipping policy, enforcement, fees",
+  "3": "04 — Tooling, APIs and AI listing pipeline",
+  "4": "05 — Legal/IP/compliance risks and other platforms",
+  "5": "03 — Suppliers and their APIs",
+  "6": "hooks",
+  "7": "CLAUDE.md",
+  "8": ".pre-commit-config.yaml",
+  "9": "check_no_ai_attribution.py"
+}

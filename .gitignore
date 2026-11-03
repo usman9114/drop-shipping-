@@ -1,0 +1,26 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# data / outputs
+data/raw/
+*.csv.tmp
+
+# graphify: commit graph + report, not caches
+graphify-out/cache/
+graphify-out/**/.cache/
+
+# editors / os
+.DS_Store
+.idea/
+.vscode/
