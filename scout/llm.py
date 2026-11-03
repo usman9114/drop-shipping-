@@ -106,10 +106,40 @@ def _post(payload: dict, provider: str, key: str, timeout: int = 180) -> dict:
         return json.loads(resp.read())
 
 
-def _inline_images(messages: list[dict]) -> list[dict]:
-    """Z.ai can't fetch many image URLs itself; send them as base64 data URLs."""
-    import base64
+MAX_IMAGE_BYTES = 5_000_000
+
+
+def _read_image(url: str) -> tuple[bytes, str]:
+    """Fetch one image with a size cap. Local files must sit under the working
+    directory or the system temp directory; only http(s) URLs are fetched."""
     import mimetypes
+    import tempfile
+    from pathlib import Path
+
+    if url.startswith(("http://", "https://")):
+        req = urllib.request.Request(url, headers={"User-Agent": "dropship-poc-scout"})
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            raw = resp.read(MAX_IMAGE_BYTES + 1)
+            mime = resp.headers.get_content_type()
+    elif "://" in url:
+        raise LLMError(f"unsupported image URL scheme: {url.split('://', 1)[0]}")
+    else:
+        path = Path(url).resolve()
+        roots = [Path.cwd().resolve(), Path(tempfile.gettempdir()).resolve()]
+        if not any(path.is_relative_to(r) for r in roots):
+            raise LLMError("local images must be under the working or temp directory")
+        raw = path.read_bytes()[: MAX_IMAGE_BYTES + 1]
+        mime = mimetypes.guess_type(str(path))[0] or "image/jpeg"
+    if len(raw) > MAX_IMAGE_BYTES:
+        raise LLMError(f"image larger than {MAX_IMAGE_BYTES} bytes")
+    if not mime.startswith("image/"):
+        raise LLMError(f"not an image: {mime}")
+    return raw, mime
+
+
+def _inline_images(messages: list[dict]) -> list[dict]:
+    """Send images as base64 data URLs (Z.ai can't fetch many URLs itself)."""
+    import base64
 
     out = []
     for msg in messages:
@@ -120,22 +150,23 @@ def _inline_images(messages: list[dict]) -> list[dict]:
         for part in msg["content"]:
             url = part.get("image_url", {}).get("url", "")
             if part.get("type") == "image_url" and not url.startswith("data:"):
-                if url.startswith(("http://", "https://")):
-                    req = urllib.request.Request(
-                        url, headers={"User-Agent": "dropship-poc-scout"}
-                    )
-                    with urllib.request.urlopen(req, timeout=60) as resp:
-                        raw = resp.read()
-                        mime = resp.headers.get_content_type()
-                else:  # local file path
-                    with open(url, "rb") as fh:
-                        raw = fh.read()
-                    mime = mimetypes.guess_type(url)[0] or "image/jpeg"
+                raw, mime = _read_image(url)
                 url = f"data:{mime};base64,{base64.b64encode(raw).decode()}"
                 part = {"type": "image_url", "image_url": {"url": url}}
             parts.append(part)
         out.append({**msg, "content": parts})
     return out
+
+
+def _extract_text(data) -> str | None:
+    """Return the reply text, or None when the response is unusable."""
+    try:
+        text = data["choices"][0]["message"]["content"]
+    except (KeyError, IndexError, TypeError):
+        return None
+    if not isinstance(text, str) or not text.strip():
+        return None
+    return text
 
 
 def chat(
@@ -146,7 +177,10 @@ def chat(
     json_mode: bool = False,
     max_tokens: int = 2048,  # reasoning models spend part of this on hidden thinking
 ) -> dict:
-    """Return {'model': ..., 'text': ...}. Tries each free model for the task."""
+    """Return {'model': ..., 'text': ...}. Tries each free model for the task.
+
+    An empty or malformed reply counts as a failure and falls through to the
+    next model."""
     models = [m for m in FREE_MODELS[task] if _key(m.split(":", 1)[0])]
     if not models:
         need = sorted(
@@ -166,13 +200,19 @@ def chat(
     messages = ([{"role": "system", "content": system}] if system else []) + [
         {"role": "user", "content": content}
     ]
+    if image_urls:  # download once, before any provider is tried
+        try:
+            messages = _inline_images(messages)
+        except LLMError:
+            raise
+        except (OSError, ValueError, urllib.error.URLError) as exc:
+            raise LLMError(f"could not load image: {type(exc).__name__}") from exc
 
     errors = []
     for spec in models:
         provider, model = spec.split(":", 1)
         key = _key(provider)
-        msgs = _inline_images(messages) if image_urls else messages
-        payload = {"model": model, "messages": msgs, "max_tokens": max_tokens}
+        payload = {"model": model, "messages": messages, "max_tokens": max_tokens}
         if provider == "zai":
             # GLM Flash models think by default and can spend the whole token
             # budget on hidden reasoning; keep it off except for reasoning tasks.
@@ -185,18 +225,23 @@ def chat(
         for attempt in range(3):
             try:
                 data = _post(payload, provider, key)
-                text = data["choices"][0]["message"]["content"] or ""
-                return {"model": f"{provider}:{data.get('model', model)}", "text": text}
             except urllib.error.HTTPError as exc:
-                body = exc.read().decode(errors="replace")[:300]
+                # Error bodies can echo our prompt: keep only a short prefix.
+                body = exc.read().decode(errors="replace")[:120]
                 errors.append(f"{spec}: HTTP {exc.code} {body}")
                 if exc.code in (429, 500, 502, 503) and attempt < 2:
                     time.sleep(5 * (attempt + 1))  # free tiers are often overloaded
                     continue
                 break
-            except (urllib.error.URLError, KeyError, TimeoutError) as exc:
-                errors.append(f"{spec}: {exc}")
+            except (urllib.error.URLError, TimeoutError, ValueError) as exc:
+                errors.append(f"{spec}: {type(exc).__name__}")
                 break
+            text = _extract_text(data)
+            if text is None:
+                errors.append(f"{spec}: empty or malformed reply")
+                break
+            actual = data.get("model", model) if isinstance(data, dict) else model
+            return {"model": f"{provider}:{actual}", "text": text}
     raise LLMError("all free models failed:\n  " + "\n  ".join(errors))
 
 

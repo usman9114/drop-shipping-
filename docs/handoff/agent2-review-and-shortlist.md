@@ -26,16 +26,18 @@ Use `graphify query "<question>"` before reading many files, to save tokens.
 - **Terms gate.** Unknown data terms mean don't store. eBay API content is not stored, analysed for statistics, or used to model prices without eBay's written permission.
 - **Zero inventory.** CJ images only, product pixels untouched. No scraping that breaches terms.
 - **Evidence labels.** Mark claims `[data]`, `[primary]`, `[secondary]`, `[estimate]` or `[unverified]`. Never invent numbers. Mock data is labeled `MOCK`.
+- **Review fixes already applied by the first agent** (2026-11-03): evidence store quarantine and atomic rebuild, margin input validation and tax-inclusive order-fee threshold, CJ client hardening, model-router reply checks, eBay license 9.6 recorded. Build on the current code.
 - **Don't change** `CLAUDE.md`, accepted decisions (0001 to 0005), or the behaviour of `scout/cj.py`, `scout/margin.py`, `scout/llm.py`, `scout/store.py`. Propose changes in your review instead.
 
 ## 4. How to work
 
-- Clone: `git clone -b agent2/review-and-shortlist https://github.com/usman9114/drop-shipping-.git`
-- Work **only on `agent2/review-and-shortlist`**. Keep a rebase on `research/feasibility-poc` (`git fetch && git rebase origin/research/feasibility-poc`) before you start each part. The first agent keeps working on that branch and stays out of the paths you own (below).
+- **Update 2026-11-03: Part 1 is done and merged (PR #1).** For Part 2, start from the latest `research/feasibility-poc` and create a **new branch `agent2/shortlist-engine`**. Do not reuse `agent2/review-and-shortlist`.
+- Clone: `git clone https://github.com/usman9114/drop-shipping-.git`, then `git switch -c agent2/shortlist-engine origin/research/feasibility-poc`
+- Work **only on your own branch**. Keep a rebase on `research/feasibility-poc` (`git fetch && git rebase origin/research/feasibility-poc`) before you start each part. The first agent keeps working on that branch and stays out of the paths you own (below).
 - Open **two pull requests into `research/feasibility-poc`**: one for the review, one for the shortlist engine. Do not push to `research/feasibility-poc` directly and never force-push it.
 - Small commits with clear messages. If blocked or unsure, write the question in the PR description. Don't guess.
 
-## 5. Part 1: independent review (read-only, then a report)
+## 5. Part 1: independent review (DONE, merged as PR #1; read `docs/reviews/2026-11-agent2-project-review.md`)
 
 Deliverable: `docs/reviews/2026-11-agent2-project-review.md`. You may add that file only. Findings go in a table: **severity** (blocker, high, medium, low), **evidence** (`file:line` or URL), **recommended fix**, **effort**. End with the **top 10 actions**.
 

@@ -58,3 +58,67 @@ def test_runs_are_never_overwritten(lake):
     second = store.record_run("d", [{"a": 1}], source="t", trust="data")
     assert first != second
     assert len(store._runs()) == 2
+
+
+def test_failed_checksum_rows_are_quarantined_not_loaded(lake):
+    store.record_run("trend_points", ROWS, source="t", trust="data")
+    path = next((lake / "lake" / "trend_points").rglob("*.jsonl.gz"))
+    with gzip.open(path, "wt", encoding="utf-8") as fh:
+        fh.write(json.dumps({"keyword": "EDITED", "run_id": "x"}) + "\n")
+    assert store.rebuild() == {}
+    assert store.query("SELECT verified FROM runs")[1][0] == 0
+    tables = store.query("SELECT name FROM sqlite_master WHERE name='trend_points'")
+    assert len(tables) == 1  # header only: the table was never created
+
+
+@pytest.mark.parametrize("name", ["../evil", "a b", "Drop;--", "", "x" * 80])
+def test_bad_dataset_names_are_rejected(lake, name):
+    with pytest.raises(ValueError, match="dataset"):
+        store.record_run(name, [{"a": 1}], source="t", trust="data")
+
+
+def test_bad_column_names_are_rejected(lake):
+    with pytest.raises(ValueError, match="column"):
+        store.record_run(
+            "d", [{'a"; DROP TABLE runs; --': 1}], source="t", trust="data"
+        )
+
+
+def test_a_failed_rebuild_leaves_the_old_database_intact(lake):
+    store.record_run("d", [{"a": 1}], source="t", trust="data")
+    store.rebuild()
+    with store.RUNS.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps({"run_id": "bad", "dataset": "../x", "path": "x"}) + "\n")
+    with pytest.raises(ValueError):
+        store.rebuild()
+    # query() would try (and fail) to rebuild from the corrupt log, so read the
+    # surviving database directly.
+    import sqlite3
+
+    con = sqlite3.connect(store.DB)
+    assert con.execute("SELECT COUNT(*) FROM d").fetchone()[0] == 1
+    con.close()
+    assert not store.DB.with_name(store.DB.name + ".tmp").exists()
+
+
+def test_run_paths_outside_the_lake_are_refused(lake, tmp_path):
+    outside = tmp_path / "elsewhere.jsonl.gz"
+    with gzip.open(outside, "wt") as fh:
+        fh.write("{}\n")
+    meta = {"run_id": "r", "dataset": "d", "path": str(outside)}
+    store.RUNS.parent.mkdir(parents=True, exist_ok=True)
+    store.RUNS.write_text(json.dumps(meta) + "\n")
+    with pytest.raises(ValueError, match="outside the lake"):
+        store.rebuild()
+
+
+def test_query_rebuilds_when_the_lake_has_new_runs(lake):
+    import os
+    import time
+
+    store.record_run("d", [{"a": 1}], source="t", trust="data")
+    assert store.query("SELECT COUNT(*) FROM d")[1][0] == 1
+    time.sleep(0.02)
+    store.record_run("d", [{"a": 2}], source="t", trust="data")
+    os.utime(store.RUNS, None)
+    assert store.query("SELECT COUNT(*) FROM d")[1][0] == 2

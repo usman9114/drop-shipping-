@@ -12,11 +12,12 @@ def test_net_is_contribution_minus_reserves():
     )
 
 
-def test_per_order_fee_steps_at_ten_dollars():
-    at_ten = compute(Inputs(price=10.00, cost=1, ship=1))["ebay_fees"]
-    above = compute(Inputs(price=10.01, cost=1, ship=1))["ebay_fees"]
-    assert at_ten == pytest.approx(0.136 * 10.00 * 1.07 + 0.30, abs=0.01)
-    assert above == pytest.approx(0.136 * 10.01 * 1.07 + 0.40, abs=0.01)
+def test_per_order_fee_steps_when_the_taxed_total_passes_ten_dollars():
+    # eBay's order fee depends on the order total, which includes sales tax (7%).
+    below = compute(Inputs(price=9.34, cost=1, ship=1))["ebay_fees"]  # total 9.994
+    above = compute(Inputs(price=9.35, cost=1, ship=1))["ebay_fees"]  # total 10.0045
+    assert below == pytest.approx(0.136 * 9.34 * 1.07 + 0.30, abs=0.01)
+    assert above == pytest.approx(0.136 * 9.35 * 1.07 + 0.40, abs=0.01)
 
 
 def test_higher_cost_lowers_net():
@@ -53,3 +54,49 @@ def test_reviewed_cases(price, cost, ship, base_margin, stress_margin, passes):
 
 def test_thin_margin_item_fails_even_in_base_case():
     assert evaluate(Inputs(price=15, cost=7, ship=4))["pass"] is False
+
+
+def test_hand_calculated_case():
+    """Worked by hand, independent of the code path.
+
+    total = 30 * 1.07 = 32.10 ; fees = 0.136 * 32.10 + 0.40 = 4.7656
+    ads = 1.50 ; landed = 14 ; contribution = 30 - 14 - 4.7656 - 1.50 = 9.7344
+    forfeited = 30 - 4.3656 = 25.6344
+    returns = 0.08 * (25.6344 + 8) = 2.69075 ; disputes = 0.02 * 25.6344 = 0.51269
+    net = 6.53096 ; margin = 0.2177
+    """
+    r = compute(Inputs(price=30, cost=9, ship=5))
+    assert r["contribution"] == pytest.approx(9.7344, abs=0.006)
+    assert r["net"] == pytest.approx(6.53096, abs=0.006)
+    assert r["net_margin"] == pytest.approx(0.2177, abs=0.0006)
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        {"price": 0},
+        {"price": -5},
+        {"price": float("nan")},
+        {"price": float("inf")},
+        {"cost": -1},
+        {"return_rate": 1.5},
+        {"ad_rate": -0.1},
+        {"return_rate": 0.7, "dispute_rate": 0.5},
+    ],
+)
+def test_impossible_inputs_are_rejected(bad):
+    args = {"price": 30, "cost": 9, "ship": 5, **bad}
+    with pytest.raises(ValueError):
+        compute(Inputs(**args))
+
+
+def test_pass_decision_uses_unrounded_margins():
+    from scout import margin
+
+    i = Inputs(price=34.5, cost=8.1, ship=5.2)
+    raw_base = margin._compute_raw(i)["net_margin"]
+    raw_stress = margin._compute_raw(
+        Inputs(price=34.5, cost=8.1, ship=5.2, duty=3.0, return_rate=0.16)
+    )["net_margin"]
+    expected = raw_base >= margin.PASS_NET and raw_stress >= margin.STRESS_NET
+    assert evaluate(i)["pass"] is expected

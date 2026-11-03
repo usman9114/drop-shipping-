@@ -39,8 +39,15 @@ class CJError(RuntimeError):
 
 def parse_price(value) -> tuple[float | None, float | None]:
     """CJ prices may be a number or a range string such as '1.20 -- 3.50'."""
-    nums = [float(x) for x in re.findall(r"\d+(?:\.\d+)?", str(value))]
+    text = "" if value is None else str(value).strip()
+    if re.match(r"^-\s*\d", text):  # a negative price is invalid, not a range
+        return (None, None)
+    nums = [float(x) for x in re.findall(r"\d+(?:\.\d+)?", text)]
     return (min(nums), max(nums)) if nums else (None, None)
+
+
+def _dicts(value) -> list[dict]:
+    return [x for x in value if isinstance(x, dict)] if isinstance(value, list) else []
 
 
 def normalize_listing(item: dict) -> dict:
@@ -64,7 +71,11 @@ def normalize_detail(data: dict) -> dict:
         "name": data.get("productNameEn"),
         "sku": data.get("productSku"),
         "weight_g": data.get("productWeight"),
-        "images": [data.get("bigImage"), *(data.get("productImageSet") or [])],
+        "images": [
+            x
+            for x in [data.get("bigImage"), *(data.get("productImageSet") or [])]
+            if isinstance(x, str) and x
+        ],
         "variants": [
             {
                 "vid": v.get("vid"),
@@ -79,7 +90,7 @@ def normalize_detail(data: dict) -> dict:
                 ],
                 "inventories": v.get("inventories"),
             }
-            for v in data.get("variants") or []
+            for v in _dicts(data.get("variants"))
         ],
     }
 
@@ -124,9 +135,17 @@ class CJClient:
             timeout=30,
         )
         self._last = time.monotonic()
-        payload = resp.json()
+        status = getattr(resp, "status_code", 200)
+        try:
+            payload = resp.json()
+        except ValueError as exc:
+            raise CJError(status, "response was not JSON") from exc
+        if not isinstance(payload, dict):
+            raise CJError(status, "unexpected response shape")
         if payload.get("code") != 200:
-            raise CJError(payload.get("code"), payload.get("message"))
+            raise CJError(
+                payload.get("code", status), payload.get("message") or f"HTTP {status}"
+            )
         return payload.get("data")
 
     def _auth(self) -> str:
@@ -160,11 +179,10 @@ class CJClient:
                     "size": size,
                 },
             )
-            items = [
-                p
-                for c in (data or {}).get("content", [])
-                for p in c.get("productList", [])
-            ]
+            contents = _dicts(
+                (data or {}).get("content") if isinstance(data, dict) else None
+            )
+            items = [p for c in contents for p in _dicts(c.get("productList"))]
             if not items:
                 break
             rows += [normalize_listing(i) for i in items]

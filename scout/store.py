@@ -33,6 +33,8 @@ import argparse
 import gzip
 import hashlib
 import json
+import os
+import re
 import sqlite3
 import subprocess
 import sys
@@ -43,6 +45,8 @@ from pathlib import Path
 LAKE = Path("data/lake")
 RUNS = LAKE / "_runs.jsonl"
 DB = Path("data/store/scout.db")
+_DATASET = re.compile(r"^[a-z][a-z0-9_]{0,62}$")
+_COLUMN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]{0,62}$")
 TRUST = {"data", "primary", "secondary", "estimate", "mock"}
 
 
@@ -70,6 +74,12 @@ def record_run(
     """Write rows to the lake as one immutable run and log its provenance."""
     if trust not in TRUST:
         raise ValueError(f"trust must be one of {sorted(TRUST)}")
+    if not _DATASET.match(dataset):
+        raise ValueError(f"invalid dataset name: {dataset!r}")
+    for row in rows:
+        bad = [k for k in row if not _COLUMN.match(str(k))]
+        if bad:
+            raise ValueError(f"invalid column name(s): {bad}")
     now = datetime.now(timezone.utc)
     run_id = now.strftime("%Y%m%dT%H%M%SZ") + "-" + uuid.uuid4().hex[:6]
     body = "\n".join(json.dumps({**r, "run_id": run_id}, sort_keys=True) for r in rows)
@@ -102,77 +112,109 @@ def _runs() -> list[dict]:
     return [json.loads(line) for line in RUNS.read_text().splitlines() if line.strip()]
 
 
+def _checked_path(run: dict) -> Path:
+    """A run's file must live inside the lake, with a safe dataset name."""
+    if not _DATASET.match(str(run.get("dataset", ""))):
+        raise ValueError(f"invalid dataset name in run log: {run.get('dataset')!r}")
+    path = Path(run["path"]).resolve()
+    if not path.is_relative_to(LAKE.resolve()):
+        raise ValueError(f"run {run.get('run_id')} points outside the lake")
+    return path
+
+
 def rebuild() -> dict:
-    """Recreate the SQLite DB from the lake. Verifies each run's sha256."""
+    """Recreate the SQLite DB from the lake, atomically.
+
+    The new database is built beside the old one and swapped in only when
+    complete. A run whose checksum does not match is quarantined: it is listed
+    in `runs` with verified=0 and its rows are NOT loaded. Returns rows loaded
+    per table."""
     DB.parent.mkdir(parents=True, exist_ok=True)
-    if DB.exists():
-        DB.unlink()
-    con = sqlite3.connect(DB)
-    con.execute(
-        "CREATE TABLE runs (run_id TEXT PRIMARY KEY, dataset TEXT, source TEXT, trust TEXT,"
-        " params TEXT, fetched_at TEXT, git_sha TEXT, rows INT, sha256 TEXT, path TEXT,"
-        " note TEXT, verified INT)"
-    )
+    tmp = DB.with_name(DB.name + ".tmp")
+    tmp.unlink(missing_ok=True)
+    con = sqlite3.connect(tmp)
     counts: dict[str, int] = {}
     cols_by_table: dict[str, list[str]] = {}
-    for run in _runs():
-        with gzip.open(run["path"], "rt", encoding="utf-8") as fh:
-            body = fh.read().rstrip("\n")
-        ok = hashlib.sha256(body.encode()).hexdigest() == run["sha256"]
+    try:
         con.execute(
-            "INSERT INTO runs VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
-            (
-                run["run_id"],
-                run["dataset"],
-                run["source"],
-                run["trust"],
-                json.dumps(run["params"]),
-                run["fetched_at"],
-                run["git_sha"],
-                run["rows"],
-                run["sha256"],
-                run["path"],
-                run.get("note", ""),
-                int(ok),
-            ),
+            "CREATE TABLE runs (run_id TEXT PRIMARY KEY, dataset TEXT, source TEXT,"
+            " trust TEXT, params TEXT, fetched_at TEXT, git_sha TEXT, rows INT,"
+            " sha256 TEXT, path TEXT, note TEXT, verified INT)"
         )
-        rows = [json.loads(line) for line in body.splitlines() if line]
-        if not rows:
-            continue
-        table = run["dataset"]
-        new_cols = list(dict.fromkeys(c for r in rows for c in r))
-        if table not in cols_by_table:
-            cols_by_table[table] = new_cols
+        for run in _runs():
+            path = _checked_path(run)
+            with gzip.open(path, "rt", encoding="utf-8") as fh:
+                body = fh.read().rstrip("\n")
+            ok = hashlib.sha256(body.encode()).hexdigest() == run["sha256"]
             con.execute(
-                f'CREATE TABLE "{table}" ({",".join(f"{chr(34)}{c}{chr(34)}" for c in new_cols)})'
+                "INSERT INTO runs VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+                (
+                    run["run_id"],
+                    run["dataset"],
+                    run["source"],
+                    run["trust"],
+                    json.dumps(run["params"]),
+                    run["fetched_at"],
+                    run["git_sha"],
+                    run["rows"],
+                    run["sha256"],
+                    run["path"],
+                    run.get("note", ""),
+                    int(ok),
+                ),
             )
-        cols = cols_by_table[table]
-        for c in new_cols:
-            if c not in cols:
-                con.execute(f'ALTER TABLE "{table}" ADD COLUMN "{c}"')
-                cols.append(c)
-        placeholders = ",".join("?" for _ in cols)
-        quoted = ",".join(f'"{c}"' for c in cols)
-        con.executemany(
-            f'INSERT INTO "{table}" ({quoted}) VALUES ({placeholders})',
-            [
-                tuple(
-                    json.dumps(r.get(c))
-                    if isinstance(r.get(c), (list, dict))
-                    else r.get(c)
-                    for c in cols
+            if not ok:
+                print(
+                    f"WARNING: run {run['run_id']} failed its checksum; rows quarantined",
+                    file=sys.stderr,
                 )
-                for r in rows
-            ],
-        )
-        counts[table] = counts.get(table, 0) + len(rows)
-    con.commit()
+                continue
+            rows = [json.loads(line) for line in body.splitlines() if line]
+            if not rows:
+                continue
+            table = run["dataset"]
+            new_cols = list(dict.fromkeys(c for r in rows for c in r))
+            bad = [c for c in new_cols if not _COLUMN.match(str(c))]
+            if bad:
+                raise ValueError(f"invalid column name(s) in {run['run_id']}: {bad}")
+            if table not in cols_by_table:
+                cols_by_table[table] = new_cols
+                defs = ",".join(f'"{c}"' for c in new_cols)
+                con.execute(f'CREATE TABLE "{table}" ({defs})')
+            cols = cols_by_table[table]
+            for c in new_cols:
+                if c not in cols:
+                    con.execute(f'ALTER TABLE "{table}" ADD COLUMN "{c}"')
+                    cols.append(c)
+            quoted = ",".join(f'"{c}"' for c in cols)
+            marks = ",".join("?" for _ in cols)
+            con.executemany(
+                f'INSERT INTO "{table}" ({quoted}) VALUES ({marks})',
+                [
+                    tuple(
+                        json.dumps(r.get(c))
+                        if isinstance(r.get(c), (list, dict))
+                        else r.get(c)
+                        for c in cols
+                    )
+                    for r in rows
+                ],
+            )
+            counts[table] = counts.get(table, 0) + len(rows)
+        con.commit()
+    except BaseException:
+        con.close()
+        tmp.unlink(missing_ok=True)
+        raise
     con.close()
+    os.replace(tmp, DB)
     return counts
 
 
 def query(sql: str) -> list[tuple]:
-    if not DB.exists():
+    """Read-only SQL. Rebuilds first when the lake is newer than the database."""
+    stale = RUNS.exists() and DB.exists() and RUNS.stat().st_mtime >= DB.stat().st_mtime
+    if not DB.exists() or stale:
         rebuild()
     con = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
     try:

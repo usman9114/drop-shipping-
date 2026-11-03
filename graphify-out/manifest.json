@@ -72,15 +72,15 @@
     "semantic_hash": ""
   },
   "scout/llm.py": {
-    "mtime": 1793723525.4518611,
-    "seen": 1793723526.0768592,
-    "ast_hash": "2bd3d2664b382893d2b5807f0159ec1c",
+    "mtime": 1793749793.5575485,
+    "seen": 1793749806.4003115,
+    "ast_hash": "0ba3d6ed6af84ae2d4b70661a5ef344d",
     "semantic_hash": ""
   },
   "scout/margin.py": {
-    "mtime": 1793709760.1571407,
-    "seen": 1793709766.1400394,
-    "ast_hash": "26510c956ded93dd090d11651a113838",
+    "mtime": 1793749756.3073764,
+    "seen": 1793749806.4003127,
+    "ast_hash": "0f67b681a5c31043f301376df163d035",
     "semantic_hash": ""
   },
   "scout/trends.py": {
@@ -222,9 +222,9 @@
     "semantic_hash": ""
   },
   "scout/store.py": {
-    "mtime": 1793722948.2851775,
-    "seen": 1793722955.6918445,
-    "ast_hash": "23cb059222669bab2d2c6430487edbbf",
+    "mtime": 1793749782.8829157,
+    "seen": 1793749806.4003139,
+    "ast_hash": "8be6abba412b56c1528d742f62f2098a",
     "semantic_hash": ""
   },
   "scripts/claude-glm.sh": {
@@ -306,21 +306,21 @@
     "semantic_hash": ""
   },
   "tests/test_margin.py": {
-    "mtime": 1793745877.9451618,
-    "seen": 1793745899.3056366,
-    "ast_hash": "5a116480eab7ffe0533e3ec5d1431fa0",
+    "mtime": 1793749782.1626914,
+    "seen": 1793749806.4003186,
+    "ast_hash": "534c7bec6582c701ea6802c51931857b",
     "semantic_hash": ""
   },
   "tests/test_store.py": {
-    "mtime": 1793745877.9611619,
-    "seen": 1793745899.3056378,
-    "ast_hash": "310638df748630a13759148053627218",
+    "mtime": 1793749793.5591722,
+    "seen": 1793749806.4003196,
+    "ast_hash": "54fa324dfd30d289941c195d4340939f",
     "semantic_hash": ""
   },
   "tests/test_trends_llm.py": {
-    "mtime": 1793745890.1691613,
-    "seen": 1793745899.305639,
-    "ast_hash": "be54c294b08e8d7d9cd2ee578d1064ff",
+    "mtime": 1793749782.8829157,
+    "seen": 1793749806.4003203,
+    "ast_hash": "0a9f359076855e69517f70832420e180",
     "semantic_hash": ""
   },
   "docs/runbooks/terapeak-session.md": {
@@ -336,15 +336,15 @@
     "semantic_hash": ""
   },
   "scout/cj.py": {
-    "mtime": 1793746060.4531536,
-    "seen": 1793746062.1268468,
-    "ast_hash": "828fe352101270945cc59f3d662f6134",
+    "mtime": 1793749782.8829157,
+    "seen": 1793749806.4003103,
+    "ast_hash": "4dbb7d1c14a51d99cae9aca4067d19c2",
     "semantic_hash": ""
   },
   "tests/test_cj.py": {
-    "mtime": 1793746060.4531536,
-    "seen": 1793746062.126857,
-    "ast_hash": "1d27290f1fcf438177cafa35d18020e9",
+    "mtime": 1793749782.8829157,
+    "seen": 1793749806.400318,
+    "ast_hash": "d4f96625a792d19f3c2dbfd292e2a261",
     "semantic_hash": ""
   },
   "docs/decisions/0005-cj-client.md": {
@@ -360,9 +360,9 @@
     "semantic_hash": ""
   },
   "docs/handoff/agent2-review-and-shortlist.md": {
-    "mtime": 1793746177.2931485,
-    "seen": 1793746183.4561517,
-    "ast_hash": "33fe892413d89144a9b8b57d179e7cb8",
+    "mtime": 1793749805.5571477,
+    "seen": 1793749806.400337,
+    "ast_hash": "df69eaf188010bbcf82f1e5ce89ee26d",
     "semantic_hash": ""
   },
   "docs/reviews/2026-11-agent2-project-review.md": {

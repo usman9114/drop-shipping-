@@ -79,3 +79,64 @@ def test_data_urls_are_left_alone():
         }
     ]
     assert llm._inline_images(msgs) == msgs
+
+
+def _reply(content):
+    return {"model": "m", "choices": [{"message": {"content": content}}]}
+
+
+@pytest.mark.parametrize(
+    "bad", [_reply(""), _reply("   "), {"choices": []}, {"nope": 1}, _reply(None)]
+)
+def test_empty_or_malformed_replies_fall_through_to_the_next_model(
+    no_keys, monkeypatch, bad
+):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "x")
+    replies = [bad, _reply("good")]
+    monkeypatch.setattr(llm, "_post", lambda *a, **k: replies.pop(0))
+    assert llm.chat("hi", task="bulk")["text"] == "good"
+
+
+def test_all_empty_replies_raise(no_keys, monkeypatch):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "x")
+    monkeypatch.setattr(llm, "_post", lambda *a, **k: _reply(""))
+    with pytest.raises(llm.LLMError, match="empty or malformed"):
+        llm.chat("hi", task="bulk")
+
+
+def test_local_images_outside_allowed_roots_are_refused(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    with pytest.raises(llm.LLMError, match="working or temp"):
+        llm._read_image("/etc/hostname")
+
+
+def test_unsupported_url_schemes_are_refused():
+    with pytest.raises(llm.LLMError, match="scheme"):
+        llm._read_image("file:///etc/passwd")
+
+
+def test_oversized_images_are_refused(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    big = tmp_path / "big.png"
+    big.write_bytes(b"0" * (llm.MAX_IMAGE_BYTES + 10))
+    with pytest.raises(llm.LLMError, match="larger"):
+        llm._read_image(str(big))
+
+
+def test_images_are_loaded_once_not_per_model(no_keys, monkeypatch, tmp_path):
+    monkeypatch.chdir(tmp_path)
+    img = tmp_path / "a.png"
+    img.write_bytes(b"\x89PNG")
+    monkeypatch.setenv("OPENROUTER_API_KEY", "x")
+    calls = []
+    real = llm._inline_images
+
+    def counting(msgs):
+        calls.append(1)
+        return real(msgs)
+
+    monkeypatch.setattr(llm, "_inline_images", counting)
+    replies = [_reply(""), _reply("ok")]
+    monkeypatch.setattr(llm, "_post", lambda *a, **k: replies.pop(0))
+    assert llm.chat("hi", task="vision", image_urls=[str(img)])["text"] == "ok"
+    assert len(calls) == 1

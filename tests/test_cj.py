@@ -31,10 +31,13 @@ EMPTY = {"code": 200, "data": {"content": []}}
 
 
 class FakeResp:
-    def __init__(self, payload):
+    def __init__(self, payload, status=200):
         self._p = payload
+        self.status_code = status
 
     def json(self):
+        if isinstance(self._p, Exception):
+            raise self._p
         return self._p
 
 
@@ -134,3 +137,36 @@ def test_raw_output_must_stay_under_data_private(tmp_path, monkeypatch):
     assert cj.private_path("data/private/x.json").name == "x.json"
     with pytest.raises(SystemExit):
         cj.private_path("docs/x.json")
+
+
+def test_a_non_json_response_is_a_clear_error():
+    c, _ = client([TOKEN_OK, ValueError("no json")])
+    with pytest.raises(cj.CJError, match="not JSON"):
+        c.search("x")
+
+
+def test_negative_prices_are_unusable():
+    assert cj.parse_price("-5") == (None, None)
+    assert cj.parse_price(" -3.20") == (None, None)
+
+
+def test_malformed_shapes_do_not_crash_search():
+    odd = {"code": 200, "data": {"content": ["junk", {"productList": "nope"}, 7]}}
+    c, _ = client([TOKEN_OK, odd])
+    assert c.search("x") == []
+
+
+def test_detail_ignores_junk_variants_and_images():
+    d = {
+        "code": 200,
+        "data": {
+            "pid": "P",
+            "bigImage": None,
+            "productImageSet": [None, 3, "ok.jpg"],
+            "variants": ["x", {"vid": "V"}],
+        },
+    }
+    c, _ = client([TOKEN_OK, d])
+    out = c.detail("P")
+    assert out["images"] == ["ok.jpg"]
+    assert [v["vid"] for v in out["variants"]] == ["V"]
