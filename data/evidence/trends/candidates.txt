@@ -1,0 +1,68 @@
+# Stage B candidate keywords for Google Trends (US). Owner: head-of-marketing, 2026-11-03.
+# Source decision: docs/decisions/0001-niche-candidates.md
+# Run: python -m scout.trends --file data/evidence/trends/candidates.txt --out data/evidence/trends/candidates.csv
+# Rules: generic product-type phrases only, no brands or licensed names. 8 niches x 6 = 48 keywords.
+
+# niche: tcg-supplies
+card display case
+magnetic card holder
+trading card binder
+graded card case
+card storage box
+card sleeves
+
+# niche: collectibles-display
+acrylic display case
+figure display case
+minifigure display case
+diecast display case
+baseball display case
+acrylic display risers
+
+# niche: coin-supplies
+coin holders
+coin capsules
+coin album
+coin display case
+coin storage box
+coin flips
+
+# niche: vinyl-record-care
+record cleaning kit
+vinyl record sleeves
+record display stand
+record cleaning brush
+turntable mat
+record storage box
+
+# niche: watch-accessories
+watch box
+watch repair kit
+watch strap
+nato watch strap
+watch link remover
+watch travel case
+
+# niche: hobby-modeling-tools
+hobby tool kit
+model kit tools
+wet palette
+paint storage rack
+hobby knife
+sprue cutter
+
+# niche: auto-detailing-tools
+car detailing brushes
+car detailing kit
+foam cannon
+trim removal tool
+drill brush set
+car wash mitt
+
+# niche: pet-grooming-supplies
+dog grooming kit
+slicker brush
+deshedding brush
+dog nail clippers
+pet hair remover
+cat grooming brush
