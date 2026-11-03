@@ -28,11 +28,12 @@
   "26": "2. Per-niche price bands and representative products",
   "27": "12 — Compliance risk cards for the 8 candidate niches",
   "28": "3. Primary niche: `tcg-supplies`",
-  "29": "check_no_ai_attribution.py",
+  "29": "Warehouse design: Postgres as the source of truth",
   "30": "Multichannel plan: one pipeline, eBay + Shopify/Instagram",
   "31": "claude-glm.sh",
   "32": "Data pipeline: feeding the team authentic evidence",
   "33": "aggregate_candidates.py",
   "34": "glm-coder.md",
-  "35": "0003 — Build vs reuse: workflow, data loading, connectors, LLM routing"
+  "35": "0003 — Build vs reuse: workflow, data loading, connectors, LLM routing",
+  "36": "data-engineer.md"
 }

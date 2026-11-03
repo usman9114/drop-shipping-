@@ -250,5 +250,17 @@
     "seen": 1793724088.8524992,
     "ast_hash": "5502fbbbf226f4050c662c46fd6d5985",
     "semantic_hash": ""
+  },
+  ".claude/agents/data-engineer.md": {
+    "mtime": 1793724703.456278,
+    "seen": 1793724754.482549,
+    "ast_hash": "b349ce040b72472a809556125981d61e",
+    "semantic_hash": ""
+  },
+  "docs/plan/warehouse.md": {
+    "mtime": 1793724743.8242762,
+    "seen": 1793724754.4825635,
+    "ast_hash": "2caccc34b0e06138c4ef1f0ebbb5af3d",
+    "semantic_hash": ""
   }
 }

@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 40 files · ~35,916 words
+- 42 files · ~38,192 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 10 file(s) not represented in the graph (top: .csv 4, (none) 3, .example 1)
 
 ## Summary
-- 332 nodes · 368 edges · 36 communities (26 shown, 10 thin omitted)
+- 350 nodes · 384 edges · 37 communities (28 shown, 9 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.95)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `df485762`
+- Built from commit: `bef19d6c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -43,42 +43,43 @@
 - 2. Per-niche price bands and representative products
 - 12 — Compliance risk cards for the 8 candidate niches
 - 3. Primary niche: `tcg-supplies`
-- check_no_ai_attribution.py
+- Warehouse design: Postgres as the source of truth
 - Multichannel plan: one pipeline, eBay + Shopify/Instagram
 - claude-glm.sh
 - Data pipeline: feeding the team authentic evidence
 - aggregate_candidates.py
 - glm-coder.md
 - 0003 — Build vs reuse: workflow, data loading, connectors, LLM routing
+- data-engineer.md
 
 ## God Nodes (most connected - your core abstractions)
-1. `12 — Compliance risk cards for the 8 candidate niches` - 13 edges
-2. `record_run()` - 11 edges
-3. `2. Per-niche price bands and representative products` - 11 edges
-4. `rebuild()` - 10 edges
-5. `02 — Unit economics, success rates, saturation, tariffs` - 10 edges
-6. `hooks` - 9 edges
-7. `3. Candidate cards` - 9 edges
-8. `3. Primary niche: `tcg-supplies`` - 9 edges
-9. `11 - Google Trends check of Stage B candidates (US)` - 9 edges
-10. `chat()` - 8 edges
+1. `Warehouse design: Postgres as the source of truth` - 13 edges
+2. `12 — Compliance risk cards for the 8 candidate niches` - 13 edges
+3. `record_run()` - 11 edges
+4. `2. Per-niche price bands and representative products` - 11 edges
+5. `rebuild()` - 10 edges
+6. `02 — Unit economics, success rates, saturation, tariffs` - 10 edges
+7. `hooks` - 9 edges
+8. `3. Candidate cards` - 9 edges
+9. `3. Primary niche: `tcg-supplies`` - 9 edges
+10. `11 - Google Trends check of Stage B candidates (US)` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
 - `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
   .claude/agents/_team-rules.md → scout/store.py
-- `2. Per-niche price bands and representative products` --references--> `Inputs`  [INFERRED]
-  docs/research/13-sales-niche-economics.md → scout/margin.py
-- `2. Per-niche price bands and representative products` --references--> `evaluate()`  [INFERRED]
-  docs/research/13-sales-niche-economics.md → scout/margin.py
 - `2. What makes it "authentic"` --references--> `record_run()`  [INFERRED]
   docs/plan/data-pipeline.md → scout/store.py
+- `2. What makes it "authentic"` --references--> `rebuild()`  [INFERRED]
+  docs/plan/data-pipeline.md → scout/store.py
+- `2. Per-niche price bands and representative products` --references--> `Inputs`  [INFERRED]
+  docs/research/13-sales-niche-economics.md → scout/margin.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (36 total, 10 thin omitted)
+## Communities (37 total, 9 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -149,8 +150,8 @@ Cohesion: 0.50
 Nodes (3): 10 — Category risk ranking (US, zero-inventory eBay dropshipping), Cross-cutting facts, Sources
 
 ### Community 22 - "store.py"
-Cohesion: 0.17
-Nodes (11): Shared rules for every AI team member, 2. What makes it "authentic", _git_sha(), main(), query(), rebuild(), record_run(), _runs() (+3 more)
+Cohesion: 0.13
+Nodes (12): Shared rules for every AI team member, _git_sha(), main(), query(), rebuild(), record_run(), _runs(), analyze() (+4 more)
 
 ### Community 25 - "3. Candidate cards"
 Cohesion: 0.10
@@ -168,6 +169,10 @@ Nodes (19): 0.1 Checks that apply to every niche, 0.2 Wording rules that apply t
 Cohesion: 0.10
 Nodes (20): 0002 — Niche selection (Stage D), 1. Decision, 2. Evidence table, 2a. Rescore on the §5 rubric (0–5, 5 = best; Risk and Temu/Amazon inverted), 2b. What changed per criterion, and why, 2c. Sensitivity of the primary pick, 2d. Key evidence behind the decision, 3.1 Target buyer (+12 more)
 
+### Community 29 - "Warehouse design: Postgres as the source of truth"
+Cohesion: 0.14
+Nodes (13): 10. Durability, 11. What this replaces, 12. Build order, 1. Principles, 2. Layers (one schema each), 3. Core model (grain first), 4. Ingestion contract, 5. Enrichment (systematic, deterministic first) (+5 more)
+
 ### Community 30 - "Multichannel plan: one pipeline, eBay + Shopify/Instagram"
 Cohesion: 0.25
 Nodes (7): 1. Why the channels differ, 2. Shared pipeline (generic `scout` core + channel adapters), 3. What the AI team can and can't do, 4. Beauty and cosmetics: the important caveat, 5. Proposed new team roles, 6. Owner decisions needed, Multichannel plan: one pipeline, eBay + Shopify/Instagram
@@ -177,21 +182,27 @@ Cohesion: 0.25
 Nodes (7): ANTHROPIC_AUTH_TOKEN, ANTHROPIC_BASE_URL, ANTHROPIC_DEFAULT_HAIKU_MODEL, ANTHROPIC_DEFAULT_OPUS_MODEL, ANTHROPIC_DEFAULT_SONNET_MODEL, API_TIMEOUT_MS, claude-glm.sh script
 
 ### Community 32 - "Data pipeline: feeding the team authentic evidence"
-Cohesion: 0.29
-Nodes (6): 1. Architecture, 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence
+Cohesion: 0.25
+Nodes (7): 1. Architecture, 2. What makes it "authentic", 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence
 
 ### Community 35 - "0003 — Build vs reuse: workflow, data loading, connectors, LLM routing"
 Cohesion: 0.33
 Nodes (5): 0003 — Build vs reuse: workflow, data loading, connectors, LLM routing, Decision, Home-grown audit (flagged to the team), Next actions, What this does not settle
 
+### Community 36 - "data-engineer.md"
+Cohesion: 0.50
+Nodes (3): Every change includes, Principles, Rules
+
 ## Knowledge Gaps
 - **6 isolated node(s):** `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 246 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 262 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `record_run()` connect `store.py` to `Data pipeline: feeding the team authentic evidence`?**
+  _High betweenness centrality (0.011) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
   _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS` to the rest of the system?**
@@ -200,9 +211,7 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
 - **Are the 2 inferred relationships involving `2. Per-niche price bands and representative products` (e.g. with `evaluate()` and `Inputs`) actually correct?**
   _`2. Per-niche price bands and representative products` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **Should `store.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.13068181818181818 - nodes in this community are weakly interconnected._
 - **Should `3. Candidate cards` be split into smaller, more focused modules?**
-  _Cohesion score 0.1 - nodes in this community are weakly interconnected._
-- **Should `2. Per-niche price bands and representative products` be split into smaller, more focused modules?**
-  _Cohesion score 0.11857707509881422 - nodes in this community are weakly interconnected._
-- **Should `12 — Compliance risk cards for the 8 candidate niches` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
