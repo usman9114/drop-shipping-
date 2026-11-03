@@ -144,7 +144,7 @@ def chat(
     image_urls: list[str] | None = None,
     system: str | None = None,
     json_mode: bool = False,
-    max_tokens: int = 1024,
+    max_tokens: int = 2048,  # reasoning models spend part of this on hidden thinking
 ) -> dict:
     """Return {'model': ..., 'text': ...}. Tries each free model for the task."""
     models = [m for m in FREE_MODELS[task] if _key(m.split(":", 1)[0])]
@@ -171,9 +171,7 @@ def chat(
     for spec in models:
         provider, model = spec.split(":", 1)
         key = _key(provider)
-        msgs = (
-            _inline_images(messages) if provider == "zai" and image_urls else messages
-        )
+        msgs = _inline_images(messages) if image_urls else messages
         payload = {"model": model, "messages": msgs, "max_tokens": max_tokens}
         if provider == "zai":
             # GLM Flash models think by default and can spend the whole token

@@ -1,7 +1,7 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 39 files · ~34,947 words
+- 39 files · ~34,951 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 10 file(s) not represented in the graph (top: .csv 4, (none) 3, .example 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0fd2cb5e`
+- Built from commit: `007af25d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -56,21 +56,21 @@
 3. `2. Per-niche price bands and representative products` - 11 edges
 4. `rebuild()` - 10 edges
 5. `02 — Unit economics, success rates, saturation, tariffs` - 10 edges
-6. `3. Candidate cards` - 9 edges
-7. `3. Primary niche: `tcg-supplies`` - 9 edges
-8. `hooks` - 9 edges
+6. `hooks` - 9 edges
+7. `3. Candidate cards` - 9 edges
+8. `3. Primary niche: `tcg-supplies`` - 9 edges
 9. `11 - Google Trends check of Stage B candidates (US)` - 9 edges
 10. `chat()` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
-  .claude/agents/_team-rules.md → scout/store.py
 - `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
+- `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
+  .claude/agents/_team-rules.md → scout/store.py
 - `2. Per-niche price bands and representative products` --references--> `Inputs`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
-- `2. What makes it "authentic"` --references--> `rebuild()`  [INFERRED]
-  docs/plan/data-pipeline.md → scout/store.py
+- `2. Per-niche price bands and representative products` --references--> `evaluate()`  [INFERRED]
+  docs/research/13-sales-niche-economics.md → scout/margin.py
 - `2. What makes it "authentic"` --references--> `record_run()`  [INFERRED]
   docs/plan/data-pipeline.md → scout/store.py
 
@@ -180,7 +180,7 @@ Cohesion: 0.29
 Nodes (6): 1. Architecture, 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence
 
 ## Knowledge Gaps
-- **6 isolated node(s):** `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
+- **6 isolated node(s):** `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 241 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -189,7 +189,7 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
   _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL` to the rest of the system?**
+- **What connects `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS` to the rest of the system?**
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
