@@ -43,5 +43,8 @@
   "41": "Runbook: Postgres on a VPS, reached by CI through an SSH tunnel",
   "42": "Data pipeline: feeding the team authentic evidence",
   "43": "Runbook: Terapeak research session (manual, about 90 minutes)",
-  "44": "check_no_ai_attribution.py"
+  "44": "cj.py",
+  "45": "test_cj.py",
+  "46": "18 — CJ Dropshipping API cheat sheet",
+  "47": "0005-cj-client.md"
 }

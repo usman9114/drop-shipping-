@@ -29,3 +29,4 @@ graphify-out/.graphify_root
 data/evidence/**/.cache/
 data/store/
 infra/vps/secrets/
+data/private/

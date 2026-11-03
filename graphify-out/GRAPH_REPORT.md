@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 53 files · ~44,556 words
+- 57 files · ~46,484 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 12 file(s) not represented in the graph (top: .csv 5, (none) 4, .example 1)
 
 ## Summary
-- 489 nodes · 564 edges · 45 communities (36 shown, 9 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.92)
+- 540 nodes · 655 edges · 48 communities (39 shown, 9 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 11 edges (avg confidence: 0.91)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `751197bc`
+- Built from commit: `999d1325`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -59,36 +59,39 @@
 - Runbook: Postgres on a VPS, reached by CI through an SSH tunnel
 - Data pipeline: feeding the team authentic evidence
 - Runbook: Terapeak research session (manual, about 90 minutes)
-- check_no_ai_attribution.py
+- cj.py
+- test_cj.py
+- 18 — CJ Dropshipping API cheat sheet
+- 0005-cj-client.md
 
 ## God Nodes (most connected - your core abstractions)
 1. `record_run()` - 16 edges
-2. `Warehouse design: Postgres as the source of truth` - 13 edges
-3. `Inputs` - 13 edges
-4. `rebuild()` - 13 edges
+2. `Inputs` - 13 edges
+3. `rebuild()` - 13 edges
+4. `Warehouse design: Postgres as the source of truth` - 13 edges
 5. `12 — Compliance risk cards for the 8 candidate niches` - 13 edges
 6. `Runbook: Postgres on a VPS, reached by CI through an SSH tunnel` - 13 edges
-7. `chat()` - 11 edges
-8. `2. Per-niche price bands and representative products` - 11 edges
-9. `db` - 11 edges
-10. `evaluate()` - 10 edges
+7. `db` - 11 edges
+8. `CJClient` - 11 edges
+9. `chat()` - 11 edges
+10. `2. Per-niche price bands and representative products` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
-  .claude/agents/_team-rules.md → scout/store.py
 - `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
+- `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
+  .claude/agents/_team-rules.md → scout/store.py
 - `2. Per-niche price bands and representative products` --references--> `Inputs`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
-- `2. What makes it "authentic"` --references--> `rebuild()`  [INFERRED]
-  docs/plan/data-pipeline.md → scout/store.py
+- `2. Per-niche price bands and representative products` --references--> `evaluate()`  [INFERRED]
+  docs/research/13-sales-niche-economics.md → scout/margin.py
 - `2. What makes it "authentic"` --references--> `record_run()`  [INFERRED]
   docs/plan/data-pipeline.md → scout/store.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (45 total, 9 thin omitted)
+## Communities (48 total, 9 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -159,7 +162,7 @@ Cohesion: 0.50
 Nodes (3): 10 — Category risk ranking (US, zero-inventory eBay dropshipping), Cross-cutting facts, Sources
 
 ### Community 22 - "store.py"
-Cohesion: 0.13
+Cohesion: 0.14
 Nodes (17): Shared rules for every AI team member, 2. What makes it "authentic", _git_sha(), main(), query(), rebuild(), record_run(), _runs() (+9 more)
 
 ### Community 23 - "steps"
@@ -234,9 +237,21 @@ Nodes (6): 1. Architecture, 3. Datasets, 4. How agents use it, 5. Automation, 6.
 Cohesion: 0.29
 Nodes (6): For each product type, Rules, Runbook: Terapeak research session (manual, about 90 minutes), What I do with it, What you need, Which products
 
+### Community 44 - "cj.py"
+Cohesion: 0.11
+Nodes (10): CJClient, CJError, _default_session(), main(), normalize_detail(), normalize_listing(), parse_price(), private_path() (+2 more)
+
+### Community 45 - "test_cj.py"
+Cohesion: 0.17
+Nodes (11): client(), FakeResp, FakeSession, test_a_second_auth_failure_is_not_retried_forever(), test_detail_normalizes_images_and_variants(), test_error_envelope_raises_with_the_code(), test_expired_token_is_refreshed_once(), test_missing_key_is_a_clear_error() (+3 more)
+
+### Community 46 - "18 — CJ Dropshipping API cheat sheet"
+Cohesion: 0.22
+Nodes (8): 18 — CJ Dropshipping API cheat sheet, Endpoints, Limits and errors, Minimal call sequence, Official MCP server, Sources, Terms, Unknowns that need a live key
+
 ## Knowledge Gaps
-- **6 isolated node(s):** `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 348 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **6 isolated node(s):** `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 368 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
@@ -244,15 +259,15 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
   _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL` to the rest of the system?**
+- **What connects `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS` to the rest of the system?**
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
+- **Are the 2 inferred relationships involving `Inputs` (e.g. with `2. Per-niche price bands and representative products` and `test_reviewed_cases()`) actually correct?**
+  _`Inputs` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Should `llm.py` be split into smaller, more focused modules?**
   _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._
 - **Should `store.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.13174603174603175 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1361344537815126 - nodes in this community are weakly interconnected._
 - **Should `steps` be split into smaller, more focused modules?**
   _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._
-- **Should `3. Candidate cards` be split into smaller, more focused modules?**
-  _Cohesion score 0.1 - nodes in this community are weakly interconnected._

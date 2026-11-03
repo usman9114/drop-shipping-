@@ -162,9 +162,9 @@
     "semantic_hash": ""
   },
   "requirements.txt": {
-    "mtime": 1793709623.9318068,
-    "seen": 1793709766.1400697,
-    "ast_hash": "307adfd30b85d8fcaac80735f3cda453",
+    "mtime": 1793746051.9553585,
+    "seen": 1793746059.65853,
+    "ast_hash": "cfa1a56cedeb054fdb4c4b4fbe1985d9",
     "semantic_hash": ""
   },
   "data/evidence/trends/candidates.txt": {
@@ -333,6 +333,30 @@
     "mtime": 1793745878.2843654,
     "seen": 1793745899.3056865,
     "ast_hash": "63a0b5fb9c71ef99a768f795f43d01f6",
+    "semantic_hash": ""
+  },
+  "scout/cj.py": {
+    "mtime": 1793746051.713154,
+    "seen": 1793746059.658481,
+    "ast_hash": "7a003a113dbc884b90a26a9761422686",
+    "semantic_hash": ""
+  },
+  "tests/test_cj.py": {
+    "mtime": 1793746051.729154,
+    "seen": 1793746059.658489,
+    "ast_hash": "f55565d5b8cd4a6d4ae11a2b8d051876",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0005-cj-client.md": {
+    "mtime": 1793746051.741154,
+    "seen": 1793746059.6585069,
+    "ast_hash": "27497e43b55802c6290abdba1dbc5055",
+    "semantic_hash": ""
+  },
+  "docs/research/18-cj-api-cheatsheet.md": {
+    "mtime": 1793746051.693154,
+    "seen": 1793746059.6585262,
+    "ast_hash": "fc10d156d1670fbbcf3f49c249666dec",
     "semantic_hash": ""
   }
 }
