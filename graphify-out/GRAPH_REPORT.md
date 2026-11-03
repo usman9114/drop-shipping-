@@ -1,7 +1,7 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 39 files · ~34,709 words
+- 39 files · ~34,717 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 10 file(s) not represented in the graph (top: .csv 4, (none) 3, .example 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ba83ba8a`
+- Built from commit: `a4b4ecd5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -56,23 +56,23 @@
 3. `2. Per-niche price bands and representative products` - 11 edges
 4. `rebuild()` - 10 edges
 5. `02 — Unit economics, success rates, saturation, tariffs` - 10 edges
-6. `hooks` - 9 edges
-7. `3. Candidate cards` - 9 edges
-8. `3. Primary niche: `tcg-supplies`` - 9 edges
+6. `3. Candidate cards` - 9 edges
+7. `3. Primary niche: `tcg-supplies`` - 9 edges
+8. `hooks` - 9 edges
 9. `11 - Google Trends check of Stage B candidates (US)` - 9 edges
 10. `main()` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
-  docs/research/13-sales-niche-economics.md → scout/margin.py
 - `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
   .claude/agents/_team-rules.md → scout/store.py
-- `2. Per-niche price bands and representative products` --references--> `Inputs`  [INFERRED]
+- `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
-- `2. Per-niche price bands and representative products` --references--> `evaluate()`  [INFERRED]
-  docs/research/13-sales-niche-economics.md → scout/margin.py
+- `2. What makes it "authentic"` --references--> `rebuild()`  [INFERRED]
+  docs/plan/data-pipeline.md → scout/store.py
 - `2. What makes it "authentic"` --references--> `record_run()`  [INFERRED]
   docs/plan/data-pipeline.md → scout/store.py
+- `2. Per-niche price bands and representative products` --references--> `Inputs`  [INFERRED]
+  docs/research/13-sales-niche-economics.md → scout/margin.py
 
 ## Import Cycles
 - None detected.

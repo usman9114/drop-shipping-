@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "scout/llm.py": {
-    "mtime": 1793722889.9493396,
-    "seen": 1793722942.8753617,
-    "ast_hash": "0beb800e0492b51bd6f11d457d134fad",
+    "mtime": 1793722948.285144,
+    "seen": 1793722955.6918416,
+    "ast_hash": "83c371af4794b3260836772535ab1c2f",
     "semantic_hash": ""
   },
   "scout/margin.py": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "scout/trends.py": {
-    "mtime": 1793722855.013566,
-    "seen": 1793722942.8753672,
-    "ast_hash": "662fec88d7587f896f77ee205ecfb6bf",
+    "mtime": 1793722948.2851956,
+    "seen": 1793722955.6918454,
+    "ast_hash": "a48274ed2c83fd115e91bf56f2698493",
     "semantic_hash": ""
   },
   ".claude/agents/_team-rules.md": {
@@ -222,9 +222,9 @@
     "semantic_hash": ""
   },
   "scout/store.py": {
-    "mtime": 1793722902.4785795,
-    "seen": 1793722942.8753653,
-    "ast_hash": "d16f5e4bdac345954c55ff69615d2cbc",
+    "mtime": 1793722948.2851775,
+    "seen": 1793722955.6918445,
+    "ast_hash": "23cb059222669bab2d2c6430487edbbf",
     "semantic_hash": ""
   },
   "scripts/claude-glm.sh": {
