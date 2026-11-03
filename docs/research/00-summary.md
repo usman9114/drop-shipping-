@@ -93,6 +93,8 @@ Build `product-scout`:
 
 5. ~~Which supplier?~~ **Decided 2026-11-03: CJ Dropshipping** for catalog, stock, orders and tracking. Images: **CJ's own images, with AI enhancing only the surroundings** (decided 2026-11-03; see `06-image-sourcing.md` §5). CJ's paid copyrighted photos come later if the PoC works.
 
+> **Update 2026-11-03:** eBay's API license restricts storing eBay data, computing statistics or average selling prices from it, and using it to model prices without written permission (`docs/research/17`, decision 0004). Phase 0 therefore cannot rely on automated eBay Browse data; it uses manual Terapeak reading, non-eBay evidence, and later our own account's data.
+
 ## Confidence
 
 - **High:** eBay fees and seller standards; the dropshipping policy text (UK page); the de minimis timeline (Federal Register); NRF return rate.

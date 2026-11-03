@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 42 files · ~38,192 words
+- 46 files · ~41,880 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 10 file(s) not represented in the graph (top: .csv 4, (none) 3, .example 1)
 
 ## Summary
-- 350 nodes · 384 edges · 37 communities (28 shown, 9 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.95)
+- 382 nodes · 412 edges · 41 communities (32 shown, 9 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.95)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `bef19d6c`
+- Built from commit: `63d19402`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -51,6 +51,10 @@
 - glm-coder.md
 - 0003 — Build vs reuse: workflow, data loading, connectors, LLM routing
 - data-engineer.md
+- 0004 — Postgres warehouse, hosting, and what the source terms allow
+- 15 — Postgres hosting, GitHub Actions limits, warehouse tooling
+- 16 — Trend and demand sources (US): what we can legitimately ingest
+- 17 — Free feeds, and what each API lets us store
 
 ## God Nodes (most connected - your core abstractions)
 1. `Warehouse design: Postgres as the source of truth` - 13 edges
@@ -69,17 +73,17 @@
   docs/research/13-sales-niche-economics.md → scout/margin.py
 - `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
   .claude/agents/_team-rules.md → scout/store.py
-- `2. What makes it "authentic"` --references--> `record_run()`  [INFERRED]
-  docs/plan/data-pipeline.md → scout/store.py
-- `2. What makes it "authentic"` --references--> `rebuild()`  [INFERRED]
-  docs/plan/data-pipeline.md → scout/store.py
 - `2. Per-niche price bands and representative products` --references--> `Inputs`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
+- `2. Per-niche price bands and representative products` --references--> `evaluate()`  [INFERRED]
+  docs/research/13-sales-niche-economics.md → scout/margin.py
+- `2. What makes it "authentic"` --references--> `record_run()`  [INFERRED]
+  docs/plan/data-pipeline.md → scout/store.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (37 total, 9 thin omitted)
+## Communities (41 total, 9 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -151,7 +155,7 @@ Nodes (3): 10 — Category risk ranking (US, zero-inventory eBay dropshipping), 
 
 ### Community 22 - "store.py"
 Cohesion: 0.13
-Nodes (12): Shared rules for every AI team member, _git_sha(), main(), query(), rebuild(), record_run(), _runs(), analyze() (+4 more)
+Nodes (13): Shared rules for every AI team member, 2. What makes it "authentic", _git_sha(), main(), query(), rebuild(), record_run(), _runs() (+5 more)
 
 ### Community 25 - "3. Candidate cards"
 Cohesion: 0.10
@@ -182,8 +186,8 @@ Cohesion: 0.25
 Nodes (7): ANTHROPIC_AUTH_TOKEN, ANTHROPIC_BASE_URL, ANTHROPIC_DEFAULT_HAIKU_MODEL, ANTHROPIC_DEFAULT_OPUS_MODEL, ANTHROPIC_DEFAULT_SONNET_MODEL, API_TIMEOUT_MS, claude-glm.sh script
 
 ### Community 32 - "Data pipeline: feeding the team authentic evidence"
-Cohesion: 0.25
-Nodes (7): 1. Architecture, 2. What makes it "authentic", 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence
+Cohesion: 0.29
+Nodes (6): 1. Architecture, 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence
 
 ### Community 35 - "0003 — Build vs reuse: workflow, data loading, connectors, LLM routing"
 Cohesion: 0.33
@@ -193,16 +197,30 @@ Nodes (5): 0003 — Build vs reuse: workflow, data loading, connectors, LLM rout
 Cohesion: 0.50
 Nodes (3): Every change includes, Principles, Rules
 
+### Community 37 - "0004 — Postgres warehouse, hosting, and what the source terms allow"
+Cohesion: 0.18
+Nodes (10): 0004 — Postgres warehouse, hosting, and what the source terms allow, 1. Decision, 2. New rule: terms gate, 3. What the terms change (the important part), 4. Home-grown audit update, 5. Owner actions, 6. What this does not settle, eBay data cannot simply be stored and analysed (+2 more)
+
+### Community 38 - "15 — Postgres hosting, GitHub Actions limits, warehouse tooling"
+Cohesion: 0.25
+Nodes (7): 15 — Postgres hosting, GitHub Actions limits, warehouse tooling, 1. Free hosted Postgres, 2. GitHub Actions, 3. Tooling, 4. Pattern check, Ranked recommendation (from the agent), Sources
+
+### Community 39 - "16 — Trend and demand sources (US): what we can legitimately ingest"
+Cohesion: 0.29
+Nodes (6): 16 — Trend and demand sources (US): what we can legitimately ingest, Implications for the warehouse, Sources, Sources, ranked by value / cost / legal safety, Storage and use constraints found, Verdict by platform
+
+### Community 40 - "17 — Free feeds, and what each API lets us store"
+Cohesion: 0.33
+Nodes (5): 17 — Free feeds, and what each API lets us store, A. eBay API License Agreement (verified against https://developer.ebay.com/develop/apis/api-license-agreement), B. Other storage terms, C. Free feeds, ranked, Sources
+
 ## Knowledge Gaps
 - **6 isolated node(s):** `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 262 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 289 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `record_run()` connect `store.py` to `Data pipeline: feeding the team authentic evidence`?**
-  _High betweenness centrality (0.011) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
   _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS` to the rest of the system?**
@@ -215,3 +233,5 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.13068181818181818 - nodes in this community are weakly interconnected._
 - **Should `3. Candidate cards` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
+- **Should `2. Per-niche price bands and representative products` be split into smaller, more focused modules?**
+  _Cohesion score 0.11857707509881422 - nodes in this community are weakly interconnected._

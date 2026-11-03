@@ -1,6 +1,6 @@
 # Warehouse design: Postgres as the source of truth
 
-> Status: **draft for owner review**, 2026-11-03. Supersedes the DuckDB/SQLite store in `docs/plan/data-pipeline.md` and part of decision 0003. Hosting, retention limits from API terms, and tool picks are filled in from the research wave (decision 0004).
+> Status: **draft for owner review**, 2026-11-03. Supersedes the DuckDB/SQLite store in `docs/plan/data-pipeline.md` and part of decision 0003. Decision 0004 (proposed) records hosting, tool picks and the source-terms findings. This document follows it.
 > Owner's direction: boring proven tech, Postgres, systematic ingestion and enrichment, proper warehousing, lean, runs in GitHub CI, retention controlled.
 
 ## 1. Principles
@@ -44,6 +44,7 @@ Time handling: every fact carries `observed_at` (when the world was true) and `l
 
 Every ingester follows the same steps. The skeleton is shared, so a new source is mostly a mapping.
 
+0. **Terms gate.** A source cannot be enabled until its terms page has been read, `meta.source.terms_reviewed_on` is set, and `max_retention` is recorded (null means *do not store*). The retention job enforces `max_retention`. Sources whose terms forbid storing or analytics stay disabled. This is why eBay listing data is off by default (decision 0004).
 1. **Register the source** in `meta.source` once: id, owner, access path, trust level, rate limit, cadence, **storage terms** (max age, redistribution) and license link.
 2. **Open a run** in `meta.run` with params, a params hash and the window. A unique key on (source, params_hash, window) makes retries safe.
 3. **Fetch** with retries, backoff and a hard timeout. Respect rate limits from the registry.
@@ -80,10 +81,11 @@ Targets assume a free hosted Postgres with a 500 MB cap. Keep steady state under
 
 | Data | Rough volume | Raw kept | Derived kept | Mechanism |
 |---|---|---|---|---|
-| Google Trends | 260 weekly points per keyword; 100 keywords = 26k rows | not kept (tiny) | forever | upsert |
+| Search interest | 260 weekly points per keyword; 100 keywords = 26k rows; from a licensed provider (SerpApi or DataForSEO). Existing pytrends points are flagged. | not kept (tiny) | forever | upsert |
 | CJ catalog scan | maybe 5k variants per niche, weekly | 30 days | SCD2 forever | monthly partitions, drop expired |
 | CJ shortlist offers | 40 candidates × 10 variants × daily, change-only | 90 days | daily facts 1 year | partitions plus retention job |
-| eBay listings | 50 queries × 200 items × daily = 10k rows/day | **7 to 30 days, or less if terms require** | daily stats forever | partitions, drop old |
+| eBay listings | **disabled by default** (eBay API License 8.1.3, 8.1.4, 9.5, 9.7). If eBay gives written permission: listings TTL 6 h, other content 24 h, delete on delisting. | none | none until permission | TTL job built, switched off |
+| Own-account eBay data (Sell APIs: impressions, orders, returns) | small | per Sell API terms (check first) | forever | upsert, first-party truth |
 | Social trends | weekly per term | 90 days | weekly forever | upsert |
 | Compliance feeds (CPSC, FDA, USPTO) | incremental deltas | 90 days | current state | upsert |
 | Runs, rejects, DQ results | small | 1 year | summary forever | delete job |
@@ -126,7 +128,7 @@ The choice is the owner's. Both use the same code.
 
 | Option | Where the data lives | Pros | Cons |
 |---|---|---|---|
-| **A. Hosted free Postgres** (recommended, pending research) | Neon, Supabase or similar | Real database, persistent, point-in-time recovery may be included, agents can query it | One more account. Free-tier caps, pausing behaviour and extension support must be checked. |
+| **A. Hosted free Postgres** (recommended: Neon Free, decision 0004) | Neon, Supabase or similar | Real database, persistent, point-in-time recovery may be included, agents can query it | One more account. Free-tier caps, pausing behaviour and extension support must be checked. |
 | **B. All in CI** | Postgres rebuilt each run from compact exports committed to git or a release | No accounts, fully reproducible | Git history grows, rebuild time grows, no ad-hoc agent queries between runs. Fine for the first weeks only. |
 
 Backups: logical dumps of `core` and `meta` (small) on a schedule to a private location. Raw is replayable only within its retention, so `core` and its history are the real truth.

@@ -35,5 +35,9 @@
   "33": "aggregate_candidates.py",
   "34": "glm-coder.md",
   "35": "0003 — Build vs reuse: workflow, data loading, connectors, LLM routing",
-  "36": "data-engineer.md"
+  "36": "data-engineer.md",
+  "37": "0004 — Postgres warehouse, hosting, and what the source terms allow",
+  "38": "15 — Postgres hosting, GitHub Actions limits, warehouse tooling",
+  "39": "16 — Trend and demand sources (US): what we can legitimately ingest",
+  "40": "17 — Free feeds, and what each API lets us store"
 }

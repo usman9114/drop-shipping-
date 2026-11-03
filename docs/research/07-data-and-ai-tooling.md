@@ -13,6 +13,8 @@
 
 `scout.trends` uses pytrends with caching and backoff. We should also apply for the official alpha.
 
+> **Update 2026-11-03:** storing and analysing Browse API data is restricted by the eBay API License Agreement. See `docs/research/17` and decision 0004 before using anything in this section.
+
 ## 2. eBay Browse API
 
 - **[data]** `api.ebay.com` returned **403 from Akamai** to a request without a token on 2026-11-03. We need to recheck with an OAuth token before concluding that this environment can reach eBay.

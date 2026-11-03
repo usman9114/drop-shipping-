@@ -18,15 +18,15 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793723870.569825,
-    "seen": 1793724088.852495,
-    "ast_hash": "448a36d2c881dad1096e8baa6805998c",
+    "mtime": 1793724965.5442631,
+    "seen": 1793724966.4889164,
+    "ast_hash": "e0170b0eecb387218b768af0955328c1",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
-    "mtime": 1793708858.2937906,
-    "seen": 1793708858.7450092,
-    "ast_hash": "2eedb43240bc2f9d90288e9b0db42664",
+    "mtime": 1793724965.544466,
+    "seen": 1793724966.4889264,
+    "ast_hash": "22aff3a18f63f5cd68a72882dd1a6e7a",
     "semantic_hash": ""
   },
   "docs/research/01-ebay-policy.md": {
@@ -138,9 +138,9 @@
     "semantic_hash": ""
   },
   "docs/research/07-data-and-ai-tooling.md": {
-    "mtime": 1793709487.6091528,
-    "seen": 1793709766.1400652,
-    "ast_hash": "fc3d64b5654e7791ee3bac762b3a0a6a",
+    "mtime": 1793724965.5446327,
+    "seen": 1793724966.488933,
+    "ast_hash": "b8e3fe9908237bc5de7a86ed32af3afb",
     "semantic_hash": ""
   },
   "docs/research/08-ebay-us-demand.md": {
@@ -258,9 +258,33 @@
     "semantic_hash": ""
   },
   "docs/plan/warehouse.md": {
-    "mtime": 1793724743.8242762,
-    "seen": 1793724754.4825635,
-    "ast_hash": "2caccc34b0e06138c4ef1f0ebbb5af3d",
+    "mtime": 1793724965.5440667,
+    "seen": 1793724966.4889257,
+    "ast_hash": "2a4f9e01bfb6cb471f1ff6c178e844cc",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0004-postgres-warehouse-and-source-terms.md": {
+    "mtime": 1793724954.1122668,
+    "seen": 1793724966.488922,
+    "ast_hash": "ed3fd3cf4079c977e3c199025e3589c5",
+    "semantic_hash": ""
+  },
+  "docs/research/15-warehouse-hosting-and-tooling.md": {
+    "mtime": 1793724815.412273,
+    "seen": 1793724966.4889402,
+    "ast_hash": "93824ecb0b42ab9cfe2e4c3d2aae4523",
+    "semantic_hash": ""
+  },
+  "docs/research/16-trend-and-social-sources.md": {
+    "mtime": 1793724834.424272,
+    "seen": 1793724966.488941,
+    "ast_hash": "2b1bde4876e9ec08b3e0b38bff172eb2",
+    "semantic_hash": ""
+  },
+  "docs/research/17-free-feeds-and-storage-terms.md": {
+    "mtime": 1793724934.0562677,
+    "seen": 1793724966.4889421,
+    "ast_hash": "14fed06251b8bdbcbb1d46520929d8d3",
     "semantic_hash": ""
   }
 }
