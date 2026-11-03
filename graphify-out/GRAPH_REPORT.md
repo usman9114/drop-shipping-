@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 10 files · ~6,316 words
+- 11 files · ~7,209 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: (none) 3, .example 1)
 
 ## Summary
-- 87 nodes · 81 edges · 10 communities (9 shown, 1 thin omitted)
+- 95 nodes · 88 edges · 11 communities (10 shown, 1 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fee208c9`
+- Built from commit: `28c09f9a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -26,18 +26,19 @@
 - CLAUDE.md
 - .pre-commit-config.yaml
 - check_no_ai_attribution.py
+- 06 — Image sourcing under zero inventory
 
 ## God Nodes (most connected - your core abstractions)
 1. `02 — Unit economics, success rates, saturation, tariffs` - 10 edges
-2. `00 — Research summary and PoC plan` - 8 edges
-3. `05 — Legal/IP/compliance risks and other platforms` - 8 edges
+2. `hooks` - 8 edges
+3. `00 — Research summary and PoC plan` - 8 edges
 4. `01 — eBay dropshipping policy, enforcement, fees` - 8 edges
 5. `04 — Tooling, APIs and AI listing pipeline` - 8 edges
-6. `hooks` - 8 edges
+6. `05 — Legal/IP/compliance risks and other platforms` - 8 edges
 7. `03 — Suppliers and their APIs` - 7 edges
-8. `PoC plan (feasibility before money)` - 4 edges
+8. `06 — Image sourcing under zero inventory` - 7 edges
 9. `repos` - 4 edges
-10. `git_ident()` - 3 edges
+10. `PoC plan (feasibility before money)` - 4 edges
 
 ## Surprising Connections (you probably didn't know these)
 - None detected - all connections are within the same source files.
@@ -45,7 +46,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (10 total, 1 thin omitted)
+## Communities (11 total, 1 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -83,6 +84,10 @@ Nodes (5): Commands, Context: graphify knowledge graph, graphify, Hard rules, Pr
 Cohesion: 0.29
 Nodes (6): default_install_hook_types, default_stages, exclude, repos, repo, rev
 
+### Community 10 - "06 — Image sourcing under zero inventory"
+Cohesion: 0.25
+Nodes (7): 06 — Image sourcing under zero inventory, 1. Which suppliers license their images to us, 2. What eBay's picture policy allows (fetched), 3. eBay catalog (ePID) images, 4. Checking quality and delivery without stock, Pipeline rules derived from this, Sources
+
 ## Knowledge Gaps
 - **1 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -90,6 +95,6 @@ Nodes (6): default_install_hook_types, default_stages, exclude, repos, repo, rev
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `hooks` connect `hooks` to `.pre-commit-config.yaml`?**
-  _High betweenness centrality (0.019) - this node is a cross-community bridge._
-- **Why does `repos` connect `.pre-commit-config.yaml` to `hooks`?**
   _High betweenness centrality (0.016) - this node is a cross-community bridge._
+- **Why does `repos` connect `.pre-commit-config.yaml` to `hooks`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._

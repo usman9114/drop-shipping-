@@ -22,7 +22,7 @@ The version everyone has heard about, *find a winning AliExpress product, copy a
 - **We never hold or buy stock.** Every order is paid to the supplier after the buyer pays, and the supplier ships directly to the buyer.
 - "US-warehouse supplier" means the **supplier's** warehouse. We own nothing in it.
 - Working capital pays only for orders already sold. It covers the gap until eBay releases funds held for new sellers (up to 21 days).
-- **Consequence for images:** we can't photograph products ourselves. Listing images must come from supplier images **licensed for reseller use**, a supplier's paid photo service, or eBay catalog images. AI may only *enhance* a licensed image (background, lighting, lifestyle scene, infographic overlay). It must never invent features. See `06-image-sourcing.md`.
+- **Consequence for images:** we can't photograph products ourselves. Listing images must come from supplier images **licensed for reseller use**, a supplier's paid photo service, or eBay catalog images. AI may only *enhance* a licensed image (background, lighting, upscaling, lifestyle scene around the unaltered product). eBay bans added text, borders and watermarks on images. It must never invent features. See `06-image-sourcing.md`.
 - **Consequence for QC:** quality and delivery time are checked with **test orders through the normal dropship flow**, shipped to our own address, plus supplier QC/inspection services. These are one-off orders, not stock.
 
 ## The thesis to test
@@ -64,7 +64,7 @@ Build `product-scout`:
 ### Phase 1: listing quality, ~$100–200 (no stock)
 
 - Place **test orders** for the top 5–10 SKUs through the normal dropship flow, shipped to our own address. These measure real delivery time and quality, and the items aren't resold. Supplier QC/inspection services are an alternative.
-- Run **supplier-licensed** images through the image pipeline: background cleanup, lighting, lifestyle scenes, infographic overlays. Cost is ~$0.02–0.07 per image. Keep the product itself unaltered.
+- Run **supplier-licensed** images through the image pipeline: background cleanup, lighting, upscaling, lifestyle scenes. No text, badges or borders, which eBay bans; feature callouts go in the description. Cost is ~$0.02–0.07 per image. Keep the product itself unaltered.
 - Use an LLM to write titles, item specifics and descriptions grounded **only** in supplier specs, verified against what the test order showed.
 
 **Kill criterion:** test-order quality or real delivery time doesn't match the supplier's claims, or the supplier's terms don't license its images for marketplace use.
@@ -90,6 +90,8 @@ Build `product-scout`:
 2. **Market:** US only for the PoC? The EU adds GPSR responsible-person and 14-day withdrawal obligations (05).
 3. **Can we get API keys?** eBay developer account (free), CJ API key (free), and possibly Marketplace Insights (apply).
 4. ~~Who photographs samples?~~ **Resolved: zero inventory.** Images come from supplier-licensed sources (see `06-image-sourcing.md`).
+
+5. **Which supplier?** CJ has the best API but **no image license in its terms**, so we'd need its paid photo service or written permission. Spocket and Zendrop license their images but have weaker or unconfirmed APIs. See `06-image-sourcing.md` §1 for options A–D.
 
 ## Confidence
 

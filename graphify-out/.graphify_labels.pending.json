@@ -8,5 +8,6 @@
   "6": "hooks",
   "7": "CLAUDE.md",
   "8": ".pre-commit-config.yaml",
-  "9": "check_no_ai_attribution.py"
+  "9": "check_no_ai_attribution.py",
+  "10": "06 — Image sourcing under zero inventory"
 }
