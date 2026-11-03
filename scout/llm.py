@@ -30,7 +30,7 @@ PROVIDERS = {
     "openrouter": {"base": API, "keys": ["OPENROUTER_API_KEY"]},
     "zai": {
         "base": "https://api.z.ai/api/paas/v4",
-        "keys": ["ZAI_API_KEY", "Z_AI_API_KEY", "ZHIPUAI_API_KEY"],
+        "keys": ["ZAI_API_KEY", "ZAI_KEY", "Z_AI_API_KEY", "ZHIPUAI_API_KEY"],
     },
 }
 
@@ -46,11 +46,13 @@ FREE_MODELS: dict[str, list[str]] = {
     ],
     "reasoning": [  # harder analysis, drafting copy
         "zai:glm-4.7-flash",
+        "zai:glm-4.5-flash",
         "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
         "openrouter:google/gemma-4-31b-it:free",
     ],
     "code": [  # code drafts; Claude reviews before anything is committed
         "zai:glm-4.7-flash",
+        "zai:glm-4.5-flash",
         "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
     ],
     "vision": [  # image QA, image -> attributes
@@ -61,6 +63,22 @@ FREE_MODELS: dict[str, list[str]] = {
     ],
     "safety": ["openrouter:nvidia/nemotron-3.5-content-safety:free"],
 }
+
+
+def _load_dotenv(path: str = ".env") -> None:
+    """Load KEY=VALUE lines from .env without overriding the real environment."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+    except OSError:
+        pass
+
+
+_load_dotenv()
 
 
 class LLMError(RuntimeError):
@@ -86,6 +104,38 @@ def _post(payload: dict, provider: str, key: str, timeout: int = 180) -> dict:
     )
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return json.loads(resp.read())
+
+
+def _inline_images(messages: list[dict]) -> list[dict]:
+    """Z.ai can't fetch many image URLs itself; send them as base64 data URLs."""
+    import base64
+    import mimetypes
+
+    out = []
+    for msg in messages:
+        if not isinstance(msg["content"], list):
+            out.append(msg)
+            continue
+        parts = []
+        for part in msg["content"]:
+            url = part.get("image_url", {}).get("url", "")
+            if part.get("type") == "image_url" and not url.startswith("data:"):
+                if url.startswith(("http://", "https://")):
+                    req = urllib.request.Request(
+                        url, headers={"User-Agent": "dropship-poc-scout"}
+                    )
+                    with urllib.request.urlopen(req, timeout=60) as resp:
+                        raw = resp.read()
+                        mime = resp.headers.get_content_type()
+                else:  # local file path
+                    with open(url, "rb") as fh:
+                        raw = fh.read()
+                    mime = mimetypes.guess_type(url)[0] or "image/jpeg"
+                url = f"data:{mime};base64,{base64.b64encode(raw).decode()}"
+                part = {"type": "image_url", "image_url": {"url": url}}
+            parts.append(part)
+        out.append({**msg, "content": parts})
+    return out
 
 
 def chat(
@@ -121,10 +171,20 @@ def chat(
     for spec in models:
         provider, model = spec.split(":", 1)
         key = _key(provider)
-        payload = {"model": model, "messages": messages, "max_tokens": max_tokens}
+        msgs = (
+            _inline_images(messages) if provider == "zai" and image_urls else messages
+        )
+        payload = {"model": model, "messages": msgs, "max_tokens": max_tokens}
+        if provider == "zai":
+            # GLM Flash models think by default and can spend the whole token
+            # budget on hidden reasoning; keep it off except for reasoning tasks.
+            if task == "reasoning":
+                payload["max_tokens"] = max(max_tokens, 4096)
+            else:
+                payload["thinking"] = {"type": "disabled"}
         if json_mode:
             payload["response_format"] = {"type": "json_object"}
-        for attempt in range(2):
+        for attempt in range(3):
             try:
                 data = _post(payload, provider, key)
                 text = data["choices"][0]["message"]["content"] or ""
@@ -132,8 +192,8 @@ def chat(
             except urllib.error.HTTPError as exc:
                 body = exc.read().decode(errors="replace")[:300]
                 errors.append(f"{spec}: HTTP {exc.code} {body}")
-                if exc.code == 429 and attempt == 0:
-                    time.sleep(4)
+                if exc.code in (429, 500, 502, 503) and attempt < 2:
+                    time.sleep(5 * (attempt + 1))  # free tiers are often overloaded
                     continue
                 break
             except (urllib.error.URLError, KeyError, TimeoutError) as exc:

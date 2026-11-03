@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 39 files · ~34,717 words
+- 39 files · ~34,943 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 10 file(s) not represented in the graph (top: .csv 4, (none) 3, .example 1)
 
 ## Summary
-- 322 nodes · 358 edges · 35 communities (25 shown, 10 thin omitted)
+- 326 nodes · 363 edges · 35 communities (25 shown, 10 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.95)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a4b4ecd5`
+- Built from commit: `af716e30`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -56,23 +56,23 @@
 3. `2. Per-niche price bands and representative products` - 11 edges
 4. `rebuild()` - 10 edges
 5. `02 — Unit economics, success rates, saturation, tariffs` - 10 edges
-6. `3. Candidate cards` - 9 edges
-7. `3. Primary niche: `tcg-supplies`` - 9 edges
-8. `hooks` - 9 edges
+6. `hooks` - 9 edges
+7. `3. Candidate cards` - 9 edges
+8. `3. Primary niche: `tcg-supplies`` - 9 edges
 9. `11 - Google Trends check of Stage B candidates (US)` - 9 edges
-10. `main()` - 8 edges
+10. `chat()` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
-  .claude/agents/_team-rules.md → scout/store.py
 - `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
-- `2. What makes it "authentic"` --references--> `rebuild()`  [INFERRED]
-  docs/plan/data-pipeline.md → scout/store.py
-- `2. What makes it "authentic"` --references--> `record_run()`  [INFERRED]
-  docs/plan/data-pipeline.md → scout/store.py
+- `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
+  .claude/agents/_team-rules.md → scout/store.py
 - `2. Per-niche price bands and representative products` --references--> `Inputs`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
+- `2. Per-niche price bands and representative products` --references--> `evaluate()`  [INFERRED]
+  docs/research/13-sales-niche-economics.md → scout/margin.py
+- `2. What makes it "authentic"` --references--> `record_run()`  [INFERRED]
+  docs/plan/data-pipeline.md → scout/store.py
 
 ## Import Cycles
 - None detected.
@@ -112,8 +112,8 @@ Cohesion: 0.29
 Nodes (5): Commands, Context: graphify knowledge graph, graphify, Hard rules, Project
 
 ### Community 8 - "llm.py"
-Cohesion: 0.20
-Nodes (6): chat(), _key(), list_free(), LLMError, main(), _post()
+Cohesion: 0.16
+Nodes (8): chat(), _inline_images(), _key(), list_free(), LLMError, _load_dotenv(), main(), _post()
 
 ### Community 9 - "11 - Google Trends check of Stage B candidates (US)"
 Cohesion: 0.20
@@ -148,7 +148,7 @@ Cohesion: 0.50
 Nodes (3): 10 — Category risk ranking (US, zero-inventory eBay dropshipping), Cross-cutting facts, Sources
 
 ### Community 22 - "store.py"
-Cohesion: 0.17
+Cohesion: 0.16
 Nodes (11): Shared rules for every AI team member, 2. What makes it "authentic", _git_sha(), main(), query(), rebuild(), record_run(), _runs() (+3 more)
 
 ### Community 25 - "3. Candidate cards"
@@ -181,7 +181,7 @@ Nodes (6): 1. Architecture, 3. Datasets, 4. How agents use it, 5. Automation, 6.
 
 ## Knowledge Gaps
 - **6 isolated node(s):** `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 239 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 241 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
@@ -198,6 +198,6 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `3. Candidate cards` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
 - **Should `2. Per-niche price bands and representative products` be split into smaller, more focused modules?**
-  _Cohesion score 0.11857707509881422 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.12121212121212122 - nodes in this community are weakly interconnected._
 - **Should `12 — Compliance risk cards for the 8 candidate niches` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
