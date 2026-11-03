@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793708858.2933507,
-    "seen": 1793708858.7450073,
-    "ast_hash": "f4a9dba21578f9d07ace59ca06c977ba",
+    "mtime": 1793722942.1553042,
+    "seen": 1793722942.8753803,
+    "ast_hash": "e5196e25692c660c4f34de1e9b0e411d",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "scout/llm.py": {
-    "mtime": 1793709760.1571407,
-    "seen": 1793709766.1400378,
-    "ast_hash": "07ddf0d7bd1f8f4c060c0754032e2158",
+    "mtime": 1793722889.9493396,
+    "seen": 1793722942.8753617,
+    "ast_hash": "0beb800e0492b51bd6f11d457d134fad",
     "semantic_hash": ""
   },
   "scout/margin.py": {
@@ -84,15 +84,15 @@
     "semantic_hash": ""
   },
   "scout/trends.py": {
-    "mtime": 1793721671.600497,
-    "seen": 1793721677.1602528,
-    "ast_hash": "ec20ad30dd3a861e4d864d5e6eb5c1b5",
+    "mtime": 1793722855.013566,
+    "seen": 1793722942.8753672,
+    "ast_hash": "662fec88d7587f896f77ee205ecfb6bf",
     "semantic_hash": ""
   },
   ".claude/agents/_team-rules.md": {
-    "mtime": 1793709467.1586533,
-    "seen": 1793709766.1400445,
-    "ast_hash": "83ceb229801ada1a26666f5645876c84",
+    "mtime": 1793722942.15505,
+    "seen": 1793722942.875371,
+    "ast_hash": "3d70684ed4885c736313cc2f2035603c",
     "semantic_hash": ""
   },
   ".claude/agents/compliance-officer.md": {
@@ -219,6 +219,30 @@
     "mtime": 1793721929.265171,
     "seen": 1793721929.730438,
     "ast_hash": "cf7983382117897a612713067af642c0",
+    "semantic_hash": ""
+  },
+  "scout/store.py": {
+    "mtime": 1793722902.4785795,
+    "seen": 1793722942.8753653,
+    "ast_hash": "d16f5e4bdac345954c55ff69615d2cbc",
+    "semantic_hash": ""
+  },
+  "scripts/claude-glm.sh": {
+    "mtime": 1793722932.7633038,
+    "seen": 1793722942.875368,
+    "ast_hash": "ac5417823d29646a55a551361adac997",
+    "semantic_hash": ""
+  },
+  ".claude/agents/glm-coder.md": {
+    "mtime": 1793722932.761865,
+    "seen": 1793722942.8753755,
+    "ast_hash": "421fad592bbaaccb77779fd0fa63b8c1",
+    "semantic_hash": ""
+  },
+  "docs/plan/data-pipeline.md": {
+    "mtime": 1793722932.8124404,
+    "seen": 1793722942.875385,
+    "ast_hash": "bb222cea2c32d6dd87d5d354e93a8523",
     "semantic_hash": ""
   }
 }

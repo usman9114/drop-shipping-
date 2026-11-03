@@ -27,6 +27,8 @@ Project context lives in the graphify knowledge graph (`graphify-out/`). Use it 
 make setup      # pip install pre-commit graphifyy detect-secrets; install all hooks
 make lint       # pre-commit run --all-files
 make graph      # graphify update . (refresh knowledge graph)
+python -m scout.store tables|runs|query "SQL"|rebuild   # evidence store (docs/plan/data-pipeline.md)
+python -m scout.llm --task code "..."                  # free models: Z.ai GLM Flash -> OpenRouter
 ```
 
 ## graphify

@@ -16,6 +16,7 @@ seasonality across keywords, not absolute levels.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import csv
 import json
 import sys
@@ -32,7 +33,7 @@ def _fetch(keyword: str, timeframe: str, geo: str, retries: int = 4):
 
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     key = f"{keyword}|{timeframe}|{geo}|{date.today().isoformat()}"
-    cache = CACHE_DIR / (str(abs(hash(key)) % 10**12) + ".json")
+    cache = CACHE_DIR / (hashlib.sha1(key.encode()).hexdigest()[:16] + ".json")
     if cache.exists():
         data = json.loads(cache.read_text())
         if data.get("key") == key:
@@ -101,14 +102,24 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--geo", default="US")
     ap.add_argument("--out", help="CSV output path")
     ap.add_argument("--sleep", type=float, default=2.0, help="seconds between keywords")
+    ap.add_argument(
+        "--lake",
+        action="store_true",
+        help="also record weekly series to the evidence lake",
+    )
     args = ap.parse_args(argv)
 
     kws = list(args.keywords)
+    niche_of: dict[str, str] = {}
     if args.file:
-        for line in Path(args.file).read_text().splitlines():
-            line = line.split("#", 1)[0].strip()
+        niche = ""
+        for raw in Path(args.file).read_text().splitlines():
+            if raw.strip().startswith("# niche:"):
+                niche = raw.split(":", 1)[1].strip()
+            line = raw.split("#", 1)[0].strip()
             if line:
                 kws.append(line)
+                niche_of[line] = niche
     if not kws:
         ap.error("no keywords given")
 
@@ -121,6 +132,30 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(rows[-1]), file=sys.stderr)
         if i < len(kws) - 1:
             time.sleep(args.sleep)
+
+    if args.lake:
+        from scout.store import record_run
+
+        points = [
+            {
+                "keyword": kw,
+                "niche": niche_of.get(kw, ""),
+                "geo": args.geo,
+                "week": d,
+                "value": v,
+            }
+            for kw in kws
+            for d, v in _fetch(kw, "today 5-y", args.geo)
+        ]
+        run_id = record_run(
+            "trend_points",
+            points,
+            source="google_trends/pytrends",
+            trust="data",
+            params={"keywords": kws, "geo": args.geo, "timeframe": "today 5-y"},
+            note="relative interest 0-100, normalized per keyword",
+        )
+        print(f"lake run {run_id}: {len(points)} points", file=sys.stderr)
 
     fields = [
         "keyword",

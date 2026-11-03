@@ -21,7 +21,7 @@
   "19": "head-of-marketing.md",
   "20": "sales-lead.md",
   "21": "compliance-officer.md",
-  "22": "_team-rules.md",
+  "22": "store.py",
   "23": "__init__.py",
   "24": "market-researcher.md",
   "25": "3. Candidate cards",
@@ -29,5 +29,9 @@
   "27": "12 — Compliance risk cards for the 8 candidate niches",
   "28": "3. Primary niche: `tcg-supplies`",
   "29": "check_no_ai_attribution.py",
-  "30": "Multichannel plan: one pipeline, eBay + Shopify/Instagram"
+  "30": "Multichannel plan: one pipeline, eBay + Shopify/Instagram",
+  "31": "claude-glm.sh",
+  "32": "Data pipeline: feeding the team authentic evidence",
+  "33": "aggregate_candidates.py",
+  "34": "glm-coder.md"
 }

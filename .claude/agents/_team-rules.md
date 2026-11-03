@@ -22,4 +22,6 @@ Every agent in `.claude/agents/` reads this file first. It is not an agent itsel
    - Raw data: `data/evidence/<source>/`
    - Keep reports skimmable: tables first, then notes, then sources.
 6. **Say what you don't know.** A missing number is reported as missing, never invented. Mocked data must be labeled `MOCK` in the filename and the text.
-7. **Use the knowledge graph** before reading lots of files: `graphify query "<question>"`.
+7. **Numbers come from the evidence store.** Query `python -m scout.store query "SELECT ..."` and cite the `run_id`. Ingest new pulls with `scout.store.record_run` (never hand-edit lake files). Web research explains; the store decides. See `docs/plan/data-pipeline.md`.
+8. **Free models first:** `python -m scout.llm --task {bulk,reasoning,code,vision}` uses Z.ai GLM Flash, then OpenRouter free models. Code drafts can go to `glm-coder`.
+9. **Use the knowledge graph** before reading lots of files: `graphify query "<question>"`.

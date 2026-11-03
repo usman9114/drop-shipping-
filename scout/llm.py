@@ -1,4 +1,4 @@
-"""Free-first LLM client for OpenRouter.
+"""Free-first LLM client (Z.ai GLM Flash + OpenRouter free models).
 
 Routes each task type to a list of free models and falls back on errors or
 rate limits. Free-tier limits: 20 req/min, and 50 req/day until the account has
@@ -10,7 +10,7 @@ Usage:
     python -m scout.llm --task vision --image https://... "Any text or watermark?"
     python -m scout.llm --list-free          # show current free models
 
-Env: OPENROUTER_API_KEY
+Env: ZAI_API_KEY (Z.ai GLM Flash, free) and/or OPENROUTER_API_KEY
 """
 
 from __future__ import annotations
@@ -25,24 +25,41 @@ import urllib.request
 
 API = "https://openrouter.ai/api/v1"
 
-# Ordered by preference. Verified available on 2026-11-03; refresh with --list-free.
+# Providers: OpenAI-compatible chat endpoints. Key env vars are tried in order.
+PROVIDERS = {
+    "openrouter": {"base": API, "keys": ["OPENROUTER_API_KEY"]},
+    "zai": {
+        "base": "https://api.z.ai/api/paas/v4",
+        "keys": ["ZAI_API_KEY", "Z_AI_API_KEY", "ZHIPUAI_API_KEY"],
+    },
+}
+
+# "provider:model", ordered by preference. All free (OpenRouter ":free" verified
+# 2026-11-03; Z.ai Flash models listed as Free on docs.z.ai pricing). Models whose
+# provider key is missing are skipped.
 FREE_MODELS: dict[str, list[str]] = {
     "bulk": [  # fast classification / tagging / extraction
-        "nvidia/nemotron-3.5-lightning:free",
-        "google/gemma-4-26b-a4b-it:free",
-        "liquid/lfm-2.5-2.6b:free",
+        "zai:glm-4.5-flash",
+        "openrouter:nvidia/nemotron-3.5-lightning:free",
+        "openrouter:google/gemma-4-26b-a4b-it:free",
+        "openrouter:liquid/lfm-2.5-2.6b:free",
     ],
     "reasoning": [  # harder analysis, drafting copy
-        "nvidia/nemotron-3-ultra-550b-a55b:free",
-        "google/gemma-4-31b-it:free",
-        "nvidia/nemotron-3.5-lightning:free",
+        "zai:glm-4.7-flash",
+        "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
+        "openrouter:google/gemma-4-31b-it:free",
+    ],
+    "code": [  # code drafts; Claude reviews before anything is committed
+        "zai:glm-4.7-flash",
+        "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
     ],
     "vision": [  # image QA, image -> attributes
-        "nvidia/nemotron-3.5-super-vl:free",
-        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-        "google/gemma-4-31b-it:free",
+        "zai:glm-4.6v-flash",
+        "openrouter:nvidia/nemotron-3.5-super-vl:free",
+        "openrouter:nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+        "openrouter:google/gemma-4-31b-it:free",
     ],
-    "safety": ["nvidia/nemotron-3.5-content-safety:free"],
+    "safety": ["openrouter:nvidia/nemotron-3.5-content-safety:free"],
 }
 
 
@@ -50,9 +67,16 @@ class LLMError(RuntimeError):
     pass
 
 
-def _post(payload: dict, key: str, timeout: int = 120) -> dict:
+def _key(provider: str) -> str | None:
+    for var in PROVIDERS[provider]["keys"]:
+        if os.environ.get(var):
+            return os.environ[var]
+    return None
+
+
+def _post(payload: dict, provider: str, key: str, timeout: int = 180) -> dict:
     req = urllib.request.Request(
-        f"{API}/chat/completions",
+        f"{PROVIDERS[provider]['base']}/chat/completions",
         data=json.dumps(payload).encode(),
         headers={
             "Authorization": f"Bearer {key}",
@@ -73,10 +97,16 @@ def chat(
     max_tokens: int = 1024,
 ) -> dict:
     """Return {'model': ..., 'text': ...}. Tries each free model for the task."""
-    key = os.environ.get("OPENROUTER_API_KEY")
-    if not key:
-        raise LLMError("OPENROUTER_API_KEY is not set")
-    models = FREE_MODELS[task]
+    models = [m for m in FREE_MODELS[task] if _key(m.split(":", 1)[0])]
+    if not models:
+        need = sorted(
+            {
+                v
+                for m in FREE_MODELS[task]
+                for v in PROVIDERS[m.split(":", 1)[0]]["keys"]
+            }
+        )
+        raise LLMError(f"no API key set for task {task!r}; set one of {need}")
 
     content: list[dict] | str = prompt
     if image_urls:
@@ -88,24 +118,26 @@ def chat(
     ]
 
     errors = []
-    for model in models:
+    for spec in models:
+        provider, model = spec.split(":", 1)
+        key = _key(provider)
         payload = {"model": model, "messages": messages, "max_tokens": max_tokens}
         if json_mode:
             payload["response_format"] = {"type": "json_object"}
         for attempt in range(2):
             try:
-                data = _post(payload, key)
+                data = _post(payload, provider, key)
                 text = data["choices"][0]["message"]["content"] or ""
-                return {"model": data.get("model", model), "text": text}
+                return {"model": f"{provider}:{data.get('model', model)}", "text": text}
             except urllib.error.HTTPError as exc:
                 body = exc.read().decode(errors="replace")[:300]
-                errors.append(f"{model}: HTTP {exc.code} {body}")
+                errors.append(f"{spec}: HTTP {exc.code} {body}")
                 if exc.code == 429 and attempt == 0:
                     time.sleep(4)
                     continue
                 break
             except (urllib.error.URLError, KeyError, TimeoutError) as exc:
-                errors.append(f"{model}: {exc}")
+                errors.append(f"{spec}: {exc}")
                 break
     raise LLMError("all free models failed:\n  " + "\n  ".join(errors))
 
