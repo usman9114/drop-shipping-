@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "scout/llm.py": {
-    "mtime": 1793723258.2197957,
-    "seen": 1793723348.06326,
-    "ast_hash": "bd692f7e33711877f58c6574ab9571d2",
+    "mtime": 1793723397.1561532,
+    "seen": 1793723408.3379111,
+    "ast_hash": "ed1de53d4ccff39cad43a1f148272466",
     "semantic_hash": ""
   },
   "scout/margin.py": {
