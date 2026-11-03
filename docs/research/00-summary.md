@@ -15,7 +15,15 @@ The version everyone has heard about, *find a winning AliExpress product, copy a
 3. **The economics have collapsed.** Fees are ~14–19% including ads. US de minimis ended in 2025 and the EU added a €3 duty in 2026. Temu and Shein sell the same items direct. Modeled net is **~6–21%** before any mistakes (02 §1).
 4. **The operations are brittle.** 2–5 week China shipping breaks handling-time promises (FTC Mail Order Rule) and drives INR/INAD disputes. Out-of-stock cancellations count as defects, and new sellers face payout holds of up to 21 days (01, 03).
 
-**What could work:** our edge is **product selection backed by data**, plus **original, high-quality listings**, using **domestic (US/EU-warehouse) wholesale suppliers that have APIs**, in **niches Temu doesn't serve well**. This lines up with the 2025–26 tariff changes, which favor domestic stock.
+**What could work:** our edge is **product selection backed by data**, plus **better listings built from supplier-licensed content**, using **wholesale suppliers that have APIs and stock in their own US/EU warehouses**, in **niches Temu doesn't serve well**. This lines up with the 2025–26 tariff changes, which favor stock that is already in the country.
+
+## Constraint: zero inventory (owner decision, 2026-11-03)
+
+- **We never hold or buy stock.** Every order is paid to the supplier after the buyer pays, and the supplier ships directly to the buyer.
+- "US-warehouse supplier" means the **supplier's** warehouse. We own nothing in it.
+- Working capital pays only for orders already sold. It covers the gap until eBay releases funds held for new sellers (up to 21 days).
+- **Consequence for images:** we can't photograph products ourselves. Listing images must come from supplier images **licensed for reseller use**, a supplier's paid photo service, or eBay catalog images. AI may only *enhance* a licensed image (background, lighting, lifestyle scene, infographic overlay). It must never invent features. See `06-image-sourcing.md`.
+- **Consequence for QC:** quality and delivery time are checked with **test orders through the normal dropship flow**, shipped to our own address, plus supplier QC/inspection services. These are one-off orders, not stock.
 
 ## The thesis to test
 
@@ -30,7 +38,8 @@ The version everyone has heard about, *find a winning AliExpress product, copy a
 | Most dropshippers | Our PoC |
 |---|---|
 | AliExpress / Amazon retail arbitrage | Wholesale or US-warehouse supplier with an API (policy-compliant) |
-| Copy the supplier's photos and text | Original photos of a **sample unit**, AI-enhanced; specs pulled from structured supplier data |
+| Copy competitors' or unlicensed supplier photos and text | **Supplier-licensed** images, AI-enhanced; specs pulled from structured supplier data |
+| Hold stock or prepay inventory | **Zero inventory:** the supplier ships every order |
 | Pick products by gut feel or a course's "winning product" list | A scoring model: sell-through, competition, landed margin, delivery time, IP and compliance flags |
 | Manual stock checks | Automated price/stock sync, auto-zero quantity when the supplier runs out |
 | Broad "trending" catalog | One niche, tens of SKUs, not thousands |
@@ -52,13 +61,13 @@ Build `product-scout`:
 
 **Kill criterion:** fewer than ~20 SKUs in one niche reach ≥ 20% modeled net with sell-through ≥ 50% and ≤ 5-day delivery.
 
-### Phase 1: listing quality, ~$100–200
+### Phase 1: listing quality, ~$100–200 (no stock)
 
-- Order samples of the top 5–10 SKUs to check quality and actual delivery time.
-- Photograph them. Run them through the image pipeline (background removal plus AI lifestyle scenes built **around our own photo**, ~$0.02–0.07 per image).
-- Use an LLM to write titles, item specifics and descriptions grounded **only** in supplier specs and the physical sample.
+- Place **test orders** for the top 5–10 SKUs through the normal dropship flow, shipped to our own address. These measure real delivery time and quality, and the items aren't resold. Supplier QC/inspection services are an alternative.
+- Run **supplier-licensed** images through the image pipeline: background cleanup, lighting, lifestyle scenes, infographic overlays. Cost is ~$0.02–0.07 per image. Keep the product itself unaltered.
+- Use an LLM to write titles, item specifics and descriptions grounded **only** in supplier specs, verified against what the test order showed.
 
-**Kill criterion:** sample quality or real delivery time doesn't match the supplier's claims.
+**Kill criterion:** test-order quality or real delivery time doesn't match the supplier's claims, or the supplier's terms don't license its images for marketplace use.
 
 ### Phase 2: live micro-test, ~$300–500 working capital, 60 days
 
@@ -80,7 +89,7 @@ Build `product-scout`:
 1. **Which niche?** We need one candidate (e.g. hobby parts, pet, home-office accessories, replacement parts) to scope Phase 0.
 2. **Market:** US only for the PoC? The EU adds GPSR responsible-person and 14-day withdrawal obligations (05).
 3. **Can we get API keys?** eBay developer account (free), CJ API key (free), and possibly Marketplace Insights (apply).
-4. **Who photographs samples?** Original images are the core differentiator and the main IP safeguard.
+4. ~~Who photographs samples?~~ **Resolved: zero inventory.** Images come from supplier-licensed sources (see `06-image-sourcing.md`).
 
 ## Confidence
 

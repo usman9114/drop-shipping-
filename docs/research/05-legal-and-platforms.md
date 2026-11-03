@@ -8,7 +8,7 @@
 - eBay's policy says listing content "shouldn't be copied from any websites, third-party catalogs or other sources unless you have approval".
 - Rights owners file reports through **VeRO**. Upheld reports get listings removed. Repeat violations lead to restrictions and then suspension.
 - **AliExpress and supplier images are not licensed to resellers by default [unverified].** Model photos carry extra risk because the models' image rights may not be cleared.
-- **AI-editing someone else's photo still produces a derivative work [unverified for our exact case].** "Better images" must start from **our own photos**: a sample unit photographed ourselves, or AI scenes built around it. The other option is supplier images with **written permission**.
+- **AI-editing someone else's photo still produces a derivative work [unverified for our exact case].** Under the zero-inventory rule we can't take our own photos, so "better images" must start from supplier images that are **licensed for reseller use** (terms of service or written permission), a supplier's paid photo service, or eBay catalog images. See `06-image-sourcing.md`.
 - So the clean version of the idea is **"find a good product, then make our own better listing"**, not "clone the listing".
 
 ## 2. Trademark, counterfeits, design patents
