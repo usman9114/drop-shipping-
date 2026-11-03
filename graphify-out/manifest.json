@@ -12,21 +12,21 @@
     "semantic_hash": ""
   },
   "scripts/hooks/check_no_ai_attribution.py": {
-    "mtime": 1793702837.726847,
-    "seen": 1793703016.7823358,
-    "ast_hash": "f4dcb78a65be4d25357f5821ceabc32f",
+    "mtime": 1793703035.786838,
+    "seen": 1793703480.8942585,
+    "ast_hash": "9e7c7d6913497251e092abd16b2d1609",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793703011.995831,
-    "seen": 1793703016.7823374,
-    "ast_hash": "69c6f31d6aa7bdf7fc58510fd02b8a29",
+    "mtime": 1793703468.5068185,
+    "seen": 1793703480.8942606,
+    "ast_hash": "cea7ccaaece997b90524244c5b1878aa",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
-    "mtime": 1793702994.9308398,
-    "seen": 1793703016.7823389,
-    "ast_hash": "0aff7b2efac4aae5fe84cb43898b8394",
+    "mtime": 1793703466.6188185,
+    "seen": 1793703480.8942623,
+    "ast_hash": "7a94bf3bc4cc0a50ff295cfb926711a9",
     "semantic_hash": ""
   },
   "docs/research/01-ebay-policy.md": {
@@ -54,9 +54,9 @@
     "semantic_hash": ""
   },
   "docs/research/05-legal-and-platforms.md": {
-    "mtime": 1793702941.0988421,
-    "seen": 1793703016.7823448,
-    "ast_hash": "d0e1e73c0e9f5a135e52706a72624878",
+    "mtime": 1793703472.4068184,
+    "seen": 1793703480.89427,
+    "ast_hash": "9093a9b6d01e00dabf78e8a1511ce172",
     "semantic_hash": ""
   }
 }

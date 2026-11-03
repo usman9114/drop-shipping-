@@ -1,14 +1,19 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 10 files · ~6,029 words
+- 10 files · ~6,316 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: (none) 3, .example 1)
 
 ## Summary
-- 86 nodes · 80 edges · 10 communities (9 shown, 1 thin omitted)
+- 87 nodes · 81 edges · 10 communities (9 shown, 1 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `fee208c9`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - 00 — Research summary and PoC plan
@@ -24,14 +29,14 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `02 — Unit economics, success rates, saturation, tariffs` - 10 edges
-2. `hooks` - 8 edges
-3. `01 — eBay dropshipping policy, enforcement, fees` - 8 edges
-4. `04 — Tooling, APIs and AI listing pipeline` - 8 edges
-5. `05 — Legal/IP/compliance risks and other platforms` - 8 edges
-6. `00 — Research summary and PoC plan` - 7 edges
+2. `00 — Research summary and PoC plan` - 8 edges
+3. `05 — Legal/IP/compliance risks and other platforms` - 8 edges
+4. `01 — eBay dropshipping policy, enforcement, fees` - 8 edges
+5. `04 — Tooling, APIs and AI listing pipeline` - 8 edges
+6. `hooks` - 8 edges
 7. `03 — Suppliers and their APIs` - 7 edges
-8. `repos` - 4 edges
-9. `PoC plan (feasibility before money)` - 4 edges
+8. `PoC plan (feasibility before money)` - 4 edges
+9. `repos` - 4 edges
 10. `git_ident()` - 3 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -43,8 +48,8 @@
 ## Communities (10 total, 1 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
-Cohesion: 0.18
-Nodes (10): 00 — Research summary and PoC plan, Confidence, Open questions to resolve before building, Phase 0: desk feasibility, $0, ~1–2 weeks of build, Phase 1: listing quality, ~$100–200, Phase 2: live micro-test, ~$300–500 working capital, 60 days, PoC plan (feasibility before money), The thesis to test (+2 more)
+Cohesion: 0.17
+Nodes (11): 00 — Research summary and PoC plan, Confidence, Constraint: zero inventory (owner decision, 2026-11-03), Open questions to resolve before building, Phase 0: desk feasibility, $0, ~1–2 weeks of build, Phase 1: listing quality, ~$100–200 (no stock), Phase 2: live micro-test, ~$300–500 working capital, 60 days, PoC plan (feasibility before money) (+3 more)
 
 ### Community 1 - "02 — Unit economics, success rates, saturation, tariffs"
 Cohesion: 0.18
@@ -85,6 +90,6 @@ Nodes (6): default_install_hook_types, default_stages, exclude, repos, repo, rev
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `hooks` connect `hooks` to `.pre-commit-config.yaml`?**
-  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+  _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **Why does `repos` connect `.pre-commit-config.yaml` to `hooks`?**
   _High betweenness centrality (0.016) - this node is a cross-community bridge._
