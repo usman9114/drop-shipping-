@@ -1,4 +1,4 @@
-.PHONY: setup lint graph
+.PHONY: setup lint graph test
 
 setup:
 	python3 -m pip install --upgrade pre-commit graphifyy detect-secrets -r requirements.txt
@@ -11,3 +11,6 @@ lint:
 
 graph:
 	graphify update .
+
+test:
+	python3 -m pytest -q

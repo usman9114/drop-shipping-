@@ -1,6 +1,7 @@
 # Warehouse design: Postgres as the source of truth
 
 > Status: **draft for owner review**, 2026-11-03. Supersedes the DuckDB/SQLite store in `docs/plan/data-pipeline.md` and part of decision 0003. Decision 0004 (proposed) records hosting, tool picks and the source-terms findings. This document follows it.
+> **Parked 2026-11-03:** the owner chose to run lean without a database for now. Phase 0 keeps the existing JSONL lake in git plus a disposable SQLite file (`scout/store.py`, flagged home-grown). This design and the VPS runbook stay as the target. **Revisit when:** a scheduled daily ingest exists, there are three or more live sources, or the lake passes about 50 MB. **Rule meanwhile:** anything with a retention limit in its terms must never be committed to git, because deleting a file does not remove it from history.
 > Owner's direction: boring proven tech, Postgres, systematic ingestion and enrichment, proper warehousing, lean, runs in GitHub CI, retention controlled.
 
 ## 1. Principles

@@ -1,6 +1,7 @@
 # 0004 — Postgres warehouse, hosting, and what the source terms allow
 
 > Status: **proposed**, awaiting owner sign-off. Date: 2026-11-03. Supersedes the storage rows of decision 0003 (DuckDB, `scout/store.py`).
+> **Parked 2026-11-03:** the owner chose to run lean without a database for now. Phase 0 keeps the existing JSONL lake in git plus a disposable SQLite file (`scout/store.py`, flagged home-grown). This design and the VPS runbook stay as the target. **Revisit when:** a scheduled daily ingest exists, there are three or more live sources, or the lake passes about 50 MB. **Rule meanwhile:** anything with a retention limit in its terms must never be committed to git, because deleting a file does not remove it from history.
 > Inputs: `docs/research/15` (hosting and tools), `16` (trend sources), `17` (free feeds and storage terms). Design: `docs/plan/warehouse.md`.
 > Research, not legal advice.
 
