@@ -18,15 +18,15 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793724965.5442631,
-    "seen": 1793724966.4889164,
-    "ast_hash": "e0170b0eecb387218b768af0955328c1",
+    "mtime": 1793749403.7589629,
+    "seen": 1793749404.719604,
+    "ast_hash": "59873861f5fc839ff3aff45b49a83f74",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
-    "mtime": 1793724965.544466,
-    "seen": 1793724966.4889264,
-    "ast_hash": "22aff3a18f63f5cd68a72882dd1a6e7a",
+    "mtime": 1793749403.7586246,
+    "seen": 1793749404.7196155,
+    "ast_hash": "ec411c63246d9e87c28ced6e3c3898a6",
     "semantic_hash": ""
   },
   "docs/research/01-ebay-policy.md": {
@@ -282,9 +282,9 @@
     "semantic_hash": ""
   },
   "docs/research/17-free-feeds-and-storage-terms.md": {
-    "mtime": 1793724934.0562677,
-    "seen": 1793724966.4889421,
-    "ast_hash": "14fed06251b8bdbcbb1d46520929d8d3",
+    "mtime": 1793749403.7570128,
+    "seen": 1793749404.7196317,
+    "ast_hash": "8e824ffb11164231eb121aab5fc04ffc",
     "semantic_hash": ""
   },
   "infra/vps/docker-compose.yml": {

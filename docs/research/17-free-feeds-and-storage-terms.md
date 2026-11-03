@@ -13,10 +13,13 @@
 | 8.1.4(a) | "You must have eBay's express prior written permission to use or display eBay Content" including "Any site-wide statistics" and "Average selling price or gross merchandise sold for any eBay category" | **Statistics and average selling prices need written permission.** |
 | 9.5 | no use of eBay Content, alone or combined with third-party data, "to suggest or model prices" | **Using eBay data to price our listings is restricted.** |
 | 9.10 | no use of eBay Content "to train algorithms, conduct machine learning" | No ML on eBay data |
+| 9.6 | no use of eBay Services "to promote or engage in seller arbitrage", with examples: "automatically repricing eBay listings in response to price changes on other third-party sites", "automatically ordering sold items from other third-party sites", or "posting tracking information to eBay when items purchased from other third-party sites are shipped" | **Automating CJ orders, tracking upload or repricing through the eBay API is prohibited.** Found by the PR #1 reviewer, re-verified against the license text 2026-11-03. |
 | 8.5(2)(d) | no electronic distribution of **Restricted API** data, raw or aggregated | Marketplace Insights (sold data) is Restricted |
 | 16.3 | destroy all copies within 10 days after termination | Retention ends with the agreement |
 
 The agreement does not distinguish Buy from Sell APIs for these rules. Restricted APIs are defined by data type (market trends, pricing, sales volumes).
+
+**Second consequence (9.6):** order forwarding to CJ and tracking upload to eBay must be **manual** (or through a path eBay has approved for the supplier's own integration, which is unverified). No API-driven ordering, tracking posts, repricing or stock syncing from CJ.
 
 **Consequence:** the plan to ingest eBay Browse data into the warehouse, compute price statistics and use them to set prices is **not safe without eBay's written permission.** This changes the evidence strategy; see decision 0004.
 

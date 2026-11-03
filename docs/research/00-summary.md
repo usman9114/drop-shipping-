@@ -82,7 +82,7 @@ Build `product-scout`:
   | Return rate | — |
   | Hours per order | — |
 
-**Go criterion:** realized net ≥ 15% and defect rate under 2%, with a path to automating ordering and tracking through the APIs.
+**Go criterion:** realized net ≥ 15% and defect rate under 2%, with a workable **manual** routine for ordering and tracking. API automation of CJ orders or tracking is prohibited (eBay API License 9.6).
 
 ## Open questions to resolve before building
 
@@ -94,6 +94,8 @@ Build `product-scout`:
 5. ~~Which supplier?~~ **Decided 2026-11-03: CJ Dropshipping** for catalog, stock, orders and tracking. Images: **CJ's own images, with AI enhancing only the surroundings** (decided 2026-11-03; see `06-image-sourcing.md` §5). CJ's paid copyrighted photos come later if the PoC works.
 
 > **Update 2026-11-03:** eBay's API license restricts storing eBay data, computing statistics or average selling prices from it, and using it to model prices without written permission (`docs/research/17`, decision 0004). Phase 0 therefore cannot rely on automated eBay Browse data; it uses manual Terapeak reading, non-eBay evidence, and later our own account's data.
+
+> **Update 2026-11-03 (PR #1 review):** eBay API License 9.6 prohibits automating orders from other sites, posting tracking for them, and repricing from their prices. The first 10 to 20 listings are handled manually; whether CJ's own eBay integration is allowed is unverified.
 
 ## Confidence
 
