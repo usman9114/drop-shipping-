@@ -22,7 +22,7 @@
   "20": "sales-lead.md",
   "21": "compliance-officer.md",
   "22": "store.py",
-  "23": "__init__.py",
+  "23": "steps",
   "24": "market-researcher.md",
   "25": "3. Candidate cards",
   "26": "2. Per-niche price bands and representative products",
@@ -40,5 +40,8 @@
   "38": "15 — Postgres hosting, GitHub Actions limits, warehouse tooling",
   "39": "16 — Trend and demand sources (US): what we can legitimately ingest",
   "40": "17 — Free feeds, and what each API lets us store",
-  "41": "Runbook: Postgres on a VPS, reached by CI through an SSH tunnel"
+  "41": "Runbook: Postgres on a VPS, reached by CI through an SSH tunnel",
+  "42": "Data pipeline: feeding the team authentic evidence",
+  "43": "Runbook: Terapeak research session (manual, about 90 minutes)",
+  "44": "check_no_ai_attribution.py"
 }

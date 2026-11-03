@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 48 files · ~43,280 words
+- 53 files · ~44,556 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 10 file(s) not represented in the graph (top: .csv 4, (none) 3, .example 1)
+- Unclassified: 12 file(s) not represented in the graph (top: .csv 5, (none) 4, .example 1)
 
 ## Summary
-- 425 nodes · 453 edges · 42 communities (33 shown, 9 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.95)
+- 489 nodes · 564 edges · 45 communities (36 shown, 9 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 8 edges (avg confidence: 0.92)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `bc69b61a`
+- Built from commit: `751197bc`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -39,6 +39,7 @@
 - sales-lead.md
 - compliance-officer.md
 - store.py
+- steps
 - 3. Candidate cards
 - 2. Per-niche price bands and representative products
 - 12 — Compliance risk cards for the 8 candidate niches
@@ -56,35 +57,38 @@
 - 16 — Trend and demand sources (US): what we can legitimately ingest
 - 17 — Free feeds, and what each API lets us store
 - Runbook: Postgres on a VPS, reached by CI through an SSH tunnel
+- Data pipeline: feeding the team authentic evidence
+- Runbook: Terapeak research session (manual, about 90 minutes)
+- check_no_ai_attribution.py
 
 ## God Nodes (most connected - your core abstractions)
-1. `Warehouse design: Postgres as the source of truth` - 13 edges
-2. `12 — Compliance risk cards for the 8 candidate niches` - 13 edges
-3. `Runbook: Postgres on a VPS, reached by CI through an SSH tunnel` - 13 edges
-4. `db` - 11 edges
-5. `record_run()` - 11 edges
-6. `2. Per-niche price bands and representative products` - 11 edges
-7. `rebuild()` - 10 edges
-8. `02 — Unit economics, success rates, saturation, tariffs` - 10 edges
-9. `hooks` - 9 edges
-10. `3. Candidate cards` - 9 edges
+1. `record_run()` - 16 edges
+2. `Warehouse design: Postgres as the source of truth` - 13 edges
+3. `Inputs` - 13 edges
+4. `rebuild()` - 13 edges
+5. `12 — Compliance risk cards for the 8 candidate niches` - 13 edges
+6. `Runbook: Postgres on a VPS, reached by CI through an SSH tunnel` - 13 edges
+7. `chat()` - 11 edges
+8. `2. Per-niche price bands and representative products` - 11 edges
+9. `db` - 11 edges
+10. `evaluate()` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
-  docs/research/13-sales-niche-economics.md → scout/margin.py
 - `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
   .claude/agents/_team-rules.md → scout/store.py
+- `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
+  docs/research/13-sales-niche-economics.md → scout/margin.py
 - `2. Per-niche price bands and representative products` --references--> `Inputs`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
-- `2. Per-niche price bands and representative products` --references--> `evaluate()`  [INFERRED]
-  docs/research/13-sales-niche-economics.md → scout/margin.py
+- `2. What makes it "authentic"` --references--> `rebuild()`  [INFERRED]
+  docs/plan/data-pipeline.md → scout/store.py
 - `2. What makes it "authentic"` --references--> `record_run()`  [INFERRED]
   docs/plan/data-pipeline.md → scout/store.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (42 total, 9 thin omitted)
+## Communities (45 total, 9 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -119,8 +123,8 @@ Cohesion: 0.29
 Nodes (5): Commands, Context: graphify knowledge graph, graphify, Hard rules, Project
 
 ### Community 8 - "llm.py"
-Cohesion: 0.16
-Nodes (8): chat(), _inline_images(), _key(), list_free(), LLMError, _load_dotenv(), main(), _post()
+Cohesion: 0.08
+Nodes (17): chat(), _inline_images(), _key(), list_free(), LLMError, _load_dotenv(), main(), _post() (+9 more)
 
 ### Community 9 - "11 - Google Trends check of Stage B candidates (US)"
 Cohesion: 0.20
@@ -155,16 +159,20 @@ Cohesion: 0.50
 Nodes (3): 10 — Category risk ranking (US, zero-inventory eBay dropshipping), Cross-cutting facts, Sources
 
 ### Community 22 - "store.py"
-Cohesion: 0.10
-Nodes (19): Shared rules for every AI team member, 1. Architecture, 2. What makes it "authentic", 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence (+11 more)
+Cohesion: 0.13
+Nodes (17): Shared rules for every AI team member, 2. What makes it "authentic", _git_sha(), main(), query(), rebuild(), record_run(), _runs() (+9 more)
+
+### Community 23 - "steps"
+Cohesion: 0.08
+Nodes (23): concurrency, cancel-in-progress, group, SKIP, jobs, test, name, on (+15 more)
 
 ### Community 25 - "3. Candidate cards"
 Cohesion: 0.10
 Nodes (19): 0001 — Candidate niches (Stage B), 1. Decision, 2. Evidence table, 2a. Margin constraint behind the price targets, 2b. Rubric scores (`docs/plan/ai-team.md` §5), 2c. Sources for the shared premises, 3.1 `tcg-supplies`: trading-card storage and display, 3.2 `hobby-modeling-tools`: miniature and scale-model tools (+11 more)
 
 ### Community 26 - "2. Per-niche price bands and representative products"
-Cohesion: 0.12
-Nodes (18): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost ceiling table [data: scout.margin output], 2. Per-niche price bands and representative products, 3. Ranked summary, 4. Gaps and next steps, auto-detailing-tools, coin-supplies, collectibles-display (+10 more)
+Cohesion: 0.11
+Nodes (25): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost ceiling table [data: scout.margin output], 2. Per-niche price bands and representative products, 3. Ranked summary, 4. Gaps and next steps, auto-detailing-tools, coin-supplies, collectibles-display (+17 more)
 
 ### Community 27 - "12 — Compliance risk cards for the 8 candidate niches"
 Cohesion: 0.10
@@ -218,25 +226,33 @@ Nodes (5): 17 — Free feeds, and what each API lets us store, A. eBay API Licen
 Cohesion: 0.14
 Nodes (13): 0. What you are building, 10. Leaving, 1. Choose the server, 2. Harden the server (one time, as root, from your laptop), 3. Install Docker, 4. Start Postgres, 5. The CI tunnel user (can do nothing except forward one port), 6. GitHub secrets (repository settings, Secrets and variables, Actions) (+5 more)
 
+### Community 42 - "Data pipeline: feeding the team authentic evidence"
+Cohesion: 0.29
+Nodes (6): 1. Architecture, 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence
+
+### Community 43 - "Runbook: Terapeak research session (manual, about 90 minutes)"
+Cohesion: 0.29
+Nodes (6): For each product type, Rules, Runbook: Terapeak research session (manual, about 90 minutes), What I do with it, What you need, Which products
+
 ## Knowledge Gaps
-- **6 isolated node(s):** `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 321 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **6 isolated node(s):** `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 348 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **What connects `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS` to the rest of the system?**
+- **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
+  _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **What connects `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL` to the rest of the system?**
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
+- **Should `llm.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._
 - **Should `store.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.09743589743589744 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13174603174603175 - nodes in this community are weakly interconnected._
+- **Should `steps` be split into smaller, more focused modules?**
+  _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._
 - **Should `3. Candidate cards` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
-- **Should `2. Per-niche price bands and representative products` be split into smaller, more focused modules?**
-  _Cohesion score 0.11857707509881422 - nodes in this community are weakly interconnected._
-- **Should `12 — Compliance risk cards for the 8 candidate niches` be split into smaller, more focused modules?**
-  _Cohesion score 0.1 - nodes in this community are weakly interconnected._
-- **Should `3. Primary niche: `tcg-supplies`` be split into smaller, more focused modules?**
-  _Cohesion score 0.09523809523809523 - nodes in this community are weakly interconnected._
