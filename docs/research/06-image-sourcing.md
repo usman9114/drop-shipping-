@@ -94,7 +94,7 @@ eBay has no official statement on AI-edited or AI-generated images. Vendor blogs
     - **"No copyright":** public, and anyone can buy a download.
   - Source: https://blog.cjdropshipping.cn/detail/how-to-use-video-shooting-service-from-cj-dropshipping
 
-### Image source for the PoC (open)
+### Image source for the PoC: **decided 2026-11-03: CJ's own images + AI enhancement of the surroundings** (row 2 below). Google Images look-alikes were rejected for IP and INAD risk.
 
 | Option | Cost | IP risk | Accuracy risk (INAD / picture policy) |
 |---|---|---|---|

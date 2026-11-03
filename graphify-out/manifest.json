@@ -18,15 +18,15 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793703468.5068185,
-    "seen": 1793703480.8942606,
-    "ast_hash": "cea7ccaaece997b90524244c5b1878aa",
+    "mtime": 1793708858.2933507,
+    "seen": 1793708858.7450073,
+    "ast_hash": "f4a9dba21578f9d07ace59ca06c977ba",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
-    "mtime": 1793708757.4333882,
-    "seen": 1793708758.230224,
-    "ast_hash": "0bda55ae897d902f118c217a7e322a61",
+    "mtime": 1793708858.2937906,
+    "seen": 1793708858.7450092,
+    "ast_hash": "2eedb43240bc2f9d90288e9b0db42664",
     "semantic_hash": ""
   },
   "docs/research/01-ebay-policy.md": {
@@ -60,9 +60,9 @@
     "semantic_hash": ""
   },
   "docs/research/06-image-sourcing.md": {
-    "mtime": 1793708757.4337258,
-    "seen": 1793708758.23023,
-    "ast_hash": "8e84680e4e5ded4c8d48f861d5941cec",
+    "mtime": 1793708858.2936254,
+    "seen": 1793708858.7450163,
+    "ast_hash": "17f41084257d551497c62f788fe0e666",
     "semantic_hash": ""
   }
 }

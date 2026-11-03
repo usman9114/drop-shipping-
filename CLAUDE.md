@@ -2,10 +2,10 @@
 
 ## Project
 
-Proof-of-concept to test whether **eBay (and similar marketplace) dropshipping** is feasible. The idea: pick products with proven demand, make better listings (our own photos, AI-enhanced; accurate, structured descriptions), and fulfil through suppliers.
+Proof-of-concept to test whether **eBay (and similar marketplace) dropshipping** is feasible. The idea: pick products with proven demand, make better listings (CJ product images with AI-enhanced surroundings; accurate, structured descriptions), and fulfil through CJ Dropshipping (zero inventory).
 
 - Current phase: **research done → Phase 0 (desk feasibility tool)**. See `docs/research/00-summary.md` for the verdict, thesis and phased plan with kill criteria.
-- Research reports: `docs/research/01..05-*.md` (eBay policy, unit economics, suppliers, tooling/APIs, legal/platforms). Every claim carries a source URL; `[unverified]` marks secondary-only claims. Keep that convention when adding research.
+- Research reports: `docs/research/01..06-*.md` (eBay policy, unit economics, suppliers, tooling/APIs, legal/platforms, image sourcing). Every claim carries a source URL; `[unverified]` marks secondary-only claims. Keep that convention when adding research.
 
 ## Hard rules
 
@@ -13,6 +13,7 @@ Proof-of-concept to test whether **eBay (and similar marketplace) dropshipping**
 - **Pre-commit must pass.** Run `make setup` once per clone (installs pre-commit + commit-msg hooks and graphify git hooks). Fix the failures; don't skip hooks.
 - **No secrets in the repo.** eBay, CJ and LLM API keys go in `.env` (gitignored). `detect-secrets` scans every commit; if a finding is a false positive, update `.secrets.baseline` with `detect-secrets scan --baseline .secrets.baseline`.
 - **Zero inventory.** The business never holds, buys or prepays stock. Every order is purchased from the supplier after the customer pays and shipped by the supplier straight to the buyer. Don't design features that assume we have stock or our own product photos. Images must be supplier-licensed and only enhanced, never fabricated.
+- **Images = CJ's own product images** (from the CJ API `bigImage` / `productImageSet` / `variantImage`). AI may change only the surroundings: background, lighting, upscaling, lifestyle scene. The product pixels stay untouched. No text, badges, borders or watermarks (eBay picture policy). Never use Google Images or competitors' photos, even as AI references. Keep the CJ source URL with every generated image. CJ's paid photo service comes later, if the PoC works.
 - **Stay policy-compliant in code we build.** No scraping that breaches marketplace terms, no copying competitors' images or text, no sourcing from retail marketplaces (AliExpress, Amazon, Walmart) for eBay orders. See `docs/research/01` and `05`.
 - **Research workflow.** Plan and synthesize on the large model. Fan web searches out to Haiku subagents (`model: haiku`), one topic per agent, in parallel. Save each report to `docs/research/NN-topic.md` and update `00-summary.md`.
 

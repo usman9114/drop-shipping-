@@ -91,7 +91,7 @@ Build `product-scout`:
 3. **Can we get API keys?** eBay developer account (free), CJ API key (free), and possibly Marketplace Insights (apply).
 4. ~~Who photographs samples?~~ **Resolved: zero inventory.** Images come from supplier-licensed sources (see `06-image-sourcing.md`).
 
-5. ~~Which supplier?~~ **Decided 2026-11-03: CJ Dropshipping** for catalog, stock, orders and tracking. Image source for the PoC is still open; see `06-image-sourcing.md` §5. CJ's paid copyrighted photos come later if the PoC works.
+5. ~~Which supplier?~~ **Decided 2026-11-03: CJ Dropshipping** for catalog, stock, orders and tracking. Images: **CJ's own images, with AI enhancing only the surroundings** (decided 2026-11-03; see `06-image-sourcing.md` §5). CJ's paid copyrighted photos come later if the PoC works.
 
 ## Confidence
 
