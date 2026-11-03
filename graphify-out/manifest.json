@@ -196,5 +196,17 @@
     "seen": 1793721534.3205438,
     "ast_hash": "44558ad08ae857e87f15424a7172dd31",
     "semantic_hash": ""
+  },
+  "data/evidence/trends/aggregate_candidates.py": {
+    "mtime": 1793721640.9903495,
+    "seen": 1793721661.2023828,
+    "ast_hash": "3973b697124f7bd43ae371ff3a136cfa",
+    "semantic_hash": ""
+  },
+  "docs/research/11-trends-candidates.md": {
+    "mtime": 1793721641.0000613,
+    "seen": 1793721661.202413,
+    "ast_hash": "e10187405e2e0c0bed9a7dc8bb4a3f9d",
+    "semantic_hash": ""
   }
 }

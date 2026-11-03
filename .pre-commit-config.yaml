@@ -35,7 +35,9 @@ repos:
     hooks:
       - id: ruff
         args: [--fix]
+        exclude: ^data/  # one-off evidence reproduction scripts
       - id: ruff-format
+        exclude: ^data/
 
   - repo: local
     hooks:

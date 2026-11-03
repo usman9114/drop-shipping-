@@ -134,7 +134,9 @@ def main(argv: list[str] | None = None) -> int:
     out = open(args.out, "w", newline="") if args.out else sys.stdout
     if args.out:
         Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    w = csv.DictWriter(out, fieldnames=fields, extrasaction="ignore")
+    w = csv.DictWriter(
+        out, fieldnames=fields, extrasaction="ignore", lineterminator="\n"
+    )
     w.writeheader()
     w.writerows(rows)
     if args.out:

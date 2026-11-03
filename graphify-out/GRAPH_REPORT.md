@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-03)
 
 ## Corpus Check
-- 31 files · ~23,566 words
+- 33 files · ~26,354 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 4 file(s) not represented in the graph (top: (none) 3, .example 1)
+- Unclassified: 8 file(s) not represented in the graph (top: .csv 4, (none) 3, .example 1)
 
 ## Summary
-- 242 nodes · 249 edges · 28 communities (19 shown, 9 thin omitted)
+- 258 nodes · 266 edges · 29 communities (20 shown, 9 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.95)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4c5a6d44`
+- Built from commit: `ea901ea4`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -25,7 +25,7 @@
 - hooks
 - CLAUDE.md
 - llm.py
-- check_no_ai_attribution.py
+- 11 - Google Trends check of Stage B candidates (US)
 - 06 — Image sourcing under zero inventory
 - 14 — External source review: "I tried AI dropshipping for 7 days" (YouTube transcript)
 - AI team operating plan
@@ -42,18 +42,19 @@
 - 3. Candidate cards
 - 2. Per-niche price bands and representative products
 - 12 — Compliance risk cards for the 8 candidate niches
+- aggregate_candidates.py
 
 ## God Nodes (most connected - your core abstractions)
 1. `12 — Compliance risk cards for the 8 candidate niches` - 13 edges
 2. `2. Per-niche price bands and representative products` - 11 edges
 3. `02 — Unit economics, success rates, saturation, tariffs` - 10 edges
 4. `3. Candidate cards` - 9 edges
-5. `00 — Research summary and PoC plan` - 8 edges
-6. `06 — Image sourcing under zero inventory` - 8 edges
-7. `01 — eBay dropshipping policy, enforcement, fees` - 8 edges
-8. `0001 — Candidate niches (Stage B)` - 8 edges
-9. `04 — Tooling, APIs and AI listing pipeline` - 8 edges
-10. `05 — Legal/IP/compliance risks and other platforms` - 8 edges
+5. `11 - Google Trends check of Stage B candidates (US)` - 9 edges
+6. `hooks` - 8 edges
+7. `0001 — Candidate niches (Stage B)` - 8 edges
+8. `00 — Research summary and PoC plan` - 8 edges
+9. `01 — eBay dropshipping policy, enforcement, fees` - 8 edges
+10. `04 — Tooling, APIs and AI listing pipeline` - 8 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
@@ -66,7 +67,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (28 total, 9 thin omitted)
+## Communities (29 total, 9 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -102,7 +103,11 @@ Nodes (5): Commands, Context: graphify knowledge graph, graphify, Hard rules, Pr
 
 ### Community 8 - "llm.py"
 Cohesion: 0.12
-Nodes (12): chat(), list_free(), LLMError, main(), _post(), compute(), evaluate(), Inputs (+4 more)
+Nodes (10): chat(), list_free(), LLMError, main(), _post(), analyze(), _fetch(), main() (+2 more)
+
+### Community 9 - "11 - Google Trends check of Stage B candidates (US)"
+Cohesion: 0.20
+Nodes (9): 11 - Google Trends check of Stage B candidates (US), Commands (exact), Flags for a Nov/Dec start, Headline finding: the scout's growth numbers are distorted, do not use them as-is, Method limits, Per-keyword table, Per-niche ranking, Suggested next steps (+1 more)
 
 ### Community 10 - "06 — Image sourcing under zero inventory"
 Cohesion: 0.18
@@ -137,8 +142,8 @@ Cohesion: 0.10
 Nodes (19): 0001 — Candidate niches (Stage B), 1. Decision, 2. Evidence table, 2a. Margin constraint behind the price targets, 2b. Rubric scores (`docs/plan/ai-team.md` §5), 2c. Sources for the shared premises, 3.1 `tcg-supplies`: trading-card storage and display, 3.2 `hobby-modeling-tools`: miniature and scale-model tools (+11 more)
 
 ### Community 26 - "2. Per-niche price bands and representative products"
-Cohesion: 0.13
-Nodes (14): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost ceiling table [data: scout.margin output], 2. Per-niche price bands and representative products, 3. Ranked summary, 4. Gaps and next steps, auto-detailing-tools, coin-supplies, collectibles-display (+6 more)
+Cohesion: 0.12
+Nodes (18): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost ceiling table [data: scout.margin output], 2. Per-niche price bands and representative products, 3. Ranked summary, 4. Gaps and next steps, auto-detailing-tools, coin-supplies, collectibles-display (+10 more)
 
 ### Community 27 - "12 — Compliance risk cards for the 8 candidate niches"
 Cohesion: 0.10
@@ -150,17 +155,15 @@ Nodes (19): 0.1 Checks that apply to every niche, 0.2 Wording rules that apply t
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `2. Per-niche price bands and representative products` connect `2. Per-niche price bands and representative products` to `llm.py`?**
-  _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `2. Per-niche price bands and representative products` (e.g. with `evaluate()` and `Inputs`) actually correct?**
   _`2. Per-niche price bands and representative products` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._
-- **Why does `evaluate()` connect `llm.py` to `2. Per-niche price bands and representative products`?**
-  _High betweenness centrality (0.011) - this node is a cross-community bridge._
 - **Should `llm.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.12473118279569892 - nodes in this community are weakly interconnected._
-- **Why does `Inputs` connect `llm.py` to `2. Per-niche price bands and representative products`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
+  _Cohesion score 0.11576354679802955 - nodes in this community are weakly interconnected._
 - **Should `3. Candidate cards` be split into smaller, more focused modules?**
+  _Cohesion score 0.1 - nodes in this community are weakly interconnected._
+- **Should `2. Per-niche price bands and representative products` be split into smaller, more focused modules?**
+  _Cohesion score 0.11857707509881422 - nodes in this community are weakly interconnected._
+- **Should `12 — Compliance risk cards for the 8 candidate niches` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
