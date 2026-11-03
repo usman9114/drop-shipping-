@@ -9,7 +9,7 @@ An eBay seller account (a free personal account is enough to start). Open **Sell
 The 10 to 12 product types for the primary niche are in `docs/decisions/0002-niche-selection.md` (section "primary spec"). Start with the five that have the highest margin ceiling in `docs/research/13-sales-niche-economics.md`.
 
 ## For each product type
-Search a plain phrase (for example "magnetic card holder 35pt"). Set: **United States**, **last 90 days**, **Sold** tab, condition **New**. Record one row in `docs/templates/terapeak-observations.csv` (copy it to `data/observations/terapeak-YYYY-MM-DD.csv`):
+Search a plain phrase (for example "magnetic card holder 35pt"). Set: **United States**, **last 90 days**, **Sold** tab, condition **New**. Fill in the matching row of **`data/observations/terapeak-prefilled.csv`** (13 product types and search phrases are already entered; copy it to `data/observations/terapeak-YYYY-MM-DD.csv` and fill in your copy). The `notes` column says which listing size to compare. Row layout:
 
 | Column | What to write |
 |---|---|
