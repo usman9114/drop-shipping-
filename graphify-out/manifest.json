@@ -166,5 +166,17 @@
     "seen": 1793709766.1400697,
     "ast_hash": "307adfd30b85d8fcaac80735f3cda453",
     "semantic_hash": ""
+  },
+  "data/evidence/trends/candidates.txt": {
+    "mtime": 1793709796.813139,
+    "seen": 1793721406.5690265,
+    "ast_hash": "d75f3e8f24e0bdaec6f63d85a320af13",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0001-niche-candidates.md": {
+    "mtime": 1793709890.5971348,
+    "seen": 1793721406.5690281,
+    "ast_hash": "ae62ec3582cb88d90178641ee5d8800f",
+    "semantic_hash": ""
   }
 }
