@@ -956,7 +956,7 @@
   "warehouse/models/marts/mart_candidate_pool.sql": {
     "mtime": 1793834683.356046,
     "seen": 1793834850.9207084,
-    "ast_hash": "c1bb913d3a66de8730f14443ca3c8c4b",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "docs/research/29-proof-of-performance-pilot.md": {
