@@ -796,5 +796,11 @@
     "seen": 1793824343.22064,
     "ast_hash": "c56c024b07244cacfb8f0bc300fcaa4b",
     "semantic_hash": ""
+  },
+  "scripts/validate_business_model.py": {
+    "mtime": 1793826114.5466764,
+    "seen": 1793826117.061683,
+    "ast_hash": "c6a76d138a614324a7c27947c4a4a1e7",
+    "semantic_hash": ""
   }
 }

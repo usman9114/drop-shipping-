@@ -69,13 +69,12 @@
   "67": "0007 — Deterministic harness first, intelligence layer on top",
   "68": "store_intel.py",
   "69": "csv",
-  "70": "intel.py",
+  "70": "test_warehouse_helpers.py",
   "71": "Brief for the second agent: independent review, then build the shortlist engine",
   "72": "0009 — Step 1: find the best online stores and reconstruct what they do",
   "73": "Step 1 flow: how we find the best online stores and what they do",
-  "74": "store_export.py",
+  "74": "validate_business_model.py",
   "75": "0006 — DuckDB warehouse: deterministic core, LLM on top",
   "76": "json",
-  "77": "aggregate_candidates.py",
   "78": "parametrize"
 }
