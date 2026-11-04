@@ -36,3 +36,4 @@ data/lake/
 
 # dbt: per-user tracking id
 warehouse/.user.yml
+graphify-out/.rebuild.lock
