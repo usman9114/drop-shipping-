@@ -108,3 +108,7 @@ Changes:
 ## Phase 2 result (2026-11-04)
 
 Top 50 researched (doc 30): established slice A 2, B 10, C 6, D 7; riser slice A 0, B 2, C 2, D 21. **Decision:** the study set is the established stores with at least one independent sign of performance; risers go to the watchlist until they show proof. Identity rule corrected (a brand with contact details, tied to a named company by its own pages or one independent source); strict-rule failures re-graded.
+
+## Phases 3 and 4 result (2026-11-04)
+
+Dossiers for the 17-store study set (private) and the pattern report (doc 31). Remaining: owner's manual ad-library check for the top 20; then decide which borrowed methods and which niches feed the sourcing phase.
