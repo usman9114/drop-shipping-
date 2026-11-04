@@ -876,9 +876,9 @@
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_niche_copyable.sql": {
-    "mtime": 1793829639.6598268,
-    "seen": 1793829681.3685696,
-    "ast_hash": "",
+    "mtime": 1793830467.607476,
+    "seen": 1793831594.7569766,
+    "ast_hash": "7e59e304c91addf781a21cb11e25547e",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_store_universe.sql": {
@@ -897,6 +897,12 @@
     "mtime": 1793830500.4287064,
     "seen": 1793830505.8274138,
     "ast_hash": "41b174507829ab69bd15dfcb908986bf",
+    "semantic_hash": ""
+  },
+  "docs/research/27-prefilter-signals.md": {
+    "mtime": 1793831585.6617892,
+    "seen": 1793831594.7570865,
+    "ast_hash": "374b30bbfdefb4f1fe436a3f671aa0bf",
     "semantic_hash": ""
   }
 }
