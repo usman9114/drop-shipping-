@@ -1,4 +1,4 @@
-.PHONY: stores-scan stores-meta stores-deep stores-ranks stores-build stores-report stores setup lint graph test wh-load wh-catalogue wh-offers wh-build wh-classify wh-images wh-export wh-snapshot intel pipeline
+.PHONY: niches stores-sanity stores-scan stores-meta stores-deep stores-ranks stores-build stores-report stores setup lint graph test wh-load wh-catalogue wh-offers wh-build wh-classify wh-images wh-export wh-snapshot intel pipeline
 
 setup:
 	python3 -m pip install --upgrade pre-commit graphifyy detect-secrets -r requirements.txt
@@ -69,3 +69,8 @@ stores-report:  ## private store stories + committed aggregate report
 	python3 scripts/store_export.py
 
 stores: stores-scan stores-meta stores-deep stores-ranks stores-build stores-report
+
+stores-sanity:  ## quick CJ supply check for the latest niche shortlist (no cost)
+	python3 scripts/supply_sanity.py
+
+niches: stores stores-sanity   ## R1: the whole niche-finding run (docs/plan/phase-niche-finder-r1.md)
