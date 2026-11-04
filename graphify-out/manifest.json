@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793821226.5890949,
-    "seen": 1793821231.779225,
-    "ast_hash": "1d95f25dbcec3d148d96b00d52888fd6",
+    "mtime": 1793824331.2119281,
+    "seen": 1793824343.2206178,
+    "ast_hash": "c185e4890cd7accff5c10ecd233dc390",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "scout/llm.py": {
-    "mtime": 1793821210.2754629,
-    "seen": 1793821231.7789986,
-    "ast_hash": "0eda804f331ee310ba545e644d2a9621",
+    "mtime": 1793824321.746001,
+    "seen": 1793824343.2205243,
+    "ast_hash": "66cb9d5c58a5b2b23689692ede5cd328",
     "semantic_hash": ""
   },
   "scout/margin.py": {
@@ -318,9 +318,9 @@
     "semantic_hash": ""
   },
   "tests/test_trends_llm.py": {
-    "mtime": 1793819093.151903,
-    "seen": 1793821059.2091851,
-    "ast_hash": "36d96f19aacdf7f4eac6bf02dfc6efda",
+    "mtime": 1793824331.2114115,
+    "seen": 1793824343.2205606,
+    "ast_hash": "2aa5d7c4ed76a5353c5ecc07eaf5b3db",
     "semantic_hash": ""
   },
   "requirements-dev.txt": {
@@ -792,9 +792,9 @@
     "semantic_hash": ""
   },
   "docs/plan/phase-niche-finder-r1.md": {
-    "mtime": 1793823796.0065386,
-    "seen": 1793823805.886331,
-    "ast_hash": "7bd7e9d490b3e6b917db1dc7954650f9",
+    "mtime": 1793824331.2123773,
+    "seen": 1793824343.22064,
+    "ast_hash": "c56c024b07244cacfb8f0bc300fcaa4b",
     "semantic_hash": ""
   }
 }
