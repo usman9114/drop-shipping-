@@ -293,3 +293,18 @@ def test_failed_refresh_never_replaces_a_good_profile():
     assert got["a.com"]["run_id"] == "1"  # the good one survives the failed refresh
     assert "b.com" not in got  # never answered, so it is retried
     assert got["c.com"]["business_model"] == "reseller"  # a later good row wins
+
+
+def test_dominant_vendor_or_few_labels_means_brand():
+    mous = _m(vendors=86, top_vendor_share=0.59, own_vendor_share=0.0)
+    assert stores.business_model(mous)[0] == "brand"
+    dickies = _m(vendors=5, top_vendor_share=0.36, own_vendor_share=0.0)
+    assert stores.business_model(dickies)[0] == "brand"
+    clif = _m(vendors=4, top_vendor_share=0.47, own_vendor_share=0.47)
+    assert stores.business_model(clif)[0] == "brand"
+    assert (
+        stores.business_model(
+            _m(vendors=6, top_vendor_share=0.47, own_vendor_share=0.0)
+        )[0]
+        == "reseller"
+    )

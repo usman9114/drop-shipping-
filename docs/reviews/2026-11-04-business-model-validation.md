@@ -10,10 +10,13 @@
 | 2 | 25 stores (seed 11) | v2: app needs a product trace; added `retailer` (30+ vendors); brand at ≥ 50% own or a dominant vendor | 17 of 25 agree with the free model | A failed refresh row (read timeout) replaced a good profile: pipeline bug, fixed with `latest_good` and a test |
 | 3 | 25 stores (seed 23), hand-judged by the advisor | v2 | Rules right on **18 of 25 (72%)**, gate is 85% | 7 of the 9 "reseller" labels were big retailers, publishers or house-brand portfolios with 12 to 20 vendors; only 2 were true boutique resellers |
 
+| 4 | 17 fresh stores (seed 5, `--fresh`), hand-judged | v3 (retailer at 10+ vendors) | Rules right on **14 of 17 (82%)**; 14 of 15 agree with the free model | All 3 errors are brands with a few sub-labels or one dominant vendor among many (rule said unclear or reseller) |
+
 ## Result and the change made
 
 - The free second opinion is **noisy** (it invented "print on demand" from a tag and "own vendor" shares that were not in the evidence). Agreement with it is a hint, not the truth. Hand judgement decides.
 - **Change:** `retailer` now starts at 10 vendors with none dominant; `reseller` is 5 to 9. This line was chosen from the 25-store sample, so it is a hypothesis.
+- **v4 change after round 4:** a vendor holding half the catalogue, at any vendor count, means brand; five labels or fewer means brand; reseller is 6 to 9 vendors. Chosen from 17 stores, so again a hypothesis.
 - **Gate still open.** The 85% bar is rechecked on at least 30 stores not used for tuning (`--fresh` skips every store already validated), after the full deep profile, before R1 is called final.
 
 ## Error classes (carry into the rules and the report)

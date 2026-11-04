@@ -265,8 +265,9 @@ def business_model(
     brand: makes or commissions its own goods (its own name, or one vendor holding
     half or more of a small catalogue). retailer: 10+ vendors with none dominant,
     a big multi-brand retailer, publisher or house-brand portfolio (many labels,
-    one owner); not copyable at our scale. reseller: 5 to 9 vendors, none
-    dominant (a boutique reselling other brands). The 10-vendor line comes from a
+    one owner); not copyable at our scale. reseller: 6 to 9 vendors, none
+    dominant (a boutique reselling other brands). A vendor holding half the catalogue,
+    or five labels or fewer, means a brand. The 10-vendor line comes from a
     25-store hand check where 7 of 9 'resellers' with 12-20 vendors were big
     retailers or portfolio owners; recheck it on the larger validation sample.
     dropship: marketplace-import traces. pod: print on demand.
@@ -298,8 +299,10 @@ def business_model(
     vendors = s.get("vendors") or 0
     if own >= 0.5:
         return "brand", [f"own name is the vendor on {own:.0%} of products"]
-    if top >= 0.5 and vendors <= 10:
+    if top >= 0.5:
         return "brand", [f"one vendor holds {top:.0%} of {vendors} vendors"]
+    if vendors <= 5:  # a handful of labels is a brand with sub-labels
+        return "brand", [f"only {vendors} vendors (own sub-labels), largest {top:.0%}"]
     if vendors >= 10 and top < 0.5:
         return "retailer", [f"{vendors} vendors, largest has {top:.0%}"]
     if vendors >= 5 and top < 0.5:
@@ -578,6 +581,74 @@ def run_deep(
     return out
 
 
+def _light_one(hit: dict, pause: float, rules, today: date) -> dict:
+    """Cheap screen: one page of the feed, no homepage, no DNS. Enough for the
+    business model, price band, categories and release rhythm."""
+    d = hit["domain"]
+    base = f"https://{hit.get('final_host') or d}"
+    row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
+    s = webmeta._session()
+    try:
+        rp = _robots(s, base)
+        url = base + "/products.json?limit=250"
+        if not rp.can_fetch(webmeta.UA, url):
+            row["feed_allowed"] = False
+            return row
+        time.sleep(pause)
+        r = s.get(url, timeout=30)
+        row["feed_status"] = r.status_code
+        if not r.ok:
+            row["error"] = f"HTTP{r.status_code}"
+            return row
+        row.update(
+            summarize_feed(
+                r.json().get("products") or [],
+                hit.get("shop_name") or "",
+                d,
+                rules,
+                today,
+            )
+        )
+        row["business_model"], row["business_model_why"] = business_model(row)
+    except Exception as exc:
+        row["error"] = type(exc).__name__
+    return row
+
+
+def run_light(
+    max_stores: int, workers: int, pause: float, stride: int = 1, batch: int = 300
+) -> dict:
+    rules = load_rules()
+    today = datetime.now(timezone.utc).date()
+    done = set(latest_good(_all_rows("web_store_light")))
+    metas = latest_good(_all_rows("web_meta"))
+    todo = [
+        m
+        for m in sorted(metas.values(), key=lambda r: r["tranco_rank"])
+        if m.get("shop_id") and us_store(m) and m["domain"] not in done
+    ][::stride][:max_stores]  # stride spreads a sample over the whole rank range
+    out = {}
+    for i in range(0, len(todo), batch):
+        chunk = todo[i : i + batch]
+        rows = _parallel(lambda h: _light_one(h, pause, rules, today), chunk, workers)
+        run = store.record_run(
+            "web_store_light",
+            rows,
+            source="shopify_products_json",
+            trust="data",
+            params={"n": len(chunk)},
+            note="one feed page per store, robots.txt respected; aggregates only",
+        )
+        ok = sum(1 for r in rows if r.get("business_model"))
+        print(
+            f"light batch {i}: {len(rows)} stores, {ok} labelled",
+            file=sys.stderr,
+            flush=True,
+        )
+        out[f"web_store_light {i}"] = (run, len(rows))
+    return out
+
+
 def relabel() -> dict:
     """Recompute business_model for every profiled store from its saved evidence.
 
@@ -653,6 +724,13 @@ def main(argv: list[str] | None = None) -> int:
     d.add_argument(
         "--refresh", action="store_true", help="re-profile stores already done"
     )
+    lt = sub.add_parser(
+        "light", help="one feed page per US store: business model screen"
+    )
+    lt.add_argument("--max-stores", type=int, default=30)
+    lt.add_argument("--workers", type=int, default=6)
+    lt.add_argument("--pause", type=float, default=1.0)
+    lt.add_argument("--stride", type=int, default=1, help="take every Nth store")
     sub.add_parser("relabel", help="recompute business_model from saved evidence")
     r = sub.add_parser("ranks")
     r.add_argument("--days-back", type=int, nargs="+", default=[90, 365])
@@ -663,6 +741,8 @@ def main(argv: list[str] | None = None) -> int:
         out = run_deep(
             a.max_stores, a.workers, a.pages, a.pause, not a.all_countries, a.refresh
         )
+    elif a.cmd == "light":
+        out = run_light(a.max_stores, a.workers, a.pause, a.stride)
     elif a.cmd == "relabel":
         out = relabel()
     else:
