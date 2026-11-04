@@ -456,9 +456,9 @@
     "semantic_hash": ""
   },
   "warehouse/models/marts/_marts.yml": {
-    "mtime": 1793829639.6598268,
-    "seen": 1793829668.918607,
-    "ast_hash": "1c7f9bf6dbb384d793817af05c9862bd",
+    "mtime": 1793833681.9797566,
+    "seen": 1793833738.1285543,
+    "ast_hash": "899c6ad6315d47473c27d9db27e89201",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_supply_candidates.py": {
@@ -903,6 +903,18 @@
     "mtime": 1793831585.6617892,
     "seen": 1793831594.7570865,
     "ast_hash": "374b30bbfdefb4f1fe436a3f671aa0bf",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0012-temporal-storage.md": {
+    "mtime": 1793833731.234677,
+    "seen": 1793833738.1295898,
+    "ast_hash": "51d5d310b1478c1b589a07482e641efb",
+    "semantic_hash": ""
+  },
+  "docs/plan/temporal-system.md": {
+    "mtime": 1793833731.2317595,
+    "seen": 1793833738.1298034,
+    "ast_hash": "8e875aca6144fce631d818326a2f5db3",
     "semantic_hash": ""
   }
 }
