@@ -43,18 +43,29 @@
 - Keys live in the cloud environment **"Crypto"** (the one this project's sessions use; "Default" also has them). As of 2026-11-04 `OPENROUTER_API_KEY` is not visible in the container; check the variable name.
 - Z.ai and OpenRouter keys were pasted into an earlier chat. The owner was asked to rotate them.
 
-## Next tasks, in order
+## Next tasks, in order (focus from 2026-11-04: reconstruct and recreate store success)
 
-Calendar: `docs/plan/operating-plan.md` §3. **Approach changed 2026-11-04: supply-first** (owner agreed): score what CJ's US warehouse ships in a DuckDB warehouse (decision 0006), then the owner checks demand by hand in Terapeak (no API exists; automation banned by eBay's User Agreement).
+**Focus:** pick successful stores, rebuild the story of how they did it end to end (what they sell, from whom, at what price and margin, since when, how they get traffic), mark the gaps, then turn the story into a recreation plan inside our constraints. Method: `CLAUDE.md` source evaluation standard; decisions 0007 (harness + intelligence layer) and 0008 (internet-metadata harness).
 
-Done 2026-11-04: warehouse slice (`warehouse/`, `make wh-*`), CJ catalogue (3,964) → rules → 268 pre-filtered → offers (cost, US stock, real freight: median $4.80) → **252 pass margin at ≤ $45** (`docs/shortlists/supply-candidates-2026-11-04.csv`). Free GLM wrote product types for the 21% the rules missed and one eBay search phrase per product (both cached as hash → label seeds). Terapeak worklist: `data/observations/terapeak-sheet-2026-11-04.csv` (245 phrases, ranked).
+1. **Set up and rebuild local data** (container is ephemeral): git identity, `make setup`, `pip install -r requirements.txt -r requirements-dev.txt tranco`, `make test`, then `make pipeline` (about 25 minutes, mostly CJ offers).
+2. **Discover stores** with `python -m scout.webmeta discover --max-dns 1200`, then `sitemaps`, `products` and `footprint` for the Shopify stores found. Improve first:
+   - a tighter keyword list (drop noisy words such as "craft" and "mop")
+   - a US filter (TLD, storefront currency or shipping country)
+3. **Build the store story** as warehouse models plus the intelligence layer:
+   - stage the `web_*` lake datasets
+   - match each store's products to CJ US products by type and price, to estimate their margin at CJ cost
+   - combine with DNS platform signals, traffic tags (ads, email and SMS, affiliates), social links, catalogue size, release rhythm, price band and Tranco rank
+   - `scout.intel` writes a grounded "how they did it" story per store (every number from the evidence, gaps named), then a **recreation plan**: product mix, price points and channels we would copy within C1 to C8, with eBay first
+4. **Review panel:** `python -m scout.review_panel` fills any missing reviews (cached). Read `docs/reviews/<date>-idea-panel.md`, especially I06 to I08 (does studying Shopify stores serve an eBay-first test?). Act on drop consensus or split votes.
+5. **Velocity:** `make wh-snapshot` once a day. History needs durable storage; the owner's choice is still open (private data repo recommended, decision 0007).
+6. Stop and ask before spending money, creating accounts, or sending anything outside the repo.
 
-1. **Image screen** (`make wh-images`, main image per viable product) was running at session end; re-run to finish (cache skips done images), then `make wh-build wh-export`. Z.ai's free vision model stalled after 27 images (no reply for 14 min); OpenRouter's `nemotron-3.5-super-vl:free` does ~9 s/image, so run it as `ZAI_API_KEY= make wh-images`. Follow-up: give `scout.llm` a per-call timeout well under 180 s for vision.
-2. **Owner fills the Terapeak sheet** (top ~40 rows first, runbook `docs/runbooks/terapeak-session.md`). Most CJ US items are cheap; if singles sell below `price_floor_best`, record the 2- or 3-pack price in `notes`.
-3. Load the filled sheet into the warehouse (new seed or `read_csv` source + `mart_shortlist`: avg sold ≥ floor, sell-through ≥ ~50%, ≥ ~20 sold in 90 days), then compliance review and test orders before ~2026-12-01.
-4. Stop and ask before spending money, creating accounts, or sending anything outside the repo.
-
-Rebuild in a fresh container: `make wh-load wh-catalogue wh-offers` (~25 min), `python -m scout.ingest_cj images --from-file data/private/candidates.txt`, `make wh-build`. LLM caches are committed, so no model calls are repeated.
+**State at handoff:**
+- Warehouse built with 48 of 48 models and tests passing.
+- First what-sells report in template mode. Jewelry tops supply but every item is flagged for metal content; press-on nails and cleaning tools are far less crowded (median 57 and 96 stores against 423 to 786).
+- Metadata pilot: 4,510 keyword domains; 17 Shopify stores profiled; DNS and `/products.json` are the strongest traces.
+- Shopify sitemaps' `lastmod` is always today, so it is useless for timing.
+- The panel and a 1,200-domain discovery were still running when this session ended. Their local results do not carry over; rerun them.
 
 ## Owner tasks outstanding
 
