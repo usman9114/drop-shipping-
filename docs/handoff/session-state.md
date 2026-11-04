@@ -51,7 +51,10 @@
 - **Shared message:** stop building analysis tooling; list 3–5 margin-viable, compliance-clean CJ US products on eBay and measure real sales.
 - **Wrong reasons to ignore:** "Shopify feeds break eBay's API terms" and "this collects personal data" are both untrue.
 - **Orchestrator's recommendation:** do both, in this order. First a small live test (3–5 products from the less crowded types: cleaning tools, pet grooming tools, hand tools; CJ test orders also keep the CJ API active). Then use the store-story work for the **Shopify channel** it actually fits.
-- **Owner decision (2026-11-04): focus on choosing the product niche and on how successful businesses did it** (store discovery, store stories, recreation plan). The live test comes later. Keep the panel's caution in view: Shopify success is evidence of demand and method, not proof of eBay demand.
+- **Owner decision (2026-11-04, latest): step 1 is finding the best stores and what they do, with no CJ or supplier focus yet; step 2 is sourcing (CJ) for what step 1 finds.** The live test comes later.
+- **myip.ms:** the idea is in (a popularity-ranked list of Shopify stores); the site is not automated until its terms allow it or it offers an API with suitable terms. The owner is checking that in a browser. Meanwhile the same list comes from open data: Tranco top 1M plus DNS (Shopify IP range), run at scale without a keyword filter.
+- **How to define "best":** traffic rank, rank growth (compare daily Tranco lists), release rhythm, marketing stack. Separate brands that make their own goods from resellers and dropshippers, because a brand's success does not transfer to zero inventory.
+- Keep the panel's caution in view: Shopify success shows demand and method, not eBay demand.
 
 ## Next tasks, in order (focus from 2026-11-04: reconstruct and recreate store success)
 
