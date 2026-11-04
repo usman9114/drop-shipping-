@@ -774,9 +774,21 @@
     "semantic_hash": ""
   },
   "docs/plan/step1-flow.md": {
-    "mtime": 1793822527.1664631,
-    "seen": 1793822535.5396392,
-    "ast_hash": "81b5c761fe2f6a31fc4a3e6e51ed87a2",
+    "mtime": 1793822680.4531343,
+    "seen": 1793822683.6848865,
+    "ast_hash": "6ff38a12d76b541cff1d97fa0e9db155",
+    "semantic_hash": ""
+  },
+  "docs/plan/img/step1-flow.png": {
+    "mtime": 1793822665.833519,
+    "seen": 1793822683.684925,
+    "ast_hash": "61d420ee67f1a99af82d46abdcd78da6",
+    "semantic_hash": ""
+  },
+  "docs/plan/img/step1-flow.svg": {
+    "mtime": 1793822680.7784724,
+    "seen": 1793822683.684927,
+    "ast_hash": "17bf3a64e09f3b7dae61405ba2d349e5",
     "semantic_hash": ""
   }
 }

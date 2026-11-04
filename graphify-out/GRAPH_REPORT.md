@@ -1,7 +1,7 @@
 # Graph Report - drop-shipping-  (2026-11-04)
 
 ## Corpus Check
-- 127 files · ~86,962 words
+- 127 files · ~89,406 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 20 file(s) not represented in the graph (top: .csv 14, (none) 4, .example 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `15c09a96`
+- Built from commit: `a3bd7b59`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -382,15 +382,15 @@ Nodes (3): analyze(), _fetch(), main()
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `record_run()` connect `store.py` to `stores.py`, `review_panel.py`, `trends.py`, `webmeta.py`, `cj.py`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+  _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
   _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL` to the rest of the system?**
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
-- **Why does `chat()` connect `chat` to `review_panel.py`, `store_intel.py`, `chat`, `trends.py`, `csv`, `intel.py`, `classify.py`?**
-  _High betweenness centrality (0.011) - this node is a cross-community bridge._
+- **Why does `rebuild()` connect `store.py` to `review_panel.py`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `chat()` (e.g. with `main()` and `main()`) actually correct?**
   _`chat()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Should `chat` be split into smaller, more focused modules?**
