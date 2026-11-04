@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-04)
 
 ## Corpus Check
-- 60 files · ~51,885 words
+- 61 files · ~53,580 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 11 file(s) not represented in the graph (top: .csv 6, (none) 4, .example 1)
+- Unclassified: 12 file(s) not represented in the graph (top: .csv 6, (none) 4, .graphify-bak 1)
 
 ## Summary
-- 604 nodes · 773 edges · 51 communities (42 shown, 9 thin omitted)
+- 618 nodes · 786 edges · 49 communities (40 shown, 9 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 21 edges (avg confidence: 0.93)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `909b258a`
+- Built from commit: `678d8183`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -48,7 +48,7 @@
 - Multichannel plan: one pipeline, eBay + Shopify/Instagram
 - claude-glm.sh
 - db
-- CJClient
+- Brief for the second agent: independent review, then build the shortlist engine
 - glm-coder.md
 - 0003 — Build vs reuse: workflow, data loading, connectors, LLM routing
 - data-engineer.md
@@ -57,14 +57,12 @@
 - 16 — Trend and demand sources (US): what we can legitimately ingest
 - 17 — Free feeds, and what each API lets us store
 - Runbook: Postgres on a VPS, reached by CI through an SSH tunnel
-- Data pipeline: feeding the team authentic evidence
+- Operating plan: from desk research to first sale, without the engineering trap
 - Runbook: Terapeak research session (manual, about 90 minutes)
 - test_cj.py
 - aggregate_candidates.py
 - 18 — CJ Dropshipping API cheat sheet
 - 0005-cj-client.md
-- Independent project review — 2026-11-03
-- 2. Per-niche price bands and representative products
 - Session state: where the project stands
 
 ## God Nodes (most connected - your core abstractions)
@@ -73,28 +71,28 @@
 3. `Inputs` - 18 edges
 4. `chat()` - 15 edges
 5. `evaluate()` - 14 edges
-6. `Warehouse design: Postgres as the source of truth` - 13 edges
-7. `12 — Compliance risk cards for the 8 candidate niches` - 13 edges
+6. `12 — Compliance risk cards for the 8 candidate niches` - 13 edges
+7. `Warehouse design: Postgres as the source of truth` - 13 edges
 8. `Runbook: Postgres on a VPS, reached by CI through an SSH tunnel` - 13 edges
 9. `compute()` - 12 edges
-10. `db` - 11 edges
+10. `CJClient` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
-  docs/research/13-sales-niche-economics.md → scout/margin.py
-- `Findings` --references--> `_inline_images()`  [INFERRED]
-  docs/reviews/2026-11-agent2-project-review.md → scout/llm.py
-- `2. Per-niche price bands and representative products` --references--> `Inputs`  [INFERRED]
-  docs/research/13-sales-niche-economics.md → scout/margin.py
+- `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
+  .claude/agents/_team-rules.md → scout/store.py
+- `Findings` --references--> `compute()`  [INFERRED]
+  docs/reviews/2026-11-agent2-project-review.md → scout/margin.py
 - `6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`)` --references--> `evaluate()`  [INFERRED]
   docs/handoff/agent2-review-and-shortlist.md → scout/margin.py
-- `2. Per-niche price bands and representative products` --references--> `evaluate()`  [INFERRED]
+- `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
+- `Findings` --references--> `evaluate()`  [INFERRED]
+  docs/reviews/2026-11-agent2-project-review.md → scout/margin.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (51 total, 9 thin omitted)
+## Communities (49 total, 9 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -165,8 +163,8 @@ Cohesion: 0.50
 Nodes (3): 10 — Category risk ranking (US, zero-inventory eBay dropshipping), Cross-cutting facts, Sources
 
 ### Community 22 - "store.py"
-Cohesion: 0.11
-Nodes (21): Shared rules for every AI team member, 2. What makes it "authentic", _checked_path(), _git_sha(), main(), query(), rebuild(), record_run() (+13 more)
+Cohesion: 0.06
+Nodes (35): Shared rules for every AI team member, 1. Architecture, 2. What makes it "authentic", 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence (+27 more)
 
 ### Community 23 - "steps"
 Cohesion: 0.08
@@ -177,8 +175,8 @@ Cohesion: 0.10
 Nodes (19): 0001 — Candidate niches (Stage B), 1. Decision, 2. Evidence table, 2a. Margin constraint behind the price targets, 2b. Rubric scores (`docs/plan/ai-team.md` §5), 2c. Sources for the shared premises, 3.1 `tcg-supplies`: trading-card storage and display, 3.2 `hobby-modeling-tools`: miniature and scale-model tools (+11 more)
 
 ### Community 26 - "2. Per-niche price bands and representative products"
-Cohesion: 0.17
-Nodes (18): Findings, _check(), compute(), _compute_raw(), evaluate(), Inputs, main(), _rounded() (+10 more)
+Cohesion: 0.09
+Nodes (31): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost ceiling table [data: scout.margin output], 2. Per-niche price bands and representative products, 3. Ranked summary, 4. Gaps and next steps, auto-detailing-tools, coin-supplies, collectibles-display (+23 more)
 
 ### Community 27 - "12 — Compliance risk cards for the 8 candidate niches"
 Cohesion: 0.10
@@ -204,9 +202,9 @@ Nodes (7): ANTHROPIC_AUTH_TOKEN, ANTHROPIC_BASE_URL, ANTHROPIC_DEFAULT_HAIKU_MOD
 Cohesion: 0.07
 Nodes (28): command, environment, healthcheck, image, logging, ports, restart, secrets (+20 more)
 
-### Community 33 - "CJClient"
-Cohesion: 0.11
-Nodes (16): 1. Project in four lines, 2. Read first (in this order, about 30 minutes), 3. Ground rules (from `CLAUDE.md`, restated because they matter most), 4. How to work, 5. Part 1: independent review (DONE, merged as PR #1; read `docs/reviews/2026-11-agent2-project-review.md`), 6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`), 7. When you finish, Brief for the second agent: independent review, then build the shortlist engine (+8 more)
+### Community 33 - "Brief for the second agent: independent review, then build the shortlist engine"
+Cohesion: 0.25
+Nodes (7): 1. Project in four lines, 2. Read first (in this order, about 30 minutes), 3. Ground rules (from `CLAUDE.md`, restated because they matter most), 4. How to work, 5. Part 1: independent review (DONE, merged as PR #1; read `docs/reviews/2026-11-agent2-project-review.md`), 7. When you finish, Brief for the second agent: independent review, then build the shortlist engine
 
 ### Community 35 - "0003 — Build vs reuse: workflow, data loading, connectors, LLM routing"
 Cohesion: 0.33
@@ -236,53 +234,45 @@ Nodes (5): 17 — Free feeds, and what each API lets us store, A. eBay API Licen
 Cohesion: 0.14
 Nodes (13): 0. What you are building, 10. Leaving, 1. Choose the server, 2. Harden the server (one time, as root, from your laptop), 3. Install Docker, 4. Start Postgres, 5. The CI tunnel user (can do nothing except forward one port), 6. GitHub secrets (repository settings, Secrets and variables, Actions) (+5 more)
 
-### Community 42 - "Data pipeline: feeding the team authentic evidence"
-Cohesion: 0.29
-Nodes (6): 1. Architecture, 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence
+### Community 42 - "Operating plan: from desk research to first sale, without the engineering trap"
+Cohesion: 0.14
+Nodes (13): 0. Status today, 1. Guardrails against the engineering trap, 2. Model plan: GLM + OpenRouter, and what the €10 is for, 3. Calendar, 4. Weekly review (every Sunday, 30 min), 5. The SaaS option: keep the door open, don't walk through it yet, 6. Parking lot (not before 20 live listings), 7. Owner actions, in order (+5 more)
 
 ### Community 43 - "Runbook: Terapeak research session (manual, about 90 minutes)"
 Cohesion: 0.29
 Nodes (6): For each product type, Rules, Runbook: Terapeak research session (manual, about 90 minutes), What I do with it, What you need, Which products
 
 ### Community 44 - "test_cj.py"
-Cohesion: 0.08
-Nodes (18): parse_price(), private_path(), git_ident(), main(), client(), FakeResp, FakeSession, test_a_non_json_response_is_a_clear_error() (+10 more)
+Cohesion: 0.07
+Nodes (25): 6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`), CJClient, CJError, _default_session(), _dicts(), main(), normalize_detail(), normalize_listing() (+17 more)
 
 ### Community 46 - "18 — CJ Dropshipping API cheat sheet"
 Cohesion: 0.22
 Nodes (8): 18 — CJ Dropshipping API cheat sheet, Endpoints, Limits and errors, Minimal call sequence, Official MCP server, Sources, Terms, Unknowns that need a live key
-
-### Community 48 - "Independent project review — 2026-11-03"
-Cohesion: 0.33
-Nodes (5): Independent project review — 2026-11-03, Primary-source verification, retrieved 2026-11-03, Questions for the review pull request, Top 10 actions, Validation and limits
-
-### Community 49 - "2. Per-niche price bands and representative products"
-Cohesion: 0.13
-Nodes (14): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost ceiling table [data: scout.margin output], 2. Per-niche price bands and representative products, 3. Ranked summary, 4. Gaps and next steps, auto-detailing-tools, coin-supplies, collectibles-display (+6 more)
 
 ### Community 50 - "Session state: where the project stands"
 Cohesion: 0.25
 Nodes (7): Facts that change plans, Next tasks, in order, Owner tasks outstanding, Repo, Session state: where the project stands, Traps in a fresh container, What exists
 
 ## Knowledge Gaps
-- **6 isolated node(s):** `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 399 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **6 isolated node(s):** `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 411 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `evaluate()` connect `2. Per-niche price bands and representative products` to `CJClient`, `2. Per-niche price bands and representative products`?**
-  _High betweenness centrality (0.019) - this node is a cross-community bridge._
+- **Why does `evaluate()` connect `2. Per-niche price bands and representative products` to `test_cj.py`, `store.py`?**
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
   _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS` to the rest of the system?**
+- **What connects `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL` to the rest of the system?**
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
-- **Why does `Findings` connect `2. Per-niche price bands and representative products` to `llm.py`, `Independent project review — 2026-11-03`, `store.py`?**
-  _High betweenness centrality (0.015) - this node is a cross-community bridge._
+- **Why does `Findings` connect `store.py` to `llm.py`, `2. Per-niche price bands and representative products`?**
+  _High betweenness centrality (0.014) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `rebuild()` (e.g. with `2. What makes it "authentic"` and `Findings`) actually correct?**
   _`rebuild()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Should `llm.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.06578947368421052 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06787330316742081 - nodes in this community are weakly interconnected._
