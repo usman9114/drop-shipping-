@@ -1,17 +1,17 @@
-# Graph Report - drop-shipping-  (2026-11-03)
+# Graph Report - drop-shipping-  (2026-11-04)
 
 ## Corpus Check
-- 59 files · ~51,085 words
+- 60 files · ~51,885 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 11 file(s) not represented in the graph (top: .csv 6, (none) 4, .example 1)
 
 ## Summary
-- 596 nodes · 766 edges · 50 communities (41 shown, 9 thin omitted)
+- 604 nodes · 773 edges · 51 communities (42 shown, 9 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 21 edges (avg confidence: 0.93)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fd1cbc0b`
+- Built from commit: `909b258a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -65,6 +65,7 @@
 - 0005-cj-client.md
 - Independent project review — 2026-11-03
 - 2. Per-niche price bands and representative products
+- Session state: where the project stands
 
 ## God Nodes (most connected - your core abstractions)
 1. `record_run()` - 21 edges
@@ -93,7 +94,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (50 total, 9 thin omitted)
+## Communities (51 total, 9 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -129,7 +130,7 @@ Nodes (5): Commands, Context: graphify knowledge graph, graphify, Hard rules, Pr
 
 ### Community 8 - "llm.py"
 Cohesion: 0.07
-Nodes (26): chat(), _extract_text(), _inline_images(), _key(), list_free(), LLMError, _load_dotenv(), main() (+18 more)
+Nodes (29): chat(), _extract_text(), _inline_images(), _key(), list_free(), LLMError, _load_dotenv(), main() (+21 more)
 
 ### Community 9 - "11 - Google Trends check of Stage B candidates (US)"
 Cohesion: 0.20
@@ -164,8 +165,8 @@ Cohesion: 0.50
 Nodes (3): 10 — Category risk ranking (US, zero-inventory eBay dropshipping), Cross-cutting facts, Sources
 
 ### Community 22 - "store.py"
-Cohesion: 0.08
-Nodes (26): Shared rules for every AI team member, 2. What makes it "authentic", _checked_path(), _git_sha(), main(), query(), rebuild(), record_run() (+18 more)
+Cohesion: 0.11
+Nodes (21): Shared rules for every AI team member, 2. What makes it "authentic", _checked_path(), _git_sha(), main(), query(), rebuild(), record_run() (+13 more)
 
 ### Community 23 - "steps"
 Cohesion: 0.08
@@ -244,8 +245,8 @@ Cohesion: 0.29
 Nodes (6): For each product type, Rules, Runbook: Terapeak research session (manual, about 90 minutes), What I do with it, What you need, Which products
 
 ### Community 44 - "test_cj.py"
-Cohesion: 0.11
-Nodes (16): parse_price(), private_path(), client(), FakeResp, FakeSession, test_a_non_json_response_is_a_clear_error(), test_a_second_auth_failure_is_not_retried_forever(), test_detail_ignores_junk_variants_and_images() (+8 more)
+Cohesion: 0.08
+Nodes (18): parse_price(), private_path(), git_ident(), main(), client(), FakeResp, FakeSession, test_a_non_json_response_is_a_clear_error() (+10 more)
 
 ### Community 46 - "18 — CJ Dropshipping API cheat sheet"
 Cohesion: 0.22
@@ -259,9 +260,13 @@ Nodes (5): Independent project review — 2026-11-03, Primary-source verificatio
 Cohesion: 0.13
 Nodes (14): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost ceiling table [data: scout.margin output], 2. Per-niche price bands and representative products, 3. Ranked summary, 4. Gaps and next steps, auto-detailing-tools, coin-supplies, collectibles-display (+6 more)
 
+### Community 50 - "Session state: where the project stands"
+Cohesion: 0.25
+Nodes (7): Facts that change plans, Next tasks, in order, Owner tasks outstanding, Repo, Session state: where the project stands, Traps in a fresh container, What exists
+
 ## Knowledge Gaps
 - **6 isolated node(s):** `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 392 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 399 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
@@ -280,4 +285,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 2 inferred relationships involving `rebuild()` (e.g. with `2. What makes it "authentic"` and `Findings`) actually correct?**
   _`rebuild()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Should `llm.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.06868686868686869 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06578947368421052 - nodes in this community are weakly interconnected._

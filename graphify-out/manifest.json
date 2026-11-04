@@ -370,5 +370,11 @@
     "seen": 1793749658.3212686,
     "ast_hash": "54c42fdbd0b2a2b6b5d0bef1e71010e1",
     "semantic_hash": ""
+  },
+  "docs/handoff/session-state.md": {
+    "mtime": 1793791455.8902016,
+    "seen": 1793791466.1487527,
+    "ast_hash": "7161b49819f972aee9184b37dda68917",
+    "semantic_hash": ""
   }
 }
