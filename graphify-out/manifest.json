@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   "docs/handoff/session-state.md": {
-    "mtime": 1793824723.6812074,
-    "seen": 1793824729.0805845,
-    "ast_hash": "1110bfeee06f2fab14f9469369ff70d5",
+    "mtime": 1793834845.4680712,
+    "seen": 1793834850.920767,
+    "ast_hash": "7eebce5a5a1ea51d321260075f5d254f",
     "semantic_hash": ""
   },
   "docs/plan/operating-plan.md": {
@@ -882,9 +882,9 @@
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_store_universe.sql": {
-    "mtime": 1793829639.6580558,
-    "seen": 1793829681.3685772,
-    "ast_hash": "",
+    "mtime": 1793834683.3557415,
+    "seen": 1793834850.9207165,
+    "ast_hash": "806f10e01e2b15977890dcae276f8828",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_web_store_light.sql": {
@@ -906,9 +906,9 @@
     "semantic_hash": ""
   },
   "docs/decisions/0012-temporal-storage.md": {
-    "mtime": 1793833731.234677,
-    "seen": 1793833738.1295898,
-    "ast_hash": "51d5d310b1478c1b589a07482e641efb",
+    "mtime": 1793834845.4676511,
+    "seen": 1793834850.9207647,
+    "ast_hash": "fc4ffe2bfca8e9c2cd966f4561a35e73",
     "semantic_hash": ""
   },
   "docs/plan/temporal-system.md": {
@@ -939,6 +939,24 @@
     "mtime": 1793834649.8328567,
     "seen": 1793834716.2559786,
     "ast_hash": "6097be2d90802b8300492a450abf23de",
+    "semantic_hash": ""
+  },
+  "scripts/vault_export.py": {
+    "mtime": 1793834848.1981127,
+    "seen": 1793834850.92067,
+    "ast_hash": "d74add28c8dfb0780739ad5eb93529eb",
+    "semantic_hash": ""
+  },
+  "scripts/vault_restore.py": {
+    "mtime": 1793834848.1981127,
+    "seen": 1793834850.9206717,
+    "ast_hash": "1b012ec0035da1eb6fe9fa9ee8691582",
+    "semantic_hash": ""
+  },
+  "warehouse/models/marts/mart_candidate_pool.sql": {
+    "mtime": 1793834683.356046,
+    "seen": 1793834850.9207084,
+    "ast_hash": "c1bb913d3a66de8730f14443ca3c8c4b",
     "semantic_hash": ""
   }
 }
