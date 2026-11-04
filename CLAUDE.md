@@ -4,7 +4,7 @@
 
 Proof-of-concept to test whether **eBay (and similar marketplace) dropshipping** is feasible. The idea: pick products with proven demand, make better listings (CJ product images with AI-enhanced surroundings; accurate, structured descriptions), and fulfil through CJ Dropshipping (zero inventory).
 
-- Current phase: **research done → Phase 0 (desk feasibility tool)**. See `docs/research/00-summary.md` for the verdict, thesis and phased plan with kill criteria.
+- Current phase: **Phase 0, release R1 "Niche Finder"**: find the best online stores and what they do, ending in a niche shortlist (not a single product). Goal, deliverables, exit criteria and scope: `docs/plan/phase-niche-finder-r1.md`; flow: `docs/plan/step1-flow.md`. Sourcing, listings and the live eBay test are later phases. Verdict, thesis and phased plan with kill criteria: `docs/research/00-summary.md`.
 - Research reports: `docs/research/01..06-*.md` (eBay policy, unit economics, suppliers, tooling/APIs, legal/platforms, image sourcing). Every claim carries a source URL; `[unverified]` marks secondary-only claims. Keep that convention when adding research.
 
 ## Hard rules
@@ -21,6 +21,21 @@ Proof-of-concept to test whether **eBay (and similar marketplace) dropshipping**
 - **Model roles (owner, 2026-11-04).** Workers are Z.ai GLM (free, first) and Claude **Haiku** and **Sonnet** via OpenRouter (`scout/llm.py` routes: bulk/vision → GLM then Haiku; reasoning/code → GLM then Sonnet). **Phase one is free only**: paid Claude routes are skipped unless `SCOUT_ALLOW_PAID=1`; free OpenRouter models are the fallback. **Opus is the advisor**: plans, reviews and decides; it does not do bulk work. Subagents use `model: haiku` or `sonnet`.
 - **Research workflow.** Plan and synthesize on the large model. Fan web searches out to Haiku subagents (`model: haiku`), one topic per agent, in parallel. Save each report to `docs/research/NN-topic.md` and update `00-summary.md`.
 
+## How we think (standing principles, owner 2026-11-04)
+
+Apply these to every task, not only when asked.
+
+1. **One phase at a time.** Every phase has a written goal, deliverables, measurable exit criteria and an out-of-scope list in `docs/plan/`. Work outside the current phase waits. Early phases produce a shortlist of niches, not "the best product"; picking products is a later phase.
+2. **Label what we know.** Tag every number `[data]` (observed), `[proxy]` (indirect signal) or `[unknown]`. Never present a proxy as sales, profit or margin. Public records do not show revenue, ad spend, orders or supplier cost; say so and name the gap in every story and report. Paid revenue estimators are modelled guesses and need the owner's approval.
+3. **Demand evidence is not eBay demand.** A Shopify store's success shows demand and method. A brand's success does not transfer to zero inventory. Only our own live test measures eBay.
+4. **Explain every ranking.** A score documents its inputs, weights and why, keeps the weights in one place, and says what would change the order. If the owner asks "how do you rank", the answer is already in the docs.
+5. **Validate before relying.** Rules and classifiers (business model, categories, filters) get a hand-checked sample and an independent second opinion, with an accuracy figure, before their output feeds a decision. Each error we find becomes a test.
+6. **Terms before automation, including "wrap an API around it".** Read the site's terms first. If they forbid automated access, do not scrape, drive a browser against it, or get around a bot check; use the official API (owner buys access) or manual reading. Precedent: myip.ms (terms III(e)), decision 0009.
+7. **Free first, spend only on request.** Phase one runs on free models; paid Claude routes need `SCOUT_ALLOW_PAID=1`. Stop and ask before spending money, creating accounts, installing unreviewed third-party code, or sending anything outside the repo. A third-party skill or tool is read first, pinned to a commit and installed by an owner-approved script; confirm a named tool exists before installing anything with that name.
+8. **Long jobs are resumable and auditable.** Scans run in batches that record their own counts and can restart; progress is watched, not guessed.
+9. **Report plainly.** When asked for status, say what is done, what is running now and what is next, in simple steps with numbers. Say what failed or was blocked. Lead with the answer.
+10. **Keep decisions in the repo.** Terms read, method chosen and owner decisions go in `docs/decisions/` or `docs/plan/` the same day, so a fresh container can resume from `docs/handoff/session-state.md`.
+
 ## Context: graphify knowledge graph
 
 Project context lives in the graphify knowledge graph (`graphify-out/`). Use it before re-reading files. It is rebuilt by git hooks after each commit, checkout and merge (`graphify hook install`, run by `make setup`). After editing docs or code, run `graphify update .`. For a full semantic rebuild including the research docs, run the `/graphify .` skill (vendored in `.claude/skills/graphify/`).
@@ -34,7 +49,9 @@ make graph      # graphify update . (refresh knowledge graph)
 python -m scout.store tables|runs|query "SQL"|rebuild   # evidence store (docs/plan/data-pipeline.md)
 python -m scout.llm --task code "..."                  # free models: Z.ai GLM Flash -> OpenRouter
 make pipeline | make wh-snapshot | make intel          # warehouse flow and intelligence layer (decision 0007)
-python -m scout.webmeta discover|sitemaps|products    # internet-metadata harness (decision 0008)
+python -m scout.webmeta discover|sitemaps|products|scan  # internet-metadata harness (decisions 0008, 0009)
+make niches                                             # R1: scan, profile, score, shortlist, supply check (~3 h)
+python -m scout.stores meta|deep|ranks                  # store profiler; python -m scout.store_intel --top 40
 ```
 
 ## graphify

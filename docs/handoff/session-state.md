@@ -83,3 +83,12 @@
 ## Owner tasks outstanding
 
 Choose option A/B/C (supply check §4); CJ and eBay seller account setup (eBay developer approval pending; current eBay keys are sandbox), Terapeak session, rotate leaked keys, add the 5 env vars to the cloud environment, ask CJ about customer returns and the return address, decide public versus private repo and the commit email, answer the Shopify questions (wife's Instagram details, beauty route, sequencing).
+
+## Update: phase Niche Finder R1 (2026-11-04, later)
+
+Read first: `docs/plan/phase-niche-finder-r1.md` (goal, exit criteria, scope), `docs/plan/step1-flow.md` (diagram), decision 0009, and the "How we think" section of `CLAUDE.md`.
+
+- **Built and pushed:** `scout/webmeta.py scan` (Tranco 1M, DNS, resumable batches), `scout/stores.py` (profiler), `scout/store_intel.py` (grounded stories), `scripts/store_export.py`, `scripts/supply_sanity.py`, store staging and mart models, `make niches`.
+- **Raw data is not in git.** The scan (about 20 batches, ~3 h) and profiles live in `data/private/` and are lost with the container. In a fresh container run `make niches`; `scan` skips finished batches only if the lake survived.
+- **Free models only** in phase one (`SCOUT_ALLOW_PAID=1` to override). **myip.ms:** terms forbid scraping; API only if the owner buys access. **archify skill:** found (`tt-a1i/archify`), install blocked by the permission check; waiting for the owner.
+- **Next:** finish scan, `make stores-meta stores-deep stores-ranks`, validate the business-model rules on 30 stores, build report and shortlist, supply sanity, compliance review, decision pack 0010, tag `niche-finder-r1`.
