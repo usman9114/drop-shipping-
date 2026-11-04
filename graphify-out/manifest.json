@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793824331.2119281,
-    "seen": 1793824343.2206178,
-    "ast_hash": "c185e4890cd7accff5c10ecd233dc390",
+    "mtime": 1793824716.300204,
+    "seen": 1793824729.0805652,
+    "ast_hash": "6668c349cc21b451039252c0d31de56c",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   "docs/handoff/session-state.md": {
-    "mtime": 1793819093.1280923,
-    "seen": 1793821059.2092443,
-    "ast_hash": "b0bf06e58d66ac2432ebd48055f07eed",
+    "mtime": 1793824723.6812074,
+    "seen": 1793824729.0805845,
+    "ast_hash": "1110bfeee06f2fab14f9469369ff70d5",
     "semantic_hash": ""
   },
   "docs/plan/operating-plan.md": {
