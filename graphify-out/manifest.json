@@ -696,9 +696,9 @@
     "semantic_hash": ""
   },
   "scout/stores.py": {
-    "mtime": 1793828364.0013547,
-    "seen": 1793828423.7283332,
-    "ast_hash": "3934b34874a6176e9a2a16a44d015ea0",
+    "mtime": 1793829463.984645,
+    "seen": 1793829467.227322,
+    "ast_hash": "08bc25aa1b909887a5fa5d2c4855b535",
     "semantic_hash": ""
   },
   "scripts/store_export.py": {
@@ -714,9 +714,9 @@
     "semantic_hash": ""
   },
   "tests/test_stores.py": {
-    "mtime": 1793828417.5365827,
-    "seen": 1793828423.7286642,
-    "ast_hash": "a3c97e2ea7e9a241ee9eeb9d950142f8",
+    "mtime": 1793829463.984645,
+    "seen": 1793829467.2273777,
+    "ast_hash": "00b8be9c50deb2976201a70fd4dacbad",
     "semantic_hash": ""
   },
   "docs/decisions/0009-best-store-discovery.md": {
@@ -810,9 +810,9 @@
     "semantic_hash": ""
   },
   "docs/reviews/2026-11-04-business-model-validation.md": {
-    "mtime": 1793828406.836582,
-    "seen": 1793828423.7305074,
-    "ast_hash": "584cef69bbecdb93189ff027941e06de",
+    "mtime": 1793829410.254619,
+    "seen": 1793829467.2276034,
+    "ast_hash": "b89bbbbe39f424de235e09edef18ef69",
     "semantic_hash": ""
   },
   "docs/research/22-shopify-conversion-aov-benchmarks.md": {
