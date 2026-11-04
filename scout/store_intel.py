@@ -92,7 +92,8 @@ tags). Field meanings:
   products_sampled newest products
 - price_*: entry price per product in the store currency; discount_share: share
   of products shown with a crossed-out compare-at price
-- business_model: brand (sells its own goods), reseller (many brands), dropship
+- business_model: brand (sells its own goods), retailer (10+ brands, big retailer
+  or portfolio owner), reseller (5 to 9 brands), dropship
   (supplier import traces), pod (print on demand), unclear
 - paid_ads / retention / partners / conversion: marketing code found on the homepage
 - dns_signals: platforms the domain verified with (meta_business = Meta business account)
@@ -193,7 +194,11 @@ def template(p: dict) -> str:
     )
     model = p.get("business_model")
     why = "; ".join(p.get("business_model_why") or [])
-    copy = "not copyable with zero inventory" if model == "brand" else "method copyable"
+    copy = (
+        "not copyable with zero inventory"
+        if model in ("brand", "retailer")
+        else "method copyable"
+    )
     parts.append(f"Model: {model} ({why}), {copy}.")
     parts.append("Unknown: " + "; ".join(p["gaps"]) + ".")
     return " ".join(parts)

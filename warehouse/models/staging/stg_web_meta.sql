@@ -8,4 +8,4 @@ from {{ lake('web_meta', {
     'published_products': 'BIGINT', 'published_collections': 'BIGINT',
     'installments': 'BOOLEAN', 'final_host': 'VARCHAR', 'error': 'VARCHAR'},
     all_runs=true) }}
-qualify row_number() over (partition by domain order by (shop_id is not null) desc, run_id desc) = 1
+qualify row_number() over (partition by domain order by (shop_id is not null) desc, (error is null) desc, run_id desc) = 1

@@ -5,6 +5,7 @@ cats as (
     select top_category as category,
         count(*)                                                    as stores,
         count(*) filter (where business_model = 'brand')            as brands,
+        count(*) filter (where business_model = 'retailer')         as retailers,
         count(*) filter (where business_model = 'reseller')         as resellers,
         count(*) filter (where business_model = 'dropship')         as dropshippers,
         count(*) filter (where business_model = 'pod')              as pod,

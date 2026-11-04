@@ -28,9 +28,9 @@ from pathlib import Path
 sys.path.insert(0, str(_P(__file__).resolve().parent.parent))
 
 from scout import stores  # noqa: E402
-from scout.llm import chat  # noqa: E402
+from scout.llm import chat_many  # noqa: E402
 
-LABELS = ["brand", "reseller", "dropship", "pod"]
+LABELS = ["brand", "retailer", "reseller", "dropship", "pod"]
 FIELDS = [
     "domain",
     "products_sampled",
@@ -49,13 +49,21 @@ FIELDS = [
 PROMPT = """Classify one online store's business model from this evidence.
 Labels:
 - brand: sells goods it makes or commissions under its own name (own-label, one or two vendors)
-- reseller: retails many other brands' goods
+- retailer: a large multi-brand retailer, publisher or house-brand portfolio (10+ labels)
+- reseller: a smaller shop reselling 5 to 9 other brands' goods
 - dropship: imports marketplace/supplier goods under generic or rotating vendor names (AliExpress-style images, supplier SKUs)
 - pod: print on demand
 Evidence (JSON):
 {ev}
 
-Reply with exactly one line: LABEL | short reason. LABEL is one of brand, reseller, dropship, pod."""
+Reply with exactly one line: LABEL | short reason. LABEL is one of brand, retailer, reseller, dropship, pod."""
+
+
+SEEN = Path("data/private/validation/seen.txt")
+
+
+def seen() -> set[str]:
+    return set(SEEN.read_text().split()) if SEEN.exists() else set()
 
 
 def sample(rows: list[dict], n: int, seed: int = 7) -> list[dict]:
@@ -78,7 +86,9 @@ def sample(rows: list[dict], n: int, seed: int = 7) -> list[dict]:
 
 def parse(text: str) -> tuple[str | None, str]:
     m = re.match(
-        r"\s*\**\s*(brand|reseller|dropship|pod)\b[^|]*\|?\s*(.*)", text.strip(), re.I
+        r"\s*\**\s*(brand|retailer|reseller|dropship|pod)\b[^|]*\|?\s*(.*)",
+        text.strip(),
+        re.I,
     )
     return (m.group(1).lower(), m.group(2).strip()) if m else (None, text.strip()[:120])
 
@@ -86,26 +96,32 @@ def parse(text: str) -> tuple[str | None, str]:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=30)
+    ap.add_argument("--seed", type=int, default=7)
+    ap.add_argument(
+        "--fresh", action="store_true", help="exclude stores validated before"
+    )
     a = ap.parse_args()
     rows = {
         r["domain"]: r for r in stores._all_rows("web_store_deep") if not r.get("error")
     }
     rows = [r for r in rows.values() if r.get("products_sampled")]
-    picks = sample(rows, a.n)
+    if a.fresh:  # only stores never used to tune the rules: an honest hold-out
+        done = seen()
+        rows = [r for r in rows if r["domain"] not in done]
+    picks = sample(rows, a.n, a.seed)
+    prompts = [
+        PROMPT.format(ev=json.dumps({k: r.get(k) for k in FIELDS}, default=str))
+        for r in picks
+    ]
+    # GLM Flash is free: 8 parallel calls is the tested sweet spot (16 hits HTTP errors)
+    results = chat_many(prompts, workers=8, task="bulk", max_tokens=200)
     out, errors = [], 0
-    for i, r in enumerate(picks, 1):
-        print(f"{i}/{len(picks)} {r['domain']}", file=sys.stderr, flush=True)
-        ev = {k: r.get(k) for k in FIELDS}
-        try:
-            res = chat(
-                PROMPT.format(ev=json.dumps(ev, default=str)),
-                task="reasoning",
-                max_tokens=400,
-            )
+    for r, res in zip(picks, results, strict=True):
+        if "text" in res:
             model_label, why = parse(res["text"])
             engine = res["model"]
-        except Exception as exc:
-            model_label, why, engine = None, type(exc).__name__, ""
+        else:
+            model_label, why, engine = None, res["error"], ""
             errors += 1
         rule = r.get("business_model")
         # unclear is a rule abstention, not a claim: it never counts as agreement
@@ -122,6 +138,8 @@ def main() -> int:
         )
     d = Path("data/private/validation")
     d.mkdir(parents=True, exist_ok=True)
+    with SEEN.open("a", encoding="utf-8") as fh:
+        fh.write("".join(o["domain"] + "\n" for o in out))
     dst = d / f"{date.today().isoformat()}-business-model.csv"
     with dst.open("w", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=list(out[0]), lineterminator="\n")

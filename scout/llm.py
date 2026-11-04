@@ -273,6 +273,36 @@ def chat(
     raise LLMError("all free models failed:\n  " + "\n  ".join(errors))
 
 
+def chat_many(
+    prompts: list[str],
+    *,
+    workers: int = 8,
+    task: str = "bulk",
+    **kwargs,
+) -> list[dict]:
+    """Run many prompts in parallel. Returns one dict per prompt, in order:
+    {'model', 'text'} on success or {'error': ...} on failure (never raises).
+
+    GLM Flash is free; workers sets how many calls run at once. Each call keeps
+    chat()'s own retry and fallback behaviour."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    def one(p: str) -> dict:
+        err = ""
+        for attempt in range(3):  # parallel bursts can hit the provider's rate limit
+            try:
+                return chat(p, task=task, **kwargs)
+            except Exception as exc:  # recorded per prompt, never aborts the batch
+                err = f"{type(exc).__name__}: {exc}"[:200]
+                if "429" not in err and "rate" not in err.lower():
+                    break
+                time.sleep(4 * (attempt + 1))
+        return {"error": err}
+
+    with ThreadPoolExecutor(max_workers=max(1, workers)) as ex:
+        return list(ex.map(one, prompts))
+
+
 def list_free() -> list[dict]:
     with urllib.request.urlopen(f"{API}/models", timeout=30) as resp:
         models = json.loads(resp.read())["data"]

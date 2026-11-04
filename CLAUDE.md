@@ -34,7 +34,9 @@ Apply these to every task, not only when asked.
 7. **Free first, spend only on request.** Phase one runs on free models; paid Claude routes need `SCOUT_ALLOW_PAID=1`. Stop and ask before spending money, creating accounts, installing unreviewed third-party code, or sending anything outside the repo. A third-party skill or tool is read first, pinned to a commit and installed by an owner-approved script; confirm a named tool exists before installing anything with that name.
 8. **Long jobs are resumable and auditable.** Scans run in batches that record their own counts and can restart; progress is watched, not guessed.
 9. **Report plainly.** When asked for status, say what is done, what is running now and what is next, in simple steps with numbers. Say what failed or was blocked. Lead with the answer.
-10. **Keep decisions in the repo.** Terms read, method chosen and owner decisions go in `docs/decisions/` or `docs/plan/` the same day, so a fresh container can resume from `docs/handoff/session-state.md`.
+10. **Small first.** Any new method, rule, crawl or model prompt runs on a small sample (about 10 to 30 items) before it runs at scale; scale only after the sample passes. Testing small found two bugs and a weak rule on this project before they touched thousands of stores.
+11. **Parallel by default, within limits.** Independent work runs in parallel: model calls through `scout.llm.chat_many` (GLM Flash is free; **8 workers** is the tested limit, 16 gets HTTP errors), research in background subagents, jobs as resumable batches. Do not wait on one slow serial call. Use the fast `bulk` route for classification; `reasoning` makes GLM think for a minute per call.
+12. **Keep decisions in the repo.** Terms read, method chosen and owner decisions go in `docs/decisions/` or `docs/plan/` the same day, so a fresh container can resume from `docs/handoff/session-state.md`.
 
 ## Context: graphify knowledge graph
 

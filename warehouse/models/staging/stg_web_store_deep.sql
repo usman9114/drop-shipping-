@@ -19,4 +19,5 @@ from {{ lake('web_store_deep', {
     'business_model': 'VARCHAR', 'business_model_why': 'VARCHAR[]',
     'feed_allowed': 'BOOLEAN', 'feed_status': 'BIGINT', 'error': 'VARCHAR'},
     all_runs=true) }}
-qualify row_number() over (partition by domain order by run_id desc) = 1
+-- a failed refresh (error set) must not replace a good profile
+qualify row_number() over (partition by domain order by (error is null) desc, run_id desc) = 1

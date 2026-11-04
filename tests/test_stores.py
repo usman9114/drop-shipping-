@@ -135,9 +135,11 @@ def test_business_model_rules():
     }
     assert stores.business_model(base)[0] == "brand"
     assert stores.business_model({**base, "ae_image_share": 0.5})[0] == "dropship"
-    assert stores.business_model(base, homepage_dropship_app=True)[0] == "dropship"
+    assert (
+        stores.business_model(base, homepage_dropship_app=True)[0] == "brand"
+    )  # app alone is not enough
     assert stores.business_model({**base, "pod_share": 0.8})[0] == "pod"
-    reseller = {**base, "vendors": 30, "top_vendor_share": 0.2, "own_vendor_share": 0.0}
+    reseller = {**base, "vendors": 8, "top_vendor_share": 0.2, "own_vendor_share": 0.0}
     assert stores.business_model(reseller)[0] == "reseller"
     assert stores.business_model({"products_sampled": 0})[0] == "unclear"
 
@@ -237,3 +239,57 @@ def test_us_store_needs_dollars_and_us_reach():
 def test_zero_prices_are_ignored():
     s = stores.summarize_feed([_p(prices=("0", "25"))], "x", "x.com", RULES, TODAY)
     assert s["price_median"] == 25.0
+
+
+def _m(**kw):
+    base = {
+        "products_sampled": 100,
+        "ae_image_share": 0,
+        "dropship_sku_share": 0,
+        "dropship_vendor_share": 0,
+        "pod_share": 0,
+        "vendors": 1,
+        "top_vendor_share": 1.0,
+        "own_vendor_share": 1.0,
+    }
+    return {**base, **kw}
+
+
+def test_app_developer_with_dropship_code_is_not_a_dropshipper():
+    # qikify-like: app code on the homepage, no supplier traces in products
+    assert stores.business_model(_m(), homepage_dropship_app=True)[0] == "brand"
+    # same code plus a few supplier traces is dropship
+    assert (
+        stores.business_model(_m(ae_image_share=0.1), homepage_dropship_app=True)[0]
+        == "dropship"
+    )
+
+
+def test_portfolio_owners_are_retailers_not_resellers():
+    portfolio = _m(vendors=88, top_vendor_share=0.18, own_vendor_share=0.03)
+    assert stores.business_model(portfolio)[0] == "retailer"
+    mid = _m(vendors=12, top_vendor_share=0.35, own_vendor_share=0.0)
+    assert stores.business_model(mid)[0] == "retailer"
+    boutique = _m(vendors=6, top_vendor_share=0.47, own_vendor_share=0.0)
+    assert stores.business_model(boutique)[0] == "reseller"
+
+
+def test_small_catalogue_dominated_by_one_vendor_is_a_brand():
+    jam = _m(vendors=5, top_vendor_share=0.55, own_vendor_share=0.0)
+    assert stores.business_model(jam)[0] == "brand"
+    half_own = _m(vendors=36, top_vendor_share=0.55, own_vendor_share=0.55)
+    assert stores.business_model(half_own)[0] == "brand"
+
+
+def test_failed_refresh_never_replaces_a_good_profile():
+    rows = [
+        {"domain": "a.com", "run_id": "1", "business_model": "dropship"},
+        {"domain": "a.com", "run_id": "2", "error": "ReadTimeout"},
+        {"domain": "b.com", "run_id": "2", "error": "ConnectionError"},
+        {"domain": "c.com", "run_id": "1", "business_model": "brand"},
+        {"domain": "c.com", "run_id": "3", "business_model": "reseller"},
+    ]
+    got = stores.latest_good(rows)
+    assert got["a.com"]["run_id"] == "1"  # the good one survives the failed refresh
+    assert "b.com" not in got  # never answered, so it is retried
+    assert got["c.com"]["business_model"] == "reseller"  # a later good row wins

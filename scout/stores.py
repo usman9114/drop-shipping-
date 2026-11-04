@@ -260,12 +260,22 @@ DROPSHIP_APPS = re.compile(
 def business_model(
     s: dict, homepage_dropship_app: bool = False
 ) -> tuple[str, list[str]]:
-    """brand | reseller | dropship | pod | unclear, with the reasons.
+    """brand | retailer | reseller | dropship | pod | unclear, with the reasons.
 
-    A brand makes or commissions its own goods (one vendor, the shop's own name);
-    a reseller sells many brands; a dropshipper shows marketplace-import traces;
-    pod = print-on-demand. Only the first two are ruled by vendor structure; the
-    supplier traces win when present because they are direct evidence.
+    brand: makes or commissions its own goods (its own name, or one vendor holding
+    half or more of a small catalogue). retailer: 10+ vendors with none dominant,
+    a big multi-brand retailer, publisher or house-brand portfolio (many labels,
+    one owner); not copyable at our scale. reseller: 5 to 9 vendors, none
+    dominant (a boutique reselling other brands). The 10-vendor line comes from a
+    25-store hand check where 7 of 9 'resellers' with 12-20 vendors were big
+    retailers or portfolio owners; recheck it on the larger validation sample.
+    dropship: marketplace-import traces. pod: print on demand.
+
+    Supplier traces win when present because they are direct evidence. A
+    dropshipping app on the homepage is only a supporting signal: app developers
+    (and page builders) ship that code on their own sites, so it needs some trace
+    in the products as well. Validated on a hand-checked sample; see
+    docs/reviews/2026-11-04-business-model-validation.md.
     """
     why = []
     n = s.get("products_sampled") or 0
@@ -276,9 +286,8 @@ def business_model(
         s.get("dropship_sku_share") or 0,
         s.get("dropship_vendor_share") or 0,
     )
-    if ds >= 0.2 or homepage_dropship_app:
-        if ds >= 0.2:
-            why.append(f"supplier-import traces on {ds:.0%} of products")
+    if ds >= 0.2 or (homepage_dropship_app and ds >= 0.05):
+        why.append(f"supplier-import traces on {ds:.0%} of products")
         if homepage_dropship_app:
             why.append("dropshipping app code on homepage")
         return "dropship", why
@@ -287,12 +296,14 @@ def business_model(
     own = s.get("own_vendor_share") or 0
     top = s.get("top_vendor_share") or 0
     vendors = s.get("vendors") or 0
-    if own >= 0.6:
+    if own >= 0.5:
         return "brand", [f"own name is the vendor on {own:.0%} of products"]
+    if top >= 0.5 and vendors <= 10:
+        return "brand", [f"one vendor holds {top:.0%} of {vendors} vendors"]
+    if vendors >= 10 and top < 0.5:
+        return "retailer", [f"{vendors} vendors, largest has {top:.0%}"]
     if vendors >= 5 and top < 0.5:
         return "reseller", [f"{vendors} vendors, largest has {top:.0%}"]
-    if vendors <= 2 and top >= 0.8:
-        return "brand", [f"one vendor holds {top:.0%} (not the shop name)"]
     return "unclear", [f"{vendors} vendors, largest {top:.0%}, own {own:.0%}"]
 
 
@@ -366,8 +377,20 @@ def _all_rows(dataset: str) -> list[dict]:
     return rows
 
 
+def latest_good(rows: list[dict]) -> dict[str, dict]:
+    """Latest row per domain, ignoring failed fetches (rows with an error).
+
+    A transient failure on a refresh must never replace a good earlier profile."""
+    out: dict[str, dict] = {}
+    for r in rows:  # runs are in order; later rows win
+        if not r.get("error"):
+            out[r["domain"]] = r
+    return out
+
+
 def _done(dataset: str) -> set[str]:
-    return {r["domain"] for r in _all_rows(dataset)}
+    """Domains already answered. Failed fetches are not done: they get retried."""
+    return set(latest_good(_all_rows(dataset)))
 
 
 def _parallel(fn, items: list, workers: int) -> list:
@@ -555,6 +578,29 @@ def run_deep(
     return out
 
 
+def relabel() -> dict:
+    """Recompute business_model for every profiled store from its saved evidence.
+
+    Rule changes need no refetching: the evidence is already in the lake. Writes
+    one new run holding the latest row per domain with fresh labels."""
+    latest = latest_good(_all_rows("web_store_deep"))
+    rows, changed = [], 0
+    for r in latest.values():
+        model, why = business_model(r, "dropship_app" in (r.get("traffic_tags") or []))
+        changed += model != r.get("business_model")
+        rows.append({**r, "business_model": model, "business_model_why": why})
+    run = store.record_run(
+        "web_store_deep",
+        rows,
+        source="relabel",
+        trust="data",
+        params={"relabel": True, "changed": changed},
+        note="business_model recomputed from saved evidence; no refetch",
+    )
+    print(f"relabel: {len(rows)} stores, {changed} labels changed", file=sys.stderr)
+    return {"web_store_deep (relabel)": (run, len(rows))}
+
+
 def run_ranks(days_back: list[int]) -> dict:
     """Tranco rank of every Shopify hit on earlier list dates (rank growth)."""
     hits = {h["domain"] for h in _shop_hits()}
@@ -607,6 +653,7 @@ def main(argv: list[str] | None = None) -> int:
     d.add_argument(
         "--refresh", action="store_true", help="re-profile stores already done"
     )
+    sub.add_parser("relabel", help="recompute business_model from saved evidence")
     r = sub.add_parser("ranks")
     r.add_argument("--days-back", type=int, nargs="+", default=[90, 365])
     a = ap.parse_args(argv)
@@ -616,6 +663,8 @@ def main(argv: list[str] | None = None) -> int:
         out = run_deep(
             a.max_stores, a.workers, a.pages, a.pause, not a.all_countries, a.refresh
         )
+    elif a.cmd == "relabel":
+        out = relabel()
     else:
         out = run_ranks(a.days_back)
     for k, (run, n) in out.items():
