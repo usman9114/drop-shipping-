@@ -702,9 +702,9 @@
     "semantic_hash": ""
   },
   "scripts/store_export.py": {
-    "mtime": 1793830502.9287066,
-    "seen": 1793830505.8255255,
-    "ast_hash": "4e49623b24c19b2e4e97d4216b0578e2",
+    "mtime": 1793833881.4157686,
+    "seen": 1793833884.1015167,
+    "ast_hash": "54bb8d72688829a77c069a38f6b8b10c",
     "semantic_hash": ""
   },
   "tests/test_store_intel.py": {
@@ -894,9 +894,9 @@
     "semantic_hash": ""
   },
   "docs/reports/2026-11-04-best-stores.md": {
-    "mtime": 1793830500.4287064,
-    "seen": 1793830505.8274138,
-    "ast_hash": "41b174507829ab69bd15dfcb908986bf",
+    "mtime": 1793833879.0917685,
+    "seen": 1793833884.1016276,
+    "ast_hash": "3b0e10dfc70d7197353e76b049138428",
     "semantic_hash": ""
   },
   "docs/research/27-prefilter-signals.md": {
@@ -915,6 +915,12 @@
     "mtime": 1793833731.2317595,
     "seen": 1793833738.1298034,
     "ast_hash": "8e875aca6144fce631d818326a2f5db3",
+    "semantic_hash": ""
+  },
+  "warehouse/models/marts/mart_store_rank_trend.sql": {
+    "mtime": 1793833703.3106296,
+    "seen": 1793833884.101557,
+    "ast_hash": "fcbf7048c009e225ddc75ee6b9a4ef4f",
     "semantic_hash": ""
   }
 }
