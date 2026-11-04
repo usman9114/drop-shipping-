@@ -104,3 +104,7 @@ Changes:
 3. **External proof only for the top 50**, not 300: company sites, press, growth lists (Inc. 5000, Deloitte), funding announcements. Every number from a fetched page with a date; snippets are leads, never evidence. Each new source's terms are read before use; sources that forbid collection (Trustpilot) are skipped.
 4. **Rebalance the pool:** the growth weight pulled in fast-rising but obscure stores, which rarely have public proof. The pool becomes two slices: the 150 strongest by traffic level (established winners) and the 150 strongest risers.
 5. **Owner's manual ad check** (Meta Ad Library, TikTok Creative Center) stays the best independent sign that a store is spending to grow; it covers the final top 20.
+
+## Phase 2 result (2026-11-04)
+
+Top 50 researched (doc 30): established slice A 2, B 10, C 6, D 7; riser slice A 0, B 2, C 2, D 21. **Decision:** the study set is the established stores with at least one independent sign of performance; risers go to the watchlist until they show proof. Identity rule corrected (a brand with contact details, tied to a named company by its own pages or one independent source); strict-rule failures re-graded.
