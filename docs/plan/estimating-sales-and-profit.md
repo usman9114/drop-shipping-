@@ -53,6 +53,17 @@ Per product, from `scout.margin` (already built): our listing price minus CJ cos
 3. Add estimate columns (low/base/high, grade) to the store marts and to the stories' evidence pack, so every story number stays grounded.
 4. Q2 with real supplier quotes in the sourcing phase.
 
+## Lessons from similar open-source projects (owner review, 2026-11-04)
+
+| Project | Verdict | What we take |
+|---|---|---|
+| Shopify-Scout | real code, weak estimation | **Reject its constants.** It assumes 50 visitors per product, 200 per collection and 150 per review with no calibration, and can turn inventory decreases into "units sold". We use no fixed per-item visitor counts and never call a stock drop a sale. |
+| ShopIntelligence | inspiration only; no licence found, so no code is copied | Comparisons across stores, and warnings when a catalogue is incomplete. Its "velocity" counts new products, not sales: ours is called **release rhythm** and is never presented as sales. |
+| shopify-price-monitor | best reference (MIT) | Snapshots of price and availability and comparisons between them. Needs two fixes we build in: **detect removed items**, and **honour the server's Retry-After** instead of retrying sooner. |
+| shopify-stores-api | hosted service, no estimator to audit | Nothing; revenue accuracy unverified. |
+
+Rules that follow: every constant in an estimator cites a source and a range; an incomplete snapshot never reports removals; availability flips are a demand proxy, not units. The audit of the four repos is in `docs/research/25-similar-repos-audit.md`; the snapshot code is `scout/snapshots.py`.
+
 ## What we will not do
 
 Scrape ad libraries or any site whose terms forbid it; use eBay API data for statistics; buy a paid estimator (StoreLeads, Similarweb) without the owner's approval; present an estimate as revenue. A paid estimator, if approved, is used on about 10 stores to compare against our range, not as our source.
