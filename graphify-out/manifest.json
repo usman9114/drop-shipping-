@@ -790,5 +790,11 @@
     "seen": 1793822683.684927,
     "ast_hash": "17bf3a64e09f3b7dae61405ba2d349e5",
     "semantic_hash": ""
+  },
+  "docs/plan/phase-niche-finder-r1.md": {
+    "mtime": 1793823796.0065386,
+    "seen": 1793823805.886331,
+    "ast_hash": "7bd7e9d490b3e6b917db1dc7954650f9",
+    "semantic_hash": ""
   }
 }
