@@ -20,3 +20,15 @@ models:
         data_tests: [not_null, unique]
       - name: priority
         data_tests: [not_null, unique]
+  - name: mart_product_velocity
+    description: Change over time per product from repeated catalogue pulls.
+    columns:
+      - name: pid
+        data_tests: [not_null, unique]
+      - name: stock_drawdown
+        data_tests: [not_null, {in_range: {arguments: {min: 0}}}]
+  - name: mart_type_evidence
+    description: One row per product type; the only table the intelligence layer reads.
+    columns:
+      - name: product_type
+        data_tests: [not_null, unique]

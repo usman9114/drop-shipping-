@@ -1,4 +1,4 @@
-.PHONY: setup lint graph test wh-load wh-catalogue wh-offers wh-build wh-classify wh-images wh-export
+.PHONY: setup lint graph test wh-load wh-catalogue wh-offers wh-build wh-classify wh-images wh-export wh-snapshot intel pipeline
 
 setup:
 	python3 -m pip install --upgrade pre-commit graphifyy detect-secrets -r requirements.txt
@@ -38,3 +38,12 @@ wh-images:      ## free vision screen of viable candidates' first images (cached
 
 wh-export:      ## derived marts only -> committed files
 	python3 scripts/wh_export.py
+
+wh-snapshot:    ## catalogue snapshot only; run daily to build the time series (velocity)
+	python3 -m scout.ingest_cj catalogue
+
+intel:          ## intelligence layer: evidence packs -> grounded, cached narratives -> docs/reports
+	python3 -m scout.intel
+
+pipeline:       ## the whole flow in order: pull, build, export, intelligence
+	$(MAKE) wh-load wh-catalogue wh-offers wh-build wh-export intel

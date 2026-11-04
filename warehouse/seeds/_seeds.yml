@@ -18,3 +18,7 @@ seeds:
   - name: llm_search_phrase_cache
     config:
       column_types: {title_sha256: varchar, search_phrase: varchar, model: varchar, prompt_version: varchar}
+  - name: rule_why
+    description: Why a product type sells (rule-based judgment, reviewable). Tags are pipe-separated.
+    config:
+      column_types: {product_type: varchar, why_tags: varchar, reason: varchar}

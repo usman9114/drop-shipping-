@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-04)
 
 ## Corpus Check
-- 99 files · ~66,230 words
+- 107 files · ~69,157 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 19 file(s) not represented in the graph (top: .csv 14, (none) 4, .example 1)
+- Unclassified: 20 file(s) not represented in the graph (top: .csv 15, (none) 4, .example 1)
 
 ## Summary
-- 824 nodes · 1128 edges · 66 communities (57 shown, 9 thin omitted)
-- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 42 edges (avg confidence: 0.9)
+- 867 nodes · 1222 edges · 68 communities (59 shown, 9 thin omitted)
+- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 44 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fe1b5f11`
+- Built from commit: `f8d9f3c6`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -67,7 +67,7 @@
 - CJ supply check, 2026-11-04: trading-card supplies fail K1; so do both backups
 - Session state: where the project stands
 - Look-alike intelligence: reverse-engineer stores that already succeed
-- test_warehouse_helpers.py
+- intel.py
 - 0006 — DuckDB warehouse: deterministic core, LLM on top
 - dbt_project.yml
 - column_types
@@ -76,16 +76,18 @@
 - models
 - dev
 - Data pipeline: feeding the team authentic evidence
-- _read_image
+- argparse
 - main
 - classify.py
 - 20 — Source pilots: what each source actually discovered
+- json
 - aggregate_candidates.py
+- 0007 — Deterministic harness first, intelligence layer on top
 
 ## God Nodes (most connected - your core abstractions)
 1. `record_run()` - 24 edges
-2. `chat()` - 22 edges
-3. `column_types` - 22 edges
+2. `chat()` - 23 edges
+3. `column_types` - 23 edges
 4. `Inputs` - 21 edges
 5. `CJClient` - 19 edges
 6. `rebuild()` - 19 edges
@@ -109,7 +111,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (66 total, 9 thin omitted)
+## Communities (68 total, 9 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -144,8 +146,8 @@ Cohesion: 0.29
 Nodes (5): Commands, Context: graphify knowledge graph, graphify, Hard rules, Project
 
 ### Community 8 - "test_trends_llm.py"
-Cohesion: 0.14
-Nodes (12): no_keys(), _reply(), test_all_empty_replies_raise(), test_chat_without_any_key_fails_clearly(), test_empty_or_malformed_replies_fall_through_to_the_next_model(), test_empty_series_reports_no_data(), test_growth_compares_last_52_weeks_with_the_52_before(), test_images_are_loaded_once_not_per_model() (+4 more)
+Cohesion: 0.11
+Nodes (17): _inline_images(), _read_image(), no_keys(), _reply(), test_all_empty_replies_raise(), test_data_urls_are_left_alone(), test_empty_or_malformed_replies_fall_through_to_the_next_model(), test_empty_series_reports_no_data() (+9 more)
 
 ### Community 9 - "11 - Google Trends check of Stage B candidates (US)"
 Cohesion: 0.20
@@ -181,7 +183,7 @@ Nodes (3): 10 — Category risk ranking (US, zero-inventory eBay dropshipping), 
 
 ### Community 22 - "store.py"
 Cohesion: 0.08
-Nodes (30): Shared rules for every AI team member, 2. What makes it "authentic", Findings, Independent project review — 2026-11-03, Primary-source verification, retrieved 2026-11-03, Questions for the review pull request, Top 10 actions, Validation and limits (+22 more)
+Nodes (29): Shared rules for every AI team member, 2. What makes it "authentic", Findings, Independent project review — 2026-11-03, Primary-source verification, retrieved 2026-11-03, Questions for the review pull request, Top 10 actions, Validation and limits (+21 more)
 
 ### Community 23 - "steps"
 Cohesion: 0.08
@@ -264,8 +266,8 @@ Cohesion: 0.06
 Nodes (29): 6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`), CJClient, CJError, _default_session(), _dicts(), _json_list(), main(), normalize_detail() (+21 more)
 
 ### Community 45 - "chat"
-Cohesion: 0.17
-Nodes (8): chat(), _extract_text(), _key(), list_free(), LLMError, _load_dotenv(), main(), _post()
+Cohesion: 0.16
+Nodes (9): chat(), _extract_text(), _key(), list_free(), LLMError, _load_dotenv(), main(), _post() (+1 more)
 
 ### Community 46 - "18 — CJ Dropshipping API cheat sheet"
 Cohesion: 0.22
@@ -273,7 +275,7 @@ Nodes (8): 18 — CJ Dropshipping API cheat sheet, Endpoints, Limits and errors,
 
 ### Community 48 - "test_cj.py"
 Cohesion: 0.13
-Nodes (18): client(), FakeResp, FakeSession, test_a_non_json_response_is_a_clear_error(), test_a_second_auth_failure_is_not_retried_forever(), test_detail_ignores_junk_variants_and_images(), test_detail_normalizes_images_and_variants(), test_detail_parses_live_string_numbers_and_json_list_fields() (+10 more)
+Nodes (17): client(), FakeResp, FakeSession, test_a_non_json_response_is_a_clear_error(), test_a_second_auth_failure_is_not_retried_forever(), test_detail_ignores_junk_variants_and_images(), test_detail_normalizes_images_and_variants(), test_detail_parses_live_string_numbers_and_json_list_fields() (+9 more)
 
 ### Community 49 - "CJ supply check, 2026-11-04: trading-card supplies fail K1; so do both backups"
 Cohesion: 0.29
@@ -287,9 +289,9 @@ Nodes (7): Facts that change plans, Next tasks, in order, Owner tasks outstandin
 Cohesion: 0.25
 Nodes (7): 1. The idea in one paragraph, 2. Evidence we need, the traces, and candidate sources, 3. Pilot protocol (small sample, measured), 4. The store dossier (what "crack the code" produces), 5. Rules that still apply, 6. Pilot 1 (started 2026-11-04), Look-alike intelligence: reverse-engineer stores that already succeed
 
-### Community 52 - "test_warehouse_helpers.py"
-Cohesion: 0.18
-Nodes (5): FakeCJ, test_image_rows_dedupe_and_number_positions(), test_image_verdict_needs_all_checks_and_marks_clean(), test_offers_lands_variants_stock_and_freight_for_cheapest_variant(), test_parse_labels_keeps_only_valid_entries()
+### Community 52 - "intel.py"
+Cohesion: 0.12
+Nodes (22): append_cache(), _cell(), grounded(), load_cache(), load_evidence(), main(), narrate(), _numbers() (+14 more)
 
 ### Community 53 - "0006 — DuckDB warehouse: deterministic core, LLM on top"
 Cohesion: 0.25
@@ -301,15 +303,15 @@ Nodes (30): config-version, +schema, +schema, flags, send_anonymous_usage_stats,
 
 ### Community 55 - "column_types"
 Cohesion: 0.07
-Nodes (26): action, border_or_collage, child, clean, image_sha256, level1, level2, level3 (+18 more)
+Nodes (28): action, border_or_collage, child, clean, image_sha256, level1, level2, level3 (+20 more)
 
 ### Community 56 - "21 — What sells most, and why (no niche assumed)"
 Cohesion: 0.25
 Nodes (7): 1. What US shoppers buy most online (category level), 21 — What sells most, and why (no niche assumed), 2. What CJ's US warehouse can supply, and what dropshippers bet on, 3. Where demand, supply and our constraints overlap, 4. The "why" pattern behind the strongest sellers, 5. Cross-check: margin-viable vs popular [data], 6. Next step (method, not guesses)
 
 ### Community 57 - "models"
-Cohesion: 0.17
-Nodes (11): data_tests, name, max_listing_price, max_weight_g, min_us_stock, in_range, models, columns (+3 more)
+Cohesion: 0.15
+Nodes (12): data_tests, name, max_listing_price, max_weight_g, min_us_stock, in_range, models, columns (+4 more)
 
 ### Community 58 - "models"
 Cohesion: 0.22
@@ -323,25 +325,33 @@ Nodes (7): path, threads, type, dev, scout, outputs, target
 Cohesion: 0.29
 Nodes (6): 1. Architecture, 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence
 
-### Community 61 - "_read_image"
-Cohesion: 0.25
-Nodes (6): _inline_images(), _read_image(), test_data_urls_are_left_alone(), test_local_images_outside_allowed_roots_are_refused(), test_oversized_images_are_refused(), test_unsupported_url_schemes_are_refused()
+### Community 61 - "argparse"
+Cohesion: 0.20
+Nodes (3): main(), sweep(), main()
 
 ### Community 62 - "main"
-Cohesion: 0.32
-Nodes (5): load_cache(), main(), screen(), url_hash(), test_screen_skips_failures_and_yields_hash_keyed_rows()
+Cohesion: 0.26
+Nodes (6): load_cache(), main(), parse_verdict(), screen(), url_hash(), test_screen_skips_failures_and_yields_hash_keyed_rows()
 
 ### Community 63 - "classify.py"
-Cohesion: 0.25
+Cohesion: 0.26
 Nodes (10): _append(), classify(), load_cache(), main(), parse_labels(), phrases(), title_hash(), test_classify_caches_by_title_hash_not_title() (+2 more)
 
 ### Community 64 - "20 — Source pilots: what each source actually discovered"
 Cohesion: 0.33
 Nodes (5): 20 — Source pilots: what each source actually discovered, Fixes for the next round, Manual steps that remain valuable (owner, about 20–30 minutes each), Scorecard, What worked, what didn't
 
+### Community 65 - "json"
+Cohesion: 0.54
+Nodes (3): analyze(), _fetch(), main()
+
+### Community 67 - "0007 — Deterministic harness first, intelligence layer on top"
+Cohesion: 0.33
+Nodes (5): 0007 — Deterministic harness first, intelligence layer on top, How to run, New in this decision, Open: where history lives, The split
+
 ## Knowledge Gaps
 - **6 isolated node(s):** `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 526 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 543 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
@@ -355,9 +365,9 @@ _Questions this graph is uniquely positioned to answer:_
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
-- **Why does `record_run()` connect `store.py` to `cj.py`?**
+- **Why does `record_run()` connect `store.py` to `json`, `cj.py`?**
   _High betweenness centrality (0.012) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `chat()` (e.g. with `main()` and `main()`) actually correct?**
   _`chat()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Should `test_trends_llm.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.1437908496732026 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10666666666666667 - nodes in this community are weakly interconnected._

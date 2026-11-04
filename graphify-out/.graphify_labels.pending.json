@@ -51,7 +51,7 @@
   "49": "CJ supply check, 2026-11-04: trading-card supplies fail K1; so do both backups",
   "50": "Session state: where the project stands",
   "51": "Look-alike intelligence: reverse-engineer stores that already succeed",
-  "52": "test_warehouse_helpers.py",
+  "52": "intel.py",
   "53": "0006 — DuckDB warehouse: deterministic core, LLM on top",
   "54": "dbt_project.yml",
   "55": "column_types",
@@ -60,9 +60,11 @@
   "58": "models",
   "59": "dev",
   "60": "Data pipeline: feeding the team authentic evidence",
-  "61": "_read_image",
+  "61": "argparse",
   "62": "main",
   "63": "classify.py",
   "64": "20 — Source pilots: what each source actually discovered",
-  "66": "aggregate_candidates.py"
+  "65": "json",
+  "66": "aggregate_candidates.py",
+  "67": "0007 — Deterministic harness first, intelligence layer on top"
 }
