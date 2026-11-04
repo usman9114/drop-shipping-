@@ -61,3 +61,8 @@ models:
     columns:
       - name: domain
         data_tests: [not_null, unique]
+  - name: mart_candidate_pool
+    description: Private. Phase 1 pool of 300 US-relevant stores (any business model) ranked by a performance proxy (traffic 60%, rank growth 25%, release rhythm 15%).
+    columns:
+      - name: domain
+        data_tests: [not_null, unique]

@@ -122,3 +122,35 @@ def test_query_rebuilds_when_the_lake_has_new_runs(lake):
     store.record_run("d", [{"a": 2}], source="t", trust="data")
     os.utime(store.RUNS, None)
     assert store.query("SELECT COUNT(*) FROM d")[1][0] == 2
+
+
+def test_record_run_leaves_no_partial_file_on_failure(lake, monkeypatch):
+    import gzip as _gzip
+
+    from scout import store as st
+
+    real_open = _gzip.open
+
+    def failing_open(path, *a, **k):
+        fh = real_open(path, *a, **k)
+
+        class Boom:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                fh.close()
+                return False
+
+            def write(self, _):
+                raise OSError("disk full")
+
+        return Boom()
+
+    monkeypatch.setattr(st.gzip, "open", failing_open)
+    import pytest
+
+    with pytest.raises(OSError):
+        st.record_run("t_atomic", [{"a": 1}], source="test", trust="mock")
+    files = list((st.LAKE / "t_atomic").rglob("*.jsonl.gz"))
+    assert files == []  # only a .tmp may remain, never a visible run file

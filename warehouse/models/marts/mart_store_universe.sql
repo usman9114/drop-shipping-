@@ -20,7 +20,11 @@ u as (
     union all
     select * from light where domain not in (select domain from deep)
 ),
-meta as (select domain, published_products, shop_id from {{ ref('stg_web_meta') }}),
+meta as (
+    select domain, published_products, shop_id from {{ ref('stg_web_meta') }}
+    -- US market in dollars (same rule as scout.stores.us_store)
+    where currency = 'USD' and (country = 'US' or ships_to_us)
+),
 growth as (
     select s.domain, ln(r.rank_earliest::double / s.tranco_rank) as rank_growth_log
     from (select domain, min(tranco_rank) as tranco_rank from {{ ref('stg_web_scan') }} group by domain) s
@@ -30,5 +34,5 @@ growth as (
 select u.*, m.published_products, g.rank_growth_log,
        business_model in ('dropship', 'general', 'reseller', 'pod', 'unclear') as copyable
 from u
-left join meta m using (domain)
+join meta m using (domain)
 left join growth g using (domain)

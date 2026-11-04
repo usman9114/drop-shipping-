@@ -88,8 +88,12 @@ def record_run(
     body = "\n".join(json.dumps({**r, "run_id": run_id}, sort_keys=True) for r in rows)
     path = LAKE / dataset / now.strftime("%Y-%m-%d") / f"{run_id}.jsonl.gz"
     path.parent.mkdir(parents=True, exist_ok=True)
-    with gzip.open(path, "wt", encoding="utf-8") as fh:
+    # Write to a temporary name, then rename: readers (the warehouse globs every
+    # file in the lake) never see a half-written run, even if the process dies.
+    tmp = path.with_name(path.name + ".tmp")
+    with gzip.open(tmp, "wt", encoding="utf-8") as fh:
         fh.write(body + "\n")
+    os.replace(tmp, path)
     meta = {
         "run_id": run_id,
         "dataset": dataset,
