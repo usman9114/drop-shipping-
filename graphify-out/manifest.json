@@ -862,5 +862,17 @@
     "seen": 1793829190.8539054,
     "ast_hash": "686ada67c9e3b2162f64ae39f2d7eb5f",
     "semantic_hash": ""
+  },
+  "scout/snapshot_job.py": {
+    "mtime": 1793829299.284635,
+    "seen": 1793829302.2843473,
+    "ast_hash": "b32ff54886dd800cd1020e2ad7e9b163",
+    "semantic_hash": ""
+  },
+  "tests/test_snapshot_job.py": {
+    "mtime": 1793829299.280635,
+    "seen": 1793829302.284382,
+    "ast_hash": "6817e613b16e72a0bf3647118b494ae5",
+    "semantic_hash": ""
   }
 }
