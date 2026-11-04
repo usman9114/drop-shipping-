@@ -92,3 +92,9 @@ Read first: `docs/plan/phase-niche-finder-r1.md` (goal, exit criteria, scope), `
 - **Raw data is not in git.** The scan (about 20 batches, ~3 h) and profiles live in `data/private/` and are lost with the container. In a fresh container run `make niches`; `scan` skips finished batches only if the lake survived.
 - **Free models only** in phase one (`SCOUT_ALLOW_PAID=1` to override). **myip.ms:** terms forbid scraping; API only if the owner buys access. **archify skill:** found (`tt-a1i/archify`), install blocked by the permission check; waiting for the owner.
 - **Next:** finish scan, `make stores-meta stores-deep stores-ranks`, validate the business-model rules on 30 stores, build report and shortlist, supply sanity, compliance review, decision pack 0010, tag `niche-finder-r1`.
+
+## Update: data vault and approved re-scope (2026-11-04, late)
+
+- **Owner approved** `docs/plan/top-stores-inspiration-plan.md` (find top-performing stores for inspiration; copyable is one column). Phase 1 running: discovery miss-rate pilot (`scout/shopify_detect.py`), candidate pool (`mart_candidate_pool`, 300 stores), proof-of-performance pilot on 10 stores.
+- **Data survives in the owner's Claude storage:** private artifact "Store Data Vault" (find it with the Artifact tool's `list`). Restore: download its files, then `python scripts/vault_restore.py <folder>`; rebuild rank history with `python -m scout.stores ranks --days-back ...` (dates in the manifest). Decision 0012.
+- **Lake writes are now atomic** (write then rename) after a killed process left a 0-byte run file that broke the warehouse build.
