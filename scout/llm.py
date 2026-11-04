@@ -26,6 +26,7 @@ import argparse
 import json
 import os
 import sys
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -100,6 +101,57 @@ _load_dotenv()
 
 class LLMError(RuntimeError):
     pass
+
+
+# OpenRouter free models: 20 requests/minute, and 1,000/day once the account has
+# bought credits (owner confirmed 2026-11-04). We count our own calls per UTC day
+# and stop at a cap below the limit; pace calls to stay under the per-minute cap.
+OR_FREE_DAILY_CAP = int(os.environ.get("SCOUT_OR_FREE_CAP", "900"))
+OR_FREE_MIN_GAP = 3.2  # seconds between calls = about 18 per minute
+USAGE_FILE = "data/private/llm_usage.json"
+_usage_lock = threading.Lock()
+_or_next = [0.0]
+
+
+# The OpenRouter free lane for chat_many(spread=...). Probed one by one on
+# 2026-11-04: nemotron-3-ultra answered in under a second; nemotron-lightning
+# returned empty replies; gemma-4 and lfm returned upstream HTTP 429. Re-probe
+# before trusting this list: free models come and go.
+OR_LANE = ["openrouter:nvidia/nemotron-3-ultra-550b-a55b:free"]
+
+
+def is_or_free(spec: str) -> bool:
+    return spec.startswith("openrouter:") and spec.endswith(":free")
+
+
+def _today() -> str:
+    return time.strftime("%Y-%m-%d", time.gmtime())
+
+
+def or_free_used() -> int:
+    try:
+        with open(USAGE_FILE, encoding="utf-8") as fh:
+            d = json.load(fh)
+        return int(d.get("count", 0)) if d.get("date") == _today() else 0
+    except (OSError, ValueError):
+        return 0
+
+
+def _or_free_take() -> bool:
+    """Reserve one OpenRouter free call: False when today's cap is spent. Paces
+    callers (thread-safe) so parallel workers stay under the per-minute limit."""
+    with _usage_lock:
+        used = or_free_used()
+        if used >= OR_FREE_DAILY_CAP:
+            return False
+        os.makedirs(os.path.dirname(USAGE_FILE), exist_ok=True)
+        with open(USAGE_FILE, "w", encoding="utf-8") as fh:
+            json.dump({"date": _today(), "count": used + 1}, fh)
+        wait = _or_next[0] - time.monotonic()
+        _or_next[0] = max(_or_next[0], time.monotonic()) + OR_FREE_MIN_GAP
+    if wait > 0:
+        time.sleep(wait)
+    return True
 
 
 def is_paid(spec: str) -> bool:
@@ -250,6 +302,13 @@ def chat(
                 payload["thinking"] = {"type": "disabled"}
         if json_mode:
             payload["response_format"] = {"type": "json_object"}
+        if spec in OR_LANE:
+            # reasoning model: it spends 400+ tokens thinking even for one word,
+            # so a small max_tokens comes back empty (probed 2026-11-04)
+            payload["max_tokens"] = max(max_tokens, 1500)
+        if is_or_free(spec) and not _or_free_take():
+            errors.append(f"{spec}: daily free cap of {OR_FREE_DAILY_CAP} reached")
+            continue
         for attempt in range(3):
             try:
                 data = _post(payload, provider, key)
@@ -278,20 +337,45 @@ def chat_many(
     *,
     workers: int = 8,
     task: str = "bulk",
+    spread: float = 0.0,
     **kwargs,
 ) -> list[dict]:
     """Run many prompts in parallel. Returns one dict per prompt, in order:
     {'model', 'text'} on success or {'error': ...} on failure (never raises).
 
     GLM Flash is free; workers sets how many calls run at once. Each call keeps
-    chat()'s own retry and fallback behaviour."""
+    chat()'s own retry and fallback behaviour.
+
+    spread (0 to 1) sends that share of prompts to the OpenRouter free models
+    first, using the daily allowance as a second lane next to GLM (about 18 calls
+    a minute). 0 keeps everything on GLM first. GLM runs about 1 call a second
+    with 8 workers and the OpenRouter lane about one every 3 to 5 seconds (paced,
+    and its model thinks), so a share near 0.15 keeps both lanes busy; 0.5 makes
+    the slow lane the bottleneck. The lane also gives a differently trained second
+    opinion for validation."""
     from concurrent.futures import ThreadPoolExecutor
 
-    def one(p: str) -> dict:
+    free_or = list(OR_LANE)
+    glm_first = [m for m in FREE_MODELS[task] if not is_paid(m)]
+
+    def order(i: int) -> list[str] | None:
+        """Lane for prompt i: spread share goes OpenRouter-free first, rest GLM first."""
+        if not spread or not free_or or "models" in kwargs:
+            return None
+        every = max(1, round(1 / spread))
+        if i % every == 0:
+            return free_or + [m for m in glm_first if m not in free_or]
+        return None
+
+    def one(i_p: tuple[int, str]) -> dict:
+        i, p = i_p
         err = ""
         for attempt in range(3):  # parallel bursts can hit the provider's rate limit
             try:
-                return chat(p, task=task, **kwargs)
+                lane = order(i)
+                return chat(
+                    p, task=task, **({**kwargs, "models": lane} if lane else kwargs)
+                )
             except Exception as exc:  # recorded per prompt, never aborts the batch
                 err = f"{type(exc).__name__}: {exc}"[:200]
                 if "429" not in err and "rate" not in err.lower():
@@ -300,7 +384,7 @@ def chat_many(
         return {"error": err}
 
     with ThreadPoolExecutor(max_workers=max(1, workers)) as ex:
-        return list(ex.map(one, prompts))
+        return list(ex.map(one, enumerate(prompts)))
 
 
 def list_free() -> list[dict]:

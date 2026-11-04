@@ -171,3 +171,65 @@ def test_paid_routes_are_skipped_unless_opted_in(monkeypatch):
     monkeypatch.setenv("SCOUT_ALLOW_PAID", "1")
     llm.chat("hi", task="haiku", models=[llm.HAIKU, "openrouter:some/model:free"])
     assert seen == ["openrouter:anthropic/claude-haiku-5.5"]
+
+
+@pytest.fixture(autouse=True)
+def _isolated_free_usage(tmp_path, monkeypatch):
+    """No test touches the real daily counter or waits on the pacer."""
+    monkeypatch.setattr(llm, "USAGE_FILE", str(tmp_path / "usage.json"))
+    monkeypatch.setattr(llm, "OR_FREE_MIN_GAP", 0.0)
+    monkeypatch.setattr(llm, "_or_next", [0.0])
+
+
+def _ok_post(seen):
+    def fake_post(payload, provider, key, timeout=180):
+        seen.append(f"{provider}:{payload['model']}")
+        return {"model": payload["model"], "choices": [{"message": {"content": "ok"}}]}
+
+    return fake_post
+
+
+def test_openrouter_free_calls_are_counted_and_capped(monkeypatch):
+    seen = []
+    monkeypatch.setattr(llm, "_post", _ok_post(seen))
+    monkeypatch.setenv("OPENROUTER_API_KEY", "x")
+    monkeypatch.setattr(llm, "OR_FREE_DAILY_CAP", 2)
+    spec = ["openrouter:a/b:free"]
+    llm.chat("hi", task="bulk", models=spec)
+    llm.chat("hi", task="bulk", models=spec)
+    assert llm.or_free_used() == 2
+    with pytest.raises(llm.LLMError, match="daily free cap"):
+        llm.chat("hi", task="bulk", models=spec)
+    assert len(seen) == 2  # the third call never left the machine
+
+
+def test_glm_calls_do_not_use_the_openrouter_allowance(monkeypatch):
+    seen = []
+    monkeypatch.setattr(llm, "_post", _ok_post(seen))
+    monkeypatch.setenv("ZAI_API_KEY", "x")
+    llm.chat("hi", task="bulk", models=["zai:glm-4.5-flash"])
+    assert llm.or_free_used() == 0
+
+
+def test_chat_many_spread_sends_a_share_to_openrouter_free(monkeypatch):
+    seen = []
+    monkeypatch.setattr(llm, "_post", _ok_post(seen))
+    monkeypatch.setenv("ZAI_API_KEY", "x")
+    monkeypatch.setenv("OPENROUTER_API_KEY", "x")
+    out = llm.chat_many([f"p{i}" for i in range(8)], workers=1, task="bulk", spread=0.5)
+    assert all("text" in o for o in out)
+    assert 3 <= llm.or_free_used() <= 5  # about half went to the free lane
+    assert sum(m.startswith("zai:") for m in seen) >= 3
+
+
+def test_openrouter_lane_gets_a_token_floor_for_its_reasoning_model(monkeypatch):
+    sent = []
+
+    def fake_post(payload, provider, key, timeout=180):
+        sent.append(payload["max_tokens"])
+        return {"model": payload["model"], "choices": [{"message": {"content": "ok"}}]}
+
+    monkeypatch.setattr(llm, "_post", fake_post)
+    monkeypatch.setenv("OPENROUTER_API_KEY", "x")
+    llm.chat("hi", task="bulk", models=llm.OR_LANE, max_tokens=20)
+    assert sent == [1500]

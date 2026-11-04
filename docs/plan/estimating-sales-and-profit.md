@@ -57,6 +57,26 @@ Per product, from `scout.margin` (already built): our listing price minus CJ cos
 
 Scrape ad libraries or any site whose terms forbid it; use eBay API data for statistics; buy a paid estimator (StoreLeads, Similarweb) without the owner's approval; present an estimate as revenue. A paid estimator, if approved, is used on about 10 stores to compare against our range, not as our source.
 
+## What the research found (docs 22 to 24) and what it changes
+
+| Finding | Source quality | Consequence |
+|---|---|---|
+| Median Shopify conversion is about 1.3% (top 20% 2.7%); fashion and home about 1.0%, beauty about 2.6% | one 2026 benchmark of 438 stores, reached through a mirror, `[unverified]` | use 1.0% / 1.3% / 2.7% as low / base / high |
+| Average order value ranges from about $85 to $312 across sources | weak, disagree by 10x | take order value from the store's own price band, not from a benchmark |
+| Review rate is only vendor-quoted: 2.5% to 5% typical | vendor blogs, no study | units = reviews ÷ rate carries a 4x to 40x band, so review-based units are `[proxy]` |
+| No published rank-to-visits mapping exists (Tranco, CrUX, Cloudflare Radar publish ranks or buckets, not visits) | checked three sources | **a visits figure from rank is an estimate with no calibration** |
+| Strict calibration set is 2 stores (BARK, Allbirds), target was 10 | filings | **method D cannot be validated yet** |
+| Paid estimators (StoreLeads, Similarweb, Semrush): terms and prices unread or conflicting | unpiloted | none used; needs owner approval |
+
+**Decisions that follow**
+
+1. **R1 states no revenue levels.** Method D (visits × conversion × order value) is used **only to rank** stores until the calibration set reaches 10 stores. Ranking inputs are rank, rank trend, release rhythm and the marketing stack, which we already have.
+2. **Review velocity (B) is the primary sales signal for R1**, kept as relative velocity (reviews per week, higher or lower than peers), not units. The unit figure is shown only as a wide band, labelled `[proxy]`.
+3. **Widen the calibration set** by searching EDGAR filings for "run on Shopify" and UK Companies House for Shopify brands. If fewer than 10 are found, dated Shopify case studies form a lower-weight, labelled tier.
+4. **Record which review app and which structured-data field** each store uses (the research could not confirm which field each app fills); snapshot jobs record the review-app name so counts compare like with like.
+5. **Shopify's default robots rules disallow sorted collection URLs**, so we never fetch best-seller sort pages. Unsorted collection order and sold-out flips are tie-breakers only.
+6. **Owner decision (optional):** approve a trial of one paid estimator on about 10 stores, only to compare against our ranges. Default: no.
+
 ## Research feeding this plan (written by the research agents)
 
 - `docs/research/22-shopify-conversion-aov-benchmarks.md`: conversion, order value, ad share, returns
