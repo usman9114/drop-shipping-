@@ -19,6 +19,7 @@
 | Independent review of the project | `docs/reviews/2026-11-agent2-project-review.md` |
 | Team roles | `.claude/agents/*.md`, `docs/plan/ai-team.md` |
 | Code | `scout/margin.py` (decision engine), `scout/cj.py`, `scout/store.py`, `scout/llm.py`, `scout/trends.py`; tests in `tests/` |
+| Operating plan (calendar, model routing, €10 use, SaaS option, anti-trap rules) | `docs/plan/operating-plan.md` |
 | Manual eBay research kit | `docs/runbooks/terapeak-session.md`, `data/observations/terapeak-prefilled.csv` |
 
 ## Facts that change plans
@@ -36,10 +37,13 @@
 - Git hooks are not cloned. Run `make setup`, then `pip install -r requirements.txt -r requirements-dev.txt`.
 - `.env` is gitignored and disappears with the container. Keys must come from environment settings. Expected variable names: `CJ_API_KEY`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `ZAI_API_KEY`, `OPENROUTER_API_KEY`. Report names only, never values.
 - The graphify post-commit hook rebuilds the graph in the background. A commit made during the rebuild can fail with "files were modified by this hook". Wait a few seconds and retry. After committing, stage `graphify-out` and commit again if the tree is dirty.
-- The reminder to buy the $10 OpenRouter credit was bound to the previous session. Re-create it if still needed.
+- OpenRouter credit (€10) bought by the owner on 2026-11-04. See `docs/plan/operating-plan.md` §2 for how it is used.
+- 2026-11-04 session: **no env vars reached the cloud container** (all 5 missing; no `.env`). Keys must be added in the cloud environment settings and a new session started.
 - Z.ai and OpenRouter keys were pasted into an earlier chat. The owner was asked to rotate them.
 
 ## Next tasks, in order
+
+Calendar and dates: `docs/plan/operating-plan.md` §3.
 
 1. Set up (above) and run `make test`.
 2. With the CJ key present, run `python -m scout.cj search "<phrase>" --country US --pages 1 --out data/private/cj-search.json` for the 24 product types in decision 0002 §3.3. Compare real responses with the "Unknowns" list in doc 18 and fix `scout/cj.py` and its tests where the guesses were wrong. Update doc 18.
@@ -50,4 +54,4 @@
 
 ## Owner tasks outstanding
 
-CJ and eBay seller account setup (eBay developer approval pending), Terapeak session, rotate leaked keys, buy the $10 OpenRouter credit, ask CJ about customer returns and the return address, decide public versus private repo and the commit email, answer the Shopify questions (wife's Instagram details, beauty route, sequencing).
+CJ and eBay seller account setup (eBay developer approval pending), Terapeak session, rotate leaked keys, add the 5 env vars to the cloud environment, ask CJ about customer returns and the return address, decide public versus private repo and the commit email, answer the Shopify questions (wife's Instagram details, beauty route, sequencing).
