@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793828406.8596709,
-    "seen": 1793828423.7295616,
-    "ast_hash": "10941f53ca1321322880435143438496",
+    "mtime": 1793828848.3292284,
+    "seen": 1793828854.332506,
+    "ast_hash": "3caf5b008efd191b6d7ec5fc18c4d617",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "scout/llm.py": {
-    "mtime": 1793828148.6289678,
-    "seen": 1793828423.728197,
-    "ast_hash": "8f5bebdcb45048d998e3c6868b67cf37",
+    "mtime": 1793828851.2206085,
+    "seen": 1793828854.3324075,
+    "ast_hash": "74f869185ff83677c5f18876c3c3d9e6",
     "semantic_hash": ""
   },
   "scout/margin.py": {
@@ -318,9 +318,9 @@
     "semantic_hash": ""
   },
   "tests/test_trends_llm.py": {
-    "mtime": 1793824331.2114115,
-    "seen": 1793824343.2205606,
-    "ast_hash": "2aa5d7c4ed76a5353c5ecc07eaf5b3db",
+    "mtime": 1793828785.9657352,
+    "seen": 1793828854.3324468,
+    "ast_hash": "8a6314b9fb19d4dbd6765bee1560c2c1",
     "semantic_hash": ""
   },
   "requirements-dev.txt": {
@@ -732,9 +732,9 @@
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_store_categories.sql": {
-    "mtime": 1793820024.5105846,
-    "seen": 1793821132.0662472,
-    "ast_hash": "",
+    "mtime": 1793828137.8056705,
+    "seen": 1793828854.3324673,
+    "ast_hash": "647bc3abc03ead222d14e07538fbcb0a",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_store_profile.sql": {
@@ -744,9 +744,9 @@
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_web_meta.sql": {
-    "mtime": 1793820002.182613,
-    "seen": 1793821132.0662642,
-    "ast_hash": "",
+    "mtime": 1793828242.6003175,
+    "seen": 1793828854.3324847,
+    "ast_hash": "6bcd42ccb85fd71cc8c8d29b2503af3a",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_web_ranks.sql": {
@@ -768,9 +768,9 @@
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_web_store_deep.sql": {
-    "mtime": 1793820002.1842113,
-    "seen": 1793821132.066269,
-    "ast_hash": "",
+    "mtime": 1793828242.5998847,
+    "seen": 1793828854.3324895,
+    "ast_hash": "168b8e7397d3b6825235352f9b00bb3c",
     "semantic_hash": ""
   },
   "docs/plan/step1-flow.md": {
@@ -804,15 +804,33 @@
     "semantic_hash": ""
   },
   "docs/plan/estimating-sales-and-profit.md": {
-    "mtime": 1793828406.8407528,
-    "seen": 1793828423.7298827,
-    "ast_hash": "185610e1301f80f22a13c067c650a08d",
+    "mtime": 1793828848.3296356,
+    "seen": 1793828854.3325245,
+    "ast_hash": "675b90a3869cbe142d5d3b6dffcbe6fc",
     "semantic_hash": ""
   },
   "docs/reviews/2026-11-04-business-model-validation.md": {
     "mtime": 1793828406.836582,
     "seen": 1793828423.7305074,
     "ast_hash": "584cef69bbecdb93189ff027941e06de",
+    "semantic_hash": ""
+  },
+  "docs/research/22-shopify-conversion-aov-benchmarks.md": {
+    "mtime": 1793828609.616594,
+    "seen": 1793828854.3325596,
+    "ast_hash": "229f02d4234d776c594e3b5e53e477be",
+    "semantic_hash": ""
+  },
+  "docs/research/23-reviews-and-sales-velocity.md": {
+    "mtime": 1793828589.1045928,
+    "seen": 1793828854.3325613,
+    "ast_hash": "9928ed5710d9613a9de5c61ea1e340cd",
+    "semantic_hash": ""
+  },
+  "docs/research/24-traffic-calibration-and-public-revenue.md": {
+    "mtime": 1793828698.6245992,
+    "seen": 1793828854.3325624,
+    "ast_hash": "ee2e52ed852103aebccc6b487f47ebd8",
     "semantic_hash": ""
   }
 }
