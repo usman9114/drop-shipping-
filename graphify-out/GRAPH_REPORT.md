@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-04)
 
 ## Corpus Check
-- 108 files · ~71,243 words
+- 111 files · ~73,283 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 18 file(s) not represented in the graph (top: .csv 13, (none) 4, .example 1)
+- Unclassified: 19 file(s) not represented in the graph (top: .csv 13, (none) 4, .example 1)
 
 ## Summary
-- 907 nodes · 1315 edges · 69 communities (59 shown, 10 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 44 edges (avg confidence: 0.9)
+- 939 nodes · 1387 edges · 65 communities (57 shown, 8 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 47 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5c964570`
+- Built from commit: `9e9ccd35`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -24,7 +24,7 @@
 - 03 — Suppliers and their APIs
 - hooks
 - CLAUDE.md
-- test_trends_llm.py
+- chat
 - 11 - Google Trends check of Stage B candidates (US)
 - 06 — Image sourcing under zero inventory
 - 14 — External source review: "I tried AI dropshipping for 7 days" (YouTube transcript)
@@ -68,25 +68,22 @@
 - Session state: where the project stands
 - Look-alike intelligence: reverse-engineer stores that already succeed
 - intel.py
-- 0006 — DuckDB warehouse: deterministic core, LLM on top
+- ideas
 - dbt_project.yml
 - column_types
 - 21 — What sells most, and why (no niche assumed)
 - models
 - models
 - dev
-- chat
-- screen_images.py
-- test_warehouse_helpers.py
+- Independent project review — 2026-11-03
 - classify.py
 - 20 — Source pilots: what each source actually discovered
-- json
-- aggregate_candidates.py
+- review_panel.py
 - 0007 — Deterministic harness first, intelligence layer on top
 
 ## God Nodes (most connected - your core abstractions)
 1. `record_run()` - 28 edges
-2. `chat()` - 23 edges
+2. `chat()` - 27 edges
 3. `column_types` - 23 edges
 4. `Inputs` - 21 edges
 5. `CJClient` - 19 edges
@@ -94,13 +91,13 @@
 7. `evaluate()` - 16 edges
 8. `client()` - 15 edges
 9. `min_price()` - 13 edges
-10. `12 — Compliance risk cards for the 8 candidate niches` - 13 edges
+10. `Warehouse design: Postgres as the source of truth` - 13 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Rules that make it deterministic` --references--> `classify()`  [INFERRED]
   docs/decisions/0006-duckdb-warehouse.md → scout/classify.py
-- `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
-  .claude/agents/_team-rules.md → scout/store.py
+- `Findings` --references--> `_inline_images()`  [INFERRED]
+  docs/reviews/2026-11-agent2-project-review.md → scout/llm.py
 - `Findings` --references--> `compute()`  [INFERRED]
   docs/reviews/2026-11-agent2-project-review.md → scout/margin.py
 - `6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`)` --references--> `evaluate()`  [INFERRED]
@@ -111,7 +108,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (69 total, 10 thin omitted)
+## Communities (65 total, 8 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -145,9 +142,9 @@ Nodes (15): default_install_hook_types, default_stages, exclude, always_run, arg
 Cohesion: 0.29
 Nodes (5): Commands, Context: graphify knowledge graph, graphify, Hard rules, Project
 
-### Community 8 - "test_trends_llm.py"
-Cohesion: 0.12
-Nodes (15): _inline_images(), _read_image(), no_keys(), _reply(), test_all_empty_replies_raise(), test_chat_without_any_key_fails_clearly(), test_data_urls_are_left_alone(), test_empty_or_malformed_replies_fall_through_to_the_next_model() (+7 more)
+### Community 8 - "chat"
+Cohesion: 0.07
+Nodes (28): chat(), _extract_text(), _inline_images(), _key(), list_free(), LLMError, _load_dotenv(), main() (+20 more)
 
 ### Community 9 - "11 - Google Trends check of Stage B candidates (US)"
 Cohesion: 0.20
@@ -258,8 +255,8 @@ Cohesion: 0.14
 Nodes (13): 0. Status today, 1. Guardrails against the engineering trap, 2. Model plan: GLM + OpenRouter, and what the €10 is for, 3. Calendar, 4. Weekly review (every Sunday, 30 min), 5. The SaaS option: keep the door open, don't walk through it yet, 6. Parking lot (not before 20 live listings), 7. Owner actions, in order (+5 more)
 
 ### Community 43 - "webmeta.py"
-Cohesion: 0.08
-Nodes (28): aggregate_rating(), discover(), dns(), footprint(), is_shopify(), jsonld(), keyword_hits(), _latest() (+20 more)
+Cohesion: 0.09
+Nodes (26): aggregate_rating(), discover(), dns(), footprint(), is_shopify(), jsonld(), keyword_hits(), _latest() (+18 more)
 
 ### Community 44 - "cj.py"
 Cohesion: 0.07
@@ -293,9 +290,9 @@ Nodes (7): 1. The idea in one paragraph, 2. Evidence we need, the traces, and ca
 Cohesion: 0.12
 Nodes (22): append_cache(), _cell(), grounded(), load_cache(), load_evidence(), main(), narrate(), _numbers() (+14 more)
 
-### Community 53 - "0006 — DuckDB warehouse: deterministic core, LLM on top"
-Cohesion: 0.25
-Nodes (7): 0006 — DuckDB warehouse: deterministic core, LLM on top, Choice, Intelligence layer (next), Layers, Out of scope for this slice, Rules that make it deterministic, Why now
+### Community 53 - "ideas"
+Cohesion: 0.33
+Nodes (5): brief, ideas, description, id, title
 
 ### Community 54 - "dbt_project.yml"
 Cohesion: 0.06
@@ -321,38 +318,30 @@ Nodes (8): data_tests, name, in_range, models, columns, description, name, versi
 Cohesion: 0.25
 Nodes (7): path, threads, type, dev, scout, outputs, target
 
-### Community 60 - "chat"
-Cohesion: 0.14
-Nodes (11): chat(), _extract_text(), _key(), list_free(), LLMError, _load_dotenv(), main(), _post() (+3 more)
-
-### Community 61 - "screen_images.py"
-Cohesion: 0.23
-Nodes (7): load_cache(), main(), parse_verdict(), screen(), url_hash(), test_image_verdict_needs_all_checks_and_marks_clean(), test_screen_skips_failures_and_yields_hash_keyed_rows()
-
-### Community 62 - "test_warehouse_helpers.py"
-Cohesion: 0.22
-Nodes (5): FakeCJ, test_flatten_categories_keeps_three_levels(), test_image_rows_dedupe_and_number_positions(), test_offers_lands_variants_stock_and_freight_for_cheapest_variant(), test_parse_labels_keeps_only_valid_entries()
+### Community 60 - "Independent project review — 2026-11-03"
+Cohesion: 0.33
+Nodes (5): Independent project review — 2026-11-03, Primary-source verification, retrieved 2026-11-03, Questions for the review pull request, Top 10 actions, Validation and limits
 
 ### Community 63 - "classify.py"
-Cohesion: 0.26
-Nodes (10): _append(), classify(), load_cache(), main(), parse_labels(), phrases(), title_hash(), test_classify_caches_by_title_hash_not_title() (+2 more)
+Cohesion: 0.07
+Nodes (29): 0006 — DuckDB warehouse: deterministic core, LLM on top, Choice, Intelligence layer (next), Layers, Out of scope for this slice, Rules that make it deterministic, Why now, _append() (+21 more)
 
 ### Community 64 - "20 — Source pilots: what each source actually discovered"
 Cohesion: 0.33
 Nodes (5): 20 — Source pilots: what each source actually discovered, Fixes for the next round, Manual steps that remain valuable (owner, about 20–30 minutes each), Scorecard, What worked, what didn't
 
-### Community 65 - "json"
-Cohesion: 0.57
-Nodes (3): analyze(), _fetch(), main()
+### Community 66 - "review_panel.py"
+Cohesion: 0.11
+Nodes (17): med(), append_cache(), cache_key(), load_cache(), load_ideas(), main(), parse_review(), render() (+9 more)
 
 ### Community 67 - "0007 — Deterministic harness first, intelligence layer on top"
 Cohesion: 0.33
 Nodes (5): 0007 — Deterministic harness first, intelligence layer on top, How to run, New in this decision, Open: where history lives, The split
 
 ## Knowledge Gaps
-- **6 isolated node(s):** `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 553 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **6 isolated node(s):** `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 562 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **8 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -361,13 +350,13 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.014) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
   _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL` to the rest of the system?**
+- **What connects `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS` to the rest of the system?**
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
-- **Why does `record_run()` connect `store.py` to `json`, `webmeta.py`, `cj.py`?**
+- **Why does `record_run()` connect `store.py` to `webmeta.py`, `cj.py`?**
   _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **Are the 2 inferred relationships involving `chat()` (e.g. with `main()` and `main()`) actually correct?**
-  _`chat()` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **Should `test_trends_llm.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.12121212121212122 - nodes in this community are weakly interconnected._
+- **Are the 3 inferred relationships involving `chat()` (e.g. with `main()` and `main()`) actually correct?**
+  _`chat()` has 3 INFERRED edges - model-reasoned connections that need verification._
+- **Should `chat` be split into smaller, more focused modules?**
+  _Cohesion score 0.07399577167019028 - nodes in this community are weakly interconnected._

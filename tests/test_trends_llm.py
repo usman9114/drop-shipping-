@@ -140,3 +140,16 @@ def test_images_are_loaded_once_not_per_model(no_keys, monkeypatch, tmp_path):
     monkeypatch.setattr(llm, "_post", lambda *a, **k: replies.pop(0))
     assert llm.chat("hi", task="vision", image_urls=[str(img)])["text"] == "ok"
     assert len(calls) == 1
+
+
+def test_explicit_models_override_the_task_list(no_keys, monkeypatch):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "x")
+    seen = []
+
+    def fake_post(payload, provider, key, timeout=0):
+        seen.append(f"{provider}:{payload['model']}")
+        return _reply("ok")
+
+    monkeypatch.setattr(llm, "_post", fake_post)
+    llm.chat("hi", task="bulk", models=["openrouter:some/model:free"])
+    assert seen == ["openrouter:some/model:free"]

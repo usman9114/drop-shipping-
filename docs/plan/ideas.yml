@@ -1,0 +1,90 @@
+# Ideas currently in play, judged by the review panel (python -m scout.review_panel).
+# Edit this list when an idea is added, changed or dropped; the panel re-reviews
+# only what changed (answers are cached by content hash).
+
+brief: |
+  GOAL: prove or disprove, cheaply, that a one-person business can make money
+  dropshipping on eBay US with zero inventory, sourcing from CJ Dropshipping's US
+  warehouse. A Shopify + Instagram channel may come later.
+
+  CONSTRAINTS (cite by id):
+  C1 Zero inventory: never buy or hold stock.
+  C2 Supplier: CJ Dropshipping US warehouse only (about 3,960 US-stocked products).
+  C3 Channel: eBay US first. eBay's API license forbids storing eBay data,
+     computing statistics or modelling prices from it, and automating orders or
+     tracking for items bought elsewhere (sections 8.1.4, 9.5, 9.6).
+  C4 Everything repeatable must be automated and deterministic; manual research
+     steps are dropped (owner decision).
+  C5 Terms gate: no automated access a site's terms forbid; no personal data;
+     raw third-party data stays private; the repo is public.
+  C6 Lean: free tools first, near-zero spend until evidence justifies money.
+  C7 Margin: an item passes only at >=20% net (>=10% under stress) after eBay
+     fees, ads, returns; in practice landed cost must be about 1/3 of price.
+  C8 Compliance: no cosmetics, children's products, batteries or radio devices,
+     branded or dupe goods; jewelry only with metal-content statements.
+
+  FACTS SO FAR:
+  F1 The first niche (trading-card supplies) and both backups had zero CJ US supply.
+  F2 Margin-viable CJ US products are mostly fashion jewelry, press-on nails,
+     cleaning tools, handbags, pet accessories (about 250 products).
+  F3 Those viable products are listed by a median of 418 other stores vs 49
+     for the catalogue: either proven demand or a crowded field.
+  F4 No automated source of eBay sold counts is allowed without eBay's permission.
+  F5 Total spend so far: $0. No listing has gone live.
+
+ideas:
+  - id: I01
+    title: Core thesis
+    description: Zero-inventory eBay US dropshipping from CJ's US warehouse can reach >=20% net margin on 10-20 listings in a 60-day test.
+
+  - id: I02
+    title: Supply-first product selection
+    description: Choose products from what CJ's US warehouse actually stocks and what passes the margin model, then look for demand evidence, instead of picking a niche from demand first.
+
+  - id: I03
+    title: Better listings from supplier images
+    description: Compete on listing quality using CJ's own product images with AI-enhanced backgrounds and accurate structured descriptions, never fabricated images.
+
+  - id: I04
+    title: CJ stock drawdown as a sales meter
+    description: Pull CJ's US catalogue daily; falling US stock per product estimates units sold by all stores selling it.
+
+  - id: I05
+    title: CJ listing count as a popularity signal
+    description: Use CJ's listedNum (how many stores imported a product) to rank products by what other dropshippers bet on.
+
+  - id: I06
+    title: Look-alike discovery from internet metadata
+    description: Find successful stores selling our product types via the Tranco traffic list, DNS records (Shopify detection, platform verification tokens), sitemaps and Shopify product feeds, then study what they sell and at what price.
+
+  - id: I07
+    title: Traffic footprint of look-alike stores
+    description: Read ad pixels, email/SMS, affiliate and review apps and social links from store homepages to learn how successful stores get traffic.
+
+  - id: I08
+    title: Study Shopify stores although our channel is eBay
+    description: Use Shopify look-alike stores as the main evidence of what sells and how, even though we sell on eBay first.
+
+  - id: I09
+    title: Drop Terapeak and all manual research
+    description: Remove eBay Terapeak (manual only) and accept no direct eBay sold-count evidence before going live.
+
+  - id: I10
+    title: Intelligence layer with grounded narratives
+    description: Free LLMs write short explanations per product type from a fixed evidence table; any number not in the table rejects the text; answers cached.
+
+  - id: I11
+    title: DuckDB and dbt warehouse now, Postgres later
+    description: Keep data in a local DuckDB file with dbt models and tests; move to Postgres only when daily scheduled loads exist.
+
+  - id: I12
+    title: Fashion jewelry as the lead category
+    description: Make fashion jewelry the first test category because it dominates margin-viable CJ US supply.
+
+  - id: I13
+    title: Live micro-test as the decisive evidence
+    description: Since eBay data cannot be automated, list 10-20 margin-viable products and use our own sales, views and returns over 60 days as the evidence.
+
+  - id: I14
+    title: Free LLMs for bulk labelling and image checks
+    description: Use free GLM and OpenRouter models for product-type labels, search phrases and image QA, cached and never deciding compliance.

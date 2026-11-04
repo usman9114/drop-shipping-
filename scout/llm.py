@@ -176,19 +176,18 @@ def chat(
     system: str | None = None,
     json_mode: bool = False,
     max_tokens: int = 2048,  # reasoning models spend part of this on hidden thinking
+    models: list[str]
+    | None = None,  # exact 'provider:model' specs; overrides the task list
 ) -> dict:
     """Return {'model': ..., 'text': ...}. Tries each free model for the task.
 
     An empty or malformed reply counts as a failure and falls through to the
     next model."""
-    models = [m for m in FREE_MODELS[task] if _key(m.split(":", 1)[0])]
+    candidates = models or FREE_MODELS[task]
+    models = [m for m in candidates if _key(m.split(":", 1)[0])]
     if not models:
         need = sorted(
-            {
-                v
-                for m in FREE_MODELS[task]
-                for v in PROVIDERS[m.split(":", 1)[0]]["keys"]
-            }
+            {v for m in candidates for v in PROVIDERS[m.split(":", 1)[0]]["keys"]}
         )
         raise LLMError(f"no API key set for task {task!r}; set one of {need}")
 
