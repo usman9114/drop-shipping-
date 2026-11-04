@@ -936,9 +936,9 @@
     "semantic_hash": ""
   },
   "tests/test_shopify_detect.py": {
-    "mtime": 1793834649.8328567,
-    "seen": 1793834716.2559786,
-    "ast_hash": "6097be2d90802b8300492a450abf23de",
+    "mtime": 1793834882.5501149,
+    "seen": 1793834885.267292,
+    "ast_hash": "94eefa04ead85e942b5a383e45b4cafd",
     "semantic_hash": ""
   },
   "scripts/vault_export.py": {
