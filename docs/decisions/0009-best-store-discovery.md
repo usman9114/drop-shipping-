@@ -18,6 +18,16 @@ myip.ms lists the sites on Shopify's IP addresses ranked by popularity. Its page
 
 No keyword filter: every domain in the top 1M is checked.
 
+### myip.ms terms (read 2026-11-04)
+
+The owner asked whether myip.ms can be automated (a Playwright scraper, or an API wrapped around the site). Its [terms](https://myip.ms/info/terms) answer it:
+
+- Section III(e): "You may not use any 'deep-link', 'page-scrape', 'robot', 'spider' or other automatic device", and it names the **Myip.ms API** as the approved channel ("may be subject to additional terms").
+- Section IV: the service may be accessed only through the interface myip.ms provides.
+- Section III(f): no reselling or copying without written agreement.
+
+So **no scraper and no browser automation** (Playwright included), and no getting around its bot check. The allowed routes are: (1) the **official Myip.ms API** (owner checks price and API terms, then adds the key as an environment variable; we then write a thin client that obeys those terms), or (2) **manual** browsing by the owner. Meanwhile the Tranco + DNS scan gives the same kind of list from open data.
+
 ## What "best" means here
 
 `mart.mart_store_profile.best_score` = percentile among profiled stores of: **traffic rank 45%**, **rank growth 20%** (ln(rank 365 or 90 days ago / rank now)), **release rhythm 20%** (products created in the last 90 days), **marketing stack 15%** (count of ad, retention, partner and conversion tools plus DNS platform verifications). Weights are our judgment and sit in one SQL line.

@@ -1,7 +1,13 @@
-"""Free-first LLM client (Z.ai GLM Flash + OpenRouter free models).
+"""LLM client: Z.ai GLM Flash first, then Claude Haiku / Sonnet via OpenRouter.
 
-Routes each task type to a list of free models and falls back on errors or
-rate limits. Free-tier limits: 20 req/min, and 50 req/day until the account has
+Owner routing (2026-11-04): GLM and OpenRouter Sonnet and Haiku do the work;
+Opus is the advisor (planning and review in the Claude Code session), never a
+worker here. Order per task: free GLM Flash -> Haiku 5.5 (bulk, vision; about
+$0.10/$0.50 per million tokens in/out) or Sonnet 5.5 (reasoning, code; about
+$2/$10) -> OpenRouter free models as a last resort. Paid calls draw on the
+OpenRouter credit, so GLM stays first.
+
+Falls back on errors or rate limits. Free-tier limits: 20 req/min, and 50 req/day until the account has
 bought $10 of credits in total (then 1,000/day). Free routes are NOT private:
 never send keys, customer data or contracts.
 
@@ -34,35 +40,45 @@ PROVIDERS = {
     },
 }
 
-# "provider:model", ordered by preference. All free (OpenRouter ":free" verified
-# 2026-11-03; Z.ai Flash models listed as Free on docs.z.ai pricing). Models whose
-# provider key is missing are skipped.
+# "provider:model", ordered by preference. GLM Flash is free (docs.z.ai pricing);
+# Claude Haiku/Sonnet are paid OpenRouter routes (ids and prices checked on
+# openrouter.ai/api/v1/models 2026-11-04); ":free" models are the last resort.
+# Models whose provider key is missing are skipped.
+HAIKU = "openrouter:anthropic/claude-haiku-5.5"
+SONNET = "openrouter:anthropic/claude-sonnet-5.5"
 FREE_MODELS: dict[str, list[str]] = {
     "bulk": [  # fast classification / tagging / extraction
         "zai:glm-4.5-flash",
+        HAIKU,
         "openrouter:nvidia/nemotron-3.5-lightning:free",
         "openrouter:google/gemma-4-26b-a4b-it:free",
         "openrouter:liquid/lfm-2.5-2.6b:free",
     ],
     "reasoning": [  # harder analysis, drafting copy
         "zai:glm-4.7-flash",
+        SONNET,
         "zai:glm-4.5-flash",
         "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
         "openrouter:google/gemma-4-31b-it:free",
     ],
-    "code": [  # code drafts; Claude reviews before anything is committed
+    "code": [  # code drafts; Opus (advisor) reviews before anything is committed
         "zai:glm-4.7-flash",
+        SONNET,
         "zai:glm-4.5-flash",
         "openrouter:nvidia/nemotron-3-ultra-550b-a55b:free",
     ],
     "vision": [  # image QA, image -> attributes
         "zai:glm-4.6v-flash",
+        HAIKU,
         "openrouter:nvidia/nemotron-3.5-super-vl:free",
         "openrouter:nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
         "openrouter:google/gemma-4-31b-it:free",
     ],
     "safety": ["openrouter:nvidia/nemotron-3.5-content-safety:free"],
+    "haiku": [HAIKU, "zai:glm-4.5-flash"],  # force Haiku (e.g. a second opinion)
+    "sonnet": [SONNET, "zai:glm-4.7-flash"],  # force Sonnet
 }
+MODELS = FREE_MODELS  # the name predates paid routes; kept for callers
 
 
 def _load_dotenv(path: str = ".env") -> None:
