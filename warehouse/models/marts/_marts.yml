@@ -56,3 +56,8 @@ models:
     columns:
       - name: category
         data_tests: [not_null, unique]
+  - name: mart_store_rank_trend
+    description: Private. Temporal features per store from the Tranco rank history (slope, volatility, first seen, breakout, fading, emerged).
+    columns:
+      - name: domain
+        data_tests: [not_null, unique]
