@@ -804,9 +804,9 @@
     "semantic_hash": ""
   },
   "docs/plan/estimating-sales-and-profit.md": {
-    "mtime": 1793828848.3296356,
-    "seen": 1793828854.3325245,
-    "ast_hash": "675b90a3869cbe142d5d3b6dffcbe6fc",
+    "mtime": 1793828935.5935087,
+    "seen": 1793829033.5677502,
+    "ast_hash": "491d628bb307965a3b632053a87fd4d2",
     "semantic_hash": ""
   },
   "docs/reviews/2026-11-04-business-model-validation.md": {
@@ -831,6 +831,12 @@
     "mtime": 1793828698.6245992,
     "seen": 1793828854.3325624,
     "ast_hash": "ee2e52ed852103aebccc6b487f47ebd8",
+    "semantic_hash": ""
+  },
+  "docs/research/26-calibration-set-widening.md": {
+    "mtime": 1793829030.732619,
+    "seen": 1793829033.5678263,
+    "ast_hash": "505599a7693de25d3c5e95aec2c854b7",
     "semantic_hash": ""
   }
 }
