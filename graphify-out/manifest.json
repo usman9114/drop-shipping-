@@ -222,9 +222,9 @@
     "semantic_hash": ""
   },
   "scout/store.py": {
-    "mtime": 1793819093.149598,
-    "seen": 1793821059.2091587,
-    "ast_hash": "ef427629ca74df94a391e7b2c4c8dbb2",
+    "mtime": 1793834654.9778109,
+    "seen": 1793834716.2556252,
+    "ast_hash": "0d47ba45953902d8bc5c9f1140d47a7a",
     "semantic_hash": ""
   },
   "scripts/claude-glm.sh": {
@@ -312,9 +312,9 @@
     "semantic_hash": ""
   },
   "tests/test_store.py": {
-    "mtime": 1793819093.151903,
-    "seen": 1793821059.2091815,
-    "ast_hash": "54fa324dfd30d289941c195d4340939f",
+    "mtime": 1793834654.9781013,
+    "seen": 1793834716.256017,
+    "ast_hash": "b2040afee5b347e97a8e3c49cbdc64c4",
     "semantic_hash": ""
   },
   "tests/test_trends_llm.py": {
@@ -456,9 +456,9 @@
     "semantic_hash": ""
   },
   "warehouse/models/marts/_marts.yml": {
-    "mtime": 1793833681.9797566,
-    "seen": 1793833738.1285543,
-    "ast_hash": "899c6ad6315d47473c27d9db27e89201",
+    "mtime": 1793834628.1180997,
+    "seen": 1793834716.2564218,
+    "ast_hash": "59d25a8ec291758a1b87102a4927d7ef",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_supply_candidates.py": {
@@ -884,7 +884,7 @@
   "warehouse/models/marts/mart_store_universe.sql": {
     "mtime": 1793829639.6580558,
     "seen": 1793829681.3685772,
-    "ast_hash": "743cf84d1a92ff394bc327fe4354caa6",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_web_store_light.sql": {
@@ -927,6 +927,18 @@
     "mtime": 1793833963.9757736,
     "seen": 1793833971.6945817,
     "ast_hash": "95619ef12f411d742d1804927e393265",
+    "semantic_hash": ""
+  },
+  "scout/shopify_detect.py": {
+    "mtime": 1793834649.830101,
+    "seen": 1793834716.2555845,
+    "ast_hash": "01e10ba803d1dea6c42c917dc4a7cb20",
+    "semantic_hash": ""
+  },
+  "tests/test_shopify_detect.py": {
+    "mtime": 1793834649.8328567,
+    "seen": 1793834716.2559786,
+    "ast_hash": "6097be2d90802b8300492a450abf23de",
     "semantic_hash": ""
   }
 }
