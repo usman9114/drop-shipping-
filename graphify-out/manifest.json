@@ -636,9 +636,9 @@
     "semantic_hash": ""
   },
   "docs/decisions/0008-internet-metadata-harness.md": {
-    "mtime": 1793813901.431654,
-    "seen": 1793813921.2640288,
-    "ast_hash": "e593a122c98cb0b238f504743d14b514",
+    "mtime": 1793814675.561502,
+    "seen": 1793814677.243399,
+    "ast_hash": "ffde61f5d98ebf17f1daf92db6e05fa2",
     "semantic_hash": ""
   },
   "warehouse/models/core/core_fact_product_snapshot.sql": {

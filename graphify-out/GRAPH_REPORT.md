@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-04)
 
 ## Corpus Check
-- 111 files · ~73,455 words
+- 111 files · ~73,582 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 19 file(s) not represented in the graph (top: .csv 13, (none) 4, .example 1)
 
 ## Summary
-- 942 nodes · 1390 edges · 66 communities (55 shown, 11 thin omitted)
+- 943 nodes · 1391 edges · 67 communities (56 shown, 11 thin omitted)
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 50 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `83c7ce70`
+- Built from commit: `1c90cd02`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -65,6 +65,7 @@
 - 0005-cj-client.md
 - test_cj.py
 - CJ supply check, 2026-11-04: trading-card supplies fail K1; so do both backups
+- Data pipeline: feeding the team authentic evidence
 - Look-alike intelligence: reverse-engineer stores that already succeed
 - intel.py
 - ideas
@@ -92,21 +93,21 @@
 10. `12 — Compliance risk cards for the 8 candidate niches` - 13 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `Findings` --references--> `query()`  [INFERRED]
+  docs/reviews/2026-11-agent2-project-review.md → scout/store.py
+- `Findings` --references--> `rebuild()`  [INFERRED]
+  docs/reviews/2026-11-agent2-project-review.md → scout/store.py
 - `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
   .claude/agents/_team-rules.md → scout/store.py
-- `Findings` --references--> `compute()`  [INFERRED]
-  docs/reviews/2026-11-agent2-project-review.md → scout/margin.py
 - `6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`)` --references--> `evaluate()`  [INFERRED]
   docs/handoff/agent2-review-and-shortlist.md → scout/margin.py
 - `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
-- `Findings` --references--> `evaluate()`  [INFERRED]
-  docs/reviews/2026-11-agent2-project-review.md → scout/margin.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (66 total, 11 thin omitted)
+## Communities (67 total, 11 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -177,8 +178,8 @@ Cohesion: 0.50
 Nodes (3): 10 — Category risk ranking (US, zero-inventory eBay dropshipping), Cross-cutting facts, Sources
 
 ### Community 22 - "store.py"
-Cohesion: 0.07
-Nodes (33): Shared rules for every AI team member, 1. Architecture, 2. What makes it "authentic", 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence (+25 more)
+Cohesion: 0.10
+Nodes (25): Shared rules for every AI team member, 2. What makes it "authentic", cache_key(), _checked_path(), _git_sha(), main(), query(), rebuild() (+17 more)
 
 ### Community 23 - "steps"
 Cohesion: 0.08
@@ -189,8 +190,8 @@ Cohesion: 0.10
 Nodes (19): 0001 — Candidate niches (Stage B), 1. Decision, 2. Evidence table, 2a. Margin constraint behind the price targets, 2b. Rubric scores (`docs/plan/ai-team.md` §5), 2c. Sources for the shared premises, 3.1 `tcg-supplies`: trading-card storage and display, 3.2 `hobby-modeling-tools`: miniature and scale-model tools (+11 more)
 
 ### Community 26 - "2. Per-niche price bands and representative products"
-Cohesion: 0.08
-Nodes (38): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost ceiling table [data: scout.margin output], 2. Per-niche price bands and representative products, 3. Ranked summary, 4. Gaps and next steps, auto-detailing-tools, coin-supplies, collectibles-display (+30 more)
+Cohesion: 0.07
+Nodes (44): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost ceiling table [data: scout.margin output], 2. Per-niche price bands and representative products, 3. Ranked summary, 4. Gaps and next steps, auto-detailing-tools, coin-supplies, collectibles-display (+36 more)
 
 ### Community 27 - "12 — Compliance risk cards for the 8 candidate niches"
 Cohesion: 0.10
@@ -254,15 +255,15 @@ Nodes (13): 0. Status today, 1. Guardrails against the engineering trap, 2. Mode
 
 ### Community 43 - "webmeta.py"
 Cohesion: 0.07
-Nodes (35): Facts that change plans, Next tasks, in order (focus from 2026-11-04: reconstruct and recreate store success), Owner tasks outstanding, Repo, Session state: where the project stands, Traps in a fresh container, What exists, aggregate_rating() (+27 more)
+Nodes (33): Facts that change plans, Next tasks, in order (focus from 2026-11-04: reconstruct and recreate store success), Owner tasks outstanding, Repo, Session state: where the project stands, Traps in a fresh container, What exists, aggregate_rating() (+25 more)
 
 ### Community 44 - "cj.py"
 Cohesion: 0.07
-Nodes (29): 6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`), CJClient, CJError, _default_session(), _dicts(), _json_list(), main(), normalize_detail() (+21 more)
+Nodes (27): 6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`), CJClient, CJError, _default_session(), _dicts(), _json_list(), main(), normalize_detail() (+19 more)
 
 ### Community 45 - "0008 — Internet-metadata harness: find and profile stores from records the web already publishes"
-Cohesion: 0.29
-Nodes (6): 0008 — Internet-metadata harness: find and profile stores from records the web already publishes, Automated demand signals that replace Terapeak, Gaps and fixes for the next run, Pilot result (2026-11-04), Terapeak is dropped, The idea
+Cohesion: 0.25
+Nodes (7): 0008 — Internet-metadata harness: find and profile stores from records the web already publishes, Automated demand signals that replace Terapeak, Gaps and fixes for the next run, Pilot result (2026-11-04), Terapeak is dropped, The idea, Wider run (2026-11-04, 1,200 domains)
 
 ### Community 46 - "18 — CJ Dropshipping API cheat sheet"
 Cohesion: 0.22
@@ -270,11 +271,15 @@ Nodes (8): 18 — CJ Dropshipping API cheat sheet, Endpoints, Limits and errors,
 
 ### Community 48 - "test_cj.py"
 Cohesion: 0.13
-Nodes (17): client(), FakeResp, FakeSession, test_a_non_json_response_is_a_clear_error(), test_a_second_auth_failure_is_not_retried_forever(), test_detail_ignores_junk_variants_and_images(), test_detail_normalizes_images_and_variants(), test_detail_parses_live_string_numbers_and_json_list_fields() (+9 more)
+Nodes (18): client(), FakeResp, FakeSession, test_a_non_json_response_is_a_clear_error(), test_a_second_auth_failure_is_not_retried_forever(), test_detail_ignores_junk_variants_and_images(), test_detail_normalizes_images_and_variants(), test_detail_parses_live_string_numbers_and_json_list_fields() (+10 more)
 
 ### Community 49 - "CJ supply check, 2026-11-04: trading-card supplies fail K1; so do both backups"
 Cohesion: 0.29
 Nodes (6): 1. Result, 2. What CJ's US warehouse actually holds, 3. Real cost floor, 4. Options (owner decision), 5. Other findings, CJ supply check, 2026-11-04: trading-card supplies fail K1; so do both backups
+
+### Community 50 - "Data pipeline: feeding the team authentic evidence"
+Cohesion: 0.29
+Nodes (6): 1. Architecture, 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence
 
 ### Community 51 - "Look-alike intelligence: reverse-engineer stores that already succeed"
 Cohesion: 0.25
@@ -322,7 +327,7 @@ Nodes (5): 20 — Source pilots: what each source actually discovered, Fixes for
 
 ### Community 66 - "review_panel.py"
 Cohesion: 0.11
-Nodes (17): med(), append_cache(), cache_key(), load_cache(), load_ideas(), main(), parse_review(), render() (+9 more)
+Nodes (16): med(), append_cache(), load_cache(), load_ideas(), main(), parse_review(), render(), review() (+8 more)
 
 ### Community 67 - "0007 — Deterministic harness first, intelligence layer on top"
 Cohesion: 0.33
@@ -336,7 +341,7 @@ Nodes (5): 0007 — Deterministic harness first, intelligence layer on top, How 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `record_run()` connect `store.py` to `review_panel.py`, `webmeta.py`, `cj.py`?**
+- **Why does `record_run()` connect `store.py` to `webmeta.py`, `cj.py`?**
   _High betweenness centrality (0.016) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
   _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
