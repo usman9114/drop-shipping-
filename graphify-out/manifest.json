@@ -1,8 +1,8 @@
 {
   ".claude/settings.json": {
-    "mtime": 1793792720.3304596,
-    "seen": 1793792721.2712076,
-    "ast_hash": "3372bbbcd8dc689040c50ec0866a75af",
+    "mtime": 1793792755.990214,
+    "seen": 1793796316.0302448,
+    "ast_hash": "932728c53d1a5d6267554a83bdc89f5c",
     "semantic_hash": ""
   },
   ".pre-commit-config.yaml": {
@@ -84,8 +84,8 @@
     "semantic_hash": ""
   },
   "scout/trends.py": {
-    "mtime": 1793750309.43445,
-    "seen": 1793792641.4622087,
+    "mtime": 1793796303.402581,
+    "seen": 1793796316.0302963,
     "ast_hash": "a48274ed2c83fd115e91bf56f2698493",
     "semantic_hash": ""
   },
@@ -336,15 +336,15 @@
     "semantic_hash": ""
   },
   "scout/cj.py": {
-    "mtime": 1793750309.43445,
-    "seen": 1793792641.4622028,
-    "ast_hash": "4dbb7d1c14a51d99cae9aca4067d19c2",
+    "mtime": 1793796019.434564,
+    "seen": 1793796316.0302896,
+    "ast_hash": "10e9d0fcdc71ef77288d024abd575c8d",
     "semantic_hash": ""
   },
   "tests/test_cj.py": {
-    "mtime": 1793750309.4351273,
-    "seen": 1793792641.4622133,
-    "ast_hash": "d4f96625a792d19f3c2dbfd292e2a261",
+    "mtime": 1793796019.434564,
+    "seen": 1793796316.030305,
+    "ast_hash": "57cb96d477ab2435396a4e4dbf94a4f3",
     "semantic_hash": ""
   },
   "docs/decisions/0005-cj-client.md": {
@@ -354,9 +354,9 @@
     "semantic_hash": ""
   },
   "docs/research/18-cj-api-cheatsheet.md": {
-    "mtime": 1793750309.427374,
-    "seen": 1793792641.4622703,
-    "ast_hash": "fc10d156d1670fbbcf3f49c249666dec",
+    "mtime": 1793796282.4353845,
+    "seen": 1793796316.030361,
+    "ast_hash": "c929d53a2c3b5950925e6a54ee065618",
     "semantic_hash": ""
   },
   "docs/handoff/agent2-review-and-shortlist.md": {
@@ -372,15 +372,63 @@
     "semantic_hash": ""
   },
   "docs/handoff/session-state.md": {
-    "mtime": 1793792719.2725825,
-    "seen": 1793792721.271298,
-    "ast_hash": "c44d9b56711018cb4617e53f7c6c5450",
+    "mtime": 1793796295.4763968,
+    "seen": 1793796316.0303319,
+    "ast_hash": "3d12ad6ff956cf18d2012a1d984b1336",
     "semantic_hash": ""
   },
   "docs/plan/operating-plan.md": {
-    "mtime": 1793792712.9462116,
-    "seen": 1793792721.2713065,
-    "ast_hash": "df42094dceeafb5c9b3b08f0c45c02a6",
+    "mtime": 1793796295.4771128,
+    "seen": 1793796316.030337,
+    "ast_hash": "6ef8ccf73c0a87654c76f6e46dfc78c7",
+    "semantic_hash": ""
+  },
+  "docs/shortlists/cj-sweep-hobby.json": {
+    "mtime": 1793795878.1425557,
+    "seen": 1793796316.0302804,
+    "ast_hash": "38d805bb3f46a34cad7f9e58f09c3e9b",
+    "semantic_hash": ""
+  },
+  "docs/shortlists/cj-sweep-tcg.json": {
+    "mtime": 1793795683.938544,
+    "seen": 1793796316.030282,
+    "ast_hash": "b2eb058efee576707b0a9311a63c7bad",
+    "semantic_hash": ""
+  },
+  "docs/shortlists/cj-sweep-vinyl.json": {
+    "mtime": 1793795784.0013027,
+    "seen": 1793796316.0302832,
+    "ast_hash": "df3a972584e1b3a748051216963e3645",
+    "semantic_hash": ""
+  },
+  "scripts/cj_sweep.py": {
+    "mtime": 1793796022.1105642,
+    "seen": 1793796316.0302975,
+    "ast_hash": "e58e603bff5290d87a048e93de1d4f6e",
+    "semantic_hash": ""
+  },
+  "scripts/cj_sweep_hobby.json": {
+    "mtime": 1793796028.4145646,
+    "seen": 1793796316.0302987,
+    "ast_hash": "215e6e64811e8e4b5aab6c60ef05d502",
+    "semantic_hash": ""
+  },
+  "scripts/cj_sweep_tcg.json": {
+    "mtime": 1793796028.4025645,
+    "seen": 1793796316.0302997,
+    "ast_hash": "d3812ae86bcad7d0adc82b075f38204e",
+    "semantic_hash": ""
+  },
+  "scripts/cj_sweep_vinyl.json": {
+    "mtime": 1793796028.4025645,
+    "seen": 1793796316.0303009,
+    "ast_hash": "e36d937d5fb010308b785bd47e0e9644",
+    "semantic_hash": ""
+  },
+  "docs/shortlists/2026-11-04-cj-supply-check.md": {
+    "mtime": 1793796269.706579,
+    "seen": 1793796316.0303655,
+    "ast_hash": "ffafa66be8872168cf0479be244fa33c",
     "semantic_hash": ""
   }
 }

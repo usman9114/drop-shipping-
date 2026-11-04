@@ -43,9 +43,14 @@
   "41": "Runbook: Postgres on a VPS, reached by CI through an SSH tunnel",
   "42": "Operating plan: from desk research to first sale, without the engineering trap",
   "43": "Runbook: Terapeak research session (manual, about 90 minutes)",
-  "44": "test_cj.py",
+  "44": "cj.py",
   "45": "aggregate_candidates.py",
   "46": "18 — CJ Dropshipping API cheat sheet",
   "47": "0005-cj-client.md",
-  "50": "Session state: where the project stands"
+  "48": "test_cj.py",
+  "49": "CJ supply check, 2026-11-04: trading-card supplies fail K1; so do both backups",
+  "50": "Session state: where the project stands",
+  "51": "Path",
+  "52": "RuntimeError",
+  "53": "parametrize"
 }
