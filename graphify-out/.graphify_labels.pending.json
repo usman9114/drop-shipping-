@@ -55,11 +55,16 @@
   "53": "parametrize",
   "54": "dbt_project.yml",
   "55": "column_types",
-  "56": "2. Per-niche price bands and representative products",
+  "56": "chat",
   "57": "models",
   "58": "models",
   "59": "dev",
   "60": "Data pipeline: feeding the team authentic evidence",
   "61": "Independent project review — 2026-11-03",
-  "62": "parametrize"
+  "62": "parametrize",
+  "63": "screen_images.py",
+  "64": "test_warehouse_helpers.py",
+  "65": "0006 — DuckDB warehouse: deterministic core, LLM on top",
+  "66": "aggregate_candidates.py",
+  "67": "re"
 }
