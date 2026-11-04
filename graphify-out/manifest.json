@@ -505,92 +505,92 @@
   },
   "warehouse/macros/lake.sql": {
     "mtime": 1793810895.6820118,
-    "seen": 1793812408.217857,
-    "ast_hash": "",
+    "seen": 1793812977.349859,
+    "ast_hash": "a697efeb66636a1129b11ca7d4fa704e",
     "semantic_hash": ""
   },
   "warehouse/macros/tests.sql": {
     "mtime": 1793810895.6821787,
-    "seen": 1793812408.2178583,
-    "ast_hash": "",
+    "seen": 1793812977.3498611,
+    "ast_hash": "c7b1261c67a125c72e2503c368308c15",
     "semantic_hash": ""
   },
   "warehouse/models/core/core_dim_product.sql": {
     "mtime": 1793810895.682283,
-    "seen": 1793812408.2178593,
-    "ast_hash": "",
+    "seen": 1793812977.3498623,
+    "ast_hash": "8f11d67eeabadf97e19681809c88f2d7",
     "semantic_hash": ""
   },
   "warehouse/models/core/core_fact_offer.sql": {
     "mtime": 1793810895.6823215,
-    "seen": 1793812408.217861,
-    "ast_hash": "",
+    "seen": 1793812977.349864,
+    "ast_hash": "d6d319f36c08c77622458758c6780c61",
     "semantic_hash": ""
   },
   "warehouse/models/enrich/enr_product_flags.sql": {
     "mtime": 1793810895.6824055,
-    "seen": 1793812408.2178633,
-    "ast_hash": "",
+    "seen": 1793812977.3498664,
+    "ast_hash": "7a2bcb3dbe1880fb8b00f194a9cbb01d",
     "semantic_hash": ""
   },
   "warehouse/models/enrich/enr_product_type.sql": {
     "mtime": 1793810895.6824055,
-    "seen": 1793812408.2178648,
-    "ast_hash": "",
+    "seen": 1793812977.3498676,
+    "ast_hash": "b92d69048c1881194f14d6aa83d2a783",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_prefilter.sql": {
     "mtime": 1793810895.6825066,
-    "seen": 1793812408.2178667,
-    "ast_hash": "",
+    "seen": 1793812977.34987,
+    "ast_hash": "b30e7a52362ffd055dbbed9841162802",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_terapeak_sheet.sql": {
     "mtime": 1793810895.6825066,
-    "seen": 1793812408.2178688,
-    "ast_hash": "",
+    "seen": 1793812977.3498724,
+    "ast_hash": "42cd8d3f5cbd168f0db6569bf7968682",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_categories.sql": {
     "mtime": 1793810895.6826122,
-    "seen": 1793812408.2178705,
-    "ast_hash": "",
+    "seen": 1793812977.3498752,
+    "ast_hash": "df168ceaecdc85f5b4870db50833828d",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_freight.sql": {
     "mtime": 1793810895.6826122,
-    "seen": 1793812408.2178717,
-    "ast_hash": "",
+    "seen": 1793812977.3498766,
+    "ast_hash": "8a948e4750a086378d4d22f5760c9553",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_products.sql": {
     "mtime": 1793810895.6826122,
-    "seen": 1793812408.2178736,
-    "ast_hash": "",
+    "seen": 1793812977.349879,
+    "ast_hash": "2aa04914541835f3ed55ad29c6f7b6ec",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_stock.sql": {
     "mtime": 1793810895.6826122,
-    "seen": 1793812408.2178748,
-    "ast_hash": "",
+    "seen": 1793812977.3498805,
+    "ast_hash": "d7711f44fff7d3fbb797be673e0f4880",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_variants.sql": {
     "mtime": 1793810895.6826122,
-    "seen": 1793812408.2178757,
-    "ast_hash": "",
+    "seen": 1793812977.349882,
+    "ast_hash": "73e4361731a18869b3b865734c188848",
     "semantic_hash": ""
   },
   "warehouse/models/enrich/enr_image_screen.sql": {
     "mtime": 1793810895.6823215,
-    "seen": 1793812408.2178621,
-    "ast_hash": "",
+    "seen": 1793812977.3498652,
+    "ast_hash": "a91e16efe39682d9aca3ca7d58bd1b95",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_images.sql": {
     "mtime": 1793810895.6826122,
-    "seen": 1793812408.2178726,
-    "ast_hash": "",
+    "seen": 1793812977.349878,
+    "ast_hash": "c5c1db913a854b4d5b49a59e90f074f4",
     "semantic_hash": ""
   },
   "docs/plan/lookalike-intelligence.md": {
