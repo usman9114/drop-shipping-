@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-04)
 
 ## Corpus Check
-- 149 files · ~118,107 words
+- 150 files · ~119,325 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 21 file(s) not represented in the graph (top: .csv 15, (none) 4, .example 1)
 
 ## Summary
-- 1342 nodes · 2192 edges · 97 communities (81 shown, 16 thin omitted)
+- 1352 nodes · 2201 edges · 95 communities (81 shown, 14 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 68 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `dead6c56`
+- Built from commit: `12a54c8b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -24,7 +24,7 @@
 - 03 — Suppliers and their APIs
 - hooks
 - CLAUDE.md
-- chat
+- fake_post
 - 11 - Google Trends check of Stage B candidates (US)
 - 06 — Image sourcing under zero inventory
 - 14 — External source review: "I tried AI dropshipping for 7 days" (YouTube transcript)
@@ -41,7 +41,7 @@
 - json
 - steps
 - 3. Candidate cards
-- Inputs
+- test_cj.py
 - 12 — Compliance risk cards for the 8 candidate niches
 - 3. Primary niche: `tcg-supplies`
 - Warehouse design: Postgres as the source of truth
@@ -58,7 +58,7 @@
 - 17 — Free feeds, and what each API lets us store
 - Runbook: Postgres on a VPS, reached by CI through an SSH tunnel
 - Operating plan: from desk research to first sale, without the engineering trap
-- meta_summary
+- _deep_one
 - argparse
 - 0008 — Internet-metadata harness: find and profile stores from records the web already publishes
 - 18 — CJ Dropshipping API cheat sheet
@@ -75,38 +75,36 @@
 - models
 - models
 - dev
-- classify.py
+- csv
 - 20 — Source pilots: what each source actually discovered
 - 22. Shopify store benchmarks for estimating revenue from traffic
-- json
+- margin.py
 - 0007 — Deterministic harness first, intelligence layer on top
-- csv
+- Inputs
 - stores.py
 - test_stores.py
-- test_warehouse_helpers.py
+- 2. Per-niche price bands and representative products
 - 0009 — Step 1: find the best online stores and reconstruct what they do
 - Step 1 flow: how we find the best online stores and what they do
-- re
+- Plan: find top-performing Shopify stores to take inspiration from
 - Estimating sales and profit: how we think about it
 - 26. Calibration set widening: Shopify-hosted stores that publish revenue
 - test_snapshots.py
 - webmeta.py
-- 0006 — DuckDB warehouse: deterministic core, LLM on top
-- hashlib
+- Brief for the second agent: independent review, then build the shortlist engine
+- Findings
 - snapshot_job.py
 - 27 — Can we pre-filter brands and retailers before fetching a store's feed?
 - test_trends_llm.py
-- validate_business_model.py
-- llm.py
+- or_free_used
+- chat
 - 25 — Audit of four public Shopify data repos
-- _read_image
 - test_stores.py
 - store_intel.py
 - Business-model rules: validation record (R1 exit criterion)
 - 0012-temporal-storage.md
 - fit_shop_age
 - Best online stores: what they sell and how they get traffic — 2026-11-04
-- aggregate_candidates.py
 - _isolated_free_usage
 
 ## God Nodes (most connected - your core abstractions)
@@ -122,21 +120,21 @@
 10. `_product()` - 16 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Rules that make it deterministic` --references--> `classify()`  [INFERRED]
-  docs/decisions/0006-duckdb-warehouse.md → scout/classify.py
+- `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
+  docs/research/13-sales-niche-economics.md → scout/margin.py
 - `What "best" means here` --references--> `business_model()`  [INFERRED]
   docs/decisions/0009-best-store-discovery.md → scout/stores.py
-- `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
-  .claude/agents/_team-rules.md → scout/store.py
-- `Findings` --references--> `compute()`  [INFERRED]
-  docs/reviews/2026-11-agent2-project-review.md → scout/margin.py
-- `6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`)` --references--> `evaluate()`  [INFERRED]
-  docs/handoff/agent2-review-and-shortlist.md → scout/margin.py
+- `2. Per-niche price bands and representative products` --references--> `Inputs`  [INFERRED]
+  docs/research/13-sales-niche-economics.md → scout/margin.py
+- `Findings` --references--> `query()`  [INFERRED]
+  docs/reviews/2026-11-agent2-project-review.md → scout/store.py
+- `Findings` --references--> `rebuild()`  [INFERRED]
+  docs/reviews/2026-11-agent2-project-review.md → scout/store.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (97 total, 16 thin omitted)
+## Communities (95 total, 14 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -167,12 +165,12 @@ Cohesion: 0.12
 Nodes (15): default_install_hook_types, default_stages, exclude, always_run, args, entry, exclude, id (+7 more)
 
 ### Community 7 - "CLAUDE.md"
-Cohesion: 0.14
-Nodes (11): Commands, Context: graphify knowledge graph, graphify, Hard rules, How we think (standing principles, owner 2026-11-04), Project, chat_many(), one() (+3 more)
+Cohesion: 0.15
+Nodes (10): Commands, Context: graphify knowledge graph, graphify, Hard rules, How we think (standing principles, owner 2026-11-04), Project, chat_many(), one() (+2 more)
 
-### Community 8 - "chat"
-Cohesion: 0.13
-Nodes (12): chat(), _extract_text(), is_or_free(), _key(), paid_allowed(), _post(), test_chat_without_any_key_fails_clearly(), test_only_providers_with_keys_are_tried() (+4 more)
+### Community 8 - "fake_post"
+Cohesion: 0.25
+Nodes (5): test_only_providers_with_keys_are_tried(), fake_post(), test_openrouter_lane_gets_a_token_floor_for_its_reasoning_model(), test_paid_routes_are_skipped_unless_opted_in(), test_thinking_is_disabled_for_zai_non_reasoning_tasks()
 
 ### Community 9 - "11 - Google Trends check of Stage B candidates (US)"
 Cohesion: 0.20
@@ -207,8 +205,8 @@ Cohesion: 0.50
 Nodes (3): 10 — Category risk ranking (US, zero-inventory eBay dropshipping), Cross-cutting facts, Sources
 
 ### Community 22 - "json"
-Cohesion: 0.07
-Nodes (32): Shared rules for every AI team member, 1. Architecture, 2. What makes it "authentic", 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence (+24 more)
+Cohesion: 0.05
+Nodes (47): Shared rules for every AI team member, med(), 1. Architecture, 2. What makes it "authentic", 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order (+39 more)
 
 ### Community 23 - "steps"
 Cohesion: 0.08
@@ -218,9 +216,9 @@ Nodes (23): concurrency, cancel-in-progress, group, SKIP, jobs, test, name, on (
 Cohesion: 0.10
 Nodes (19): 0001 — Candidate niches (Stage B), 1. Decision, 2. Evidence table, 2a. Margin constraint behind the price targets, 2b. Rubric scores (`docs/plan/ai-team.md` §5), 2c. Sources for the shared premises, 3.1 `tcg-supplies`: trading-card storage and display, 3.2 `hobby-modeling-tools`: miniature and scale-model tools (+11 more)
 
-### Community 26 - "Inputs"
-Cohesion: 0.05
-Nodes (55): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost ceiling table [data: scout.margin output], 2. Per-niche price bands and representative products, 3. Ranked summary, 4. Gaps and next steps, auto-detailing-tools, coin-supplies, collectibles-display (+47 more)
+### Community 26 - "test_cj.py"
+Cohesion: 0.12
+Nodes (19): client(), FakeResp, FakeSession, test_a_non_json_response_is_a_clear_error(), test_a_second_auth_failure_is_not_retried_forever(), test_detail_ignores_junk_variants_and_images(), test_detail_normalizes_images_and_variants(), test_detail_parses_live_string_numbers_and_json_list_fields() (+11 more)
 
 ### Community 27 - "12 — Compliance risk cards for the 8 candidate niches"
 Cohesion: 0.10
@@ -282,9 +280,13 @@ Nodes (13): 0. What you are building, 10. Leaving, 1. Choose the server, 2. Hard
 Cohesion: 0.14
 Nodes (13): 0. Status today, 1. Guardrails against the engineering trap, 2. Model plan: GLM + OpenRouter, and what the €10 is for, 3. Calendar, 4. Weekly review (every Sunday, 30 min), 5. The SaaS option: keep the door open, don't walk through it yet, 6. Parking lot (not before 20 live listings), 7. Owner actions, in order (+5 more)
 
+### Community 43 - "_deep_one"
+Cohesion: 0.27
+Nodes (7): _deep_one(), _light_one(), _meta_one(), meta_summary(), _robots(), _session(), test_meta_summary_drops_city_and_description()
+
 ### Community 44 - "argparse"
 Cohesion: 0.05
-Nodes (39): 1. Project in four lines, 2. Read first (in this order, about 30 minutes), 3. Ground rules (from `CLAUDE.md`, restated because they matter most), 4. How to work, 5. Part 1: independent review (DONE, merged as PR #1; read `docs/reviews/2026-11-agent2-project-review.md`), 6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`), 7. When you finish, Brief for the second agent: independent review, then build the shortlist engine (+31 more)
+Nodes (36): 6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`), CJClient, CJError, _default_session(), _dicts(), _json_list(), main(), normalize_detail() (+28 more)
 
 ### Community 45 - "0008 — Internet-metadata harness: find and profile stores from records the web already publishes"
 Cohesion: 0.25
@@ -342,9 +344,9 @@ Nodes (9): data_tests, name, accepted_values, in_range, models, columns, descrip
 Cohesion: 0.25
 Nodes (7): path, threads, type, dev, scout, outputs, target
 
-### Community 63 - "classify.py"
-Cohesion: 0.26
-Nodes (10): _append(), classify(), load_cache(), main(), parse_labels(), phrases(), title_hash(), test_classify_caches_by_title_hash_not_title() (+2 more)
+### Community 63 - "csv"
+Cohesion: 0.07
+Nodes (29): 0006 — DuckDB warehouse: deterministic core, LLM on top, Choice, Intelligence layer (next), Layers, Out of scope for this slice, Rules that make it deterministic, Why now, _append() (+21 more)
 
 ### Community 64 - "20 — Source pilots: what each source actually discovered"
 Cohesion: 0.33
@@ -354,29 +356,29 @@ Nodes (5): 20 — Source pilots: what each source actually discovered, Fixes for
 Cohesion: 0.14
 Nodes (13): 1. Conversion rate (Shopify), 22. Shopify store benchmarks for estimating revenue from traffic, 2. Average order value (AOV), 3. Units per order, 4. Traffic channel mix (paid vs organic vs email), 5. Ad spend share of revenue (blended CAC / MER), 6. Return rates by category, How we would use these (+5 more)
 
-### Community 66 - "json"
+### Community 66 - "margin.py"
 Cohesion: 0.14
-Nodes (16): append_cache(), cache_key(), load_cache(), load_ideas(), main(), parse_review(), render(), review() (+8 more)
+Nodes (12): _check(), _compute_raw(), evaluate(), main(), min_price(), _price_floor(), _rounded(), test_min_price_matches_the_documented_ceilings() (+4 more)
 
 ### Community 67 - "0007 — Deterministic harness first, intelligence layer on top"
 Cohesion: 0.33
 Nodes (5): 0007 — Deterministic harness first, intelligence layer on top, How to run, New in this decision, Open: where history lives, The split
 
-### Community 68 - "csv"
-Cohesion: 0.23
-Nodes (7): load_cache(), main(), parse_verdict(), screen(), url_hash(), test_image_verdict_needs_all_checks_and_marks_clean(), test_screen_skips_failures_and_yields_hash_keyed_rows()
+### Community 68 - "Inputs"
+Cohesion: 0.30
+Nodes (12): compute(), Inputs, test_duty_reduces_net_one_for_one(), test_hand_calculated_case(), test_higher_cost_lowers_net(), test_impossible_inputs_are_rejected(), test_min_price_is_the_lowest_passing_price(), test_net_is_contribution_minus_reserves() (+4 more)
 
 ### Community 69 - "stores.py"
-Cohesion: 0.15
-Nodes (17): _all_rows(), classify_product(), deep_targets(), _done(), load_rules(), main(), _meta_one(), _parallel() (+9 more)
+Cohesion: 0.14
+Nodes (17): _all_rows(), classify_product(), deep_targets(), _done(), load_rules(), main(), _norm(), _parallel() (+9 more)
 
 ### Community 70 - "test_stores.py"
-Cohesion: 0.15
-Nodes (13): dropship_traces(), _light_one(), product_category(), _product_text(), _quantile(), summarize_feed(), _p(), test_added_categories() (+5 more)
+Cohesion: 0.17
+Nodes (12): dropship_traces(), product_category(), _product_text(), _quantile(), summarize_feed(), _p(), test_added_categories(), test_dropship_traces() (+4 more)
 
-### Community 71 - "test_warehouse_helpers.py"
-Cohesion: 0.22
-Nodes (5): FakeCJ, test_flatten_categories_keeps_three_levels(), test_image_rows_dedupe_and_number_positions(), test_offers_lands_variants_stock_and_freight_for_cheapest_variant(), test_parse_labels_keeps_only_valid_entries()
+### Community 71 - "2. Per-niche price bands and representative products"
+Cohesion: 0.13
+Nodes (14): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost ceiling table [data: scout.margin output], 2. Per-niche price bands and representative products, 3. Ranked summary, 4. Gaps and next steps, auto-detailing-tools, coin-supplies, collectibles-display (+6 more)
 
 ### Community 72 - "0009 — Step 1: find the best online stores and reconstruct what they do"
 Cohesion: 0.20
@@ -386,9 +388,9 @@ Nodes (9): 0009 — Step 1: find the best online stores and reconstruct what the
 Cohesion: 0.33
 Nodes (5): Diagram, How it works, step by step, Rules that apply throughout, Step 1 flow: how we find the best online stores and what they do, What this cannot tell us
 
-### Community 74 - "re"
-Cohesion: 0.27
-Nodes (6): _git_sha(), _norm(), vendor_is_shop(), git_ident(), main(), test_vendor_is_shop()
+### Community 74 - "Plan: find top-performing Shopify stores to take inspiration from"
+Cohesion: 0.20
+Nodes (9): Is the current approach good? An honest verdict, Owner tasks, Phases (small first: a 10-store pilot before every sweep), Plan: find top-performing Shopify stores to take inspiration from, Risks, Team and work, What "performing well" will mean, What we keep (already built) (+1 more)
 
 ### Community 75 - "Estimating sales and profit: how we think about it"
 Cohesion: 0.17
@@ -403,56 +405,52 @@ Cohesion: 0.05
 Nodes (61): 0011 — Weekly store snapshots: reuse and build, Candidates, Decision, Rules in the job, Build order, Cadence and cost, Feature definitions (so the numbers are explainable), Layers (+53 more)
 
 ### Community 79 - "webmeta.py"
-Cohesion: 0.06
-Nodes (42): Facts that change plans, Next tasks, in order (focus from 2026-11-04: reconstruct and recreate store success), Owner tasks outstanding, Repo, Review panel result (2026-11-04) — read before starting, Session state: where the project stands, Traps in a fresh container, Update: phase Niche Finder R1 (2026-11-04, later) (+34 more)
+Cohesion: 0.05
+Nodes (43): Facts that change plans, Next tasks, in order (focus from 2026-11-04: reconstruct and recreate store success), Owner tasks outstanding, Repo, Review panel result (2026-11-04) — read before starting, Session state: where the project stands, Traps in a fresh container, Update: phase Niche Finder R1 (2026-11-04, later) (+35 more)
 
-### Community 80 - "0006 — DuckDB warehouse: deterministic core, LLM on top"
+### Community 80 - "Brief for the second agent: independent review, then build the shortlist engine"
 Cohesion: 0.25
-Nodes (7): 0006 — DuckDB warehouse: deterministic core, LLM on top, Choice, Intelligence layer (next), Layers, Out of scope for this slice, Rules that make it deterministic, Why now
+Nodes (7): 1. Project in four lines, 2. Read first (in this order, about 30 minutes), 3. Ground rules (from `CLAUDE.md`, restated because they matter most), 4. How to work, 5. Part 1: independent review (DONE, merged as PR #1; read `docs/reviews/2026-11-agent2-project-review.md`), 7. When you finish, Brief for the second agent: independent review, then build the shortlist engine
 
-### Community 81 - "hashlib"
-Cohesion: 0.57
-Nodes (3): analyze(), _fetch(), main()
+### Community 81 - "Findings"
+Cohesion: 0.29
+Nodes (6): Findings, Independent project review — 2026-11-03, Primary-source verification, retrieved 2026-11-03, Questions for the review pull request, Top 10 actions, Validation and limits
 
 ### Community 82 - "snapshot_job.py"
 Cohesion: 0.10
-Nodes (28): diff_runs(), feed_status(), fetch_feed(), _intkeys(), main(), review_app(), review_sample(), run() (+20 more)
+Nodes (27): diff_runs(), feed_status(), fetch_feed(), _intkeys(), main(), review_app(), review_sample(), run() (+19 more)
 
 ### Community 83 - "27 — Can we pre-filter brands and retailers before fetching a store's feed?"
 Cohesion: 0.29
 Nodes (6): 27 — Can we pre-filter brands and retailers before fetching a store's feed?, Answer, Pilot results, Untested ideas (hypotheses), What a filter would cost, What we do instead
 
 ### Community 84 - "test_trends_llm.py"
-Cohesion: 0.18
-Nodes (12): _ok_post(), _reply(), test_all_empty_replies_raise(), test_empty_or_malformed_replies_fall_through_to_the_next_model(), test_empty_series_reports_no_data(), test_explicit_models_override_the_task_list(), fake_post(), test_glm_calls_do_not_use_the_openrouter_allowance() (+4 more)
+Cohesion: 0.15
+Nodes (14): _inline_images(), _read_image(), _reply(), test_all_empty_replies_raise(), test_data_urls_are_left_alone(), test_empty_or_malformed_replies_fall_through_to_the_next_model(), test_explicit_models_override_the_task_list(), fake_post() (+6 more)
 
-### Community 85 - "validate_business_model.py"
-Cohesion: 0.39
-Nodes (4): main(), parse(), sample(), seen()
+### Community 85 - "or_free_used"
+Cohesion: 0.47
+Nodes (5): or_free_used(), _ok_post(), test_chat_many_spread_sends_a_share_to_openrouter_free(), test_glm_calls_do_not_use_the_openrouter_allowance(), test_openrouter_free_calls_are_counted_and_capped()
 
-### Community 86 - "llm.py"
-Cohesion: 0.21
-Nodes (6): list_free(), _load_dotenv(), main(), _or_free_take(), or_free_used(), _today()
+### Community 86 - "chat"
+Cohesion: 0.12
+Nodes (13): chat(), _extract_text(), is_or_free(), _key(), list_free(), LLMError, _load_dotenv(), main() (+5 more)
 
 ### Community 87 - "25 — Audit of four public Shopify data repos"
 Cohesion: 0.40
 Nodes (4): 25 — Audit of four public Shopify data repos, Summary, What each one taught us, What we reuse and what we build
 
-### Community 88 - "_read_image"
-Cohesion: 0.20
-Nodes (7): _inline_images(), LLMError, _read_image(), test_data_urls_are_left_alone(), test_local_images_outside_allowed_roots_are_refused(), test_oversized_images_are_refused(), test_unsupported_url_schemes_are_refused()
-
 ### Community 89 - "test_stores.py"
-Cohesion: 0.19
-Nodes (13): business_model(), category_spread(), _m(), test_app_developer_with_dropship_code_is_not_a_dropshipper(), test_business_model_rules(), test_dominant_vendor_or_few_labels_means_brand(), test_general_store_pattern_is_separate_from_brand(), test_homepage_signals_include_marketing_apps() (+5 more)
+Cohesion: 0.22
+Nodes (12): business_model(), category_spread(), homepage_signals(), _m(), test_app_developer_with_dropship_code_is_not_a_dropshipper(), test_business_model_rules(), test_dominant_vendor_or_few_labels_means_brand(), test_general_store_pattern_is_separate_from_brand() (+4 more)
 
 ### Community 90 - "store_intel.py"
 Cohesion: 0.16
 Nodes (20): _numbers(), append_cache(), _clean(), gaps(), grounded(), walk(), load_cache(), _ls() (+12 more)
 
 ### Community 91 - "Business-model rules: validation record (R1 exit criterion)"
-Cohesion: 0.25
-Nodes (7): Business-model rules: validation record (R1 exit criterion), Error classes (carry into the rules and the report), Pipeline bugs found by testing small, Result and the change made, Rounds, latest_good(), test_failed_refresh_never_replaces_a_good_profile()
+Cohesion: 0.20
+Nodes (8): Business-model rules: validation record (R1 exit criterion), Error classes (carry into the rules and the report), Pipeline bugs found by testing small, Result and the change made, Rounds, latest_good(), relabel(), test_failed_refresh_never_replaces_a_good_profile()
 
 ### Community 93 - "fit_shop_age"
 Cohesion: 0.40
@@ -464,23 +462,23 @@ Nodes (7): Best online stores: what they sell and how they get traffic — 2026-
 
 ## Knowledge Gaps
 - **6 isolated node(s):** `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 733 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 742 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `record_run()` connect `json` to `json`, `stores.py`, `re`, `argparse`, `webmeta.py`, `hashlib`, `snapshot_job.py`?**
-  _High betweenness centrality (0.017) - this node is a cross-community bridge._
+- **Why does `record_run()` connect `json` to `stores.py`, `argparse`, `webmeta.py`, `snapshot_job.py`, `Business-model rules: validation record (R1 exit criterion)`?**
+  _High betweenness centrality (0.025) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `chat()` (e.g. with `main()` and `main()`) actually correct?**
   _`chat()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL` to the rest of the system?**
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
-- **Why does `chat()` connect `chat` to `json`, `csv`, `CLAUDE.md`, `hashlib`, `intel.py`, `test_trends_llm.py`, `llm.py`, `_read_image`, `store_intel.py`, `classify.py`?**
-  _High betweenness centrality (0.015) - this node is a cross-community bridge._
+- **Why does `chat()` connect `chat` to `CLAUDE.md`, `fake_post`, `intel.py`, `test_trends_llm.py`, `json`, `or_free_used`, `store_intel.py`, `csv`?**
+  _High betweenness centrality (0.022) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
   _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **Should `CLAUDE.md` be split into smaller, more focused modules?**
-  _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
+- **Should `json` be split into smaller, more focused modules?**
+  _Cohesion score 0.05030834144758196 - nodes in this community are weakly interconnected._
