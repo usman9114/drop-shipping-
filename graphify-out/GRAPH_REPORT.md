@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-04)
 
 ## Corpus Check
-- 96 files · ~63,723 words
+- 97 files · ~68,407 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 19 file(s) not represented in the graph (top: .csv 14, (none) 4, .example 1)
 
 ## Summary
-- 804 nodes · 1107 edges · 64 communities (50 shown, 14 thin omitted)
+- 820 nodes · 1122 edges · 65 communities (51 shown, 14 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 37 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `af297dd1`
+- Built from commit: `92ec54a4`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -67,6 +67,7 @@
 - Session state: where the project stands
 - dbt_project.yml
 - column_types
+- End-to-end commerce platform: data, analytics and intelligence
 - models
 - models
 - dev
@@ -77,19 +78,17 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `record_run()` - 24 edges
-2. `column_types` - 22 edges
-3. `chat()` - 22 edges
+2. `chat()` - 22 edges
+3. `column_types` - 22 edges
 4. `Inputs` - 21 edges
 5. `CJClient` - 19 edges
 6. `rebuild()` - 19 edges
 7. `evaluate()` - 16 edges
-8. `client()` - 15 edges
-9. `min_price()` - 13 edges
-10. `12 — Compliance risk cards for the 8 candidate niches` - 13 edges
+8. `End-to-end commerce platform: data, analytics and intelligence` - 15 edges
+9. `client()` - 15 edges
+10. `min_price()` - 13 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Rules that make it deterministic` --references--> `classify()`  [INFERRED]
-  docs/decisions/0006-duckdb-warehouse.md → scout/classify.py
 - `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
   .claude/agents/_team-rules.md → scout/store.py
 - `Findings` --references--> `compute()`  [INFERRED]
@@ -98,11 +97,13 @@
   docs/handoff/agent2-review-and-shortlist.md → scout/margin.py
 - `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
+- `Findings` --references--> `evaluate()`  [INFERRED]
+  docs/reviews/2026-11-agent2-project-review.md → scout/margin.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (64 total, 14 thin omitted)
+## Communities (65 total, 14 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -137,7 +138,7 @@ Cohesion: 0.29
 Nodes (5): Commands, Context: graphify knowledge graph, graphify, Hard rules, Project
 
 ### Community 8 - "llm.py"
-Cohesion: 0.08
+Cohesion: 0.07
 Nodes (26): chat(), _extract_text(), _inline_images(), _key(), list_free(), LLMError, _load_dotenv(), main() (+18 more)
 
 ### Community 9 - "11 - Google Trends check of Stage B candidates (US)"
@@ -253,16 +254,16 @@ Cohesion: 0.29
 Nodes (6): For each row, Rules, Runbook: Terapeak research session (manual, about 90 minutes), What I do with it, What you need, Which products
 
 ### Community 44 - "cj.py"
-Cohesion: 0.07
-Nodes (27): 6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`), CJClient, CJError, _default_session(), _dicts(), _json_list(), main(), normalize_detail() (+19 more)
+Cohesion: 0.06
+Nodes (29): 6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`), CJClient, CJError, _default_session(), _dicts(), _json_list(), main(), normalize_detail() (+21 more)
 
 ### Community 46 - "18 — CJ Dropshipping API cheat sheet"
 Cohesion: 0.22
 Nodes (8): 18 — CJ Dropshipping API cheat sheet, Endpoints, Limits and errors, Live findings (2026-11-04, first key), Minimal call sequence, Official MCP server, Sources, Terms
 
 ### Community 48 - "test_cj.py"
-Cohesion: 0.12
-Nodes (19): parse_price(), client(), FakeResp, FakeSession, test_a_non_json_response_is_a_clear_error(), test_a_second_auth_failure_is_not_retried_forever(), test_detail_ignores_junk_variants_and_images(), test_detail_normalizes_images_and_variants() (+11 more)
+Cohesion: 0.15
+Nodes (16): client(), FakeResp, FakeSession, test_a_non_json_response_is_a_clear_error(), test_a_second_auth_failure_is_not_retried_forever(), test_detail_ignores_junk_variants_and_images(), test_detail_normalizes_images_and_variants(), test_detail_parses_live_string_numbers_and_json_list_fields() (+8 more)
 
 ### Community 49 - "CJ supply check, 2026-11-04: trading-card supplies fail K1; so do both backups"
 Cohesion: 0.29
@@ -279,6 +280,10 @@ Nodes (30): config-version, +schema, +schema, flags, send_anonymous_usage_stats,
 ### Community 55 - "column_types"
 Cohesion: 0.07
 Nodes (26): action, border_or_collage, child, clean, image_sha256, level1, level2, level3 (+18 more)
+
+### Community 56 - "End-to-end commerce platform: data, analytics and intelligence"
+Cohesion: 0.12
+Nodes (15): 10. Application workflows and authority, 11. Reliability, security and operations, 12. Delivery plan and engineering ownership, 13. Acceptance criteria and decisions to record, 1. Starting position and immediate decisions, 2. System boundaries, 3. Stack and migration boundaries, 4. Source registry and application connectivity (+7 more)
 
 ### Community 57 - "models"
 Cohesion: 0.17
@@ -302,18 +307,18 @@ Nodes (5): Independent project review — 2026-11-03, Primary-source verificatio
 
 ### Community 63 - "classify.py"
 Cohesion: 0.07
-Nodes (28): 0006 — DuckDB warehouse: deterministic core, LLM on top, Choice, Intelligence layer (next), Layers, Out of scope for this slice, Rules that make it deterministic, Why now, _append() (+20 more)
+Nodes (29): 0006 — DuckDB warehouse: deterministic core, LLM on top, Choice, Intelligence layer (next), Layers, Out of scope for this slice, Rules that make it deterministic, Why now, _append() (+21 more)
 
 ## Knowledge Gaps
 - **6 isolated node(s):** `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 509 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 524 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `evaluate()` connect `2. Per-niche price bands and representative products` to `cj.py`, `store.py`?**
-  _High betweenness centrality (0.015) - this node is a cross-community bridge._
+  _High betweenness centrality (0.014) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
   _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL` to the rest of the system?**
@@ -321,8 +326,8 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
 - **Why does `record_run()` connect `store.py` to `cj.py`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+  _High betweenness centrality (0.011) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `chat()` (e.g. with `main()` and `main()`) actually correct?**
   _`chat()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Should `llm.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.07549361207897794 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0708245243128964 - nodes in this community are weakly interconnected._
