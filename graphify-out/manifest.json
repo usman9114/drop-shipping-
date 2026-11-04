@@ -924,9 +924,9 @@
     "semantic_hash": ""
   },
   "docs/plan/top-stores-inspiration-plan.md": {
-    "mtime": 1793835908.3649657,
-    "seen": 1793835911.5795903,
-    "ast_hash": "aaabd52d2c02050fcca4f08df57902fc",
+    "mtime": 1793836286.1597104,
+    "seen": 1793836289.2410762,
+    "ast_hash": "07fcc40ccfd772618022fb03214e9caf",
     "semantic_hash": ""
   },
   "scout/shopify_detect.py": {
@@ -975,6 +975,12 @@
     "mtime": 1793836103.503487,
     "seen": 1793836106.6826777,
     "ast_hash": "88299fb6c6f2571aadaeb2ad5ef9498c",
+    "semantic_hash": ""
+  },
+  "docs/research/31-patterns-top-stores.md": {
+    "mtime": 1793836286.1461983,
+    "seen": 1793836289.2411184,
+    "ast_hash": "b15212ce2f259972063a938bb32a7dd2",
     "semantic_hash": ""
   }
 }
