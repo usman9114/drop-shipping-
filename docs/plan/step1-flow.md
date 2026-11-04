@@ -4,6 +4,10 @@
 
 ## Diagram
 
+![Step 1 flow](img/step1-flow.png)
+
+Vector version: [img/step1-flow.svg](img/step1-flow.svg). Rendered from the Mermaid source below with `@mermaid-js/mermaid-cli`.
+
 ```mermaid
 flowchart TD
     A["1. Popularity list<br/>Tranco top 1,000,000 sites<br/>(free research ranking)"] --> B["2. Scan: scout.webmeta scan<br/>DNS lookup of every domain<br/>100 per second, 50k per tranche"]
