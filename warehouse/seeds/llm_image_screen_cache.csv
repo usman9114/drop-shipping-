@@ -26,3 +26,7 @@ fcd2820c9d9623592c626322b94a9487d0a87a1aedace89581a7de83eaf6eb4b,False,False,Fal
 88f2acdf903f8021ebf55c67fcb6f607ea0fb1db93ceb3ebed8e6abc623941ed,True,False,False,False,False,True,False,zai:glm-4.6v-flash,img-v1
 b23e4857ab9ef72a1d6ed38e3c58ba672745b35d6aec527b55365ab430ffb076,True,False,False,False,False,False,False,zai:glm-4.6v-flash,img-v1
 88cd56a732706253e3cd763895252f3e9d634efe9f86cd6533be60b10967e890,False,True,False,False,False,False,False,zai:glm-4.6v-flash,img-v1
+83aa8f92fc472ce168833f4b0b7d474fc296694df5327a515a1031f72f4f07ab,True,False,False,False,False,False,False,openrouter:nvidia/nemotron-3.5-super-vl:free,img-v1
+a835d2311584ef76b83f495c619b6b6beb0becd2397398383065a5a3928a7654,True,False,False,False,False,False,False,openrouter:nvidia/nemotron-3.5-super-vl:free,img-v1
+016aab2e3ae5065ad812cefdfe508b20827e8930ae07107cf8f0e9e79e26c729,True,False,False,False,False,False,False,openrouter:nvidia/nemotron-3.5-super-vl:free,img-v1
+6e2be50049c1b815c51c2f81d298682494b09c0bafe2d097078e332674cba031,False,False,True,False,True,True,False,openrouter:nvidia/nemotron-3.5-super-vl:free,img-v1

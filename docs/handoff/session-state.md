@@ -49,7 +49,7 @@ Calendar: `docs/plan/operating-plan.md` §3. **Approach changed 2026-11-04: supp
 
 Done 2026-11-04: warehouse slice (`warehouse/`, `make wh-*`), CJ catalogue (3,964) → rules → 268 pre-filtered → offers (cost, US stock, real freight: median $4.80) → **252 pass margin at ≤ $45** (`docs/shortlists/supply-candidates-2026-11-04.csv`). Free GLM wrote product types for the 21% the rules missed and one eBay search phrase per product (both cached as hash → label seeds). Terapeak worklist: `data/observations/terapeak-sheet-2026-11-04.csv` (245 phrases, ranked).
 
-1. **Image screen** (`make wh-images`, main image per viable product) was running at session end; re-run to finish (cache skips done images), then `make wh-build wh-export`.
+1. **Image screen** (`make wh-images`, main image per viable product) was running at session end; re-run to finish (cache skips done images), then `make wh-build wh-export`. Z.ai's free vision model stalled after 27 images (no reply for 14 min); OpenRouter's `nemotron-3.5-super-vl:free` does ~9 s/image, so run it as `ZAI_API_KEY= make wh-images`. Follow-up: give `scout.llm` a per-call timeout well under 180 s for vision.
 2. **Owner fills the Terapeak sheet** (top ~40 rows first, runbook `docs/runbooks/terapeak-session.md`). Most CJ US items are cheap; if singles sell below `price_floor_best`, record the 2- or 3-pack price in `notes`.
 3. Load the filled sheet into the warehouse (new seed or `read_csv` source + `mart_shortlist`: avg sold ≥ floor, sell-through ≥ ~50%, ≥ ~20 sold in 90 days), then compliance review and test orders before ~2026-12-01.
 4. Stop and ask before spending money, creating accounts, or sending anything outside the repo.
