@@ -10,7 +10,8 @@ From the 300-store pool (`mart_candidate_pool`), stores with **own-evidence grad
 
 | Slice | A | B | C | D |
 |---|---|---|---|---|
-| Established (25) | 2 | 10 | 6 | 7 |
+| Established (25), first pass | 2 | 10 | 6 | 7 |
+| Established (25), after the identity re-grade | **4** | **11** | **9** | **1** |
 | Risers (25) | 0 | 2 | 2 | 21 |
 
 A = 3+ independent signals including one hard signal (filing, disclosed revenue, funding, acquisition, named major retailer, employee count); B = 2; C = 1; D = none. Every number had to come from a fetched page with a date.
@@ -19,10 +20,14 @@ A = 3+ independent signals including one hard signal (filing, disclosed revenue,
 
 1. **Established stores are the study set.** 18 of 25 have at least one independent sign of performance: listing filings with revenue growth, funding rounds, named retail partners, design awards. Their methods are worth studying even where they are brands we would not copy.
 2. **Fast risers are mostly unverifiable.** 21 of 25 have no independent proof, and 7 of 20 researched in two batches could not be tied to a real business. A sudden rank jump often means a short-lived or anonymous store. Risers stay on the watchlist (temporal system) and are not used as inspiration until they show proof.
-3. **The first identity rule was too strict.** Requiring a legal company name on the store's own pages failed several well-known brands (a listed spice company, a decades-old outdoor apparel brand, a known backpack brand). Corrected rule: a brand with contact details, tied to a named company by its own pages or one independent source. Those stores are being re-graded.
+3. **The first identity rule was too strict.** Requiring a legal company name on the store's own pages failed several well-known brands (a listed spice company, a decades-old outdoor apparel brand, a known backpack brand). Corrected rule: a brand with contact details, tied to a named company by its own pages or one independent source. Re-graded by a Sonnet agent: of the 7 strict-rule failures, 2 rose to A (a listed company with filings; a brand with disclosed sales in bankruptcy coverage, so demand evidence only), 1 to B, 3 to C (one of them with mostly negative customer reviews: not a quality benchmark), 1 stayed D.
 4. **Category labels are wrong in a few cases** (a coin dealer labelled hobby, a B2B electronics supplier labelled apparel, a general store labelled home décor). The keyword rules are a first cut; dossiers use the researchers' description.
 5. **Safety:** one store's pages showed a pop-up asking for an email and password ("quick verification"), a phishing pattern. It is excluded and nothing was entered.
 6. **Search snippets mislead.** As in the pilot, several snippet facts did not match the fetched pages; only fetched, dated numbers count.
+
+## Model lesson
+
+The Sonnet re-check was markedly better than the Haiku first pass: Haiku stopped at the first missing fact and graded listed companies D. Use Haiku for search fan-out and lead finding; use Sonnet to grade and to write anything a decision rests on.
 
 ## Sources that worked and failed
 
