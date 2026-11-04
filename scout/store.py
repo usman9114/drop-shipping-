@@ -1,8 +1,11 @@
 """Evidence store: append-only lake (source of truth) + derived SQLite for queries.
 
-Lake layout (committed to git, text, diffable):
-    data/lake/<dataset>/<YYYY-MM-DD>/<run_id>.jsonl.gz
-    data/lake/_runs.jsonl            one line per ingestion run (provenance)
+Lake layout (gitignored: raw data stays private until its source terms are
+recorded; moved under data/private/ on 2026-11-04, set SCOUT_LAKE to override):
+    data/private/lake/<dataset>/<YYYY-MM-DD>/<run_id>.jsonl.gz
+    data/private/lake/_runs.jsonl    one line per ingestion run (provenance)
+
+The DuckDB warehouse (warehouse/, dbt) reads the lake directly.
 
 Every row carries run_id; every run records source, trust level, params,
 fetched_at, git sha, row count and a sha256 of the rows. Nothing is edited in
@@ -42,7 +45,7 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
-LAKE = Path("data/lake")
+LAKE = Path(os.environ.get("SCOUT_LAKE", "data/private/lake"))
 RUNS = LAKE / "_runs.jsonl"
 DB = Path("data/store/scout.db")
 _DATASET = re.compile(r"^[a-z][a-z0-9_]{0,62}$")

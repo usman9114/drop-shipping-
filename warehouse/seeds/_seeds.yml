@@ -1,0 +1,14 @@
+version: 2
+seeds:
+  - name: llm_product_type_cache
+    config:
+      column_types: {title_sha256: varchar, product_type: varchar, model: varchar, prompt_version: varchar}
+  - name: product_type_rules
+    config:
+      column_types: {priority: integer, pattern: varchar, product_type: varchar}
+  - name: rule_category
+    config:
+      column_types: {rule_id: varchar, level1: varchar, level2: varchar, level3: varchar, action: varchar, reason: varchar}
+  - name: rule_title
+    config:
+      column_types: {rule_id: varchar, pattern: varchar, action: varchar, reason: varchar}

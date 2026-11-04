@@ -33,3 +33,6 @@ data/private/
 
 # raw pulls stay local until the source terms are recorded (terms gate)
 data/lake/
+
+# dbt: per-user tracking id
+warehouse/.user.yml

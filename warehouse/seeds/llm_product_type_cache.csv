@@ -1,0 +1,56 @@
+title_sha256,product_type,model,prompt_version
+f490022c8a2df79394872f4ea631f4e45ae83b0e248989a3cfc1bcd9637abb4c,keychain,zai:glm-4.5-flash,pt-v1
+16eed4f71140f10a481076aa24032796d68547f5db76d91aaca524603a221895,hand soap,zai:glm-4.5-flash,pt-v1
+55da18f0f126fd0535955962bb31e613c643accb77cf0597fdb6e4713bb87155,belt buckle,zai:glm-4.5-flash,pt-v1
+3edee92fd406337a6cdd7948481bc145138fcec2197ab2e47e31f1446b7268d5,car wax,zai:glm-4.5-flash,pt-v1
+d53e0d736efa239ba4bcbba0339ccaefa2f1c4177ccd01652cc3f838f1b069ac,commemorative coin,zai:glm-4.5-flash,pt-v1
+7c3ba6de7a699b9c49b889ddda365694704cfb56db8559c0ad966f4e76fb2ff3,cotton swab,zai:glm-4.5-flash,pt-v1
+cd014fd54b4ae44e3508cdc9f3d93155b393b89a97f73d74033b66f31b14dd99,kitchen knife,zai:glm-4.5-flash,pt-v1
+d5084e94a83f7ff76dfe656970dff6123570b02a2205705d1465be4f52ac9307,safety glasses,zai:glm-4.5-flash,pt-v1
+22f636a81011d366192c53ba2dab01ed02512925603d43823089d3d24b257b9a,car accessory,zai:glm-4.5-flash,pt-v1
+ef2eb8b54a791c84ed142a54fb1bb5c00fa3a2be76f7a89bbc0ced49a6d943b6,pet glasses,zai:glm-4.5-flash,pt-v1
+0997f4f7ca2b3458f156e2c82a8ea43035907ce8f6617b6519f53a95ae66bfec,wooden toy,zai:glm-4.5-flash,pt-v1
+a2fd7977ccd153e495ef4b8d7f3377980195739bd2f341fe4b824361db1109d7,pet muzzle,zai:glm-4.5-flash,pt-v1
+32b1de0eb76376284db1c13955cefc41f844f9c8cdfc36d383b75670ff832fe0,golf grip,zai:glm-4.5-flash,pt-v1
+d503a313d7fbd3fa461a338b3485ebe049cf59a7cd7d713d8081e37dd5bd6633,cleaning spray,zai:glm-4.5-flash,pt-v1
+6d100a703dac16ea11053547aae318f04adae3c85d524c0781e44f639f0aab27,cat trinket,zai:glm-4.5-flash,pt-v1
+93197ec15c142f9487f94f74051a1b9b97ea9d6e7cb06bd9de207606192d3eb9,safety hammer,zai:glm-4.5-flash,pt-v1
+e16c8938adb10fb0321e83d0c44dd9aadba7c634aaa5ec037a7c21a6a3a1712c,belt buckle,zai:glm-4.5-flash,pt-v1
+59f4355ac61f7c8e21ea66d29915a918dc3fd890a8bdfd3c71074738271552da,skincare product,zai:glm-4.5-flash,pt-v1
+e9fa0453869469e08db9822d19a837ad278b58c59ed4bf07827c556c3894ee63,straw,zai:glm-4.5-flash,pt-v1
+b81cc5b02305db3bdb4671d96aa0fda5437cfbd919cf24361e7548b0169792f3,flower box,zai:glm-4.5-flash,pt-v1
+b8ecf1c1ae41c4c06e189c2e5a3d183e14e9042104eaccae36bb049634393cfc,game dice,zai:glm-4.5-flash,pt-v1
+067b47ef0a8c8d249f74333139390dc6a69c46e1e815b616de55a3a775085e57,handbag,zai:glm-4.5-flash,pt-v1
+cc589c820255409b1abfb4c2ae0514935f085403adcaca1ee5b4373416593fd5,necklace,zai:glm-4.5-flash,pt-v1
+e68b7aa53bd393e55457116fe8cab12e7f905b546d4942737cc3d852fd8a86b5,luggage bag,zai:glm-4.5-flash,pt-v1
+7ea664a50776a65eeb1563a0a0eff10e88a228aa4ba875414194291de769dd51,crystal decor,zai:glm-4.5-flash,pt-v1
+f26da9db63c023aca05b755fba2a361e88bc8cade6e2b9dbc9679b8c617d8e45,press-on nails,zai:glm-4.5-flash,pt-v1
+fe3136a3e74ae48fb4395ee8c02f83365c9155a76ae50f35efcd6c31f8af73d2,lip oil,zai:glm-4.5-flash,pt-v1
+5da46f4a93a557878ee3fe962c6a456292866b68eaca0cbf577e2e9603fa2fda,cleaning tool,zai:glm-4.5-flash,pt-v1
+3e90b9792f648cb8224761f43023b40148282c8766fd547a362e83de2f907ab7,cleaning tool,zai:glm-4.5-flash,pt-v1
+3601d93c49bc4876aa0d6807a0bc2b29cf69ab7460b573f4b0f4ad0c29cb498e,cleaning tool,zai:glm-4.5-flash,pt-v1
+9d03c8d25fafe4c7af64e149f8037c9669ef7f92299ab175aadd2a7970846d7f,cleaning tool,zai:glm-4.5-flash,pt-v1
+ff00d42cf07154bf0d56d54da875bc589ffeb06495780ffedc2c212648190179,hand tool,zai:glm-4.5-flash,pt-v1
+f2f81f585520c33593098bdb969f9fd76991787e2a3a9d210727557568125c47,cleaning tool,zai:glm-4.5-flash,pt-v1
+864d5dfdfdc9db97b00ac039bc530a86600c0dbc7609470f401f69e8281bb889,cleaning tool,zai:glm-4.5-flash,pt-v1
+b734b328c60de0e8e314faa4150f90de1ab6c0cd707098c2d827377e03dd26ee,tool,zai:glm-4.5-flash,pt-v1
+9a702b396aa6292ee8f1559477a8cb215dc08d757295914ecc06fc4368c4050b,hand warmer,zai:glm-4.5-flash,pt-v1
+3e33e0cfc89d215bbdd7beecdf98fbf25e9d88d35074c35982249e49bc1d8404,audio adapter,zai:glm-4.5-flash,pt-v1
+a1988922e4fb981a7f0999629f7ab03bb40768d57880369258204641bff808c4,breathing strip,zai:glm-4.5-flash,pt-v1
+81863e9a453ff8135a95b9bdd1853aeefae9a2ed1151a2a64f9c52fa075a0398,bike brake pads,zai:glm-4.5-flash,pt-v1
+8d39a83507ca4d403e4634e80483cfad4fe008a7fd3214aed3b9a91acc58b22f,jewelry charm,zai:glm-4.5-flash,pt-v1
+c36903d9ad8b6c9b53877af90604bd4be280236957f0037e8a6e6357788f1df7,scratch board,zai:glm-4.5-flash,pt-v1
+0e18a8115c88dd02e8a4b3be49384049555681a2c763525ea6d1ce9002efddde,toy,zai:glm-4.5-flash,pt-v1
+c9f711dea213dfe0468e5ec6471f55056c8bc18dd9f87fd51349a655c0c575f0,cleaning cloth,zai:glm-4.5-flash,pt-v1
+9ceb0fa5a43adb89ceb1455ca722148bcd3c9a4dbe0235d6d510a027ba820477,jacket,zai:glm-4.5-flash,pt-v1
+195fa49ec0a407ba616c399c9ea8a89f986ed9ae67f95799929fff30ef649f05,knife,zai:glm-4.5-flash,pt-v1
+5a07883ab425f0593cf7a745f049e23f2c15395409b580d2e7e70ab8bbf42f72,neck traction device,zai:glm-4.5-flash,pt-v1
+9e93c67b95f0984968716bf1eb2013eb2023937a281fb1dbad1b6831f0e37e60,cleaning tool,zai:glm-4.5-flash,pt-v1
+132f99d3d00fe05731f3a084357e6adbfc82e26f59af254ca6f615197ab6f50e,antenna,zai:glm-4.5-flash,pt-v1
+ca25ed9d76280e4169bf99e106f8aad43c2e205f9dffd2c05e7706b2af09cefb,car accessory,zai:glm-4.5-flash,pt-v1
+8d5ec4d55cfc4a94b79dd096b22641dc79acf382b444d79578da1af01d4403f8,flower decor,zai:glm-4.5-flash,pt-v1
+3459de4584aa2eb845d00faf845eadc1aa23363048571697455520300937d375,cleaning tool,zai:glm-4.5-flash,pt-v1
+6e707e7e642419f21db4165c2da4ba338eb0be963082f295ca2549e8742df8c7,nail polish,zai:glm-4.5-flash,pt-v1
+e2c9a06c22ffd903a38b478cd398e23a6f6c788e5a5cc2d7447b9e770ef40826,watch band,zai:glm-4.5-flash,pt-v1
+f226195a652b5822896f80b49fcca2215c18c63cd20d0c1e9de8adc1092b3f16,sofa cover,zai:glm-4.5-flash,pt-v1
+761070658be4109023e334d47f9a438cd74e7787227ba0a24d58a670fd36b6c0,bar accessory,zai:glm-4.5-flash,pt-v1

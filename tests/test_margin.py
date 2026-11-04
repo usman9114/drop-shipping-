@@ -2,6 +2,7 @@
 
 import pytest
 
+from scout import margin
 from scout.margin import Inputs, compute, evaluate
 
 
@@ -100,3 +101,25 @@ def test_pass_decision_uses_unrounded_margins():
     )["net_margin"]
     expected = raw_base >= margin.PASS_NET and raw_stress >= margin.STRESS_NET
     assert evaluate(i)["pass"] is expected
+
+
+@pytest.mark.parametrize(
+    "cost,ship", [(3.0, 5.6), (5.0, 5.6), (8.5, 5.97), (0.5, 5.18), (15.0, 7.0)]
+)
+def test_min_price_is_the_lowest_passing_price(cost, ship):
+    p = margin.min_price(cost, ship)
+    assert margin.evaluate(margin.Inputs(price=p, cost=cost, ship=ship))["pass"]
+    assert not margin.evaluate(margin.Inputs(price=p - 0.01, cost=cost, ship=ship))[
+        "pass"
+    ]
+
+
+def test_min_price_matches_the_documented_ceilings():
+    # supply check 2026-11-04: ~$3.50 cost passes at $25, ~$6 at $30, ~$8.50 at $35
+    assert 24 <= margin.min_price(3.5, 5.6) <= 25.5
+    assert 29 <= margin.min_price(6.0, 5.6) <= 30.5
+    assert 34 <= margin.min_price(8.5, 5.6) <= 35.5
+
+
+def test_min_price_none_when_rates_make_passing_impossible():
+    assert margin.min_price(1.0, 1.0, ad_rate=0.7) is None

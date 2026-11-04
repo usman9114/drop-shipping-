@@ -1,0 +1,16 @@
+rule_id,pattern,action,reason
+title_electrical,"\b(batter(y|ies)|lithium|rechargeable|usb|led|electric|electronic|bluetooth|wireless|charger|charging|solar|plug-?in|power bank|smart|remote control|motor)\b",exclude,electrical: FCC and battery shipping rules
+title_children,"\b(baby|babies|kids?|child|children|toddlers?|infants?|newborn|nursery)\b",exclude,children's product: CPSIA
+title_toy,\btoys?\b,review,toy rules apply unless clearly a pet toy
+title_weapon,"\b(knife|knives|blade|dagger|sword|scimitar|deboning|boning|skinning|tactical|pepper spray|stun|gun|airsoft|crossbow|brass knuckles?)\b",exclude,eBay weapons and knives policy
+title_ingestible,"\b(supplements?|capsules?|vitamins?|cbd|hemp|vape|e-?cig\w*|coffee|tea|edible|snacks?|gummies)\b",exclude,food or supplement: FDA
+title_cosmetic,"\b(cream|serum|lotion|shampoo|conditioner|perfume|fragrance|essential oils?|lipstick|lip gloss|lip oil|collagen|hand soap|soap paper|mascara|eyeshadow|foundation|whitening)\b",exclude,cosmetic: FDA MoCRA
+title_medical,"\b(medical|therapy|pain relief|massager|posture corrector|brace|thermometer|orthopedic|acupressure|traction|lumbar|cervical|breathing strip|sterili[sz]\w*|ultraviolet)\b",review,possible medical-device claim
+title_adult,"\b(sex|sexy|adult|erotic|lingerie|vibrator)\b",exclude,adult category
+title_brand,"\b(nike|adidas|apple|iphone|ipad|airpods|samsung|disney|marvel|pokemon|hello kitty|sanrio|lego|barbie|stanley|yeti|gucci|louis vuitton|lv|chanel|dior|rolex|pandora|tiffany|nfl|nba|mlb|harry potter|star wars|nintendo|switch|playstation|xbox|dyson|magsafe|tesla|bmw|mercedes|toyota|glarry|vevor|cifbuy)\b",exclude,brand or brand-compatibility word: VeRO risk or third-party brand
+title_hazmat,"\b(aerosol|spray paint|flammable|lighter|butane|propane|fuel)\b",exclude,hazmat shipping
+title_furniture,"\b(sofa|couch|recliner|mattress|bed frame|bookcase|wardrobe|dresser|desk|cabinet|bench|table)\b",review,likely oversize; weight rule decides
+title_intimate,"\b(bras?|underwear|panties|thong|t-string|nipple|nightdress|shapewear|tummy control)\b",exclude,intimate apparel: sizing and hygiene returns
+title_pesticide,"\b(cockroach|insecticide|pesticide|bug killer|mosquito|rodent|rat poison|ant killer)\b",exclude,pesticide: EPA FIFRA registration
+title_chemical,"\b(spray|remover|cleaner|adhesive|glue|gel|liquid|wax|coating|polish|tablets)\b",review,chemical product: check SDS and hazmat shipping
+title_supplier_restriction,"\b(not for sale|cannot be shipped)\b",exclude,supplier marks a sales restriction

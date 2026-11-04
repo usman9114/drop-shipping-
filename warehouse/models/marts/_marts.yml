@@ -1,0 +1,20 @@
+version: 2
+models:
+  - name: core_fact_offer
+    columns:
+      - name: pid
+        data_tests: [not_null, unique]
+      - name: cost
+        data_tests: [{in_range: {min: 0}}]
+  - name: mart_supply_candidates
+    config:
+      max_listing_price: "{{ var('max_listing_price') }}"
+      max_weight_g: "{{ var('max_weight_g') }}"
+      min_us_stock: "{{ var('min_us_stock') }}"
+    columns:
+      - name: pid
+        data_tests: [not_null, unique]
+  - name: mart_terapeak_sheet
+    columns:
+      - name: product_type
+        data_tests: [not_null, unique]

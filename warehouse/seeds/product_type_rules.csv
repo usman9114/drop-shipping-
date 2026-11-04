@@ -1,0 +1,44 @@
+priority,pattern,product_type
+10,"\bwatch (band|strap)s?\b",watch band
+10,"\b(fake nails?|press[- ]on nails?|nail art)\b",press-on nails
+10,"\b(gel polish|nail polish)\b",nail polish
+20,"(dog|cat|pet).*(leash|collar|harness)|(leash|collar|harness).*(dog|cat|pet)",pet collar and leash
+20,"(dog|cat|pet).*(clothes|shoes|coat|jacket|hoodie)|(clothes|shoes|coat|jacket|hoodie).*(dog|cat|pet)",pet clothing and shoes
+20,"(dog|cat|pet).*(bed|pad|nest)|\bdog bed\b",pet bed and mat
+20,"(pet|dog|cat).*(brush|comb|grooming|hair remover)|(hair remover|deshedding).*(pet|dog|cat)",pet grooming tool
+20,"(pet|dog|cat).*carrier|carrier.*(pet|dog|cat)",pet carrier
+20,"(dog|pet).*(poop|garbage) bag|(poop|garbage) bag.*(dog|pet)",pet waste bag holder
+20,"(pet|dog|cat).*(wipes)",pet wipes
+30,"\b(necklace|pendant|choker)s?\b",necklace
+30,"\b(bracelet|bangle|anklet)s?\b",bracelet
+30,"\b(earrings?|ear studs?|ear clips?|ear cuffs?)\b",earrings
+30,"\brings?\b",ring
+30,"\bbrooch(es)?\b",brooch
+30,"\bcharms?\b",jewelry charm
+30,"\b(body jewelry|belly|navel|nose (ring|stud))\b",body jewelry
+40,"\b(hair (clip|claw|tie|band)s?|hairpin|headband|scrunchie)\b",hair accessory
+40,"\b(cosmetic|toiletry|makeup) bag\b",cosmetic bag
+40,"jewelry.*(packag|pouch|box)|drawstring.*(bag|pocket)",jewelry pouch
+40,"\bbackpack\b",backpack
+40,"\b(tote|shoulder bag|crossbody|handbag|hand bag|clutch)\b",handbag
+40,"\b(card holder|wallet)\b",wallet and card holder
+40,"\btool bag\b",tool bag
+50,"\bpillowcases?\b",pillowcase
+50,"\b(sofa cover|slipcover|couch cover)\b",sofa cover
+50,"(shower|bathroom).*(shelf|caddy|rack)",bathroom shelf
+50,"\b(dinnerware|tableware|plates?|bowls?)\b",dinnerware
+50,"\b(wine|bottle) stoppers?\b|\bbottle openers?\b",bar accessory
+50,"\b(vases?|flower pots?)\b",vase
+50,"crystal.*(tower|pyramid|stone|cube|gravel)",crystal decor
+50,"\b(message|bulletin) board\b|\bborder trim\b",message board and trim
+50,"\b(mop|scrub brush|broom)s?\b",cleaning tool
+50,"\btoothbrush",toothbrush
+50,"\b(exfoliat\w*|scrub glove|konjac sponge|kessa)\b",bath exfoliating accessory
+60,"\b(crochet|embroidery|quilling|needle threader|sewing)\b",sewing and craft tool
+60,"\b(drill bits?|vise|milling cutter|scissors|carabiner)\b",hand tool
+60,"\bfishing lures?\b",fishing lure
+60,"\b(yoga|stretch|resistance) band\b|\bhand grip\b|\bgrip trainer\b|\bfinger exercise",fitness accessory
+60,"\bstickers?\b|\bdecals?\b",stickers and decals
+60,"\b(bird netting|grow(th)? bags?|plant growth bag)\b",garden supply
+60,"\b(cushion|seat pad)\b",seat cushion
+60,"\b(eye mask|sleep mask)\b",sleep mask

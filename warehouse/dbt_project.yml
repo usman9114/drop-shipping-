@@ -1,0 +1,39 @@
+name: scout
+version: "0.1.0"
+config-version: 2
+
+flags:
+  send_anonymous_usage_stats: false
+profile: scout
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+target-path: "../data/private/dbt/target"
+log-path: "../data/private/dbt/logs"
+packages-install-path: "../data/private/dbt/packages"
+
+vars:
+  # Supply pre-filter (before detail/freight pulls). Final decisions use
+  # scout.margin.min_price on real cost + freight.
+  max_cost_prefilter: 13.0
+  min_us_stock: 20
+  max_weight_g: 500
+  max_listing_price: 45.0
+
+models:
+  scout:
+    +materialized: table
+    staging:
+      +schema: stg
+    enrich:
+      +schema: enrich
+    core:
+      +schema: core
+    marts:
+      +schema: mart
+
+seeds:
+  scout:
+    +schema: rules

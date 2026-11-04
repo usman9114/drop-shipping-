@@ -1,0 +1,8 @@
+# Local DuckDB file, gitignored (data/private/). Rebuilt from the lake any time.
+scout:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('SCOUT_DUCKDB', '../data/private/warehouse.duckdb') }}"
+      threads: 4

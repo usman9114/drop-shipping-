@@ -1,0 +1,23 @@
+rule_id,level1,level2,level3,action,reason
+cat_womens_clothing,Women's Clothing,,,exclude,sized apparel: size returns
+cat_mens_clothing,Men's Clothing,,,exclude,sized apparel: size returns
+cat_womens_shoes,Bags & Shoes,Women's Shoes,,exclude,sized footwear: size returns
+cat_mens_shoes,Bags & Shoes,Men's Shoes,,exclude,sized footwear: size returns
+cat_sportswear,Sports & Outdoors,Sportswear,,exclude,sized apparel: size returns
+cat_skin_care,"Health, Beauty & Hair",Skin Care,,exclude,cosmetics: FDA MoCRA and eBay health-beauty rules
+cat_makeup,"Health, Beauty & Hair",Makeup,,exclude,cosmetics: FDA MoCRA and eBay health-beauty rules
+cat_food_health,"Health, Beauty & Hair",Food & Health,,exclude,supplements and health claims
+cat_hair_weaves,"Health, Beauty & Hair",Hair Weaves,,exclude,wigs and hair extensions: quality returns
+cat_nail,"Health, Beauty & Hair",Nail Art & Tools,,review,nail chemicals excluded; tools may pass
+cat_kids,"Toys, Kids & Babies",,,exclude,children's products: CPSIA testing and children's product certificate
+cat_electronics,Consumer Electronics,,,exclude,electrical: FCC and batteries
+cat_phones,Phones & Accessories,,,exclude,electrical and device-brand compatibility claims
+cat_computer,Computer & Office,,,review,check for electrical parts and brand compatibility
+cat_led,Home Improvement,LED Lighting,,exclude,electrical
+cat_lighting,Home Improvement,Indoor Lighting,,exclude,electrical
+cat_appliances,Home Improvement,Home Appliances,,exclude,electrical
+cat_power_tools,Home Improvement,Tools,Power Tools,exclude,electrical and batteries
+cat_knives,"Home, Garden & Furniture","Kitchen, Dining & Bar",Kitchen Knives & Accessories,review,eBay knives policy not yet read
+cat_jewelry,Jewelry & Watches,,,review,heavy metals (Prop 65; CPSIA if marketed to children); crowded category
+cat_pet_food,Pet Supplies,Pet Outdoor Supplies,Pet Snacks,exclude,pet food: FDA
+cat_auto,Automobiles & Motorcycles,,,review,fitment returns

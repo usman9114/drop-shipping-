@@ -122,6 +122,48 @@ def evaluate(i: Inputs) -> dict:
     }
 
 
+def _price_floor(i: Inputs, target: float) -> float | None:
+    """Lowest price with net_margin >= target, for these inputs.
+
+    Net is linear in price once the per-order fee is fixed (price > ~$9.35 puts
+    the buyer total above $10, so the $0.40 fee applies): net = a*price - b.
+    Returns None when no price reaches the target.
+    """
+    fee = i.per_order_fee if i.per_order_fee is not None else 0.40
+    f = i.fvf_rate * (1 + i.sales_tax_rate)
+    loss = i.return_rate + i.dispute_rate  # share of orders whose revenue is lost
+    a = 1 - f - i.ad_rate - loss * (1 - f)
+    b = i.cost + i.ship + i.duty + fee + i.return_rate * i.return_label
+    if a - target <= 0:
+        return None
+    return b / (a - target)
+
+
+def min_price(cost: float, ship: float, step: float = 0.01, **kw) -> float | None:
+    """Lowest listing price (rounded up to `step`) that passes evaluate().
+
+    Used by the warehouse to say what a product must sell for; compare it with
+    the observed sold price (Terapeak) to decide.
+    """
+    base = Inputs(price=100.0, cost=cost, ship=ship, **kw)
+    _check(base)
+    stress = Inputs(
+        **{
+            **asdict(base),
+            "duty": base.duty + 3.0,
+            "return_rate": min(base.return_rate * 2, 1 - base.dispute_rate),
+        }
+    )
+    floors = [_price_floor(base, PASS_NET), _price_floor(stress, STRESS_NET)]
+    if any(x is None for x in floors):
+        return None
+    price = math.ceil(max(floors) / step - 1e-9) * step
+    price = round(max(price, 10.0), 2)  # the linear form assumes the $0.40 fee band
+    while not evaluate(Inputs(price=price, cost=cost, ship=ship, **kw))["pass"]:
+        price = round(price + step, 2)  # guard against float edge cases
+    return price
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--price", type=float, required=True)

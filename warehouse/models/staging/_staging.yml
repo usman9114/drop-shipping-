@@ -1,0 +1,23 @@
+version: 2
+models:
+  - name: stg_cj_products
+    description: Latest CJ US-warehouse listing, one row per product.
+    columns:
+      - name: pid
+        data_tests: [not_null, unique]
+      - name: cost_low
+        data_tests:
+          - in_range:
+              min: 0
+  - name: stg_cj_categories
+    columns:
+      - name: category_id
+        data_tests: [not_null, unique]
+  - name: stg_cj_variants
+    columns:
+      - name: vid
+        data_tests: [not_null, unique]
+  - name: stg_cj_freight
+    columns:
+      - name: pid
+        data_tests: [not_null]
