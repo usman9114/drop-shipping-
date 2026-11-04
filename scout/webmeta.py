@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import ipaddress
+import re
 
 import sys
 import time
@@ -339,6 +340,168 @@ def products(max_stores: int, pause: float = 1.0) -> dict:
     return {"web_products": (run, len(rows))}
 
 
+# Tags that reveal how a store gets traffic. Each pattern is matched against the
+# homepage HTML; a hit means the store installed that platform's code.
+TRAFFIC_TAGS = {
+    "meta_pixel": r"connect\.facebook\.net/[^\"']*/fbevents\.js|fbq\(\s*['\"]init",
+    "tiktok_pixel": r"analytics\.tiktok\.com|ttq\.load\(",
+    "google_ads": r"['\"]AW-\d{6,}",
+    "google_analytics": r"['\"]G-[A-Z0-9]{6,}['\"]|googletagmanager\.com/gtag/js",
+    "pinterest_tag": r"s\.pinimg\.com/ct/core\.js|pintrk\(",
+    "snap_pixel": r"sc-static\.net/scevent\.min\.js|snaptr\(",
+    "microsoft_ads": r"bat\.bing\.com",
+    "reddit_pixel": r"redditstatic\.com/ads/pixel\.js|rdt\(\s*['\"]init",
+    "klaviyo_email": r"static\.klaviyo\.com|klaviyo\.com/onsite",
+    "sms_marketing": r"attn\.tv|attentivemobile|postscript\.io|smsbump|cdn\.yotpo\.com/sms",
+    "affiliate_program": r"uppromote|goaffpro|refersion|socialsnowball|social-snowball|aspireiq|grin\.co|impact\.com/|shareasale",
+    "reviews_app": r"judge\.me|loox\.io|okendo|yotpo|stamped\.io|reviews\.io|junip",
+    "loyalty_program": r"smile\.io|loyaltylion|yotpo-loyalty|rivo\.io",
+    "shopify_web_pixels": r"webPixelsConfigList|web-pixels-manager",
+}
+
+SOCIAL = {
+    "instagram": r"instagram\.com/([A-Za-z0-9_.]{2,30})",
+    "tiktok": r"tiktok\.com/@([A-Za-z0-9_.]{2,30})",
+    "facebook": r"facebook\.com/([A-Za-z0-9.\-]{3,60})",
+    "pinterest": r"pinterest\.[a-z.]+/([A-Za-z0-9_]{3,30})",
+    "youtube": r"youtube\.com/(@[A-Za-z0-9_.\-]{2,40}|channel/[A-Za-z0-9_\-]{10,40}|c/[A-Za-z0-9_\-]{2,40})",
+    "x": r"(?:twitter|x)\.com/([A-Za-z0-9_]{2,15})",
+}
+_SOCIAL_SKIP = {
+    "sharer",
+    "sharer.php",
+    "share",
+    "intent",
+    "pin",
+    "dialog",
+    "tr",
+    "plugins",
+    "p",
+    "reel",
+    "explore",
+    "watch",
+    "embed",
+    "hashtag",
+    "home",
+    "login",
+    "policies",
+}
+
+
+def traffic_tags(html: str) -> list[str]:
+    return sorted(k for k, pat in TRAFFIC_TAGS.items() if re.search(pat, html, re.I))
+
+
+def social_links(html: str) -> dict[str, list[str]]:
+    out: dict[str, list[str]] = {}
+    for net, pat in SOCIAL.items():
+        handles = []
+        for h in re.findall(pat, html):
+            h = h.rstrip("/.").split("?")[0]
+            if h.lower() in _SOCIAL_SKIP or h.lower().startswith(("sharer", "share")):
+                continue
+            if h not in handles:
+                handles.append(h)
+        if handles:
+            out[net] = handles[:3]
+    return out
+
+
+def jsonld(html: str) -> list[dict]:
+    """schema.org JSON-LD blocks (structured data published for search engines)."""
+    import json
+
+    blocks = []
+    for raw in re.findall(
+        r"<script[^>]+application/ld\+json[^>]*>(.*?)</script>", html, re.S | re.I
+    ):
+        try:
+            data = json.loads(raw.strip())
+        except ValueError:
+            continue
+        items = data if isinstance(data, list) else [data]
+        for it in items:
+            if isinstance(it, dict):
+                blocks.append(it)
+                blocks += [g for g in it.get("@graph", []) if isinstance(g, dict)]
+    return blocks
+
+
+def aggregate_rating(blocks: list[dict]) -> tuple[int | None, float | None]:
+    for b in blocks:
+        ar = b.get("aggregateRating")
+        if isinstance(ar, dict):
+            try:
+                count = int(float(ar.get("reviewCount") or ar.get("ratingCount") or 0))
+                value = float(ar.get("ratingValue")) if ar.get("ratingValue") else None
+                return count, value
+            except (TypeError, ValueError):
+                continue
+    return None, None
+
+
+def footprint(max_stores: int, pause: float = 1.0) -> dict:
+    shops = sorted(
+        (r for r in _latest("web_dns") if r.get("is_shopify")),
+        key=lambda r: r["tranco_rank"],
+    )
+    s = _session()
+    rows = []
+    for r in shops[:max_stores]:
+        d = r["domain"]
+        base = f"https://{d}"
+        row = {
+            "domain": d,
+            "tranco_rank": r["tranco_rank"],
+            "dns_signals": r.get("signals"),
+        }
+        try:
+            rp = robotparser.RobotFileParser()
+            rp.parse(s.get(base + "/robots.txt", timeout=20).text.splitlines())
+            row["allowed"] = rp.can_fetch(UA, base + "/")
+            if row["allowed"]:
+                html = s.get(base + "/", timeout=30).text
+                blocks = jsonld(html)
+                same_as = sorted(
+                    {
+                        u
+                        for b in blocks
+                        for u in (b.get("sameAs") or [])
+                        if isinstance(u, str)
+                    }
+                )
+                row.update(
+                    traffic_tags=traffic_tags(html),
+                    socials=social_links(html + " ".join(same_as)),
+                    jsonld_same_as=len(same_as),
+                )
+                feed = base + "/products.json?limit=3"
+                if rp.can_fetch(UA, feed):
+                    time.sleep(pause)
+                    prods = s.get(feed, timeout=30).json().get("products") or []
+                    handle = prods[0].get("handle") if prods else None
+                    page = f"{base}/products/{handle}" if handle else None
+                    if page and rp.can_fetch(UA, page):
+                        time.sleep(pause)
+                        count, value = aggregate_rating(
+                            jsonld(s.get(page, timeout=30).text)
+                        )
+                        row.update(sample_review_count=count, sample_rating=value)
+        except Exception as exc:
+            row["error"] = type(exc).__name__
+        rows.append(row)
+        time.sleep(pause)
+    run = store.record_run(
+        "web_footprint",
+        rows,
+        source="store_homepages",
+        trust="data",
+        params={"max_stores": max_stores},
+        note="robots.txt respected; tags, social handles, one product's review count",
+    )
+    return {"web_footprint": (run, len(rows))}
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Internet-metadata harness")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -349,13 +512,17 @@ def main(argv: list[str] | None = None) -> int:
     m.add_argument("--max-stores", type=int, default=40)
     pj = sub.add_parser("products")
     pj.add_argument("--max-stores", type=int, default=40)
+    fp = sub.add_parser("footprint")
+    fp.add_argument("--max-stores", type=int, default=40)
     a = ap.parse_args(argv)
     if a.cmd == "discover":
         out = discover(a.top, a.max_dns)
     elif a.cmd == "sitemaps":
         out = sitemaps(a.max_stores)
-    else:
+    elif a.cmd == "products":
         out = products(a.max_stores)
+    else:
+        out = footprint(a.max_stores)
     for k, (run, n) in out.items():
         print(f"{k}: run {run}, {n} rows", file=sys.stderr)
     return 0

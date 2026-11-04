@@ -94,3 +94,43 @@ def test_summarize_products_keeps_aggregates_only():
     assert out["median_price"] == 22.49
     assert out["top_types"] == ["necklace"]
     assert "SECRET NAME" not in str(out)
+
+
+HOME = """
+<script src="https://connect.facebook.net/en_US/fbevents.js"></script><script>fbq('init','123');</script>
+<script src="https://analytics.tiktok.com/i18n/pixel/events.js"></script>
+<script>gtag('config','AW-1234567');</script>
+<script src="https://static.klaviyo.com/onsite/js/klaviyo.js"></script>
+<script src="https://cdn.uppromote.com/x.js"></script>
+<a href="https://www.instagram.com/glamnails/">IG</a>
+<a href="https://www.tiktok.com/@glamnails">TT</a>
+<a href="https://www.facebook.com/sharer/sharer.php?u=x">share</a>
+<a href="https://www.youtube.com/@GlamNailsTV">YT</a>
+<script type="application/ld+json">{"@type":"Organization","sameAs":["https://pinterest.com/glamnailsco"]}</script>
+"""
+
+
+def test_traffic_tags_detect_paid_and_owned_channels():
+    assert webmeta.traffic_tags(HOME) == [
+        "affiliate_program",
+        "google_ads",
+        "klaviyo_email",
+        "meta_pixel",
+        "tiktok_pixel",
+    ]
+
+
+def test_social_links_skip_share_buttons():
+    links = webmeta.social_links(HOME)
+    assert links["instagram"] == ["glamnails"]
+    assert links["tiktok"] == ["glamnails"]
+    assert links["youtube"] == ["@GlamNailsTV"]
+    assert "facebook" not in links  # only a share button
+
+
+def test_jsonld_same_as_and_rating():
+    blocks = webmeta.jsonld(HOME)
+    assert blocks[0]["sameAs"] == ["https://pinterest.com/glamnailsco"]
+    product = '<script type="application/ld+json">{"@type":"Product","aggregateRating":{"ratingValue":"4.8","reviewCount":"1234"}}</script>'
+    assert webmeta.aggregate_rating(webmeta.jsonld(product)) == (1234, 4.8)
+    assert webmeta.aggregate_rating([]) == (None, None)
