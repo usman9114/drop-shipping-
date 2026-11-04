@@ -6,9 +6,9 @@
     "semantic_hash": ""
   },
   ".pre-commit-config.yaml": {
-    "mtime": 1793721670.8873472,
-    "seen": 1793812406.5325942,
-    "ast_hash": "426b16e9be6991ba83843fdd71cbdfca",
+    "mtime": 1793814591.0367777,
+    "seen": 1793814628.092975,
+    "ast_hash": "84c8fc3b55b81925a3c923dc240f8b31",
     "semantic_hash": ""
   },
   "scripts/hooks/check_no_ai_attribution.py": {
@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   "docs/handoff/session-state.md": {
-    "mtime": 1793810895.6671345,
-    "seen": 1793812406.5326424,
-    "ast_hash": "9b7140f719d37c635e36c3d481c4a22e",
+    "mtime": 1793814625.8962414,
+    "seen": 1793814628.0930498,
+    "ast_hash": "d61ec2666b40f528038ca99c4f47ae22",
     "semantic_hash": ""
   },
   "docs/plan/operating-plan.md": {
@@ -672,9 +672,9 @@
     "semantic_hash": ""
   },
   "scout/review_panel.py": {
-    "mtime": 1793814549.0687442,
-    "seen": 1793814562.469255,
-    "ast_hash": "4ef7563e7208fb41f53c1fedd7d02ca3",
+    "mtime": 1793814591.0381768,
+    "seen": 1793814628.0929916,
+    "ast_hash": "64d57782056cab50552c3ded574ba7d3",
     "semantic_hash": ""
   },
   "tests/test_review_panel.py": {

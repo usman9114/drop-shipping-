@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-04)
 
 ## Corpus Check
-- 111 files · ~73,283 words
+- 111 files · ~73,455 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 19 file(s) not represented in the graph (top: .csv 13, (none) 4, .example 1)
 
 ## Summary
-- 942 nodes · 1387 edges · 67 communities (56 shown, 11 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 47 edges (avg confidence: 0.9)
+- 942 nodes · 1390 edges · 66 communities (55 shown, 11 thin omitted)
+- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 50 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `256f54a8`
+- Built from commit: `83c7ce70`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -65,7 +65,6 @@
 - 0005-cj-client.md
 - test_cj.py
 - CJ supply check, 2026-11-04: trading-card supplies fail K1; so do both backups
-- Session state: where the project stands
 - Look-alike intelligence: reverse-engineer stores that already succeed
 - intel.py
 - ideas
@@ -93,8 +92,6 @@
 10. `12 — Compliance risk cards for the 8 candidate niches` - 13 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Findings` --references--> `_inline_images()`  [INFERRED]
-  docs/reviews/2026-11-agent2-project-review.md → scout/llm.py
 - `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
   .claude/agents/_team-rules.md → scout/store.py
 - `Findings` --references--> `compute()`  [INFERRED]
@@ -103,11 +100,13 @@
   docs/handoff/agent2-review-and-shortlist.md → scout/margin.py
 - `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
+- `Findings` --references--> `evaluate()`  [INFERRED]
+  docs/reviews/2026-11-agent2-project-review.md → scout/margin.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (67 total, 11 thin omitted)
+## Communities (66 total, 11 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -254,8 +253,8 @@ Cohesion: 0.14
 Nodes (13): 0. Status today, 1. Guardrails against the engineering trap, 2. Model plan: GLM + OpenRouter, and what the €10 is for, 3. Calendar, 4. Weekly review (every Sunday, 30 min), 5. The SaaS option: keep the door open, don't walk through it yet, 6. Parking lot (not before 20 live listings), 7. Owner actions, in order (+5 more)
 
 ### Community 43 - "webmeta.py"
-Cohesion: 0.08
-Nodes (28): aggregate_rating(), discover(), dns(), footprint(), is_shopify(), jsonld(), keyword_hits(), _latest() (+20 more)
+Cohesion: 0.07
+Nodes (35): Facts that change plans, Next tasks, in order (focus from 2026-11-04: reconstruct and recreate store success), Owner tasks outstanding, Repo, Session state: where the project stands, Traps in a fresh container, What exists, aggregate_rating() (+27 more)
 
 ### Community 44 - "cj.py"
 Cohesion: 0.07
@@ -276,10 +275,6 @@ Nodes (17): client(), FakeResp, FakeSession, test_a_non_json_response_is_a_clear
 ### Community 49 - "CJ supply check, 2026-11-04: trading-card supplies fail K1; so do both backups"
 Cohesion: 0.29
 Nodes (6): 1. Result, 2. What CJ's US warehouse actually holds, 3. Real cost floor, 4. Options (owner decision), 5. Other findings, CJ supply check, 2026-11-04: trading-card supplies fail K1; so do both backups
-
-### Community 50 - "Session state: where the project stands"
-Cohesion: 0.25
-Nodes (7): Facts that change plans, Next tasks, in order, Owner tasks outstanding, Repo, Session state: where the project stands, Traps in a fresh container, What exists
 
 ### Community 51 - "Look-alike intelligence: reverse-engineer stores that already succeed"
 Cohesion: 0.25
@@ -335,22 +330,22 @@ Nodes (5): 0007 — Deterministic harness first, intelligence layer on top, How 
 
 ## Knowledge Gaps
 - **6 isolated node(s):** `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 565 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 564 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `evaluate()` connect `2. Per-niche price bands and representative products` to `cj.py`, `store.py`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+- **Why does `record_run()` connect `store.py` to `review_panel.py`, `webmeta.py`, `cj.py`?**
+  _High betweenness centrality (0.016) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
   _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL` to the rest of the system?**
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
-- **Why does `record_run()` connect `store.py` to `review_panel.py`, `webmeta.py`, `cj.py`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+- **Why does `chat()` connect `chat` to `review_panel.py`, `webmeta.py`, `intel.py`, `classify.py`?**
+  _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `chat()` (e.g. with `main()` and `main()`) actually correct?**
   _`chat()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Should `chat` be split into smaller, more focused modules?**
