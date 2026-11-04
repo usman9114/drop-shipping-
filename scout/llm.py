@@ -1,6 +1,7 @@
 """LLM client: Z.ai GLM Flash first, then Claude Haiku / Sonnet via OpenRouter.
 
-Owner routing (2026-11-04): GLM and OpenRouter Sonnet and Haiku do the work;
+**Phase one is free only** (owner, 2026-11-04): Haiku and Sonnet routes are skipped
+unless SCOUT_ALLOW_PAID=1 is set. Owner routing: GLM and OpenRouter Sonnet and Haiku do the work;
 Opus is the advisor (planning and review in the Claude Code session), never a
 worker here. Order per task: free GLM Flash -> Haiku 5.5 (bulk, vision; about
 $0.10/$0.50 per million tokens in/out) or Sonnet 5.5 (reasoning, code; about
@@ -99,6 +100,16 @@ _load_dotenv()
 
 class LLMError(RuntimeError):
     pass
+
+
+def is_paid(spec: str) -> bool:
+    """Paid route = a Claude model on OpenRouter. GLM Flash and ':free' models cost nothing."""
+    return spec.startswith("openrouter:anthropic/")
+
+
+def paid_allowed() -> bool:
+    """Paid routes are opt-in: set SCOUT_ALLOW_PAID=1 (owner decision, never by default)."""
+    return os.environ.get("SCOUT_ALLOW_PAID") == "1"
 
 
 def _key(provider: str) -> str | None:
@@ -200,6 +211,8 @@ def chat(
     An empty or malformed reply counts as a failure and falls through to the
     next model."""
     candidates = models or FREE_MODELS[task]
+    if not paid_allowed():  # phase one: free models only (owner, 2026-11-04)
+        candidates = [m for m in candidates if not is_paid(m)]
     models = [m for m in candidates if _key(m.split(":", 1)[0])]
     if not models:
         need = sorted(

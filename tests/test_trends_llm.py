@@ -153,3 +153,21 @@ def test_explicit_models_override_the_task_list(no_keys, monkeypatch):
     monkeypatch.setattr(llm, "_post", fake_post)
     llm.chat("hi", task="bulk", models=["openrouter:some/model:free"])
     assert seen == ["openrouter:some/model:free"]
+
+
+def test_paid_routes_are_skipped_unless_opted_in(monkeypatch):
+    seen = []
+
+    def fake_post(payload, provider, key, timeout=180):
+        seen.append(f"{provider}:{payload['model']}")
+        return {"model": payload["model"], "choices": [{"message": {"content": "ok"}}]}
+
+    monkeypatch.setattr(llm, "_post", fake_post)
+    monkeypatch.setenv("OPENROUTER_API_KEY", "x")
+    monkeypatch.delenv("SCOUT_ALLOW_PAID", raising=False)
+    llm.chat("hi", task="haiku", models=[llm.HAIKU, "openrouter:some/model:free"])
+    assert seen == ["openrouter:some/model:free"]
+    seen.clear()
+    monkeypatch.setenv("SCOUT_ALLOW_PAID", "1")
+    llm.chat("hi", task="haiku", models=[llm.HAIKU, "openrouter:some/model:free"])
+    assert seen == ["openrouter:anthropic/claude-haiku-5.5"]

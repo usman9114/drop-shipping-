@@ -4,6 +4,8 @@
 
 ## Goal
 
+R1 finds a **shortlist of niches**, not the single best product. Picking products is the sourcing phase.
+
 **Produce an evidence-backed, reproducible shortlist of niches for a US zero-inventory seller, found by studying the best online stores and what they do, and ready to hand to sourcing.**
 
 One command (`make niches`) reproduces it from open data. One decision pack tells the owner which niches to source first, with the evidence and the gaps.
@@ -31,7 +33,7 @@ One command (`make niches`) reproduces it from open data. One decision pack tell
 - Rank history attached for stores that appear on the 90- and 365-day Tranco lists.
 
 **Quality** (we measured errors early, so each gets a gate)
-- **Business model:** hand-check 30 stores spread across brand, reseller, dropship and unclear. At least 85% agreement. Haiku gives an independent second opinion on the same 30. Disagreements are fixed in the rules and listed.
+- **Business model:** hand-check 30 stores spread across brand, reseller, dropship and unclear. At least 85% agreement. A free model (GLM, then a free OpenRouter model) gives an independent second opinion on the same 30. Disagreements are fixed in the rules and listed.
 - **Categories:** "other" (unclassified) below 15% of profiled stores, after rule fixes.
 - **Stories:** top 40 stores written; share that passed the numbers check reported; any template fallback labelled.
 - **US filter:** zero non-USD stores in the profiled set (test already in place).
@@ -72,20 +74,20 @@ Known weaknesses found while building, with the fix and the gate that proves it:
 
 ## Stages and who does the work
 
-Owner rule: GLM, Haiku and Sonnet do the work; Opus advises and reviews.
+Owner rules: **phase one uses free models only** (GLM, then free OpenRouter models; Haiku and Sonnet stay off unless `SCOUT_ALLOW_PAID=1`, which needs the owner's say-so). Opus advises and reviews.
 
 | Stage | Work | Runs on | Output |
 |---|---|---|---|
 | S1 Discover | Finish the 1M scan (about 1 h 40 m left at 8 of 20 batches), `/meta.json` for all hits | scripts, no model | store list, coverage |
 | S2 Profile | Deep profile of top 600+ US stores; rank history | scripts | `mart_store_profile` |
-| S3 Validate | 30-store hand check; Haiku second opinion; fix rules; rerun | Haiku + owner spot check | accuracy figure, rule fixes |
-| S4 Score and story | Rerun marts; stories for top 40 | GLM, then Haiku/Sonnet | report, stories |
+| S3 Validate | 30-store hand check; free-model second opinion; fix rules; rerun | free models + owner spot check | accuracy figure, rule fixes |
+| S4 Score and story | Rerun marts; stories for top 40 | GLM, then free OpenRouter models | report, stories |
 | S5 Shortlist | Niche scoring, exclusions, k-floor | SQL and `store_export.py` | shortlist CSV |
 | S6 Sanity | CJ search per niche | existing CJ key, no cost | sanity CSV |
 | S7 Compliance | Policy, IP, safety screen | `compliance-officer` agent (Sonnet) | review file, vetoes |
 | S8 Release | Decision pack, `make niches`, tag, graph refresh | Opus reviews; scripts | R1 tag |
 
-**Model spend cap for R1:** at most 3 USD of OpenRouter credit (Haiku validation, Sonnet stories). GLM first, so most calls cost nothing. I stop and ask before going over.
+**Model spend for R1: 0 USD.** Free models only; the OpenRouter credit stays untouched so the higher free-tier daily limit stays unlocked. Paid Haiku/Sonnet are for a later phase.
 
 ## After R1 (not part of this phase)
 
@@ -95,6 +97,6 @@ Owner rule: GLM, Haiku and Sonnet do the work; Opus advises and reviews.
 
 ## Decisions needed from the owner
 
-1. **Approve R1 scope** as above (Shopify-only discovery, US, with the 3 USD model cap).
+1. **Approve R1 scope** as above (Shopify-only discovery, US, free models only).
 2. **myip.ms API:** pay for access or skip? Default: skip, the Tranco scan covers it.
 3. **archify skill:** allow the install script (diagram skill), or skip? Default: skip; Mermaid images are enough.
