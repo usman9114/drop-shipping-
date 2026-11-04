@@ -43,6 +43,16 @@
 - Keys live in the cloud environment **"Crypto"** (the one this project's sessions use; "Default" also has them). As of 2026-11-04 `OPENROUTER_API_KEY` is not visible in the container; check the variable name.
 - Z.ai and OpenRouter keys were pasted into an earlier chat. The owner was asked to rotate them.
 
+## Review panel result (2026-11-04) — read before starting
+
+`docs/reviews/2026-11-04-idea-panel.md` (2–3 of 4 free models answered per idea; weak sample):
+- **Drop or split:** look-alike discovery (I06), traffic footprint (I07), the warehouse (I11), the intelligence layer (I10), CJ listing count (I05), and studying Shopify stores for an eBay-first test (I08, split or drop).
+- **Keep or modify:** live micro-test (I13), jewelry only with changes (I12), supplier-image listings (I03), free LLMs (I14).
+- **Shared message:** stop building analysis tooling; list 3–5 margin-viable, compliance-clean CJ US products on eBay and measure real sales.
+- **Wrong reasons to ignore:** "Shopify feeds break eBay's API terms" and "this collects personal data" are both untrue.
+- **Orchestrator's recommendation:** do both, in this order. First a small live test (3–5 products from the less crowded types: cleaning tools, pet grooming tools, hand tools; CJ test orders also keep the CJ API active). Then use the store-story work for the **Shopify channel** it actually fits.
+- **Owner to decide** at the start of the next session.
+
 ## Next tasks, in order (focus from 2026-11-04: reconstruct and recreate store success)
 
 **Focus:** pick successful stores, rebuild the story of how they did it end to end (what they sell, from whom, at what price and margin, since when, how they get traffic), mark the gaps, then turn the story into a recreation plan inside our constraints. Method: `CLAUDE.md` source evaluation standard; decisions 0007 (harness + intelligence layer) and 0008 (internet-metadata harness).
