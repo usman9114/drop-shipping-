@@ -840,15 +840,15 @@
     "semantic_hash": ""
   },
   "scout/snapshots.py": {
-    "mtime": 1793829034.9846194,
-    "seen": 1793829050.5117817,
-    "ast_hash": "48389de7a51e2ba5edab42178da84a78",
+    "mtime": 1793829074.6913188,
+    "seen": 1793829082.062947,
+    "ast_hash": "895b41cc01aafc8e9a160a4f387978e5",
     "semantic_hash": ""
   },
   "tests/test_snapshots.py": {
-    "mtime": 1793829048.21662,
-    "seen": 1793829050.5118146,
-    "ast_hash": "dbf49f7395c58549597b2a4daf32b15b",
+    "mtime": 1793829074.6913188,
+    "seen": 1793829082.062979,
+    "ast_hash": "9f1aa75fa8b35de062fa28ae670d7681",
     "semantic_hash": ""
   }
 }
