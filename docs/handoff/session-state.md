@@ -51,7 +51,7 @@
 - **Shared message:** stop building analysis tooling; list 3–5 margin-viable, compliance-clean CJ US products on eBay and measure real sales.
 - **Wrong reasons to ignore:** "Shopify feeds break eBay's API terms" and "this collects personal data" are both untrue.
 - **Orchestrator's recommendation:** do both, in this order. First a small live test (3–5 products from the less crowded types: cleaning tools, pet grooming tools, hand tools; CJ test orders also keep the CJ API active). Then use the store-story work for the **Shopify channel** it actually fits.
-- **Owner to decide** at the start of the next session.
+- **Owner decision (2026-11-04): focus on choosing the product niche and on how successful businesses did it** (store discovery, store stories, recreation plan). The live test comes later. Keep the panel's caution in view: Shopify success is evidence of demand and method, not proof of eBay demand.
 
 ## Next tasks, in order (focus from 2026-11-04: reconstruct and recreate store success)
 
