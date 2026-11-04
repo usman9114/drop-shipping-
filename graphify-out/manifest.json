@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   "docs/handoff/session-state.md": {
-    "mtime": 1793814625.8962414,
-    "seen": 1793814628.0930498,
-    "ast_hash": "d61ec2666b40f528038ca99c4f47ae22",
+    "mtime": 1793818659.8157313,
+    "seen": 1793818664.7738144,
+    "ast_hash": "1b8ca67fdf1ced2e5b2839a87fd038fb",
     "semantic_hash": ""
   },
   "docs/plan/operating-plan.md": {
@@ -681,6 +681,12 @@
     "mtime": 1793814291.1476364,
     "seen": 1793814313.4320807,
     "ast_hash": "d3407bfc2a5f7554359fa209c2824fcb",
+    "semantic_hash": ""
+  },
+  "docs/reviews/2026-11-04-idea-panel.md": {
+    "mtime": 1793816097.9835553,
+    "seen": 1793818664.7738419,
+    "ast_hash": "690b93881492c736ea22cd574a7dcee1",
     "semantic_hash": ""
   }
 }
