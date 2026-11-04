@@ -157,9 +157,7 @@ def dns(session, name: str, rtype: str) -> list[str]:
 
 
 def discover(top: int, max_dns: int, pause: float = 0.15) -> dict:
-    import tranco
-
-    lst = tranco.Tranco(cache=True, cache_dir="data/private/tranco").list()
+    lst = _tranco_list()
     domains = lst.top(top)
     list_id = getattr(lst, "list_id", None)
     hits = [(rank, d, keyword_hits(d)) for rank, d in enumerate(domains, 1)]
@@ -343,14 +341,18 @@ def products(max_stores: int, pause: float = 1.0) -> dict:
 # Tags that reveal how a store gets traffic. Each pattern is matched against the
 # homepage HTML; a hit means the store installed that platform's code.
 TRAFFIC_TAGS = {
-    "meta_pixel": r"connect\.facebook\.net/[^\"']*/fbevents\.js|fbq\(\s*['\"]init",
-    "tiktok_pixel": r"analytics\.tiktok\.com|ttq\.load\(",
-    "google_ads": r"['\"]AW-\d{6,}",
+    # Shopify "web pixels" (sandboxed app pixels) carry their settings as escaped
+    # JSON in webPixelsConfigList; the setting names identify the platform.
+    "meta_pixel": r"connect\.facebook\.net/[^\"']*/fbevents\.js|fbq\(\s*['\"]init"
+    r"|facebook_pixel|pixel_type",
+    "tiktok_pixel": r"analytics\.tiktok\.com|ttq\.load\(|pixelCode",
+    # action_label: Google Ads conversion label in the Google & YouTube web pixel
+    "google_ads": r"['\"]AW-\d{6,}|action_label",
     "google_analytics": r"['\"]G-[A-Z0-9]{6,}['\"]|googletagmanager\.com/gtag/js",
     "pinterest_tag": r"s\.pinimg\.com/ct/core\.js|pintrk\(",
     "snap_pixel": r"sc-static\.net/scevent\.min\.js|snaptr\(",
     "microsoft_ads": r"bat\.bing\.com",
-    "reddit_pixel": r"redditstatic\.com/ads/pixel\.js|rdt\(\s*['\"]init",
+    "reddit_pixel": r"redditstatic\.com/ads/pixel\.js|rdt\(\s*['\"]init|redditPixelId",
     "klaviyo_email": r"static\.klaviyo\.com|klaviyo\.com/onsite",
     "sms_marketing": r"attn\.tv|attentivemobile|postscript\.io|smsbump|cdn\.yotpo\.com/sms",
     "affiliate_program": r"uppromote|goaffpro|refersion|socialsnowball|social-snowball|aspireiq|grin\.co|impact\.com/|shareasale",
@@ -502,6 +504,130 @@ def footprint(max_stores: int, pause: float = 1.0) -> dict:
     return {"web_footprint": (run, len(rows))}
 
 
+# ---------------------------------------------------------------------------
+# Scale scan: every Tranco domain, no keyword filter, in tranches.
+# Only the apex A record is looked up (Google Public DNS JSON API; Google's
+# documented limit is 1,500 qps per IP; we default to 100 qps). Only Shopify hits are
+# stored; each tranche's counts go in the run params so coverage is auditable.
+
+
+def _tranco_list(date: str | None = None):
+    import os
+
+    import tranco
+
+    os.makedirs("data/private/tranco", exist_ok=True)
+    t = tranco.Tranco(cache=True, cache_dir="data/private/tranco")
+    return t.list(date=date) if date else t.list()
+
+
+_LOCAL = None
+
+
+def resolve_a(domain: str) -> tuple[list[str], str]:
+    """Apex A records via Google Public DNS JSON API (follows CNAMEs).
+
+    Returns (ips, error). error is "" on NOERROR (ips may be empty), else the
+    DNS status (e.g. "rcode3" = NXDOMAIN) or the exception name. One retry on
+    SERVFAIL or a network error.
+    """
+    import threading
+
+    global _LOCAL
+    if _LOCAL is None:
+        _LOCAL = threading.local()
+    if not hasattr(_LOCAL, "s"):
+        _LOCAL.s = _session()
+    err = ""
+    for _ in range(2):
+        try:
+            r = _LOCAL.s.get(DOH, params={"name": domain, "type": "A"}, timeout=15)
+            j = r.json()
+            status = j.get("Status")
+            ips = sorted(
+                {a["data"] for a in j.get("Answer") or [] if a.get("type") == 1}
+            )
+            if status == 0:
+                return ips, ""
+            err = f"rcode{status}"
+            if status != 2:
+                return [], err
+        except Exception as exc:
+            err = type(exc).__name__
+    return [], err
+
+
+def tranches_done(dataset: str = "web_scan") -> set[tuple[str, int, int]]:
+    return {
+        (r["params"].get("list_id"), r["params"]["start"], r["params"]["end"])
+        for r in store._runs()
+        if r["dataset"] == dataset and isinstance(r.get("params"), dict)
+    }
+
+
+def scan_tranche(
+    domains: list[str], start: int, qps: float, workers: int, resolver=resolve_a
+) -> tuple[list[dict], dict]:
+    """Resolve domains[start:...] (ranks start+1..). Returns (shopify rows, counts)."""
+    import threading
+    from concurrent.futures import ThreadPoolExecutor
+
+    lock = threading.Lock()
+    gap = 1.0 / qps if qps > 0 else 0.0
+    nxt = [time.monotonic()]
+
+    def job(i_d):
+        i, d = i_d
+        with lock:  # global pacing: one lookup every `gap` seconds
+            wait = nxt[0] - time.monotonic()
+            nxt[0] = max(nxt[0], time.monotonic()) + gap
+        if wait > 0:
+            time.sleep(wait)
+        a, err = resolver(d)
+        return start + i + 1, d, a, err
+
+    rows, counts = [], {"looked_up": 0, "resolved": 0, "errors": 0, "shopify": 0}
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        for rank, d, a, err in ex.map(job, enumerate(domains)):
+            counts["looked_up"] += 1
+            counts["resolved" if a else "errors"] += 1
+            if is_shopify(a, []):
+                counts["shopify"] += 1
+                rows.append({"domain": d, "tranco_rank": rank, "a": "|".join(a)})
+    return rows, counts
+
+
+def scan(
+    top: int, tranche: int, qps: float, workers: int, max_tranches: int | None
+) -> dict:
+    lst = _tranco_list()
+    list_id = getattr(lst, "list_id", None)
+    domains = lst.top(top)
+    done = tranches_done()
+    out, n = {}, 0
+    for start in range(0, len(domains), tranche):
+        end = min(start + tranche, len(domains))
+        if (list_id, start, end) in done:
+            continue
+        if max_tranches is not None and n >= max_tranches:
+            break
+        t0 = time.time()
+        rows, counts = scan_tranche(domains[start:end], start, qps, workers)
+        counts["seconds"] = round(time.time() - t0, 1)
+        run = store.record_run(
+            "web_scan",
+            rows,
+            source="tranco+google_public_dns",
+            trust="data",
+            params={"list_id": list_id, "start": start, "end": end, **counts},
+            note="apex A record for every Tranco domain in the tranche; Shopify hits only",
+        )
+        print(f"tranche {start}-{end}: {counts}", file=sys.stderr, flush=True)
+        out[f"web_scan {start}-{end}"] = (run, len(rows))
+        n += 1
+    return out
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Internet-metadata harness")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -514,8 +640,16 @@ def main(argv: list[str] | None = None) -> int:
     pj.add_argument("--max-stores", type=int, default=40)
     fp = sub.add_parser("footprint")
     fp.add_argument("--max-stores", type=int, default=40)
+    sc = sub.add_parser("scan", help="all Tranco domains, apex A, in tranches")
+    sc.add_argument("--top", type=int, default=1_000_000)
+    sc.add_argument("--tranche", type=int, default=50_000)
+    sc.add_argument("--qps", type=float, default=100.0)
+    sc.add_argument("--workers", type=int, default=48)
+    sc.add_argument("--max-tranches", type=int)
     a = ap.parse_args(argv)
-    if a.cmd == "discover":
+    if a.cmd == "scan":
+        out = scan(a.top, a.tranche, a.qps, a.workers, a.max_tranches)
+    elif a.cmd == "discover":
         out = discover(a.top, a.max_dns)
     elif a.cmd == "sitemaps":
         out = sitemaps(a.max_stores)

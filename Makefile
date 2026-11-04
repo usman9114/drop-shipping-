@@ -1,4 +1,4 @@
-.PHONY: setup lint graph test wh-load wh-catalogue wh-offers wh-build wh-classify wh-images wh-export wh-snapshot intel pipeline
+.PHONY: stores-scan stores-meta stores-deep stores-ranks stores-build stores-report stores setup lint graph test wh-load wh-catalogue wh-offers wh-build wh-classify wh-images wh-export wh-snapshot intel pipeline
 
 setup:
 	python3 -m pip install --upgrade pre-commit graphifyy detect-secrets -r requirements.txt
@@ -47,3 +47,25 @@ intel:          ## intelligence layer: evidence packs -> grounded, cached narrat
 
 pipeline:       ## the whole flow in order: pull, build, export, intelligence
 	$(MAKE) wh-load wh-catalogue wh-offers wh-build wh-export intel
+
+# --- Step 1: best online stores (decision 0009). Raw results stay in data/private/. ---
+stores-scan:    ## Tranco top 1M, apex DNS, Shopify hits only; resumable tranches (~3 h)
+	python3 -m scout.webmeta scan --top 1000000 --tranche 50000 --qps 100
+
+stores-meta:    ## /meta.json for Shopify hits, best rank first (robots.txt respected)
+	python3 -m scout.stores meta --max-stores 6000 --workers 6
+
+stores-deep:    ## feed aggregates, homepage tags, DNS for the top US stores
+	python3 -m scout.stores deep --max-stores 600 --workers 6 --pages 4
+
+stores-ranks:   ## earlier Tranco ranks (rank growth)
+	python3 -m scout.stores ranks --days-back 90 365
+
+stores-build:   ## store models only (+ dbt tests)
+	$(DBT) build --profiles-dir . --select stg_web_scan+ stg_web_scan_tranches stg_web_meta+ stg_web_store_deep+ stg_web_ranks+
+
+stores-report:  ## private store stories + committed aggregate report
+	python3 -m scout.store_intel --top 40
+	python3 scripts/store_export.py
+
+stores: stores-scan stores-meta stores-deep stores-ranks stores-build stores-report

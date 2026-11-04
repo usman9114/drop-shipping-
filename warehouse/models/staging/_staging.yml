@@ -22,3 +22,27 @@ models:
     columns:
       - name: pid
         data_tests: [not_null]
+  - name: stg_web_scan
+    description: Shopify domains from the Tranco top-1M DNS scan (scout.webmeta scan). Private.
+    columns:
+      - name: domain
+        data_tests: [not_null, unique]
+  - name: stg_web_scan_tranches
+    description: Scan coverage per tranche, from run params.
+  - name: stg_web_meta
+    description: Shopify /meta.json fields per store (scout.stores meta).
+    columns:
+      - name: domain
+        data_tests: [not_null, unique]
+  - name: stg_web_store_deep
+    description: Feed aggregates, homepage tags and DNS signals per store (scout.stores deep).
+    columns:
+      - name: domain
+        data_tests: [not_null, unique]
+      - name: business_model
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [brand, reseller, dropship, pod, unclear]
+  - name: stg_web_ranks
+    description: Earlier Tranco ranks of scanned stores (scout.stores ranks).

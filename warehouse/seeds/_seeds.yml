@@ -22,3 +22,7 @@ seeds:
     description: Why a product type sells (rule-based judgment, reviewable). Tags are pipe-separated.
     config:
       column_types: {product_type: varchar, why_tags: varchar, reason: varchar}
+  - name: store_category_rules
+    description: Keyword rules mapping a store product (type, title, tags) to a category. Lowest priority number wins. Used by scout.stores and the store marts.
+    config:
+      column_types: {priority: integer, category: varchar, pattern: varchar}

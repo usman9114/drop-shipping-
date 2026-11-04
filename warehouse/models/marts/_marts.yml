@@ -32,3 +32,17 @@ models:
     columns:
       - name: product_type
         data_tests: [not_null, unique]
+  - name: mart_store_profile
+    description: Private. One row per profiled Shopify store with best_score (traffic 45%, rank growth 20%, release rhythm 20%, marketing stack 15%; percentiles among profiled stores) and the business model (brand, reseller, dropship, pod, unclear).
+    columns:
+      - name: domain
+        data_tests: [not_null, unique]
+      - name: best_score
+        data_tests:
+          - in_range:
+              arguments: {min: 0, max: 1}
+  - name: mart_store_categories
+    description: Aggregate per store category (no domains). Committed via scripts/store_export.py.
+    columns:
+      - name: category
+        data_tests: [not_null, unique]
