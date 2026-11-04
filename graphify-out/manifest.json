@@ -702,9 +702,9 @@
     "semantic_hash": ""
   },
   "scripts/store_export.py": {
-    "mtime": 1793821047.6663752,
-    "seen": 1793821059.2091737,
-    "ast_hash": "ed22468d6fb6d4efbf51e33df845a075",
+    "mtime": 1793830502.9287066,
+    "seen": 1793830505.8255255,
+    "ast_hash": "4e49623b24c19b2e4e97d4216b0578e2",
     "semantic_hash": ""
   },
   "tests/test_store_intel.py": {
@@ -878,7 +878,7 @@
   "warehouse/models/marts/mart_niche_copyable.sql": {
     "mtime": 1793829639.6598268,
     "seen": 1793829681.3685696,
-    "ast_hash": "feb4434aaf9b5f654488a2144b4f6384",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_store_universe.sql": {
@@ -891,6 +891,12 @@
     "mtime": 1793829639.6535645,
     "seen": 1793829681.3686013,
     "ast_hash": "2df444a7a10f619bb29a3059da189ecc",
+    "semantic_hash": ""
+  },
+  "docs/reports/2026-11-04-best-stores.md": {
+    "mtime": 1793830500.4287064,
+    "seen": 1793830505.8274138,
+    "ast_hash": "41b174507829ab69bd15dfcb908986bf",
     "semantic_hash": ""
   }
 }
