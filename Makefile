@@ -62,7 +62,7 @@ stores-ranks:   ## earlier Tranco ranks (rank growth)
 	python3 -m scout.stores ranks --days-back 90 365
 
 stores-build:   ## store models only (+ dbt tests)
-	$(DBT) build --profiles-dir . --select stg_web_scan+ stg_web_scan_tranches stg_web_meta+ stg_web_store_deep+ stg_web_ranks+
+	$(DBT) build --profiles-dir . --select stg_web_scan+ stg_web_scan_tranches stg_web_meta+ stg_web_store_deep+ stg_web_store_light+ stg_web_ranks+ mart_store_universe+ mart_niche_copyable
 
 stores-report:  ## private store stories + committed aggregate report
 	python3 -m scout.store_intel --top 40

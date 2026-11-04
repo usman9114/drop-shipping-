@@ -308,3 +308,22 @@ def test_dominant_vendor_or_few_labels_means_brand():
         )[0]
         == "reseller"
     )
+
+
+def test_general_store_pattern_is_separate_from_brand():
+    general = _m(
+        products_sampled=250,
+        discount_share=0.9,
+        category_counts={
+            "apparel": 60,
+            "home_decor": 50,
+            "pet": 40,
+            "kitchen_dining": 40,
+            "toys_games": 30,
+        },
+    )
+    assert stores.business_model(general)[0] == "general"
+    focused = {**general, "category_counts": {"footwear": 230, "apparel": 20}}
+    assert stores.business_model(focused)[0] == "brand"
+    not_discounted = {**general, "discount_share": 0.05}
+    assert stores.business_model(not_discounted)[0] == "brand"

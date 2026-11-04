@@ -46,3 +46,13 @@ models:
     columns:
       - name: category
         data_tests: [not_null, unique]
+  - name: mart_store_universe
+    description: Private. Every screened US store (light or deep) with business model and copyable flag.
+    columns:
+      - name: domain
+        data_tests: [not_null, unique]
+  - name: mart_niche_copyable
+    description: Aggregate per category over the screened universe (no domains). Committed via scripts/store_export.py.
+    columns:
+      - name: category
+        data_tests: [not_null, unique]

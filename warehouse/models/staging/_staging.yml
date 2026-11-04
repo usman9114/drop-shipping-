@@ -43,6 +43,11 @@ models:
         data_tests:
           - accepted_values:
               arguments:
-                values: [brand, retailer, reseller, dropship, pod, unclear]
+                values: [brand, general, retailer, reseller, dropship, pod, unclear]
   - name: stg_web_ranks
     description: Earlier Tranco ranks of scanned stores (scout.stores ranks).
+  - name: stg_web_store_light
+    description: Light screen of US stores, one feed page each (scout.stores light). Private.
+    columns:
+      - name: domain
+        data_tests: [not_null, unique]

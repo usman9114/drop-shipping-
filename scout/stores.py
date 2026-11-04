@@ -257,10 +257,29 @@ DROPSHIP_APPS = re.compile(
 )
 
 
+def category_spread(s: dict) -> int:
+    """Categories holding at least 8% of the classified products (not other/gift cards)."""
+    cc = {
+        k: v
+        for k, v in (s.get("category_counts") or {}).items()
+        if k not in ("non_product", "other")
+    }
+    n = sum(cc.values())
+    return sum(1 for v in cc.values() if n and v / n >= 0.08)
+
+
+GENERAL_MIN_CATEGORIES = 4
+GENERAL_MIN_DISCOUNT = 0.5
+GENERAL_MIN_PRODUCTS = 50
+
+
 def business_model(
     s: dict, homepage_dropship_app: bool = False
 ) -> tuple[str, list[str]]:
-    """brand | retailer | reseller | dropship | pod | unclear, with the reasons.
+    """brand | general | retailer | reseller | dropship | pod | unclear, with the reasons.
+
+    general: one name over many unrelated categories with permanent discounts, the
+    typical dropshipper shape (copyable); a hypothesis, validated separately.
 
     brand: makes or commissions its own goods (its own name, or one vendor holding
     half or more of a small catalogue). retailer: 10+ vendors with none dominant,
@@ -297,6 +316,20 @@ def business_model(
     own = s.get("own_vendor_share") or 0
     top = s.get("top_vendor_share") or 0
     vendors = s.get("vendors") or 0
+    spread = category_spread(s)
+    if (
+        (own >= 0.5 or top >= 0.5)
+        and n >= GENERAL_MIN_PRODUCTS
+        and spread >= GENERAL_MIN_CATEGORIES
+        and (s.get("discount_share") or 0) >= GENERAL_MIN_DISCOUNT
+    ):
+        # A dropshipper often enters its own store name as the vendor, so the vendor
+        # alone cannot prove "own goods". Many unrelated categories under one name
+        # plus permanent discounts is the general-store pattern.
+        return "general", [
+            f"general store pattern: {spread} categories, "
+            f"{s['discount_share']:.0%} of products discounted"
+        ]
     if own >= 0.5:
         return "brand", [f"own name is the vendor on {own:.0%} of products"]
     if top >= 0.5:
@@ -653,23 +686,36 @@ def relabel() -> dict:
     """Recompute business_model for every profiled store from its saved evidence.
 
     Rule changes need no refetching: the evidence is already in the lake. Writes
-    one new run holding the latest row per domain with fresh labels."""
-    latest = latest_good(_all_rows("web_store_deep"))
-    rows, changed = [], 0
-    for r in latest.values():
-        model, why = business_model(r, "dropship_app" in (r.get("traffic_tags") or []))
-        changed += model != r.get("business_model")
-        rows.append({**r, "business_model": model, "business_model_why": why})
-    run = store.record_run(
-        "web_store_deep",
-        rows,
-        source="relabel",
-        trust="data",
-        params={"relabel": True, "changed": changed},
-        note="business_model recomputed from saved evidence; no refetch",
-    )
-    print(f"relabel: {len(rows)} stores, {changed} labels changed", file=sys.stderr)
-    return {"web_store_deep (relabel)": (run, len(rows))}
+    one new run per dataset (deep and light) holding the latest good row per domain."""
+    out = {}
+    for ds in ("web_store_deep", "web_store_light"):
+        latest = latest_good(_all_rows(ds))
+        if not latest:
+            continue
+        rows, changed = [], 0
+        for r in latest.values():
+            if not r.get("products_sampled"):
+                rows.append(r)
+                continue
+            model, why = business_model(
+                r, "dropship_app" in (r.get("traffic_tags") or [])
+            )
+            changed += model != r.get("business_model")
+            rows.append({**r, "business_model": model, "business_model_why": why})
+        run = store.record_run(
+            ds,
+            rows,
+            source="relabel",
+            trust="data",
+            params={"relabel": True, "changed": changed},
+            note="business_model recomputed from saved evidence; no refetch",
+        )
+        print(
+            f"relabel {ds}: {len(rows)} stores, {changed} labels changed",
+            file=sys.stderr,
+        )
+        out[f"{ds} (relabel)"] = (run, len(rows))
+    return out
 
 
 def run_ranks(days_back: list[int]) -> dict:

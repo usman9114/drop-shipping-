@@ -92,7 +92,8 @@ tags). Field meanings:
   products_sampled newest products
 - price_*: entry price per product in the store currency; discount_share: share
   of products shown with a crossed-out compare-at price
-- business_model: brand (sells its own goods), retailer (10+ brands, big retailer
+- business_model: brand (sells its own goods), general (one name over many unrelated
+  categories with permanent discounts: the dropshipper shape), retailer (10+ brands, big retailer
   or portfolio owner), reseller (5 to 9 brands), dropship
   (supplier import traces), pod (print on demand), unclear
 - paid_ads / retention / partners / conversion: marketing code found on the homepage

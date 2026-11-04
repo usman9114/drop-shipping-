@@ -67,5 +67,5 @@ select *,
     percent_rank() over (order by stack_breadth) as pct_stack,
     round(0.45 * pct_traffic + 0.20 * pct_growth + 0.20 * pct_rhythm
           + 0.15 * percent_rank() over (order by stack_breadth), 4) as best_score,
-    business_model in ('dropship', 'reseller', 'pod', 'unclear') as transferable_model
+    business_model in ('dropship', 'general', 'reseller', 'pod', 'unclear') as transferable_model
 from scored

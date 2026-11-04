@@ -5,6 +5,7 @@ cats as (
     select top_category as category,
         count(*)                                                    as stores,
         count(*) filter (where business_model = 'brand')            as brands,
+        count(*) filter (where business_model = 'general')          as general_stores,
         count(*) filter (where business_model = 'retailer')         as retailers,
         count(*) filter (where business_model = 'reseller')         as resellers,
         count(*) filter (where business_model = 'dropship')         as dropshippers,
@@ -33,6 +34,6 @@ cats as (
 )
 select *,
     -- Demand that zero inventory can copy: resellers, dropshippers and unclear stores.
-    resellers + dropshippers + pod + unclear as transferable_stores
+    resellers + dropshippers + general_stores + pod + unclear as transferable_stores
 from cats
 order by traffic_weight desc
