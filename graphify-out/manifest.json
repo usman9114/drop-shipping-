@@ -372,9 +372,9 @@
     "semantic_hash": ""
   },
   "docs/handoff/session-state.md": {
-    "mtime": 1793799578.9706068,
-    "seen": 1793799603.8863149,
-    "ast_hash": "8cbd6ab71840afaa05cee07cce68afc5",
+    "mtime": 1793800658.5382736,
+    "seen": 1793800660.5491242,
+    "ast_hash": "9b7140f719d37c635e36c3d481c4a22e",
     "semantic_hash": ""
   },
   "docs/plan/operating-plan.md": {
@@ -516,9 +516,9 @@
     "semantic_hash": ""
   },
   "warehouse/models/core/core_dim_product.sql": {
-    "mtime": 1793797493.112729,
-    "seen": 1793797960.1930988,
-    "ast_hash": "",
+    "mtime": 1793799524.8208816,
+    "seen": 1793800660.5489843,
+    "ast_hash": "8f11d67eeabadf97e19681809c88f2d7",
     "semantic_hash": ""
   },
   "warehouse/models/core/core_fact_offer.sql": {
@@ -534,9 +534,9 @@
     "semantic_hash": ""
   },
   "warehouse/models/enrich/enr_product_type.sql": {
-    "mtime": 1793797504.7431378,
-    "seen": 1793797960.1931021,
-    "ast_hash": "",
+    "mtime": 1793799524.8204856,
+    "seen": 1793800660.548995,
+    "ast_hash": "b92d69048c1881194f14d6aa83d2a783",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_prefilter.sql": {
@@ -546,9 +546,9 @@
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_terapeak_sheet.sql": {
-    "mtime": 1793797608.9380376,
-    "seen": 1793797960.193131,
-    "ast_hash": "",
+    "mtime": 1793799524.8227725,
+    "seen": 1793800660.5490043,
+    "ast_hash": "42cd8d3f5cbd168f0db6569bf7968682",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_categories.sql": {
