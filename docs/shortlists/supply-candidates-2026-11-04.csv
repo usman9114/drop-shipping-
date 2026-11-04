@@ -1,143 +1,143 @@
 pid,product_type,type_method,search_phrase,min_price,is_viable,fail_reasons,review_rules,images_screened,images_clean,needs_image_review
-4BD7D7F7-9490-49BC-80CF-095A3B87A171,antenna,llm:zai:glm-4.5-flash:pt-v1,tv antenna amplifier,20.69,true,,cat_computer,0,0,false
-1867125496166109184,audio adapter,llm:zai:glm-4.5-flash:pt-v1,vx audio adapter,28.92,true,,cat_computer,0,0,false
-1737338606332686336,backpack,rule,women travel backpack,36.27,true,,,0,0,false
-1899737610018119682,bar accessory,rule,metal bottle opener,22.12,true,,cat_knives,0,0,false
-1899773967183876098,bar accessory,rule,wine bottle stopper,22.14,true,,cat_knives,0,0,false
-FBD229E3-C8F2-407C-879D-BD3FEA63BB92,bar accessory,llm:zai:glm-4.5-flash:pt-v1,bbq oil vinegar spray bottle,23.85,true,,title_chemical,0,0,false
-1900382647983722497,bar accessory,rule,faucet bottle stopper dispenser,23.94,true,,cat_knives,0,0,false
-C5FC8AA4-B78D-4766-8C3B-56641913B6F2,bath exfoliating accessory,rule,konjac facial sponge,14.53,true,,,0,0,false
-47A634C1-249D-42E8-BCBE-D0992EBDF4A9,bath exfoliating accessory,rule,exfoliating mitt,18.56,true,,,0,0,false
-1880165726661005314,bathroom shelf,rule,wall mounted bathroom shelf,24.48,true,,,0,0,false
-1357509147247120384,belt buckle,llm:zai:glm-4.5-flash:pt-v1,acrylic plastic chain,17.91,true,,cat_jewelry,0,0,false
-1955097636363993090,bike brake pads,llm:zai:glm-4.5-flash:pt-v1,bike brake pads set,29.62,true,,cat_auto,0,0,false
-1797470306802601984,bracelet,rule,cuban link bracelet,14.41,true,,cat_jewelry,0,0,false
-2406240714201626300,bracelet,rule,natural stone bracelet,14.46,true,,cat_jewelry,0,0,false
-1506456885363486720,bracelet,rule,anklet bohemian style,14.46,true,,cat_jewelry,0,0,false
-2411090939361614200,bracelet,rule,glow butterfly necklace set,14.64,true,,cat_jewelry,0,0,false
-CD4929F6-CB9C-4DE5-A2F8-9F178345941A,bracelet,rule,owl wood grain bracelet,14.68,true,,cat_jewelry,0,0,false
-2406280705181608400,bracelet,rule,simple metal jewelry set,14.84,true,,cat_jewelry,0,0,false
-1509512487987851264,bracelet,rule,beaded couple bracelet,14.99,true,,cat_jewelry,0,0,false
-1433001594886164480,bracelet,rule,braided leather bracelet,15.13,true,,cat_jewelry,0,0,false
-D562B58F-931A-46FE-B5D1-344900E425EE,bracelet,rule,tiger eye bracelet,15.48,true,,cat_jewelry,0,0,false
-1436554051054604288,bracelet,rule,rainbow bead bracelet,15.57,true,,cat_jewelry,0,0,false
-F95AE429-B0BE-498E-BD96-FF6F00358BDB,bracelet,rule,onyx bracelet,15.6,true,,cat_jewelry,0,0,false
-1422074647645655040,bracelet,rule,constellation chakra bracelet,15.62,true,,cat_jewelry,0,0,false
-DBE1973D-FF94-43DD-9835-85CF59C272CA,bracelet,rule,chakra energy bracelet,15.79,true,,cat_jewelry,0,0,false
-1397117854108749824,bracelet,rule,leather bracelet,16.29,true,,cat_jewelry,0,0,false
-59001164-F4A3-410F-BB65-BF5E125872E0,bracelet,rule,lion bracelet,16.53,true,,cat_jewelry,0,0,false
-1626449984012955648,bracelet,rule,pine bead bracelet,17.11,true,,cat_jewelry,0,0,false
-1405075602544922624,bracelet,rule,amethyst stone bracelet,17.35,true,,cat_jewelry,0,0,false
-2407010742141606000,bracelet,rule,shell anklet,17.44,true,,cat_jewelry,0,0,false
-1496077229191467008,bracelet,rule,butterfly bracelet zircon,17.47,true,,cat_jewelry,0,0,false
-B2A24E6C-0A0F-424B-8F37-35A65667F1C6,bracelet,rule,crystal beaded bracelet,17.69,true,,cat_jewelry,0,0,false
-1409427791266582528,bracelet,rule,turquoise cross bracelet,18.0,true,,cat_jewelry,0,0,false
-1734878194978791424,bracelet,rule,twisted rope chain bracelet,18.09,true,,cat_jewelry,0,0,false
-1933436343009431554,bracelet,rule,pearl bracelet,18.09,true,,cat_jewelry,0,0,false
-15A28BE8-B44A-46CD-9D96-79B6769156C3,bracelet,rule,stone owl bracelet,18.2,true,,cat_jewelry,0,0,false
-1557983501100789760,bracelet,rule,magnetic bracelet,18.46,true,,cat_jewelry,0,0,false
-1626465206681481216,bracelet,rule,gemstone bangle,18.49,true,,cat_jewelry,0,0,false
-1933424127878811649,bracelet,rule,cinnabar bracelet,18.6,true,,cat_jewelry,0,0,false
-F97EF571-A358-4269-8026-369D8FA90CDB,bracelet,rule,leopard head bracelet,18.98,true,,cat_jewelry,0,0,false
-1441959545097293824,bracelet,rule,rose gold bracelet,18.98,true,,cat_jewelry,0,0,false
-1933427130573017090,bracelet,rule,rose bracelet,19.18,true,,cat_jewelry,0,0,false
-1933414853800378369,bracelet,rule,cinnabar bracelet,19.18,true,,cat_jewelry,0,0,false
-1922980688115662850,bracelet,rule,flower bracelet,19.38,true,,cat_jewelry,0,0,false
-D316EB55-0D64-47F7-8F8D-4FE1510CA828,bracelet,rule,malachite elastic bracelets,19.65,true,,cat_jewelry,0,0,false
-1559843693828517888,bracelet,rule,bodhi circle bracelet,19.91,true,,cat_jewelry,0,0,false
-1499716995007393792,bracelet,rule,braided leather bangle,20.11,true,,cat_jewelry,0,0,false
-1626458861936848896,bracelet,rule,paracord bracelet,20.36,true,,cat_jewelry,0,0,false
-1922956354408022017,bracelet,rule,crystal bracelet beads,21.38,true,,cat_jewelry,0,0,false
-4823C6E9-E430-4C9A-98C4-46FDDD5AC601,bracelet,rule,couple cross bracelet,22.0,true,,cat_jewelry,0,0,false
-1371814529566117888,bracelet,rule,love vows bracelet,22.25,true,,cat_jewelry,0,0,false
-2407020914491626100,bracelet,rule,double heart anklet,22.52,true,,cat_jewelry,0,0,false
-1DE47053-AA21-4057-A630-32A3B993F3D7,bracelet,rule,sapphire bracelet,22.58,true,,cat_jewelry,0,0,false
-1498935096575660032,bracelet,rule,silver chain bracelet,23.1,true,,cat_jewelry,0,0,false
-BC8227D1-728A-4E41-ABD6-CE9A06F20230,bracelet,rule,blue apatite elastic beaded bracelet,23.32,true,,cat_jewelry,0,0,false
-1407573954780073984,bracelet,rule,tiger eye stone bracelet,26.1,true,,cat_jewelry,0,0,false
-438FA894-2D0E-4D5E-A559-11775A2BE802,bracelet,rule,tiger eye stone bracelet,37.83,true,,cat_jewelry,0,0,false
-1897217873654218754,breathing strip,llm:zai:glm-4.5-flash:pt-v1,breathing strip nasal aid,25.39,true,,title_medical,0,0,false
-1364152307499012096,brooch,rule,brooch nail pearl,18.46,true,,,0,0,false
-7A0A16A6-6483-4EB5-8746-EFB01FBE22DB,car accessory,llm:zai:glm-4.5-flash:pt-v1,headrest hangers,17.33,true,,cat_auto,0,0,false
-1428891025237217280,car accessory,llm:zai:glm-4.5-flash:pt-v1,car hud display,37.61,true,,,0,0,false
-1371730312916242432,car wax,llm:zai:glm-4.5-flash:pt-v1,car crystal wax coating,26.21,true,,"cat_auto,title_chemical",0,0,false
-1568197457056641024,cat trinket,llm:zai:glm-4.5-flash:pt-v1,wooden cat crafts,20.53,true,,,0,0,false
-2407200305291611900,cleaning cloth,llm:zai:glm-4.5-flash:pt-v1,microfiber car towel,26.74,true,,,0,0,false
-1562784097343385600,cleaning spray,llm:zai:glm-4.5-flash:pt-v1,mildew decontaminant spray,22.12,true,,title_chemical,0,0,false
-C9C8B713-4FC5-4BBF-B690-2070094B08DF,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,headlight repair liquid,19.27,true,,"cat_auto,title_chemical",0,0,false
-2508050329281600700,cleaning tool,rule,mini mop,19.42,true,,,0,0,false
-4328806F-26C7-47B0-940F-35B1AE409B00,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,sewer dredge pipe cleaner,19.85,true,,"cat_knives,title_chemical",0,0,false
-1831540337429860352,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,mold removing spray bathroom,23.43,true,,title_chemical,0,0,false
-1831944121511464960,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,car iron powder rust remover,23.45,true,,"cat_auto,title_chemical",0,0,false
-1831628296455868416,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,shoe deodorizing spray,26.65,true,,"title_chemical,title_furniture",0,0,false
-1833073681317646336,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,washing machine cleaning tablets,26.65,true,,title_chemical,0,0,false
-1830915676744601600,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,automotive coating spray,26.65,true,,title_chemical,0,0,false
-1830916614851022848,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,brake cleaner rust removal,26.65,true,,title_chemical,0,0,false
-1377161671730139136,commemorative coin,llm:zai:glm-4.5-flash:pt-v1,jesus commemorative coin,14.79,true,,cat_jewelry,0,0,false
-F7AC6D42-0DF8-41BC-A1B1-FB43131085E3,cosmetic bag,rule,cosmetic toiletry bag,20.96,true,,,0,0,false
-1379355571857264640,cotton swab,llm:zai:glm-4.5-flash:pt-v1,humidifier cotton wick,20.16,true,,,0,0,false
-1742112734486999040,crystal decor,llm:zai:glm-4.5-flash:pt-v1,crystal rose gift,19.18,true,,cat_jewelry,0,0,false
-1923311420506030082,crystal decor,rule,crystal aromatherapy diffuser,19.94,true,,,0,0,false
-C00DFDC8-8167-4E40-8649-7097372BDB56,crystal decor,rule,crystal orgone pyramid decoration,25.65,true,,,0,0,false
-1446288400226324480,crystal decor,rule,crystal pyramid decoration,29.48,true,,,0,0,false
-1925491648367996930,dinnerware,rule,bone china dinnerware set,30.8,true,,,0,0,false
-1925486614841675777,dinnerware,rule,bone china dinnerware set,30.8,true,,,0,0,false
+4BD7D7F7-9490-49BC-80CF-095A3B87A171,antenna,llm:zai:glm-4.5-flash:pt-v1,tv antenna amplifier,20.69,true,,cat_computer,1,1,false
+1867125496166109184,audio adapter,llm:zai:glm-4.5-flash:pt-v1,vx audio adapter,28.92,true,,cat_computer,1,1,false
+1737338606332686336,backpack,rule,women travel backpack,36.27,true,,,1,0,true
+1899737610018119682,bar accessory,rule,metal bottle opener,22.12,true,,cat_knives,1,1,false
+1899773967183876098,bar accessory,rule,wine bottle stopper,22.14,true,,cat_knives,1,0,true
+FBD229E3-C8F2-407C-879D-BD3FEA63BB92,bar accessory,llm:zai:glm-4.5-flash:pt-v1,bbq oil vinegar spray bottle,23.85,true,,title_chemical,1,1,false
+1900382647983722497,bar accessory,rule,faucet bottle stopper dispenser,23.94,true,,cat_knives,1,0,true
+C5FC8AA4-B78D-4766-8C3B-56641913B6F2,bath exfoliating accessory,rule,konjac facial sponge,14.53,true,,,1,0,true
+47A634C1-249D-42E8-BCBE-D0992EBDF4A9,bath exfoliating accessory,rule,exfoliating mitt,18.56,true,,,1,1,false
+1880165726661005314,bathroom shelf,rule,wall mounted bathroom shelf,24.48,true,,,1,1,false
+1357509147247120384,belt buckle,llm:zai:glm-4.5-flash:pt-v1,acrylic plastic chain,17.91,true,,cat_jewelry,1,1,false
+1955097636363993090,bike brake pads,llm:zai:glm-4.5-flash:pt-v1,bike brake pads set,29.62,true,,cat_auto,1,1,false
+1797470306802601984,bracelet,rule,cuban link bracelet,14.41,true,,cat_jewelry,1,1,false
+2406240714201626300,bracelet,rule,natural stone bracelet,14.46,true,,cat_jewelry,1,0,true
+1506456885363486720,bracelet,rule,anklet bohemian style,14.46,true,,cat_jewelry,1,1,false
+2411090939361614200,bracelet,rule,glow butterfly necklace set,14.64,true,,cat_jewelry,1,1,false
+CD4929F6-CB9C-4DE5-A2F8-9F178345941A,bracelet,rule,owl wood grain bracelet,14.68,true,,cat_jewelry,1,1,false
+2406280705181608400,bracelet,rule,simple metal jewelry set,14.84,true,,cat_jewelry,1,1,false
+1509512487987851264,bracelet,rule,beaded couple bracelet,14.99,true,,cat_jewelry,1,1,false
+1433001594886164480,bracelet,rule,braided leather bracelet,15.13,true,,cat_jewelry,1,1,false
+D562B58F-931A-46FE-B5D1-344900E425EE,bracelet,rule,tiger eye bracelet,15.48,true,,cat_jewelry,1,1,false
+1436554051054604288,bracelet,rule,rainbow bead bracelet,15.57,true,,cat_jewelry,1,1,false
+F95AE429-B0BE-498E-BD96-FF6F00358BDB,bracelet,rule,onyx bracelet,15.6,true,,cat_jewelry,1,1,false
+1422074647645655040,bracelet,rule,constellation chakra bracelet,15.62,true,,cat_jewelry,1,1,false
+DBE1973D-FF94-43DD-9835-85CF59C272CA,bracelet,rule,chakra energy bracelet,15.79,true,,cat_jewelry,1,1,false
+1397117854108749824,bracelet,rule,leather bracelet,16.29,true,,cat_jewelry,1,1,false
+59001164-F4A3-410F-BB65-BF5E125872E0,bracelet,rule,lion bracelet,16.53,true,,cat_jewelry,1,1,false
+1626449984012955648,bracelet,rule,pine bead bracelet,17.11,true,,cat_jewelry,1,1,false
+1405075602544922624,bracelet,rule,amethyst stone bracelet,17.35,true,,cat_jewelry,1,1,false
+2407010742141606000,bracelet,rule,shell anklet,17.44,true,,cat_jewelry,1,1,false
+1496077229191467008,bracelet,rule,butterfly bracelet zircon,17.47,true,,cat_jewelry,1,1,false
+B2A24E6C-0A0F-424B-8F37-35A65667F1C6,bracelet,rule,crystal beaded bracelet,17.69,true,,cat_jewelry,1,1,false
+1409427791266582528,bracelet,rule,turquoise cross bracelet,18.0,true,,cat_jewelry,1,1,false
+1734878194978791424,bracelet,rule,twisted rope chain bracelet,18.09,true,,cat_jewelry,1,0,true
+1933436343009431554,bracelet,rule,pearl bracelet,18.09,true,,cat_jewelry,1,0,true
+15A28BE8-B44A-46CD-9D96-79B6769156C3,bracelet,rule,stone owl bracelet,18.2,true,,cat_jewelry,1,1,false
+1557983501100789760,bracelet,rule,magnetic bracelet,18.46,true,,cat_jewelry,1,1,false
+1626465206681481216,bracelet,rule,gemstone bangle,18.49,true,,cat_jewelry,1,1,false
+1933424127878811649,bracelet,rule,cinnabar bracelet,18.6,true,,cat_jewelry,1,1,false
+F97EF571-A358-4269-8026-369D8FA90CDB,bracelet,rule,leopard head bracelet,18.98,true,,cat_jewelry,1,1,false
+1441959545097293824,bracelet,rule,rose gold bracelet,18.98,true,,cat_jewelry,1,0,true
+1933427130573017090,bracelet,rule,rose bracelet,19.18,true,,cat_jewelry,1,1,false
+1933414853800378369,bracelet,rule,cinnabar bracelet,19.18,true,,cat_jewelry,1,0,true
+1922980688115662850,bracelet,rule,flower bracelet,19.38,true,,cat_jewelry,1,1,false
+D316EB55-0D64-47F7-8F8D-4FE1510CA828,bracelet,rule,malachite elastic bracelets,19.65,true,,cat_jewelry,1,1,false
+1559843693828517888,bracelet,rule,bodhi circle bracelet,19.91,true,,cat_jewelry,1,1,false
+1499716995007393792,bracelet,rule,braided leather bangle,20.11,true,,cat_jewelry,1,1,false
+1626458861936848896,bracelet,rule,paracord bracelet,20.36,true,,cat_jewelry,1,1,false
+1922956354408022017,bracelet,rule,crystal bracelet beads,21.38,true,,cat_jewelry,1,1,false
+4823C6E9-E430-4C9A-98C4-46FDDD5AC601,bracelet,rule,couple cross bracelet,22.0,true,,cat_jewelry,1,0,true
+1371814529566117888,bracelet,rule,love vows bracelet,22.25,true,,cat_jewelry,1,0,true
+2407020914491626100,bracelet,rule,double heart anklet,22.52,true,,cat_jewelry,1,1,false
+1DE47053-AA21-4057-A630-32A3B993F3D7,bracelet,rule,sapphire bracelet,22.58,true,,cat_jewelry,1,1,false
+1498935096575660032,bracelet,rule,silver chain bracelet,23.1,true,,cat_jewelry,1,1,false
+BC8227D1-728A-4E41-ABD6-CE9A06F20230,bracelet,rule,blue apatite elastic beaded bracelet,23.32,true,,cat_jewelry,1,1,false
+1407573954780073984,bracelet,rule,tiger eye stone bracelet,26.1,true,,cat_jewelry,1,1,false
+438FA894-2D0E-4D5E-A559-11775A2BE802,bracelet,rule,tiger eye stone bracelet,37.83,true,,cat_jewelry,1,1,false
+1897217873654218754,breathing strip,llm:zai:glm-4.5-flash:pt-v1,breathing strip nasal aid,25.39,true,,title_medical,1,1,false
+1364152307499012096,brooch,rule,brooch nail pearl,18.46,true,,,1,1,false
+7A0A16A6-6483-4EB5-8746-EFB01FBE22DB,car accessory,llm:zai:glm-4.5-flash:pt-v1,headrest hangers,17.33,true,,cat_auto,1,1,false
+1428891025237217280,car accessory,llm:zai:glm-4.5-flash:pt-v1,car hud display,37.61,true,,,1,1,false
+1371730312916242432,car wax,llm:zai:glm-4.5-flash:pt-v1,car crystal wax coating,26.21,true,,"cat_auto,title_chemical",1,0,true
+1568197457056641024,cat trinket,llm:zai:glm-4.5-flash:pt-v1,wooden cat crafts,20.53,true,,,1,1,false
+2407200305291611900,cleaning cloth,llm:zai:glm-4.5-flash:pt-v1,microfiber car towel,26.74,true,,,1,0,true
+1562784097343385600,cleaning spray,llm:zai:glm-4.5-flash:pt-v1,mildew decontaminant spray,22.12,true,,title_chemical,1,0,true
+C9C8B713-4FC5-4BBF-B690-2070094B08DF,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,headlight repair liquid,19.27,true,,"cat_auto,title_chemical",1,0,true
+2508050329281600700,cleaning tool,rule,mini mop,19.42,true,,,1,0,true
+4328806F-26C7-47B0-940F-35B1AE409B00,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,sewer dredge pipe cleaner,19.85,true,,"cat_knives,title_chemical",1,0,true
+1831540337429860352,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,mold removing spray bathroom,23.43,true,,title_chemical,1,0,true
+1831944121511464960,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,car iron powder rust remover,23.45,true,,"cat_auto,title_chemical",1,0,true
+1831628296455868416,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,shoe deodorizing spray,26.65,true,,"title_chemical,title_furniture",1,0,true
+1833073681317646336,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,washing machine cleaning tablets,26.65,true,,title_chemical,1,0,true
+1830915676744601600,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,automotive coating spray,26.65,true,,title_chemical,1,0,true
+1830916614851022848,cleaning tool,llm:zai:glm-4.5-flash:pt-v1,brake cleaner rust removal,26.65,true,,title_chemical,1,0,true
+1377161671730139136,commemorative coin,llm:zai:glm-4.5-flash:pt-v1,jesus commemorative coin,14.79,true,,cat_jewelry,1,1,false
+F7AC6D42-0DF8-41BC-A1B1-FB43131085E3,cosmetic bag,rule,cosmetic toiletry bag,20.96,true,,,1,0,true
+1379355571857264640,cotton swab,llm:zai:glm-4.5-flash:pt-v1,humidifier cotton wick,20.16,true,,,1,1,false
+1742112734486999040,crystal decor,llm:zai:glm-4.5-flash:pt-v1,crystal rose gift,19.18,true,,cat_jewelry,1,0,true
+1923311420506030082,crystal decor,rule,crystal aromatherapy diffuser,19.94,true,,,1,0,true
+C00DFDC8-8167-4E40-8649-7097372BDB56,crystal decor,rule,crystal orgone pyramid decoration,25.65,true,,,1,1,false
+1446288400226324480,crystal decor,rule,crystal pyramid decoration,29.48,true,,,1,1,false
+1925491648367996930,dinnerware,rule,bone china dinnerware set,30.8,true,,,1,1,false
+1925486614841675777,dinnerware,rule,bone china dinnerware set,30.8,true,,,1,0,true
 2406280638481612300,earrings,rule,butterfly earrings rhinestone,14.01,true,,cat_jewelry,1,1,false
 2406240920331628600,earrings,rule,drop hummingbird earrings,14.31,true,,cat_jewelry,1,0,true
 1470312013514280960,earrings,rule,long tassel earrings,14.37,true,,cat_jewelry,1,1,false
-1387948867575746560,earrings,rule,rose tassel earrings,14.46,true,,cat_jewelry,0,0,false
-2406240625151610800,earrings,rule,rhinestone wave earrings,14.48,true,,cat_jewelry,0,0,false
-1496063290185486336,earrings,rule,butterfly clip earrings,14.53,true,,cat_jewelry,0,0,false
-1425406949347954688,earrings,rule,elongated cross earrings,14.86,true,,cat_jewelry,0,0,false
-2406280703011629400,earrings,rule,circle zircon earrings,15.15,true,,cat_jewelry,0,0,false
-2407250756141621700,earrings,rule,flower stud earrings,15.35,true,,cat_jewelry,0,0,false
-2406240623161602400,earrings,rule,square zircon earrings,15.88,true,,cat_jewelry,0,0,false
-2407010713571608100,earrings,rule,gold plated ring earrings,16.29,true,,cat_jewelry,0,0,false
-1738221070915743744,earrings,rule,stainless steel earrings,17.53,true,,cat_jewelry,0,0,false
-2406260824061628600,earrings,rule,animal stud earrings,18.26,true,,cat_jewelry,0,0,false
-1734558161266290688,earrings,rule,hip hop earring,18.36,true,,cat_jewelry,0,0,false
-095F94B5-0D07-4B05-AAC2-AD3A03E1E188,earrings,rule,ethnic earrings,18.71,true,,cat_jewelry,0,0,false
-2406250709361617900,earrings,rule,butterfly earrings,21.31,true,,cat_jewelry,0,0,false
-1859838581364641792,earrings,rule,earrings back plug,21.96,true,,cat_jewelry,0,0,false
-1846807919200194560,fishing lure,rule,fishing lure hard bait,27.97,true,,,0,0,false
-1454693325318787072,fitness accessory,rule,finger exercise arthritis,18.47,true,,,0,0,false
-1441219130710691840,fitness accessory,rule,yoga stretch band,22.43,true,,,0,0,false
-1682285176786788352,flower box,llm:zai:glm-4.5-flash:pt-v1,flower gift box,32.29,true,,cat_jewelry,0,0,false
-96D04872-FB55-4C24-9295-170B9A9CFD06,flower decor,llm:zai:glm-4.5-flash:pt-v1,color gold rose set,22.3,true,,,0,0,false
-1689541558858686464,game dice,llm:zai:glm-4.5-flash:pt-v1,wooden date night dice,23.79,true,,,0,0,false
-247C6C31-9110-44F7-84FD-B83293E903EB,garden supply,rule,plant growth bag,22.92,true,,,0,0,false
-1941777678855217154,garden supply,rule,bird netting protection,23.0,true,,,0,0,false
-1496401343378755584,golf grip,llm:zai:glm-4.5-flash:pt-v1,golf swing exerciser,19.85,true,,,0,0,false
-2406260930571606700,hair accessory,rule,butterfly hair clip,18.56,true,,,0,0,false
-2503140216061603100,hair accessory,rule,hair volume clip,18.64,true,,,0,0,false
-1524212426772852736,hair accessory,rule,silk eye mask set,29.99,true,,,0,0,false
-1446314471369871360,hand tool,rule,carabiner d type,18.18,true,,,0,0,false
-E6A19B4E-627A-49B4-8199-0594116611CD,hand tool,rule,angle milling cutter,20.23,true,,,0,0,false
-820C0127-5BC3-4F7B-A402-F73593608FB2,hand tool,rule,crane embroidery scissors,21.51,true,,,0,0,false
-4D80FC3C-3494-4B9F-A677-8AF3298B6FBF,hand tool,rule,hex shank twist drill bit set,24.7,true,,,0,0,false
-1368136541800632320,hand tool,rule,suction cup mini vise clamp,26.08,true,,,0,0,false
-1831628472633413632,hand tool,llm:zai:glm-4.5-flash:pt-v1,tile repair adhesive,26.65,true,,title_chemical,0,0,false
-1860205407231692800,hand warmer,llm:zai:glm-4.5-flash:pt-v1,wool hand warmers,27.03,true,,,0,0,false
-1732323792665456640,handbag,llm:zai:glm-4.5-flash:pt-v1,handheld bag,22.25,true,,,0,0,false
-2503020535021602500,handbag,rule,crossbody shoulder bag,23.09,true,,,0,0,false
-1827614917072408576,handbag,rule,halloween cartoon phone bag,23.59,true,,,0,0,false
-1366003969222119424,handbag,rule,canvas student shoulder bag,26.34,true,,,0,0,false
-2409030854001610700,handbag,rule,crossbody bag halloween pumpkin,28.26,true,,,0,0,false
-2406160118301609200,handbag,rule,canvas shoulder bag,31.22,true,,,0,0,false
-2503010922151626000,handbag,rule,pu leather crossbody bag,31.77,true,,,0,0,false
-2411220158191609500,handbag,rule,shoulder bag floral straps,33.93,true,,,0,0,false
-1484730277841473536,handbag,rule,embroidery tool set tote,38.45,true,,,0,0,false
-2410110911281610600,jacket,llm:zai:glm-4.5-flash:pt-v1,cotton-padded coat,27.9,true,,,0,0,false
+1387948867575746560,earrings,rule,rose tassel earrings,14.46,true,,cat_jewelry,1,1,false
+2406240625151610800,earrings,rule,rhinestone wave earrings,14.48,true,,cat_jewelry,1,1,false
+1496063290185486336,earrings,rule,butterfly clip earrings,14.53,true,,cat_jewelry,1,1,false
+1425406949347954688,earrings,rule,elongated cross earrings,14.86,true,,cat_jewelry,1,1,false
+2406280703011629400,earrings,rule,circle zircon earrings,15.15,true,,cat_jewelry,1,1,false
+2407250756141621700,earrings,rule,flower stud earrings,15.35,true,,cat_jewelry,1,1,false
+2406240623161602400,earrings,rule,square zircon earrings,15.88,true,,cat_jewelry,1,1,false
+2407010713571608100,earrings,rule,gold plated ring earrings,16.29,true,,cat_jewelry,1,1,false
+1738221070915743744,earrings,rule,stainless steel earrings,17.53,true,,cat_jewelry,1,1,false
+2406260824061628600,earrings,rule,animal stud earrings,18.26,true,,cat_jewelry,1,1,false
+1734558161266290688,earrings,rule,hip hop earring,18.36,true,,cat_jewelry,1,1,false
+095F94B5-0D07-4B05-AAC2-AD3A03E1E188,earrings,rule,ethnic earrings,18.71,true,,cat_jewelry,1,1,false
+2406250709361617900,earrings,rule,butterfly earrings,21.31,true,,cat_jewelry,1,0,true
+1859838581364641792,earrings,rule,earrings back plug,21.96,true,,cat_jewelry,1,1,false
+1846807919200194560,fishing lure,rule,fishing lure hard bait,27.97,true,,,1,0,true
+1454693325318787072,fitness accessory,rule,finger exercise arthritis,18.47,true,,title_medical,1,0,true
+1441219130710691840,fitness accessory,rule,yoga stretch band,22.43,true,,,1,0,true
+1682285176786788352,flower box,llm:zai:glm-4.5-flash:pt-v1,flower gift box,32.29,true,,cat_jewelry,1,1,false
+96D04872-FB55-4C24-9295-170B9A9CFD06,flower decor,llm:zai:glm-4.5-flash:pt-v1,color gold rose set,22.3,true,,,1,1,false
+1689541558858686464,game dice,llm:zai:glm-4.5-flash:pt-v1,wooden date night dice,23.79,true,,,1,0,true
+247C6C31-9110-44F7-84FD-B83293E903EB,garden supply,rule,plant growth bag,22.92,true,,,1,1,false
+1941777678855217154,garden supply,rule,bird netting protection,23.0,true,,,1,0,true
+1496401343378755584,golf grip,llm:zai:glm-4.5-flash:pt-v1,golf swing exerciser,19.85,true,,,1,1,false
+2406260930571606700,hair accessory,rule,butterfly hair clip,18.56,true,,,1,1,false
+2503140216061603100,hair accessory,rule,hair volume clip,18.64,true,,,1,1,false
+1524212426772852736,hair accessory,rule,silk eye mask set,29.99,true,,,1,1,false
+1446314471369871360,hand tool,rule,carabiner d type,18.18,true,,,1,1,false
+E6A19B4E-627A-49B4-8199-0594116611CD,hand tool,rule,angle milling cutter,20.23,true,,,1,0,true
+820C0127-5BC3-4F7B-A402-F73593608FB2,hand tool,rule,crane embroidery scissors,21.51,true,,,1,1,false
+4D80FC3C-3494-4B9F-A677-8AF3298B6FBF,hand tool,rule,hex shank twist drill bit set,24.7,true,,,1,1,false
+1368136541800632320,hand tool,rule,suction cup mini vise clamp,26.08,true,,,1,1,false
+1831628472633413632,hand tool,llm:zai:glm-4.5-flash:pt-v1,tile repair adhesive,26.65,true,,title_chemical,1,0,true
+1860205407231692800,hand warmer,llm:zai:glm-4.5-flash:pt-v1,wool hand warmers,27.03,true,,,1,0,true
+1732323792665456640,handbag,llm:zai:glm-4.5-flash:pt-v1,handheld bag,22.25,true,,,1,1,false
+2503020535021602500,handbag,rule,crossbody shoulder bag,23.09,true,,,1,0,true
+1827614917072408576,handbag,rule,halloween cartoon phone bag,23.59,true,,,1,0,true
+1366003969222119424,handbag,rule,canvas student shoulder bag,26.34,true,,,1,0,true
+2409030854001610700,handbag,rule,crossbody bag halloween pumpkin,28.26,true,,,1,0,true
+2406160118301609200,handbag,rule,canvas shoulder bag,31.22,true,,,1,0,true
+2503010922151626000,handbag,rule,pu leather crossbody bag,31.77,true,,,1,0,true
+2411220158191609500,handbag,rule,shoulder bag floral straps,33.93,true,,,1,0,true
+1484730277841473536,handbag,rule,embroidery tool set tote,38.45,true,,,1,0,true
+2410110911281610600,jacket,llm:zai:glm-4.5-flash:pt-v1,cotton-padded coat,27.9,true,,,1,0,true
 1549214559997800448,jewelry charm,rule,pearl choker necklace,13.95,true,,cat_jewelry,1,0,true
-2019250685770051586,jewelry charm,llm:zai:glm-4.5-flash:pt-v1,jewelry making kit,30.3,true,,,0,0,false
+2019250685770051586,jewelry charm,llm:zai:glm-4.5-flash:pt-v1,jewelry making kit,30.3,true,,,1,0,true
 1392010512996372480,jewelry pouch,rule,linen drawstring jewelry bag,13.64,true,,,1,1,false
-8835F765-6B44-477B-9AE8-9B6B92B5E7F3,jewelry pouch,rule,jewelry storage bag,21.23,true,,,0,0,false
-1650749894501605376,jewelry pouch,rule,rotating rose gift box,28.26,true,,,0,0,false
+8835F765-6B44-477B-9AE8-9B6B92B5E7F3,jewelry pouch,rule,jewelry storage bag,21.23,true,,,1,1,false
+1650749894501605376,jewelry pouch,rule,rotating rose gift box,28.26,true,,,1,0,true
 07651E43-654D-4199-A7AB-9A8176C669A5,keychain,llm:zai:glm-4.5-flash:pt-v1,keychain stainless steel,14.37,true,,cat_jewelry,1,1,false
-1909095829455958018,message board and trim,rule,bulletin board border trim,19.67,true,,,0,0,false
-1897594815467618306,message board and trim,rule,magnetic message board,27.79,true,,,0,0,false
-D0F2BB36-FE64-492E-B952-B3BBE3C33E2E,nail polish,llm:zai:glm-4.5-flash:pt-v1,nail drying liquid,18.44,true,,"cat_nail,title_chemical",0,0,false
-2089266837628420098,nail polish,rule,cat eye gel polish magnetic,24.12,true,,"cat_nail,title_chemical",0,0,false
+1909095829455958018,message board and trim,rule,bulletin board border trim,19.67,true,,,1,0,true
+1897594815467618306,message board and trim,rule,magnetic message board,27.79,true,,,1,0,true
+D0F2BB36-FE64-492E-B952-B3BBE3C33E2E,nail polish,llm:zai:glm-4.5-flash:pt-v1,nail drying liquid,18.44,true,,"cat_nail,title_chemical",1,0,true
+2089266837628420098,nail polish,rule,cat eye gel polish magnetic,24.12,true,,"cat_nail,title_chemical",1,0,true
 71E03CB1-CEDB-4A2E-A3C3-068677861128,necklace,rule,crystal moon pendant,13.5,true,,cat_jewelry,1,1,false
 1423120152576266240,necklace,rule,diamond cross necklace,13.88,true,,cat_jewelry,1,0,true
 1382652829021376512,necklace,rule,cross pendant necklace,14.04,true,,cat_jewelry,1,1,false
@@ -146,111 +146,110 @@ D0F2BB36-FE64-492E-B952-B3BBE3C33E2E,nail polish,llm:zai:glm-4.5-flash:pt-v1,nai
 1425636834188333056,necklace,rule,bar pendant necklace,14.3,true,,cat_jewelry,1,1,false
 1425403003501940736,necklace,rule,virgin mary pendant,14.33,true,,cat_jewelry,1,1,false
 1420588450972831744,necklace,rule,chakras moon necklace,14.35,true,,cat_jewelry,1,1,false
-1430089933552488448,necklace,rule,star cross pendant,14.39,true,,cat_jewelry,0,0,false
-1480471335133122560,necklace,rule,crystal diamond necklace,14.39,true,,cat_jewelry,0,0,false
-2503170323101603500,necklace,rule,shell pearl necklace,14.41,true,,cat_jewelry,0,0,false
-1369580615514591232,necklace,rule,hexagon column pendant,14.55,true,,cat_jewelry,0,0,false
-56C3E40B-6858-4EDC-B68E-72AB8BB4A626,necklace,rule,boho moon necklace,14.64,true,,cat_jewelry,0,0,false
-1395691634896801792,necklace,rule,faith heart pendant,14.82,true,,cat_jewelry,0,0,false
-BB597BEE-489A-4C6B-8E46-D9ACC501E79F,necklace,rule,flag cross necklace,14.95,true,,cat_jewelry,0,0,false
-27200308-CD10-44DA-ACCA-9F568EAD5636,necklace,rule,glowing pendant necklace,14.99,true,,cat_jewelry,0,0,false
-1385073679137902592,necklace,rule,yantra gem pendant,14.99,true,,cat_jewelry,0,0,false
-1424908652753588224,necklace,rule,heart pendant necklace,15.19,true,,cat_jewelry,0,0,false
-1413382239311499264,necklace,rule,chakra crystal pendant,15.3,true,,cat_jewelry,0,0,false
-1457902304601706496,necklace,rule,magnetic heart pendant necklace,15.4,true,,cat_jewelry,0,0,false
-B90B5473-0DA2-4344-ACE6-23AC5040B6D8,necklace,rule,kabala life tree necklace,15.5,true,,cat_jewelry,0,0,false
-1420634879032430592,necklace,rule,cross pendant necklace,15.62,true,,cat_jewelry,0,0,false
-1415542581739261952,necklace,rule,heart shaped pendant necklace,15.88,true,,cat_jewelry,0,0,false
-1422081860128870400,necklace,rule,crystal pendant,16.08,true,,cat_jewelry,0,0,false
-1421001919488462848,necklace,rule,prayer pendant necklace,16.58,true,,cat_jewelry,0,0,false
-1625379804562337792,necklace,rule,tree of life pendant,16.89,true,,cat_jewelry,0,0,false
-1625380828240949248,necklace,rule,crystal pendant,17.31,true,,cat_jewelry,0,0,false
-1422447492179562496,necklace,rule,tree of life pendant,17.64,true,,cat_jewelry,0,0,false
-1507555649188802560,necklace,rule,cross pendant necklace,17.77,true,,cat_jewelry,0,0,false
-1626470617715322880,necklace,rule,spear head pendant,17.8,true,,cat_jewelry,0,0,false
-1768584505863974912,necklace,rule,necklaces,18.0,true,,cat_jewelry,0,0,false
-1627582190571761664,necklace,rule,wolf head pendant,18.13,true,,cat_jewelry,0,0,false
-1624700699412017152,necklace,rule,viking pendant necklace,18.4,true,,cat_jewelry,0,0,false
-2407230529241628200,necklace,rule,diamond necklace,18.96,true,,cat_jewelry,0,0,false
-1492066786508673024,necklace,rule,obsidian pendant necklace,19.13,true,,cat_jewelry,0,0,false
-7405A9B0-E378-46FE-9A50-BC94B6F3BD14,necklace,rule,trident necklace,19.44,true,,cat_jewelry,0,0,false
-1890326682721710081,necklace,rule,letter pendant necklace,19.71,true,,cat_jewelry,0,0,false
-19246181-AB1E-4423-9380-54347D306235,necklace,rule,emf protection necklace,20.83,true,,cat_jewelry,0,0,false
-2504110316031603800,necklace,rule,moonstone pendant necklace,22.14,true,,cat_jewelry,0,0,false
-1380051244839735296,necklace,rule,moonstone labradorite rough stone pendant,23.25,true,,cat_jewelry,0,0,false
-1734864549699923968,necklace,llm:zai:glm-4.5-flash:pt-v1,cuban chain necklace,28.32,true,,cat_jewelry,0,0,false
-1593053933327626240,necklace,rule,valentine's necklace,36.47,true,,cat_jewelry,0,0,false
-1831638743766683648,pet bed and mat,rule,pet tear stain eye wipes,23.43,true,,,0,0,false
-2EC85C14-D684-4845-8917-AB9D4E5CE301,pet bed and mat,rule,pet cooling ice silk pad,25.99,true,,,0,0,false
-FF10D3C0-679C-4C38-8F48-8961E85AE312,pet carrier,rule,dog carrier backpack,43.01,true,,,0,0,false
-1403920038016192512,pet clothing and shoes,rule,small dog hoodies,20.02,true,,,0,0,false
-1530494926683910144,pet clothing and shoes,rule,leopard print pet shoes,24.74,true,,,0,0,false
-E1AE8A64-6DA0-4FE6-8487-43F61733EE97,pet clothing and shoes,rule,dog shoes,32.98,true,,,0,0,false
-9C9F01ED-139B-473F-A920-5514E67CBB56,pet collar and leash,rule,pet collar,18.26,true,,,0,0,false
-1585221163377242112,pet collar and leash,rule,airtag collar holder,21.03,true,,,0,0,false
-1859780638086680576,pet collar and leash,rule,pet dog training collar,23.41,true,,,0,0,false
-1956654039511355394,pet collar and leash,rule,pet car seat leash,27.06,true,,,0,0,false
-38F8EECC-A06A-460E-BF95-2D51929DF2C6,pet collar and leash,rule,pet handle leash,27.86,true,,,0,0,false
-1432144098994819072,pet glasses,llm:zai:glm-4.5-flash:pt-v1,cat sunglasses,19.98,true,,,0,0,false
-2503191148021601200,pet grooming tool,rule,pet hair remover glove,18.29,true,,title_chemical,0,0,false
-1648989475315396608,pet grooming tool,rule,pet grooming brush,23.1,true,,,0,0,false
-1496391071696031744,pet muzzle,llm:zai:glm-4.5-flash:pt-v1,dog mouth cover,27.66,true,,,0,0,false
-9C1905EC-A0D0-4CFA-AE24-3BD6B8098D24,pet waste bag holder,rule,pet poop bag storage box,26.45,true,,,0,0,false
-F25DF9B2-5E6B-42C9-85FD-B34D55E39822,pillowcase,rule,satin silk pillowcase,23.79,true,,,0,0,false
-1785920160713416704,press-on nails,llm:zai:glm-4.5-flash:pt-v1,wear nail handmade,22.36,true,,cat_nail,0,0,false
-2005817338566410242,press-on nails,rule,glitter butterfly fake nails,27.39,true,,cat_nail,0,0,false
-2005814432473178114,press-on nails,rule,long fake nails,27.39,true,,cat_nail,0,0,false
-2005570463020249089,press-on nails,rule,planet star fake nails,27.39,true,,cat_nail,0,0,false
-2005818800763990017,press-on nails,rule,black butterfly fake nails,27.39,true,,cat_nail,0,0,false
-2005818052797661185,press-on nails,rule,black star fake nails,27.39,true,,cat_nail,0,0,false
-2005571453028294657,press-on nails,rule,diamond snake fake nails,27.39,true,,cat_nail,0,0,false
-2005519779684052994,press-on nails,rule,diamond butterfly fake nails,27.39,true,,cat_nail,0,0,false
-2005518522790502402,press-on nails,rule,cherry bow fake nails,27.39,true,,cat_nail,0,0,false
-2005820165653135362,press-on nails,rule,pearl star fake nails,27.39,true,,cat_nail,0,0,false
-2005521702806937602,press-on nails,rule,diamond snowflake fake nails,27.39,true,,cat_nail,0,0,false
-2005517277608169473,press-on nails,rule,strawbow fake nails,27.39,true,,cat_nail,0,0,false
-2005583511304167426,press-on nails,rule,flower butterfly fake nails,27.39,true,,cat_nail,0,0,false
+1430089933552488448,necklace,rule,star cross pendant,14.39,true,,cat_jewelry,1,1,false
+1480471335133122560,necklace,rule,crystal diamond necklace,14.39,true,,cat_jewelry,1,1,false
+2503170323101603500,necklace,rule,shell pearl necklace,14.41,true,,cat_jewelry,1,0,true
+1369580615514591232,necklace,rule,hexagon column pendant,14.55,true,,cat_jewelry,1,1,false
+56C3E40B-6858-4EDC-B68E-72AB8BB4A626,necklace,rule,boho moon necklace,14.64,true,,cat_jewelry,1,1,false
+1395691634896801792,necklace,rule,faith heart pendant,14.82,true,,cat_jewelry,1,1,false
+BB597BEE-489A-4C6B-8E46-D9ACC501E79F,necklace,rule,flag cross necklace,14.95,true,,cat_jewelry,1,1,false
+1385073679137902592,necklace,rule,yantra gem pendant,14.99,true,,cat_jewelry,1,1,false
+27200308-CD10-44DA-ACCA-9F568EAD5636,necklace,rule,glowing pendant necklace,14.99,true,,cat_jewelry,1,1,false
+1424908652753588224,necklace,rule,heart pendant necklace,15.19,true,,cat_jewelry,1,1,false
+1413382239311499264,necklace,rule,chakra crystal pendant,15.3,true,,cat_jewelry,1,1,false
+1457902304601706496,necklace,rule,magnetic heart pendant necklace,15.4,true,,cat_jewelry,1,1,false
+B90B5473-0DA2-4344-ACE6-23AC5040B6D8,necklace,rule,kabala life tree necklace,15.5,true,,cat_jewelry,1,1,false
+1420634879032430592,necklace,rule,cross pendant necklace,15.62,true,,cat_jewelry,1,1,false
+1415542581739261952,necklace,rule,heart shaped pendant necklace,15.88,true,,cat_jewelry,1,0,true
+1422081860128870400,necklace,rule,crystal pendant,16.08,true,,cat_jewelry,1,1,false
+1421001919488462848,necklace,rule,prayer pendant necklace,16.58,true,,cat_jewelry,1,1,false
+1625379804562337792,necklace,rule,tree of life pendant,16.89,true,,cat_jewelry,1,1,false
+1625380828240949248,necklace,rule,crystal pendant,17.31,true,,cat_jewelry,1,1,false
+1422447492179562496,necklace,rule,tree of life pendant,17.64,true,,cat_jewelry,1,1,false
+1507555649188802560,necklace,rule,cross pendant necklace,17.77,true,,cat_jewelry,1,1,false
+1626470617715322880,necklace,rule,spear head pendant,17.8,true,,cat_jewelry,1,1,false
+1768584505863974912,necklace,rule,necklaces,18.0,true,,cat_jewelry,1,1,false
+1627582190571761664,necklace,rule,wolf head pendant,18.13,true,,cat_jewelry,1,1,false
+1624700699412017152,necklace,rule,viking pendant necklace,18.4,true,,cat_jewelry,1,1,false
+2407230529241628200,necklace,rule,diamond necklace,18.96,true,,cat_jewelry,1,1,false
+1492066786508673024,necklace,rule,obsidian pendant necklace,19.13,true,,cat_jewelry,1,1,false
+7405A9B0-E378-46FE-9A50-BC94B6F3BD14,necklace,rule,trident necklace,19.44,true,,cat_jewelry,1,1,false
+1890326682721710081,necklace,rule,letter pendant necklace,19.71,true,,cat_jewelry,1,1,false
+19246181-AB1E-4423-9380-54347D306235,necklace,rule,emf protection necklace,20.83,true,,cat_jewelry,1,1,false
+2504110316031603800,necklace,rule,moonstone pendant necklace,22.14,true,,cat_jewelry,1,1,false
+1380051244839735296,necklace,rule,moonstone labradorite rough stone pendant,23.25,true,,cat_jewelry,1,1,false
+1734864549699923968,necklace,llm:zai:glm-4.5-flash:pt-v1,cuban chain necklace,28.32,true,,cat_jewelry,1,1,false
+1593053933327626240,necklace,rule,valentine's necklace,36.47,true,,cat_jewelry,1,1,false
+1831638743766683648,pet bed and mat,rule,pet tear stain eye wipes,23.43,true,,,1,0,true
+2EC85C14-D684-4845-8917-AB9D4E5CE301,pet bed and mat,rule,pet cooling ice silk pad,25.99,true,,,1,0,true
+FF10D3C0-679C-4C38-8F48-8961E85AE312,pet carrier,rule,dog carrier backpack,43.01,true,,,1,0,true
+1403920038016192512,pet clothing and shoes,rule,small dog hoodies,20.02,true,,,1,1,false
+1530494926683910144,pet clothing and shoes,rule,leopard print pet shoes,24.74,true,,,1,0,true
+E1AE8A64-6DA0-4FE6-8487-43F61733EE97,pet clothing and shoes,rule,dog shoes,32.98,true,,,1,0,true
+9C9F01ED-139B-473F-A920-5514E67CBB56,pet collar and leash,rule,pet collar,18.26,true,,,1,1,false
+1859780638086680576,pet collar and leash,rule,pet dog training collar,23.41,true,,,1,1,false
+1956654039511355394,pet collar and leash,rule,pet car seat leash,27.06,true,,,1,0,true
+38F8EECC-A06A-460E-BF95-2D51929DF2C6,pet collar and leash,rule,pet handle leash,27.86,true,,,1,1,false
+1432144098994819072,pet glasses,llm:zai:glm-4.5-flash:pt-v1,cat sunglasses,19.98,true,,,1,1,false
+2503191148021601200,pet grooming tool,rule,pet hair remover glove,18.29,true,,title_chemical,1,0,true
+1648989475315396608,pet grooming tool,rule,pet grooming brush,23.1,true,,,1,1,false
+1496391071696031744,pet muzzle,llm:zai:glm-4.5-flash:pt-v1,dog mouth cover,27.66,true,,,1,1,false
+9C1905EC-A0D0-4CFA-AE24-3BD6B8098D24,pet waste bag holder,rule,pet poop bag storage box,26.45,true,,,1,0,true
+F25DF9B2-5E6B-42C9-85FD-B34D55E39822,pillowcase,rule,satin silk pillowcase,23.79,true,,,1,1,false
+1785920160713416704,press-on nails,llm:zai:glm-4.5-flash:pt-v1,wear nail handmade,22.36,true,,cat_nail,1,1,false
+2005583511304167426,press-on nails,rule,flower butterfly fake nails,27.39,true,,cat_nail,1,1,false
+2005571453028294657,press-on nails,rule,diamond snake fake nails,27.39,true,,cat_nail,1,1,false
+2005570463020249089,press-on nails,rule,planet star fake nails,27.39,true,,cat_nail,1,1,false
+2005518522790502402,press-on nails,rule,cherry bow fake nails,27.39,true,,cat_nail,1,1,false
+2005818800763990017,press-on nails,rule,black butterfly fake nails,27.39,true,,cat_nail,1,1,false
+2005521702806937602,press-on nails,rule,diamond snowflake fake nails,27.39,true,,cat_nail,1,1,false
+2005814432473178114,press-on nails,rule,long fake nails,27.39,true,,cat_nail,1,1,false
+2005820165653135362,press-on nails,rule,pearl star fake nails,27.39,true,,cat_nail,1,1,false
+2005517277608169473,press-on nails,rule,strawbow fake nails,27.39,true,,cat_nail,1,1,false
+2005519779684052994,press-on nails,rule,diamond butterfly fake nails,27.39,true,,cat_nail,1,1,false
+2005817338566410242,press-on nails,rule,glitter butterfly fake nails,27.39,true,,cat_nail,1,1,false
+2005818052797661185,press-on nails,rule,black star fake nails,27.39,true,,cat_nail,1,1,false
 1390862937786290176,ring,rule,adjustable hug ring,13.81,true,,cat_jewelry,1,1,false
 65F486B2-1201-4E91-B189-9CA1B4EA2107,ring,rule,rotatable spinner ring,13.84,true,,cat_jewelry,1,0,true
 1726917539768315904,ring,rule,cat ring adjustable,13.93,true,,cat_jewelry,1,1,false
 B0F48B0D-4275-496B-9ADE-7141DB1E5E9A,ring,rule,initial letter ring,14.04,true,,cat_jewelry,1,1,false
 1442057975102574592,ring,rule,mountain shaped ring,14.19,true,,cat_jewelry,1,1,false
 1625062352477499392,ring,rule,basilisk scale ring,14.31,true,,cat_jewelry,1,1,false
-9CEDA022-5953-462A-AA53-99663838938E,ring,rule,adjustable rose ring,14.5,true,,cat_jewelry,0,0,false
-1624665542437122048,ring,rule,wood grain arrow ring,14.57,true,,cat_jewelry,0,0,false
-1410494560672550912,ring,rule,copper cross ring,14.62,true,,cat_jewelry,0,0,false
-FFE74354-8F8C-41C2-B9B7-F0C78C4D74C4,ring,rule,purple ring,14.93,true,,cat_jewelry,0,0,false
-1795688499899801600,ring,rule,rectangular ring,15.48,true,,cat_jewelry,0,0,false
-A4B199D4-EE43-4EA1-927B-7B2C588A7921,ring,rule,pride ring,15.57,true,,cat_jewelry,0,0,false
-2408260828251620800,ring,rule,zircon ring,15.91,true,,cat_jewelry,0,0,false
-2407010725181619200,ring,rule,geometric ear ring,17.04,true,,cat_jewelry,0,0,false
-1625393763294130176,ring,rule,celtic tree of life ring,17.2,true,,cat_jewelry,0,0,false
-1507528804200361984,ring,rule,diamond ring,18.55,true,,cat_jewelry,0,0,false
-1445589054614802432,ring,rule,copper ring,18.73,true,,cat_jewelry,0,0,false
-1459000019528060928,ring,rule,agate stone ring,19.44,true,,cat_jewelry,0,0,false
-1408033049647648768,ring,rule,couple diamond rings,28.3,true,,cat_jewelry,0,0,false
-1413432674634305536,ring,rule,couple silver ring,37.3,true,,cat_jewelry,0,0,false
-13F4F27B-CB94-441E-9472-0537D8F64E96,safety glasses,llm:zai:glm-4.5-flash:pt-v1,safety face shield,21.23,true,,title_chemical,0,0,false
-1585136182898470912,safety hammer,llm:zai:glm-4.5-flash:pt-v1,window breaker hammer,23.0,true,,,0,0,false
-2406260839451612500,scratch board,llm:zai:glm-4.5-flash:pt-v1,cat scratch board,21.42,true,,"title_chemical,title_furniture",0,0,false
-1C843185-5FFD-4ACB-9FB0-9E41976A39FE,sewing and craft tool,rule,needle threader tool,17.87,true,,,0,0,false
-1687689530784096256,sewing and craft tool,rule,embroidery stabilizer,19.31,true,,title_chemical,0,0,false
-185B6AE6-7241-4FA7-84AD-314B7D99A6A3,sewing and craft tool,rule,quilling paper roll,20.8,true,,cat_computer,0,0,false
-CA5646B3-6DE5-4FFD-B83E-A9D5373E2ECD,sewing and craft tool,rule,crochet tool set,28.44,true,,,0,0,false
-B07BA231-93FD-4A87-B941-38E84EF47060,stickers and decals,rule,reflective bicycle sticker,18.64,true,,cat_auto,0,0,false
-07E2A35F-A3E2-4615-AB49-04AECE0A596A,stickers and decals,rule,decorative wall stickers,23.05,true,,,0,0,false
-1662995794766598144,straw,llm:zai:glm-4.5-flash:pt-v1,drinking straw,20.38,true,,,0,0,false
-1860201401847533568,tool,llm:zai:glm-4.5-flash:pt-v1,alcohol detector,31.17,true,,cat_auto,0,0,false
-90254686-D263-4AB0-BF44-A0D7C44C73E7,tool bag,rule,hardware tool bag,27.99,true,,,0,0,false
-88FC3457-1644-46BF-996B-F23757521FC4,toothbrush,rule,soft toothbrush,18.04,true,,,0,0,false
-EFE5F48E-B94F-4BE3-9CF8-E690A0BDFC9F,toothbrush,rule,bamboo toothbrush,21.22,true,,,0,0,false
-1897599348998537217,toothbrush,rule,toothbrush sterilizer box,29.55,true,,title_medical,0,0,false
-1409031234352451584,vase,rule,nordic style flower vase,31.49,true,,,0,0,false
-2407290907341621000,wallet and card holder,rule,card holder wallet,19.89,true,,,0,0,false
-1389432269629952000,watch band,rule,watch strap remover tool,17.51,true,,title_chemical,0,0,false
-D60CB67B-7276-4DC4-98A1-2B0445EFC1C8,watch band,llm:zai:glm-4.5-flash:pt-v1,leather wrist watch,21.67,true,,cat_jewelry,0,0,false
-1955836424589574145,watch band,rule,silicone watch band replacement,23.96,true,,cat_jewelry,0,0,false
-1462351505049915392,wooden toy,llm:zai:glm-4.5-flash:pt-v1,wooden puzzle toy,18.58,true,,title_toy,0,0,false
+9CEDA022-5953-462A-AA53-99663838938E,ring,rule,adjustable rose ring,14.5,true,,cat_jewelry,1,1,false
+1624665542437122048,ring,rule,wood grain arrow ring,14.57,true,,cat_jewelry,1,1,false
+1410494560672550912,ring,rule,copper cross ring,14.62,true,,cat_jewelry,1,1,false
+FFE74354-8F8C-41C2-B9B7-F0C78C4D74C4,ring,rule,purple ring,14.93,true,,cat_jewelry,1,0,true
+1795688499899801600,ring,rule,rectangular ring,15.48,true,,cat_jewelry,1,1,false
+A4B199D4-EE43-4EA1-927B-7B2C588A7921,ring,rule,pride ring,15.57,true,,cat_jewelry,1,0,true
+2408260828251620800,ring,rule,zircon ring,15.91,true,,cat_jewelry,1,1,false
+2407010725181619200,ring,rule,geometric ear ring,17.04,true,,cat_jewelry,1,1,false
+1625393763294130176,ring,rule,celtic tree of life ring,17.2,true,,cat_jewelry,1,1,false
+1507528804200361984,ring,rule,diamond ring,18.55,true,,cat_jewelry,1,1,false
+1445589054614802432,ring,rule,copper ring,18.73,true,,cat_jewelry,1,0,true
+1459000019528060928,ring,rule,agate stone ring,19.44,true,,cat_jewelry,1,1,false
+1408033049647648768,ring,rule,couple diamond rings,28.3,true,,cat_jewelry,1,1,false
+1413432674634305536,ring,rule,couple silver ring,37.3,true,,cat_jewelry,1,1,false
+13F4F27B-CB94-441E-9472-0537D8F64E96,safety glasses,llm:zai:glm-4.5-flash:pt-v1,safety face shield,21.23,true,,title_chemical,1,1,false
+1585136182898470912,safety hammer,llm:zai:glm-4.5-flash:pt-v1,window breaker hammer,23.0,true,,,1,0,true
+2406260839451612500,scratch board,llm:zai:glm-4.5-flash:pt-v1,cat scratch board,21.42,true,,"title_chemical,title_furniture",1,0,true
+1C843185-5FFD-4ACB-9FB0-9E41976A39FE,sewing and craft tool,rule,needle threader tool,17.87,true,,,1,1,false
+1687689530784096256,sewing and craft tool,rule,embroidery stabilizer,19.31,true,,title_chemical,1,0,true
+185B6AE6-7241-4FA7-84AD-314B7D99A6A3,sewing and craft tool,rule,quilling paper roll,20.8,true,,cat_computer,1,1,false
+CA5646B3-6DE5-4FFD-B83E-A9D5373E2ECD,sewing and craft tool,rule,crochet tool set,28.44,true,,,1,0,true
+B07BA231-93FD-4A87-B941-38E84EF47060,stickers and decals,rule,reflective bicycle sticker,18.64,true,,cat_auto,1,1,false
+07E2A35F-A3E2-4615-AB49-04AECE0A596A,stickers and decals,rule,decorative wall stickers,23.05,true,,,1,1,false
+1662995794766598144,straw,llm:zai:glm-4.5-flash:pt-v1,drinking straw,20.38,true,,,1,1,false
+1860201401847533568,tool,llm:zai:glm-4.5-flash:pt-v1,alcohol detector,31.17,true,,cat_auto,1,0,true
+90254686-D263-4AB0-BF44-A0D7C44C73E7,tool bag,rule,hardware tool bag,27.99,true,,,1,1,false
+88FC3457-1644-46BF-996B-F23757521FC4,toothbrush,rule,soft toothbrush,18.04,true,,,1,0,true
+EFE5F48E-B94F-4BE3-9CF8-E690A0BDFC9F,toothbrush,rule,bamboo toothbrush,21.22,true,,,1,1,false
+1897599348998537217,toothbrush,rule,toothbrush sterilizer box,29.55,true,,title_medical,1,1,false
+1409031234352451584,vase,rule,nordic style flower vase,31.49,true,,,1,1,false
+2407290907341621000,wallet and card holder,rule,card holder wallet,19.89,true,,,1,1,false
+1389432269629952000,watch band,rule,watch strap remover tool,17.51,true,,title_chemical,1,1,false
+D60CB67B-7276-4DC4-98A1-2B0445EFC1C8,watch band,llm:zai:glm-4.5-flash:pt-v1,leather wrist watch,21.67,true,,cat_jewelry,1,1,false
+1955836424589574145,watch band,rule,silicone watch band replacement,23.96,true,,cat_jewelry,1,0,true
+1462351505049915392,wooden toy,llm:zai:glm-4.5-flash:pt-v1,wooden puzzle toy,18.58,true,,title_toy,1,1,false
 2501160802521604500,backpack,rule,,40.48,false,too_heavy,,0,0,false
 1592450916521881600,belt buckle,llm:zai:glm-4.5-flash:pt-v1,,49.89,false,"price_floor_above_max,too_heavy",cat_unmapped,0,0,false
 2081645588297699329,cleaning tool,rule,,31.2,false,too_heavy,,0,0,false
@@ -263,6 +262,7 @@ D60CB67B-7276-4DC4-98A1-2B0445EFC1C8,watch band,llm:zai:glm-4.5-flash:pt-v1,leat
 1739938184483577856,luggage bag,llm:zai:glm-4.5-flash:pt-v1,,58.84,false,"price_floor_above_max,too_heavy",,0,0,false
 36A945E0-1C6D-44DD-A029-446411EB8200,neck traction device,llm:zai:glm-4.5-flash:pt-v1,,34.16,false,too_heavy,"cat_unmapped,title_medical",0,0,false
 1602233277266538496,pet bed and mat,rule,,44.08,false,too_heavy,,0,0,false
+1585221163377242112,pet collar and leash,rule,airtag collar holder,21.03,false,excluded_by_rule,,1,0,true
 A836EF9B-9D73-43BE-9F69-013F42AAA01E,seat cushion,rule,,37.5,false,too_heavy,,0,0,false
 1621414700674199552,skincare product,llm:zai:glm-4.5-flash:pt-v1,,19.25,false,excluded_by_rule,,0,0,false
 FB076A43-8B7C-4A96-A52D-2C32B3937DE9,sofa cover,llm:zai:glm-4.5-flash:pt-v1,,47.22,false,"price_floor_above_max,too_heavy",title_furniture,0,0,false
