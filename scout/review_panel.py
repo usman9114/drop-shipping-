@@ -147,7 +147,6 @@ def review(
 ) -> dict[str, list[dict]]:
     cache = load_cache()
     out: dict[str, list[dict]] = {}
-    new = []
     for idea in ideas:
         out[idea["id"]] = []
         for model in panel:
@@ -171,14 +170,13 @@ def review(
                 print(f"  {idea['id']} {model}: unusable answer", file=sys.stderr)
                 continue
             row = {"key": key, "idea": idea["id"], "model": model, **parsed}
-            new.append(row)
+            append_cache([row])  # save each answer at once; a crash loses nothing
             cache[key] = row
             out[idea["id"]].append(row)
         print(
             f"  {idea['id']}: {len(out[idea['id']])}/{len(panel)} reviews",
             file=sys.stderr,
         )
-    append_cache(new)
     return out
 
 

@@ -28,6 +28,8 @@ repos:
     hooks:
       - id: detect-secrets
         args: [--baseline, .secrets.baseline]
+        # content-hash cache keys (sha256) look like secrets but are not
+        exclude: ^docs/reviews/panel/cache\.jsonl$
 
   # Python lint + format (for the PoC code that comes next).
   - repo: https://github.com/astral-sh/ruff-pre-commit
