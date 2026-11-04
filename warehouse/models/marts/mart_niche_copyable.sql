@@ -12,7 +12,8 @@ select
     round(avg((rank_growth_log > 0)::int)
           filter (where copyable and rank_growth_log is not null), 2) as copyable_share_rank_rising,
     round(avg(discount_share) filter (where copyable), 2) as copyable_avg_discount_share,
-    median(tranco_rank) filter (where copyable)::bigint   as copyable_median_rank
+    median(tranco_rank) filter (where copyable)::bigint   as copyable_median_rank,
+    round(sum(1.0 / tranco_rank) filter (where copyable) * 1e5, 2) as copyable_traffic_weight
 from {{ ref('mart_store_universe') }}
 where top_category is not null
 group by top_category

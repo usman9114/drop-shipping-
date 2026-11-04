@@ -20,6 +20,7 @@ import duckdb
 
 DB = "data/private/warehouse.duckdb"
 MIN_STORES = 3  # k-anonymity floor for any label published
+MIN_COPYABLE = 5  # a niche needs this many copyable stores
 # Categories a small eBay/Shopify dropshipper should not start with (compliance,
 # perishables, licensing, or not a physical product). Our rule, reviewable.
 EXCLUDE = {
@@ -60,17 +61,24 @@ def table(rs, cols, headers=None) -> list[str]:
 
 
 def niche_score(c: dict) -> float:
-    """Deterministic: copyable demand x momentum x rhythm x price fit."""
-    if c["category"] in EXCLUDE or c["transferable_stores"] < MIN_STORES:
+    """Deterministic: traffic of copyable stores x momentum x rhythm x price fit.
+
+    Uses only copyable stores (resellers, dropshippers, general stores, print on
+    demand, unclear): a brand's success does not transfer to zero inventory."""
+    if c["category"] in EXCLUDE or (c.get("copyable_stores") or 0) < MIN_COPYABLE:
         return 0.0
-    price = c.get("median_entry_price") or 0
+    price = c.get("copyable_median_entry_price") or 0
     fit = 1.0 if IMPULSE[0] <= price <= IMPULSE[1] else 0.4
-    rising = c.get("share_rank_rising") or 0.0
-    rhythm = min((c.get("median_added_90d") or 0) / 30.0, 1.0)
-    copy = c["transferable_stores"] / c["stores"]
+    rising = c.get("copyable_share_rank_rising") or 0.0
+    rhythm = min((c.get("copyable_median_added_90d") or 0) / 30.0, 1.0)
     review = 0.7 if c["category"] in REVIEW else 1.0
     return round(
-        c["traffic_weight"] * copy * (0.5 + rising) * (0.5 + rhythm) * fit * review, 3
+        (c.get("copyable_traffic_weight") or 0)
+        * (0.5 + rising)
+        * (0.5 + rhythm)
+        * fit
+        * review,
+        3,
     )
 
 
@@ -132,7 +140,35 @@ def main() -> int:
              n as (select count(*) n from mart.mart_store_profile)
         select sig, round(count(*) / any_value(n), 2) share from t, n group by sig order by 2 desc""",
     )
-    cats = rows(con, "select * from mart.mart_store_categories")
+    universe = rows(
+        con,
+        """select business_model, count(*) stores, median(tranco_rank)::bigint median_rank,
+                  count(*) filter (where depth = 'deep') deep
+           from mart.mart_store_universe group by 1 order by 2 desc""",
+    )
+    uni = rows(
+        con,
+        """select count(*) screened, count(*) filter (where copyable) copyable
+           from mart.mart_store_universe""",
+    )[0]
+    cats = rows(con, "select * from mart.mart_niche_copyable")
+    deep_stats = {
+        r["category"]: r for r in rows(con, "select * from mart.mart_store_categories")
+    }
+    for c in cats:  # traffic-stack shares come from the deep-profiled stores only
+        d = deep_stats.get(c["category"], {})
+        for k in (
+            "share_meta_pixel",
+            "share_tiktok_pixel",
+            "share_google_ads",
+            "share_klaviyo",
+            "share_sms",
+            "share_affiliate_influencer",
+            "share_reviews_app",
+            "avg_discount_share",
+        ):
+            c[k] = d.get(k)
+        c["deep_stores"] = d.get("stores")
     types = rows(
         con,
         f"""
@@ -161,14 +197,15 @@ def main() -> int:
         "category",
         "niche_score",
         "stores",
-        "transferable_stores",
+        "copyable_stores",
         "brands",
-        "resellers",
-        "dropshippers",
-        "median_rank",
-        "median_entry_price",
-        "median_added_90d",
-        "share_rank_rising",
+        "retailers",
+        "copyable_median_rank",
+        "copyable_median_entry_price",
+        "copyable_median_added_90d",
+        "copyable_share_rank_rising",
+        "copyable_avg_discount_share",
+        "deep_stores",
         "share_meta_pixel",
         "share_tiktok_pixel",
         "share_klaviyo",
@@ -209,11 +246,18 @@ def main() -> int:
         "",
         *table(countries, ["country", "stores"]),
         "",
-        "## Business model of the profiled stores",
+        "## Business model of every screened US store",
         "",
-        "Brand = sells its own goods (its success does not transfer to zero inventory); "
-        "reseller = many brands; dropship = supplier-import traces; pod = print on demand. "
-        "`top30` = stores with best_score ≥ 0.7.",
+        f"{uni['screened']} US stores screened (one page of each store's own feed); "
+        f"**{uni['copyable']} are copyable** (dropship, general store, reseller, print on demand, "
+        "unclear). Brand = sells its own goods (its success does not transfer to zero inventory); "
+        "retailer = 10+ brands or a portfolio owner (not copyable at our scale); general = one name "
+        "over many unrelated categories with permanent discounts, the dropshipper shape (a "
+        "hypothesis, validated separately).",
+        "",
+        *table(universe, ["business_model", "stores", "median_rank", "deep"]),
+        "",
+        "Deep-profiled stores only (best traffic first; `top30` = best_score ≥ 0.7):",
         "",
         *table(
             models, ["business_model", "stores", "median_rank", "median_score", "top30"]
@@ -221,22 +265,22 @@ def main() -> int:
         "",
         "## Categories the best stores win with",
         "",
-        "`traffic_weight` = Σ 1/rank ×10⁵ (concentrates on the biggest stores). "
-        "`transferable` = resellers + dropshippers + pod + unclear.",
+        "Over every screened US store, by the store's main category. `copyable_*` columns use "
+        "copyable stores only. `copyable_traffic_weight` = Σ 1/rank ×10⁵ over copyable stores.",
         "",
         *table(
             ranked,
             [
                 "category",
                 "stores",
-                "transferable_stores",
+                "copyable_stores",
                 "brands",
-                "top30_stores",
-                "median_rank",
-                "median_entry_price",
-                "median_added_90d",
-                "share_rank_rising",
-                "traffic_weight",
+                "retailers",
+                "copyable_median_rank",
+                "copyable_median_entry_price",
+                "copyable_median_added_90d",
+                "copyable_share_rank_rising",
+                "copyable_traffic_weight",
                 "niche_score",
                 "note",
             ],
@@ -244,7 +288,7 @@ def main() -> int:
         "",
         "## How they get traffic",
         "",
-        "Homepage code (share of profiled stores, and of the top 30%):",
+        "Homepage code (share of deep-profiled stores, and of the top 30%; deep profiles favour the highest-traffic stores, so this describes the strongest stores, not the copyable ones):",
         "",
         *table(stack, ["tag", "share_all", "share_top30"]),
         "",
@@ -252,7 +296,7 @@ def main() -> int:
         "",
         *table(dns, ["sig", "share"]),
         "",
-        "Per category (share of stores with each channel):",
+        "Per category (share of deep-profiled stores with each channel; `deep_stores` is the sample size, read small samples with care):",
         "",
         *table(
             ranked,
@@ -271,8 +315,9 @@ def main() -> int:
         "",
         "## Niche shortlist for step 2 (sourcing)",
         "",
-        f"Score = traffic_weight × copyable share × (0.5 + rising share) × (0.5 + rhythm) × "
-        f"price fit (entry price {IMPULSE[0]:.0f}–{IMPULSE[1]:.0f}) × review discount. Excluded: "
+        f"Score = copyable_traffic_weight × (0.5 + rising share) × (0.5 + rhythm) × "
+        f"price fit (entry price {IMPULSE[0]:.0f}–{IMPULSE[1]:.0f}) × review discount; "
+        f"needs at least {MIN_COPYABLE} copyable stores. Excluded: "
         + ", ".join(f"{k} ({v})" for k, v in EXCLUDE.items())
         + f". File: `{out}`.",
         "",
@@ -281,10 +326,10 @@ def main() -> int:
             [
                 "category",
                 "niche_score",
-                "transferable_stores",
-                "median_entry_price",
-                "median_added_90d",
-                "share_rank_rising",
+                "copyable_stores",
+                "copyable_median_entry_price",
+                "copyable_median_added_90d",
+                "copyable_share_rank_rising",
                 "note",
                 "example_types",
             ],
