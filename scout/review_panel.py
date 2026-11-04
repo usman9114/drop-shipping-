@@ -161,7 +161,7 @@ def review(
                     PROMPT.format(brief=brief, **idea),
                     system=SYSTEM,
                     models=[model],
-                    max_tokens=900,
+                    max_tokens=2500,  # reasoning models spend part of this on hidden thinking
                 )
                 parsed = parse_review(reply["text"])
             except Exception as exc:  # one failed reviewer does not stop the panel
