@@ -44,7 +44,7 @@
   "42": "Operating plan: from desk research to first sale, without the engineering trap",
   "43": "Runbook: Terapeak research session (manual, about 90 minutes)",
   "44": "cj.py",
-  "45": "0006 — DuckDB warehouse: deterministic core, LLM on top",
+  "45": "Website request discovery",
   "46": "18 — CJ Dropshipping API cheat sheet",
   "47": "0005-cj-client.md",
   "48": "test_cj.py",
@@ -56,7 +56,6 @@
   "58": "models",
   "59": "dev",
   "60": "Data pipeline: feeding the team authentic evidence",
-  "61": "Independent project review — 2026-11-03",
   "63": "classify.py",
   "66": "aggregate_candidates.py"
 }

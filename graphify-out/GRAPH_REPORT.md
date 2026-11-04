@@ -1,17 +1,17 @@
 # Graph Report - drop-shipping-  (2026-11-04)
 
 ## Corpus Check
-- 97 files · ~65,119 words
+- 98 files · ~66,124 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 19 file(s) not represented in the graph (top: .csv 14, (none) 4, .example 1)
 
 ## Summary
-- 811 nodes · 1119 edges · 60 communities (51 shown, 9 thin omitted)
+- 820 nodes · 1127 edges · 59 communities (50 shown, 9 thin omitted)
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 42 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `cc1a04d7`
+- Built from commit: `0360325e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -60,7 +60,7 @@
 - Operating plan: from desk research to first sale, without the engineering trap
 - Runbook: Terapeak research session (manual, about 90 minutes)
 - cj.py
-- 0006 — DuckDB warehouse: deterministic core, LLM on top
+- Website request discovery
 - 18 — CJ Dropshipping API cheat sheet
 - 0005-cj-client.md
 - test_cj.py
@@ -72,7 +72,6 @@
 - models
 - dev
 - Data pipeline: feeding the team authentic evidence
-- Independent project review — 2026-11-03
 - classify.py
 - aggregate_candidates.py
 
@@ -91,19 +90,19 @@
 ## Surprising Connections (you probably didn't know these)
 - `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
   .claude/agents/_team-rules.md → scout/store.py
-- `Rules that make it deterministic` --references--> `classify()`  [INFERRED]
-  docs/decisions/0006-duckdb-warehouse.md → scout/classify.py
-- `Findings` --references--> `query()`  [INFERRED]
-  docs/reviews/2026-11-agent2-project-review.md → scout/store.py
-- `Findings` --references--> `rebuild()`  [INFERRED]
-  docs/reviews/2026-11-agent2-project-review.md → scout/store.py
+- `Findings` --references--> `compute()`  [INFERRED]
+  docs/reviews/2026-11-agent2-project-review.md → scout/margin.py
 - `6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`)` --references--> `evaluate()`  [INFERRED]
   docs/handoff/agent2-review-and-shortlist.md → scout/margin.py
+- `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
+  docs/research/13-sales-niche-economics.md → scout/margin.py
+- `Findings` --references--> `evaluate()`  [INFERRED]
+  docs/reviews/2026-11-agent2-project-review.md → scout/margin.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (60 total, 9 thin omitted)
+## Communities (59 total, 9 thin omitted)
 
 ### Community 0 - "00 — Research summary and PoC plan"
 Cohesion: 0.17
@@ -138,8 +137,8 @@ Cohesion: 0.11
 Nodes (14): Agent working agreement: reverse-engineering mindset, Completion and communication, Connect research to the system, Evidence and source evaluation, Example: using MyIP.ms as a lead source, Find sources by the traces they expose, Purpose and scope, The investigation loop (+6 more)
 
 ### Community 8 - "llm.py"
-Cohesion: 0.09
-Nodes (18): _inline_images(), _read_image(), no_keys(), _reply(), test_all_empty_replies_raise(), test_chat_without_any_key_fails_clearly(), test_data_urls_are_left_alone(), test_empty_or_malformed_replies_fall_through_to_the_next_model() (+10 more)
+Cohesion: 0.07
+Nodes (26): chat(), _extract_text(), _inline_images(), _key(), list_free(), LLMError, _load_dotenv(), main() (+18 more)
 
 ### Community 9 - "11 - Google Trends check of Stage B candidates (US)"
 Cohesion: 0.20
@@ -174,8 +173,8 @@ Cohesion: 0.50
 Nodes (3): 10 — Category risk ranking (US, zero-inventory eBay dropshipping), Cross-cutting facts, Sources
 
 ### Community 22 - "store.py"
-Cohesion: 0.11
-Nodes (23): 2. What makes it "authentic", _checked_path(), _git_sha(), main(), query(), rebuild(), record_run(), _runs() (+15 more)
+Cohesion: 0.09
+Nodes (29): 2. What makes it "authentic", Findings, Independent project review — 2026-11-03, Primary-source verification, retrieved 2026-11-03, Questions for the review pull request, Top 10 actions, Validation and limits, _checked_path() (+21 more)
 
 ### Community 23 - "steps"
 Cohesion: 0.08
@@ -187,7 +186,7 @@ Nodes (19): 0001 — Candidate niches (Stage B), 1. Decision, 2. Evidence table,
 
 ### Community 26 - "2. Per-niche price bands and representative products"
 Cohesion: 0.08
-Nodes (39): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost ceiling table [data: scout.margin output], 2. Per-niche price bands and representative products, 3. Ranked summary, 4. Gaps and next steps, auto-detailing-tools, coin-supplies, collectibles-display (+31 more)
+Nodes (38): 13 - Sales: landed-cost ceilings and niche economics, 1. Landed-cost ceiling table [data: scout.margin output], 2. Per-niche price bands and representative products, 3. Ranked summary, 4. Gaps and next steps, auto-detailing-tools, coin-supplies, collectibles-display (+30 more)
 
 ### Community 27 - "12 — Compliance risk cards for the 8 candidate niches"
 Cohesion: 0.10
@@ -254,12 +253,12 @@ Cohesion: 0.29
 Nodes (6): For each row, Rules, Runbook: Terapeak research session (manual, about 90 minutes), What I do with it, What you need, Which products
 
 ### Community 44 - "cj.py"
-Cohesion: 0.07
-Nodes (26): 6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`), CJClient, CJError, _default_session(), _dicts(), _json_list(), main(), normalize_detail() (+18 more)
+Cohesion: 0.06
+Nodes (28): 6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`), CJClient, CJError, _default_session(), _dicts(), _json_list(), main(), normalize_detail() (+20 more)
 
-### Community 45 - "0006 — DuckDB warehouse: deterministic core, LLM on top"
-Cohesion: 0.25
-Nodes (7): 0006 — DuckDB warehouse: deterministic core, LLM on top, Choice, Intelligence layer (next), Layers, Out of scope for this slice, Rules that make it deterministic, Why now
+### Community 45 - "Website request discovery"
+Cohesion: 0.22
+Nodes (8): Build only within the requested scope, Completion, Define the job, Observe a minimal browser workflow, Produce a sanitized contract, Traffic investigation limits, Validate before building, Website request discovery
 
 ### Community 46 - "18 — CJ Dropshipping API cheat sheet"
 Cohesion: 0.22
@@ -301,24 +300,20 @@ Nodes (7): path, threads, type, dev, scout, outputs, target
 Cohesion: 0.29
 Nodes (6): 1. Architecture, 3. Datasets, 4. How agents use it, 5. Automation, 6. Build order, Data pipeline: feeding the team authentic evidence
 
-### Community 61 - "Independent project review — 2026-11-03"
-Cohesion: 0.33
-Nodes (5): Independent project review — 2026-11-03, Primary-source verification, retrieved 2026-11-03, Questions for the review pull request, Top 10 actions, Validation and limits
-
 ### Community 63 - "classify.py"
-Cohesion: 0.06
-Nodes (32): _append(), classify(), load_cache(), main(), parse_labels(), phrases(), title_hash(), chat() (+24 more)
+Cohesion: 0.07
+Nodes (29): 0006 — DuckDB warehouse: deterministic core, LLM on top, Choice, Intelligence layer (next), Layers, Out of scope for this slice, Rules that make it deterministic, Why now, _append() (+21 more)
 
 ## Knowledge Gaps
 - **6 isolated node(s):** `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 511 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 519 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `record_run()` connect `store.py` to `cj.py`, `Agent working agreement: reverse-engineering mindset`?**
-  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+  _High betweenness centrality (0.026) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
   _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL` to the rest of the system?**

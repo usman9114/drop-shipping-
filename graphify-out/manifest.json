@@ -598,5 +598,11 @@
     "seen": 1793810190.502939,
     "ast_hash": "232201eb827711e33478ed317e02f89b",
     "semantic_hash": ""
+  },
+  ".claude/skills/website-request-discovery/SKILL.md": {
+    "mtime": 1793811502.7484267,
+    "seen": 1793811504.2502651,
+    "ast_hash": "dc9a5dab4a64efbf2c04047c598b9c38",
+    "semantic_hash": ""
   }
 }
