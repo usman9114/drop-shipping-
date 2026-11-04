@@ -30,7 +30,7 @@ sys.path.insert(0, str(_P(__file__).resolve().parent.parent))
 from scout import stores  # noqa: E402
 from scout.llm import chat_many  # noqa: E402
 
-LABELS = ["brand", "retailer", "reseller", "dropship", "pod"]
+LABELS = ["brand", "general", "retailer", "reseller", "dropship", "pod"]
 FIELDS = [
     "domain",
     "products_sampled",
@@ -49,6 +49,7 @@ FIELDS = [
 PROMPT = """Classify one online store's business model from this evidence.
 Labels:
 - brand: sells goods it makes or commissions under its own name (own-label, one or two vendors)
+- general: one store name over many unrelated categories with permanent discounts (typical dropshipper shape)
 - retailer: a large multi-brand retailer, publisher or house-brand portfolio (10+ labels)
 - reseller: a smaller shop reselling 5 to 9 other brands' goods
 - dropship: imports marketplace/supplier goods under generic or rotating vendor names (AliExpress-style images, supplier SKUs)
@@ -56,7 +57,7 @@ Labels:
 Evidence (JSON):
 {ev}
 
-Reply with exactly one line: LABEL | short reason. LABEL is one of brand, retailer, reseller, dropship, pod."""
+Reply with exactly one line: LABEL | short reason. LABEL is one of brand, general, retailer, reseller, dropship, pod."""
 
 
 SEEN = Path("data/private/validation/seen.txt")
@@ -86,7 +87,7 @@ def sample(rows: list[dict], n: int, seed: int = 7) -> list[dict]:
 
 def parse(text: str) -> tuple[str | None, str]:
     m = re.match(
-        r"\s*\**\s*(brand|retailer|reseller|dropship|pod)\b[^|]*\|?\s*(.*)",
+        r"\s*\**\s*(brand|general|retailer|reseller|dropship|pod)\b[^|]*\|?\s*(.*)",
         text.strip(),
         re.I,
     )
