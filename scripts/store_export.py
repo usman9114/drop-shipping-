@@ -151,6 +151,20 @@ def main() -> int:
         """select count(*) screened, count(*) filter (where copyable) copyable
            from mart.mart_store_universe""",
     )[0]
+    movers = rows(
+        con,
+        """select u.top_category as category, count(*) as copyable_stores,
+                  count(*) filter (where t.emerged) as emerged,
+                  count(*) filter (where t.breakout and not t.emerged) as risers,
+                  count(*) filter (where t.fading) as fading,
+                  round(median(t.rank_volatility), 2) as median_volatility
+           from mart.mart_store_universe u
+           join mart.mart_store_rank_trend t using (domain)
+           where u.copyable and u.top_category is not null
+           group by 1 having count(*) >= 5
+           order by count(*) filter (where t.emerged)
+                  + count(*) filter (where t.breakout and not t.emerged) desc""",
+    )
     cats = rows(con, "select * from mart.mart_niche_copyable")
     deep_stats = {
         r["category"]: r for r in rows(con, "select * from mart.mart_store_categories")
@@ -283,6 +297,25 @@ def main() -> int:
                 "copyable_traffic_weight",
                 "niche_score",
                 "note",
+            ],
+        ),
+        "",
+        "## Who is moving: rank history of the copyable stores",
+        "",
+        "From 26 Tranco list dates over 2 years (`mart_store_rank_trend`, `[proxy]`: rank is "
+        "popularity, not visits). **Emerged** = absent from every list older than 9 months, now "
+        "inside the top 500k; **risers** = rank at least 2x better than their older level; "
+        "**fading** = at least 2x worse. Categories with fewer than 5 copyable stores are left out.",
+        "",
+        *table(
+            movers,
+            [
+                "category",
+                "copyable_stores",
+                "emerged",
+                "risers",
+                "fading",
+                "median_volatility",
             ],
         ),
         "",
