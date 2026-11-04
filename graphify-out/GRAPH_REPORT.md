@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f90601f6`
+- Built from commit: `410f4e10`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -108,16 +108,16 @@
 10. `client()` - 15 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `What "best" means here` --references--> `business_model()`  [INFERRED]
-  docs/decisions/0009-best-store-discovery.md → scout/stores.py
 - `How we think (standing principles, owner 2026-11-04)` --references--> `chat_many()`  [INFERRED]
   CLAUDE.md → scout/llm.py
-- `Business-model rules: validation record (R1 exit criterion)` --references--> `business_model()`  [INFERRED]
-  docs/reviews/2026-11-04-business-model-validation.md → scout/stores.py
-- `Rounds` --references--> `latest_good()`  [INFERRED]
-  docs/reviews/2026-11-04-business-model-validation.md → scout/stores.py
+- `What "best" means here` --references--> `business_model()`  [INFERRED]
+  docs/decisions/0009-best-store-discovery.md → scout/stores.py
 - `Shared rules for every AI team member` --references--> `record_run()`  [INFERRED]
   .claude/agents/_team-rules.md → scout/store.py
+- `Findings` --references--> `compute()`  [INFERRED]
+  docs/reviews/2026-11-agent2-project-review.md → scout/margin.py
+- `6. Part 2: build the shortlist engine (stage E of `docs/plan/ai-team.md`)` --references--> `evaluate()`  [INFERRED]
+  docs/handoff/agent2-review-and-shortlist.md → scout/margin.py
 
 ## Import Cycles
 - None detected.
@@ -416,7 +416,7 @@ Nodes (3): fit_shop_age(), shop_started_by(), test_shop_age_curve_is_monotone_lo
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `record_run()` connect `json` to `stores.py`, `chat`, `argparse`, `webmeta.py`, `csv`?**
+- **Why does `chat()` connect `chat` to `json`, `intel.py`, `csv`?**
   _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `chat()` (e.g. with `main()` and `main()`) actually correct?**
   _`chat()` has 3 INFERRED edges - model-reasoned connections that need verification._
@@ -424,8 +424,8 @@ _Questions this graph is uniquely positioned to answer:_
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
-- **Why does `chat()` connect `chat` to `json`, `intel.py`, `csv`?**
-  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+- **Why does `record_run()` connect `json` to `stores.py`, `chat`, `argparse`, `webmeta.py`, `csv`?**
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `2. What makes it "authentic"`) actually correct?**
   _`record_run()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Should `chat` be split into smaller, more focused modules?**

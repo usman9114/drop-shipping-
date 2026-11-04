@@ -732,15 +732,15 @@
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_store_categories.sql": {
-    "mtime": 1793828137.8056705,
-    "seen": 1793828854.3324673,
-    "ast_hash": "",
+    "mtime": 1793829616.0435624,
+    "seen": 1793829681.3685741,
+    "ast_hash": "acf4525c6ccdaaf1a77cf8fe5ca44bcc",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_store_profile.sql": {
-    "mtime": 1793820924.2156322,
-    "seen": 1793821132.0662484,
-    "ast_hash": "",
+    "mtime": 1793829616.0423992,
+    "seen": 1793829681.368576,
+    "ast_hash": "eb51b9017784157400100dea9139ae65",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_web_meta.sql": {
@@ -798,8 +798,8 @@
     "semantic_hash": ""
   },
   "scripts/validate_business_model.py": {
-    "mtime": 1793829666.9286299,
-    "seen": 1793829668.9170556,
+    "mtime": 1793829671.7054,
+    "seen": 1793829681.368534,
     "ast_hash": "a4825060513eeb5eb94b80450c8b3d1a",
     "semantic_hash": ""
   },
@@ -873,6 +873,24 @@
     "mtime": 1793829299.280635,
     "seen": 1793829302.284382,
     "ast_hash": "6817e613b16e72a0bf3647118b494ae5",
+    "semantic_hash": ""
+  },
+  "warehouse/models/marts/mart_niche_copyable.sql": {
+    "mtime": 1793829639.6598268,
+    "seen": 1793829681.3685696,
+    "ast_hash": "feb4434aaf9b5f654488a2144b4f6384",
+    "semantic_hash": ""
+  },
+  "warehouse/models/marts/mart_store_universe.sql": {
+    "mtime": 1793829639.6580558,
+    "seen": 1793829681.3685772,
+    "ast_hash": "743cf84d1a92ff394bc327fe4354caa6",
+    "semantic_hash": ""
+  },
+  "warehouse/models/staging/stg_web_store_light.sql": {
+    "mtime": 1793829639.6535645,
+    "seen": 1793829681.3686013,
+    "ast_hash": "2df444a7a10f619bb29a3059da189ecc",
     "semantic_hash": ""
   }
 }
