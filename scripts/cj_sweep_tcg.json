@@ -1,0 +1,224 @@
+{
+ "niche": "tcg-supplies",
+ "types": [
+  {
+   "id": 1,
+   "name": "Magnetic card holders 35pt",
+   "phrases": [
+    "magnetic card holder 35pt",
+    "magnetic trading card holder"
+   ],
+   "match": "magnetic.*card|card.*magnetic|one.?touch|\\d+\\s*pt",
+   "exclude": "phone|wallet|rfid|car |mount|leather|aluminum"
+  },
+  {
+   "id": 2,
+   "name": "Magnetic holders mixed thickness",
+   "phrases": [
+    "magnetic card case 55pt 75pt 100pt"
+   ],
+   "match": "\\d+\\s*pt|one.?touch"
+  },
+  {
+   "id": 3,
+   "name": "Thick magnetic holders 180pt+",
+   "phrases": [
+    "180pt magnetic card holder"
+   ],
+   "match": "\\d+\\s*pt|thick card|relic|patch card"
+  },
+  {
+   "id": 4,
+   "name": "Stands for magnetic holders",
+   "phrases": [
+    "card holder stand acrylic"
+   ],
+   "match": "(trading|sports|game|baseball|football|basketball|collect\\w*|tcg|graded|slab|pokemon|yugioh|magic).*stand|stand.*(trading|sports|game|baseball|football|basketball|collect\\w*|tcg|graded|slab|pokemon|yugioh|magic)|card stand",
+   "exclude": "phone"
+  },
+  {
+   "id": 5,
+   "name": "Rigid card holders 3x4",
+   "phrases": [
+    "top loader card holder",
+    "rigid card holder 3x4"
+   ],
+   "match": "top.?loader|3\\s*x\\s*4|rigid.*card|card.*rigid"
+  },
+  {
+   "id": 6,
+   "name": "Card sleeves PP",
+   "phrases": [
+    "trading card sleeves",
+    "penny sleeves card protector"
+   ],
+   "match": "card.*(sleeve|protector)|(sleeve|protector).*card",
+   "exclude": "phone|shirt|dress|arm"
+  },
+  {
+   "id": 7,
+   "name": "Semi-rigid card holders",
+   "phrases": [
+    "semi rigid card holder",
+    "card saver"
+   ],
+   "match": "semi.?rigid|card saver"
+  },
+  {
+   "id": 8,
+   "name": "Resealable card bags",
+   "phrases": [
+    "card protector bag resealable",
+    "team bags card"
+   ],
+   "match": "(trading|sports|game|baseball|football|basketball|collect\\w*|tcg|graded|slab|pokemon|yugioh|magic).*bag|card.*(bag|pouch)",
+   "exclude": "wallet|phone|purse|leather"
+  },
+  {
+   "id": 9,
+   "name": "9-pocket zipper binder",
+   "phrases": [
+    "9 pocket card binder",
+    "trading card binder zipper"
+   ],
+   "match": "(9|nine).?(pocket|grid).*(card|binder)|card.*binder|binder.*card|card album",
+   "exclude": "business|name card"
+  },
+  {
+   "id": 10,
+   "name": "4-pocket binder for toploaders",
+   "phrases": [
+    "4 pocket toploader binder"
+   ],
+   "match": "4.?pocket|top.?loader binder"
+  },
+  {
+   "id": 11,
+   "name": "Graded slab binder",
+   "phrases": [
+    "graded card slab binder"
+   ],
+   "match": "slab|graded"
+  },
+  {
+   "id": 12,
+   "name": "Replacement 9-pocket pages",
+   "phrases": [
+    "9 pocket pages trading card",
+    "card binder pages refill"
+   ],
+   "match": "(9|nine).?pocket|card.*(page|sheet)|(page|sheet).*card",
+   "exclude": "business|name card"
+  },
+  {
+   "id": 13,
+   "name": "Graded slab storage case",
+   "phrases": [
+    "graded card storage case",
+    "slab case aluminum card"
+   ],
+   "match": "slab|graded"
+  },
+  {
+   "id": 14,
+   "name": "Graded slab storage box plastic",
+   "phrases": [
+    "graded card box"
+   ],
+   "match": "slab|graded"
+  },
+  {
+   "id": 15,
+   "name": "Graded slab stands/easels",
+   "phrases": [
+    "graded card stand",
+    "card display easel"
+   ],
+   "match": "slab|graded|card.*(easel|stand)",
+   "exclude": "phone|business"
+  },
+  {
+   "id": 16,
+   "name": "Graded slab wall frame",
+   "phrases": [
+    "graded card wall display"
+   ],
+   "match": "slab|graded|(trading|sports|game|baseball|football|basketball|collect\\w*|tcg|graded|slab|pokemon|yugioh|magic).*display"
+  },
+  {
+   "id": 17,
+   "name": "Acrylic booster box display case",
+   "phrases": [
+    "booster box acrylic case",
+    "acrylic display case collectible box"
+   ],
+   "match": "booster|sealed box|acrylic.*(case|box).*(card|collect)|(trading|sports|game|baseball|football|basketball|collect\\w*|tcg|graded|slab|pokemon|yugioh|magic).*acrylic"
+  },
+  {
+   "id": 18,
+   "name": "Acrylic sealed-pack holders",
+   "phrases": [
+    "booster pack acrylic holder"
+   ],
+   "match": "booster|pack holder|sealed pack"
+  },
+  {
+   "id": 19,
+   "name": "Screw-down acrylic card holders",
+   "phrases": [
+    "screw down card holder",
+    "acrylic card holder screw"
+   ],
+   "match": "screw.*card|card.*screw|acrylic.*card.*holder",
+   "exclude": "phone|business|name"
+  },
+  {
+   "id": 20,
+   "name": "Multi-card wall display frame",
+   "phrases": [
+    "trading card display frame",
+    "card display case wall"
+   ],
+   "match": "(trading|sports|game|baseball|football|basketball|collect\\w*|tcg|graded|slab|pokemon|yugioh|magic).*(frame|display)|card.*(display frame|display case)",
+   "exclude": "phone|business"
+  },
+  {
+   "id": 21,
+   "name": "Card storage boxes / sorting trays",
+   "phrases": [
+    "trading card storage box",
+    "card storage box 800"
+   ],
+   "match": "(trading|sports|game|baseball|football|basketball|collect\\w*|tcg|graded|slab|pokemon|yugioh|magic).*(storage|box)|card (storage|sorting) (box|tray)|\\d{3,4}\\s*count",
+   "exclude": "sd card|memory|game cassette|switch|ssd"
+  },
+  {
+   "id": 22,
+   "name": "Unbranded deck boxes",
+   "phrases": [
+    "deck box cards",
+    "card deck case 100"
+   ],
+   "match": "deck (box|case)|(trading|sports|game|baseball|football|basketball|collect\\w*|tcg|graded|slab|pokemon|yugioh|magic).*deck",
+   "exclude": "planter|yard|courtyard|outdoor"
+  },
+  {
+   "id": 23,
+   "name": "Card mailers shipping kit",
+   "phrases": [
+    "card mailer rigid",
+    "trading card mailer envelope"
+   ],
+   "match": "card mailer|mailer.*card|(trading|sports|game|baseball|football|basketball|collect\\w*|tcg|graded|slab|pokemon|yugioh|magic).*mail"
+  },
+  {
+   "id": 24,
+   "name": "Centering gauge / microfibre cloth",
+   "phrases": [
+    "card centering tool",
+    "card grading tool"
+   ],
+   "match": "centering|(trading|sports|game|baseball|football|basketball|collect\\w*|tcg|graded|slab|pokemon|yugioh|magic).*(gauge|grading tool)"
+  }
+ ]
+}

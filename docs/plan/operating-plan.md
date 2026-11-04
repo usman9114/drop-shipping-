@@ -9,7 +9,7 @@
 | Item | State |
 |---|---|
 | Tests | 64 passing; hooks installed |
-| Env vars in the cloud container | **None set**: `CJ_API_KEY`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `ZAI_API_KEY`, `OPENROUTER_API_KEY` are all missing. Add them in the cloud environment settings (environment menu → Edit → environment variables or network secrets) and start a **new** session; a running session does not pick them up. A local `.env` is not visible to a cloud container. |
+| Env vars in the cloud container | Fixed later on 2026-11-04: keys are in the "Crypto" environment; four of five visible (`OPENROUTER_API_KEY` missing). Original note: **none set**: `CJ_API_KEY`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `ZAI_API_KEY`, `OPENROUTER_API_KEY` are all missing. Add them in the cloud environment settings (environment menu → Edit → environment variables or network secrets) and start a **new** session; a running session does not pick them up. A local `.env` is not visible to a cloud container. |
 | OpenRouter credit | €10 bought (owner, 2026-11-04) |
 | CJ inactivity deadline | Key created ~2026-11-04. CJ may disable API access after 30 days without a transaction [unverified]. **First test order before ~2026-12-01.** |
 
@@ -49,6 +49,8 @@ Rules that keep this honest:
 Dates assume keys are in the environment by 2026-11-06.
 
 ### Week 1 (Nov 4–10): real numbers — decides the niche
+
+> **Update 2026-11-04:** tasks 1.2 and 1.6 done. Result: `tcg-supplies` and both backups fail K1 on CJ's US warehouse (`docs/shortlists/2026-11-04-cj-supply-check.md`). Week 1 continues with the owner's choice of option A/B/C; under A, task 1.3 runs on the US catalogue instead of the 24 types.
 
 | # | Task | Who | Unblocks |
 |---|---|---|---|

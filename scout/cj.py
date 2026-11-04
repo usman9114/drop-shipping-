@@ -1,13 +1,14 @@
 """Thin read-only client for the CJ Dropshipping catalogue API.
 
-Written from docs/research/18-cj-api-cheatsheet.md. NOT yet run against a live
-key: the response shapes are from CJ's docs. Treat the first real call as a
-test and fix what differs.
+Written from docs/research/18-cj-api-cheatsheet.md; response shapes checked
+against the live API on 2026-11-04 (see doc 18, "Live findings").
 
 Usage:
     python -m scout.cj search "magnetic card holder" --country US --pages 2 \
         --out data/private/cj-search.json
     python -m scout.cj detail <pid> --country US --out data/private/cj-detail.json
+    python -m scout.cj stock <pid> --out data/private/cj-stock.json
+    python -m scout.cj freight <vid> --start US --zip 10001 --out data/private/cj-freight.json
 
 Terms gate: CJ's API data-use terms have not been confirmed, so raw output may
 only be written under data/private/ (gitignored). Commit derived decisions,
@@ -46,6 +47,25 @@ def parse_price(value) -> tuple[float | None, float | None]:
     return (min(nums), max(nums)) if nums else (None, None)
 
 
+def _num(value) -> float | None:
+    """CJ sends numbers as numbers or strings ('30.00'); anything else is None."""
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _json_list(value) -> list[str]:
+    """Material and packing come as a JSON-encoded list string: '["Leather"]'."""
+    if isinstance(value, list):
+        return [str(x) for x in value]
+    try:
+        out = json.loads(value)
+    except (TypeError, ValueError):
+        return [value] if isinstance(value, str) and value else []
+    return [str(x) for x in out] if isinstance(out, list) else []
+
+
 def _dicts(value) -> list[dict]:
     return [x for x in value if isinstance(x, dict)] if isinstance(value, list) else []
 
@@ -60,17 +80,30 @@ def normalize_listing(item: dict) -> dict:
         "price_high": high,
         "price_raw": item.get("sellPrice"),
         "image": item.get("bigImage"),
-        "warehouse_inventory": item.get("warehouseInventoryNum"),  # meaning unverified
+        # Stock in the filtered country when countryCode is set (live check:
+        # equals the US warehouse total from the stock endpoint).
+        "warehouse_inventory": item.get("warehouseInventoryNum"),
+        "verified_inventory": item.get("totalVerifiedInventory"),
+        "category_id": item.get("categoryId"),
         "listed_num": item.get("listedNum"),
     }
 
 
 def normalize_detail(data: dict) -> dict:
+    """With countryCode=US, CJ returns only the variants stocked in the US.
+    variants[].inventories is null in live data: use stock() instead."""
+    sug_low, sug_high = parse_price(data.get("suggestSellPrice"))
     return {
         "pid": data.get("pid"),
         "name": data.get("productNameEn"),
         "sku": data.get("productSku"),
-        "weight_g": data.get("productWeight"),
+        "category": data.get("categoryName"),
+        "weight_g": _num(data.get("productWeight")),
+        "packing_weight_g": _num(data.get("packingWeight")),
+        "materials": _json_list(data.get("materialNameEn")),
+        "packing": _json_list(data.get("packingNameEn")),
+        "suggested_price_low": sug_low,
+        "suggested_price_high": sug_high,
         "images": [
             x
             for x in [data.get("bigImage"), *(data.get("productImageSet") or [])]
@@ -81,18 +114,51 @@ def normalize_detail(data: dict) -> dict:
                 "vid": v.get("vid"),
                 "sku": v.get("variantSku"),
                 "image": v.get("variantImage"),
-                "price": v.get("variantSellPrice"),
-                "weight_g": v.get("variantWeight"),
+                "name": v.get("variantNameEn"),
+                "price": _num(v.get("variantSellPrice")),
+                "weight_g": _num(v.get("variantWeight")),
                 "dims_mm": [
                     v.get("variantLength"),
                     v.get("variantWidth"),
                     v.get("variantHeight"),
                 ],
-                "inventories": v.get("inventories"),
             }
             for v in _dicts(data.get("variants"))
         ],
     }
+
+
+def normalize_stock(data) -> dict:
+    """Per-country stock from product/stock/getInventoryByPid."""
+    by_country: dict[str, dict] = {}
+    for inv in _dicts(
+        (data or {}).get("inventories") if isinstance(data, dict) else None
+    ):
+        cc = inv.get("countryCode")
+        if cc:
+            by_country[cc] = {
+                "total": inv.get("totalInventoryNum"),
+                "cj": inv.get("cjInventoryNum"),
+                "factory": inv.get("factoryInventoryNum"),
+            }
+    return by_country
+
+
+def normalize_freight(data) -> list[dict]:
+    """Quotes sorted cheapest first. logisticAging is a string range ('3-8'),
+    unit not documented (days assumed)."""
+    out = []
+    for q in _dicts(data):
+        days = [int(x) for x in re.findall(r"\d+", str(q.get("logisticAging") or ""))]
+        out.append(
+            {
+                "carrier": q.get("logisticName"),
+                "price_usd": _num(q.get("logisticPrice")),
+                "days_low": min(days) if days else None,
+                "days_high": max(days) if days else None,
+            }
+        )
+    return sorted(out, key=lambda q: (q["price_usd"] is None, q["price_usd"] or 0))
 
 
 def _default_session():
@@ -166,19 +232,17 @@ class CJClient:
                     continue
                 raise
 
-    def search(self, keyword, country="US", pages=1, size=100) -> list[dict]:
+    def search(self, keyword=None, country="US", pages=1, size=100) -> list[dict]:
+        """country filters to products with stock in that country's warehouse.
+        keyword=None lists the whole (filtered) catalogue."""
         rows: list[dict] = []
         for page in range(1, pages + 1):
-            data = self.call(
-                "GET",
-                "/product/listV2",
-                params={
-                    "keyWord": keyword,
-                    "countryCode": country,
-                    "page": page,
-                    "size": size,
-                },
-            )
+            params = {"page": page, "size": size}
+            if keyword:
+                params["keyWord"] = keyword
+            if country:
+                params["countryCode"] = country
+            data = self.call("GET", "/product/listV2", params=params)
             contents = _dicts(
                 (data or {}).get("content") if isinstance(data, dict) else None
             )
@@ -194,15 +258,24 @@ class CJClient:
         )
         return normalize_detail(data or {})
 
-    def freight(self, vid, quantity=1, start="US", end="US") -> list[dict]:
-        return self.call(
-            "POST",
-            "/logistic/freightCalculate",
-            body={
-                "startCountryCode": start,
-                "endCountryCode": end,
-                "products": [{"vid": vid, "quantity": quantity}],
-            },
+    def stock(self, pid) -> dict:
+        data = self.call("GET", "/product/stock/getInventoryByPid", params={"pid": pid})
+        return normalize_stock(data)
+
+    def freight(
+        self, vid, quantity=1, start="US", end="US", zip_code=None
+    ) -> list[dict]:
+        """Live: a variant with no stock at `start` returns error 1600300
+        ("Request body is required...") rather than an empty list."""
+        body = {
+            "startCountryCode": start,
+            "endCountryCode": end,
+            "products": [{"vid": vid, "quantity": quantity}],
+        }
+        if zip_code:
+            body["zip"] = zip_code
+        return normalize_freight(
+            self.call("POST", "/logistic/freightCalculate", body=body)
         )
 
 
@@ -228,30 +301,35 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="CJ catalogue client")
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("search")
-    s.add_argument("keyword")
+    s.add_argument("keyword", nargs="?", help="omit to list the whole catalogue")
     s.add_argument("--country", default="US")
     s.add_argument("--pages", type=int, default=1)
     d = sub.add_parser("detail")
     d.add_argument("pid")
     d.add_argument("--country", default="US")
-    for p in (s, d):
+    st = sub.add_parser("stock")
+    st.add_argument("pid")
+    f = sub.add_parser("freight")
+    f.add_argument("vid")
+    f.add_argument("--start", default="US")
+    f.add_argument("--zip", dest="zip_code")
+    for p in (s, d, st, f):
         p.add_argument("--out", required=True)
     a = ap.parse_args(argv)
 
     out = private_path(a.out)
     client = CJClient()
-    result = (
-        client.search(a.keyword, a.country, a.pages)
-        if a.cmd == "search"
-        else client.detail(a.pid, a.country)
-    )
+    if a.cmd == "search":
+        result = client.search(a.keyword, a.country, a.pages)
+    elif a.cmd == "detail":
+        result = client.detail(a.pid, a.country)
+    elif a.cmd == "stock":
+        result = client.stock(a.pid)
+    else:
+        result = client.freight(a.vid, start=a.start, zip_code=a.zip_code)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, indent=2))
-    n = len(result) if isinstance(result, list) else len(result.get("variants", []))
-    print(
-        f"wrote {out} ({n} {'rows' if a.cmd == 'search' else 'variants'})",
-        file=sys.stderr,
-    )
+    print(f"wrote {out} ({len(result)} items)", file=sys.stderr)
     return 0
 
 

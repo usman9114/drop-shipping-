@@ -30,23 +30,29 @@ Other: the deprecated `GET /product/list` (`countryCode`, `pageSize` up to 200),
 
 No API data-storage or redistribution terms were found. Under the repo's terms gate, **raw CJ pulls are not committed to git** until CJ's data-use terms are read and recorded. They go to the gitignored `data/private/`; only our own derived decisions (shortlist, margin results) are committed.
 
-## Unknowns that need a live key
+## Live findings (2026-11-04, first key)
 
-1. Whether `listV2` `countryCode` filters to **US-shipped products** or US stock.
-2. Whether the `privateInventory` endpoints show CJ's public warehouse stock or only our own storage.
-3. Whether `inventories[]` exists in live responses, and its fields.
-4. Real rate limit (QPS) and whether the token call has a 5-minute cap.
-5. What `sellPrice` looks like (single number or a range string) and what `warehouseInventoryNum` counts.
-6. Freight start country for US stock, and the `logisticAging` unit.
-7. Points actually consumed per call.
-8. CJ's data-use and redistribution terms.
+Raw replies are in `data/private/probe/` (not committed). Status of each former unknown:
+
+| # | Unknown | Answer [data] |
+|---|---|---|
+| 1 | Does `listV2` `countryCode` filter to US stock? | **Yes.** `countryCode=US` returns only products with US-warehouse stock: 3,964 products in total. `warehouseInventoryNum` then equals the US total from the stock endpoint (28 = 28 on the sample). Without a country, `totalRecords` stops at 6,000 (a result cap, not the catalogue size). |
+| 2 | Do stock endpoints show CJ's public stock? | **Yes.** `GET /product/stock/getInventoryByPid?pid=` and `/product/stock/queryByVid?vid=` return per-warehouse rows (`countryCode` CN/US, `totalInventoryNum`, `cjInventoryNum`, `factoryInventoryNum`) plus `variantInventories`. |
+| 3 | `inventories[]` in detail? | Present but **null**. Use the stock endpoints. `product/query` with `countryCode=US` returns only the US-stocked variants (5 of 9 on the sample). |
+| 4 | Rate limit, token cap | 1.1 s spacing never hit a 429; latency 1.4–5 s per call. Several `getAccessToken` calls within ~30 min all succeeded. Auth returns `accessTokenExpiryDate`, `refreshToken`, `refreshTokenExpiryDate`, `openId`. |
+| 5 | `sellPrice` format | String: single (`"1.36"`) or range (`"0.57 -- 0.69"`). Detail `suggestSellPrice` uses `"10.29 - 11.94"`. `variantSellPrice` is a number. Weights in detail are strings (`"30.00"`). `materialNameEn` / `packingNameEn` are JSON-encoded list strings (`'["Leather"]'`). |
+| 6 | Freight start country, `logisticAging` unit | `startCountryCode=US` works for a US-stocked variant: GOFO+ $5.18, `"3-8"` (unit not documented; days assumed). Adding `zip` changes the price ($5.97 for 10001). A variant with no stock at the start country returns **1600300 "Request body is required…"**, not an empty list. CN→US: CJPacket Sensitive Pro $5.13, `"5-11"`. |
+| 7 | Points per call | Not in any response. Still unknown. |
+| 8 | Data-use terms | Still unknown. Raw stays in `data/private/`. |
+
+Also: the category tree (`/product/getCategory`) has 578 leaves and no trading-card, collectibles-supplies or record-care category. Keyword search matches any word ("card holder" returns wallets and phone mounts), so relevance needs our own filter.
 
 ## Minimal call sequence
 
 1. `getAccessToken` with the key.
 2. `listV2` with `keyWord`, `countryCode=US`, `size=100`, page through.
 3. `product/query` with `pid` and `countryCode=US` for variants and images.
-4. Stock per variant (from step 3 `inventories`, or the stock endpoint).
+4. Stock per warehouse: `product/stock/getInventoryByPid` (detail `inventories` is null).
 5. `freightCalculate` for one unit to a US address.
 
 ## Sources

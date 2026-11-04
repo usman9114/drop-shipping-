@@ -1,0 +1,136 @@
+{
+  "niche": "vinyl-record-care",
+  "date": "2026-11-04",
+  "source": "CJ API product/listV2, page 1, relevance = title regex in spec",
+  "us_relevant_total": 4,
+  "global_relevant_total": 6,
+  "types": [
+    {
+      "id": 1,
+      "name": "Anti-static record brush",
+      "phrases": [
+        "vinyl record brush",
+        "record cleaning brush carbon fiber"
+      ],
+      "us_search_total": 98,
+      "us_relevant": 2,
+      "us_relevant_pids": [
+        "1851859540485492736",
+        "1952765254715691009"
+      ],
+      "global_search_total": 859,
+      "global_relevant": 2,
+      "global_relevant_pids": [
+        "1851859540485492736",
+        "1952765254715691009"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Inner record sleeves",
+      "phrases": [
+        "vinyl record inner sleeves",
+        "record sleeves 12 inch"
+      ],
+      "us_search_total": 890,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 8709,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 3,
+      "name": "Outer record sleeves",
+      "phrases": [
+        "record outer sleeves plastic"
+      ],
+      "us_search_total": 365,
+      "us_relevant": 1,
+      "us_relevant_pids": [
+        "8FC624D4-4551-45A6-9E6B-2CB0263CDC5F"
+      ],
+      "global_search_total": 4347,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 4,
+      "name": "Record display stand / now-playing",
+      "phrases": [
+        "vinyl record stand",
+        "record display holder"
+      ],
+      "us_search_total": 202,
+      "us_relevant": 1,
+      "us_relevant_pids": [
+        "1851859540485492736"
+      ],
+      "global_search_total": 1138,
+      "global_relevant": 1,
+      "global_relevant_pids": [
+        "1851859540485492736"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Record storage crate / box",
+      "phrases": [
+        "vinyl record storage box",
+        "record crate"
+      ],
+      "us_search_total": 1098,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 3591,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 6,
+      "name": "Stylus brush / cleaning kit (dry)",
+      "phrases": [
+        "turntable stylus brush",
+        "record cleaning kit"
+      ],
+      "us_search_total": 105,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 640,
+      "global_relevant": 3,
+      "global_relevant_pids": [
+        "1382562873238228992",
+        "1576448495509319680",
+        "2406241202201614700"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Record weight / clamp",
+      "phrases": [
+        "record weight turntable",
+        "record clamp stabilizer"
+      ],
+      "us_search_total": 34,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 97,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 8,
+      "name": "Slipmat",
+      "phrases": [
+        "turntable slipmat",
+        "record mat cork"
+      ],
+      "us_search_total": 24,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 225,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    }
+  ]
+}

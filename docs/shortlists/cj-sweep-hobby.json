@@ -1,0 +1,186 @@
+{
+  "niche": "hobby-modeling-tools",
+  "date": "2026-11-04",
+  "source": "CJ API product/listV2, page 1, relevance = title regex in spec",
+  "us_relevant_total": 8,
+  "global_relevant_total": 34,
+  "types": [
+    {
+      "id": 1,
+      "name": "Sprue cutter / nippers",
+      "phrases": [
+        "model sprue cutter",
+        "hobby nippers"
+      ],
+      "us_search_total": 12,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 126,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 2,
+      "name": "Hobby tweezers set",
+      "phrases": [
+        "model tweezers set",
+        "precision tweezers kit"
+      ],
+      "us_search_total": 382,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 2013,
+      "global_relevant": 4,
+      "global_relevant_pids": [
+        "1587363855238443008",
+        "1642764559092027392",
+        "1845727186985570304",
+        "2412040901231611400"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Sanding sticks / files",
+      "phrases": [
+        "model sanding stick",
+        "hobby file set"
+      ],
+      "us_search_total": 391,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 2035,
+      "global_relevant": 2,
+      "global_relevant_pids": [
+        "2411080212051624700",
+        "2503020244061618700"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Self-healing cutting mat",
+      "phrases": [
+        "self healing cutting mat"
+      ],
+      "us_search_total": 78,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 433,
+      "global_relevant": 1,
+      "global_relevant_pids": [
+        "1829780259710324736"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Model tool kit",
+      "phrases": [
+        "model building tool kit",
+        "gundam tool kit"
+      ],
+      "us_search_total": 247,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 859,
+      "global_relevant": 3,
+      "global_relevant_pids": [
+        "1380832066714865664",
+        "1723152630576320512",
+        "2412310655381626500"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Panel line scriber / chisel",
+      "phrases": [
+        "model scriber",
+        "hobby chisel"
+      ],
+      "us_search_total": 3,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 66,
+      "global_relevant": 1,
+      "global_relevant_pids": [
+        "1495604306752180224"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Hobby clamps / helping hand",
+      "phrases": [
+        "hobby clamp set",
+        "helping hand tool"
+      ],
+      "us_search_total": 473,
+      "us_relevant": 3,
+      "us_relevant_pids": [
+        "1849678157767921664",
+        "1851865131962486784",
+        "1953074299464962049"
+      ],
+      "global_search_total": 2593,
+      "global_relevant": 12,
+      "global_relevant_pids": [
+        "1422039867977764864",
+        "1468494187023437824",
+        "1470687179205382144",
+        "1489161273575698433",
+        "1576160305959415808",
+        "1669987023647678464",
+        "1786244749779800064",
+        "1953074299464962049",
+        "2503270319101613100",
+        "2506260905481600900",
+        "9CB5B2C7-52EE-4969-9211-1E017EDFB807",
+        "F40935F4-A2B7-4CB5-BC08-4071CB2BD442"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Parts storage organizer",
+      "phrases": [
+        "small parts organizer box",
+        "hobby storage box compartments"
+      ],
+      "us_search_total": 1509,
+      "us_relevant": 4,
+      "us_relevant_pids": [
+        "1867024719082835968",
+        "1910216822346248193",
+        "2031969829968572417",
+        "2045391075766996993"
+      ],
+      "global_search_total": 5265,
+      "global_relevant": 11,
+      "global_relevant_pids": [
+        "1386854912859705344",
+        "1671029591932145664",
+        "1770738545620160512",
+        "1798298899103485952",
+        "1867024719082835968",
+        "1910216822346248193",
+        "2031969829968572417",
+        "2408010359341616200",
+        "2408180712101616500",
+        "2502080821221625600",
+        "2502200935201617800"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Airbrush/paint stand (no paint)",
+      "phrases": [
+        "paint stand holder model",
+        "model painting stand"
+      ],
+      "us_search_total": 268,
+      "us_relevant": 1,
+      "us_relevant_pids": [
+        "1953035805249470466"
+      ],
+      "global_search_total": 1615,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    }
+  ]
+}

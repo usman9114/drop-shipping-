@@ -29,7 +29,8 @@
 3. **CJ API data terms are unconfirmed.** Raw CJ output goes only to `data/private/` (gitignored). Commit derived results only (product id plus our computed metrics).
 4. **CJ may disable API access after 30 days with no transaction** [unverified reading]. The key was created around 2026-11-04. Place the first test order within about a month.
 5. Google Trends via pytrends is terms-unclear. Do not add pulls; licensed providers (SerpApi, DataForSEO) are the route. Raw points were removed from git.
-6. Only one product type has a modelled pass (25-pack magnetic holders at about $30, **estimated** costs). Everything depends on real CJ costs.
+6. **2026-11-04 live CJ run: `tcg-supplies` fails kill criterion K1** (0 relevant US-warehouse SKUs across 24 types), and both backups fail the same bar. CJ's US warehouse holds only 3,964 products, mostly furniture, women's clothing, beauty and jewelry. Real US→US shipping is ~$5.2–6.0 per light parcel. See `docs/shortlists/2026-11-04-cj-supply-check.md`. **Owner decision pending** between options A (supply-first on CJ US, recommended), B (tcg shipped from China), C (other US supplier).
+7. eBay keys in the environment are **sandbox** keys (production returns 401).
 
 ## Traps in a fresh container
 
@@ -38,20 +39,17 @@
 - `.env` is gitignored and disappears with the container. Keys must come from environment settings. Expected variable names: `CJ_API_KEY`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `ZAI_API_KEY`, `OPENROUTER_API_KEY`. Report names only, never values.
 - The graphify post-commit hook rebuilds the graph in the background. A commit made during the rebuild can fail with "files were modified by this hook". Wait a few seconds and retry. After committing, stage `graphify-out` and commit again if the tree is dirty.
 - OpenRouter credit (€10) bought by the owner on 2026-11-04. See `docs/plan/operating-plan.md` §2 for how it is used.
-- 2026-11-04 session: **no env vars reached the cloud container** (all 5 missing; no `.env`). Keys must be added in the cloud environment settings and a new session started.
+- Keys live in the cloud environment **"Crypto"** (the one this project's sessions use; "Default" also has them). As of 2026-11-04 `OPENROUTER_API_KEY` is not visible in the container; check the variable name.
 - Z.ai and OpenRouter keys were pasted into an earlier chat. The owner was asked to rotate them.
 
 ## Next tasks, in order
 
-Calendar and dates: `docs/plan/operating-plan.md` §3.
+Calendar: `docs/plan/operating-plan.md` §3. Done 2026-11-04: setup, live CJ run, client fixes (`scout/cj.py` now has `stock` and `freight`), doc 18 live findings, eBay token test.
 
-1. Set up (above) and run `make test`.
-2. With the CJ key present, run `python -m scout.cj search "<phrase>" --country US --pages 1 --out data/private/cj-search.json` for the 24 product types in decision 0002 §3.3. Compare real responses with the "Unknowns" list in doc 18 and fix `scout/cj.py` and its tests where the guesses were wrong. Update doc 18.
-3. Pull details and freight for hits, compute margins with `scout.margin`, drop products that break the compliance exclusions (doc 12, decision 0002 §3.6), and write a **derived** shortlist (ids and computed numbers only) under `docs/shortlists/`. If the second agent's shortlist engine has landed, use it instead.
-4. If `EBAY_CLIENT_ID` and `EBAY_CLIENT_SECRET` are present, test a client-credentials token only. Use it for category reference data (Taxonomy) at most. Earlier, `api.ebay.com` returned 403 from this sandbox; note whether that persists. Do not store Browse data.
-5. Merge in the owner's Terapeak sheet when it exists, re-score the niche, apply the kill criteria in decision 0002 §3.8. If fewer than about 20 products pass, move to the backup niche.
-6. Stop and ask before spending money, creating accounts, or sending anything outside the repo.
+1. **Wait for the owner's choice** of option A, B or C in `docs/shortlists/2026-11-04-cj-supply-check.md` §4.
+2. If A: from `data/private/cj-us-catalogue.json` (re-pull with `python -m scout.cj search --country US --pages 45 --out ...` in a fresh container), drop regulated and size-return categories by rule, cluster titles into product types with the free GLM model, run detail + stock + freight + `scout.margin` on the best ~50, commit a derived shortlist, and prepare a Terapeak query list for the owner.
+3. Stop and ask before spending money, creating accounts, or sending anything outside the repo (including CJ sourcing requests).
 
 ## Owner tasks outstanding
 
-CJ and eBay seller account setup (eBay developer approval pending), Terapeak session, rotate leaked keys, add the 5 env vars to the cloud environment, ask CJ about customer returns and the return address, decide public versus private repo and the commit email, answer the Shopify questions (wife's Instagram details, beauty route, sequencing).
+Choose option A/B/C (supply check §4); CJ and eBay seller account setup (eBay developer approval pending; current eBay keys are sandbox), Terapeak session, rotate leaked keys, add the 5 env vars to the cloud environment, ask CJ about customer returns and the return address, decide public versus private repo and the commit email, answer the Shopify questions (wife's Instagram details, beauty route, sequencing).

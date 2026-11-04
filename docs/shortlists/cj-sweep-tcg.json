@@ -1,0 +1,389 @@
+{
+  "niche": "tcg-supplies",
+  "date": "2026-11-04",
+  "source": "CJ API product/listV2, page 1, relevance = title regex in spec",
+  "us_relevant_total": 11,
+  "global_relevant_total": 26,
+  "types": [
+    {
+      "id": 1,
+      "name": "Magnetic card holders 35pt",
+      "phrases": [
+        "magnetic card holder 35pt",
+        "magnetic trading card holder"
+      ],
+      "us_search_total": 118,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 1519,
+      "global_relevant": 1,
+      "global_relevant_pids": [
+        "2502150913161611000"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Magnetic holders mixed thickness",
+      "phrases": [
+        "magnetic card case 55pt 75pt 100pt"
+      ],
+      "us_search_total": 74,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 1107,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 3,
+      "name": "Thick magnetic holders 180pt+",
+      "phrases": [
+        "180pt magnetic card holder"
+      ],
+      "us_search_total": 59,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 760,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 4,
+      "name": "Stands for magnetic holders",
+      "phrases": [
+        "card holder stand acrylic"
+      ],
+      "us_search_total": 152,
+      "us_relevant": 1,
+      "us_relevant_pids": [
+        "1701064754971807744"
+      ],
+      "global_search_total": 1124,
+      "global_relevant": 1,
+      "global_relevant_pids": [
+        "1390510911118249984"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Rigid card holders 3x4",
+      "phrases": [
+        "top loader card holder",
+        "rigid card holder 3x4"
+      ],
+      "us_search_total": 277,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 2775,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 6,
+      "name": "Card sleeves PP",
+      "phrases": [
+        "trading card sleeves",
+        "penny sleeves card protector"
+      ],
+      "us_search_total": 662,
+      "us_relevant": 2,
+      "us_relevant_pids": [
+        "2502060741011625600",
+        "2506241521011616700"
+      ],
+      "global_search_total": 8731,
+      "global_relevant": 3,
+      "global_relevant_pids": [
+        "1612359967661633536",
+        "2409302349101623300",
+        "2505110119031628500"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Semi-rigid card holders",
+      "phrases": [
+        "semi rigid card holder",
+        "card saver"
+      ],
+      "us_search_total": 56,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 729,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 8,
+      "name": "Resealable card bags",
+      "phrases": [
+        "card protector bag resealable",
+        "team bags card"
+      ],
+      "us_search_total": 152,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 2401,
+      "global_relevant": 4,
+      "global_relevant_pids": [
+        "1434409160044318720",
+        "1495662542276661248",
+        "1688822984754077696",
+        "2409261155521616500"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "9-pocket zipper binder",
+      "phrases": [
+        "9 pocket card binder",
+        "trading card binder zipper"
+      ],
+      "us_search_total": 207,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 1831,
+      "global_relevant": 1,
+      "global_relevant_pids": [
+        "2412080802171624500"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "4-pocket binder for toploaders",
+      "phrases": [
+        "4 pocket toploader binder"
+      ],
+      "us_search_total": 292,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 1144,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 11,
+      "name": "Graded slab binder",
+      "phrases": [
+        "graded card slab binder"
+      ],
+      "us_search_total": 20,
+      "us_relevant": 1,
+      "us_relevant_pids": [
+        "1909144167860273153"
+      ],
+      "global_search_total": 446,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 12,
+      "name": "Replacement 9-pocket pages",
+      "phrases": [
+        "9 pocket pages trading card",
+        "card binder pages refill"
+      ],
+      "us_search_total": 163,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 1366,
+      "global_relevant": 1,
+      "global_relevant_pids": [
+        "2501270315521626700"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Graded slab storage case",
+      "phrases": [
+        "graded card storage case",
+        "slab case aluminum card"
+      ],
+      "us_search_total": 1147,
+      "us_relevant": 1,
+      "us_relevant_pids": [
+        "1909144167860273153"
+      ],
+      "global_search_total": 5281,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 14,
+      "name": "Graded slab storage box plastic",
+      "phrases": [
+        "graded card box"
+      ],
+      "us_search_total": 129,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 843,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 15,
+      "name": "Graded slab stands/easels",
+      "phrases": [
+        "graded card stand",
+        "card display easel"
+      ],
+      "us_search_total": 194,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 1533,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 16,
+      "name": "Graded slab wall frame",
+      "phrases": [
+        "graded card wall display"
+      ],
+      "us_search_total": 170,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 1135,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 17,
+      "name": "Acrylic booster box display case",
+      "phrases": [
+        "booster box acrylic case",
+        "acrylic display case collectible box"
+      ],
+      "us_search_total": 348,
+      "us_relevant": 3,
+      "us_relevant_pids": [
+        "1895123370901147650",
+        "1895469081903665154",
+        "4BD7D7F7-9490-49BC-80CF-095A3B87A171"
+      ],
+      "global_search_total": 2735,
+      "global_relevant": 7,
+      "global_relevant_pids": [
+        "1403615770684035072",
+        "1544138673338462208",
+        "1895123370901147650",
+        "1895469081903665154",
+        "2406130601411603500",
+        "4BD7D7F7-9490-49BC-80CF-095A3B87A171",
+        "AEF849F4-A2B3-42A9-A1C1-9C6D025EB821"
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Acrylic sealed-pack holders",
+      "phrases": [
+        "booster pack acrylic holder"
+      ],
+      "us_search_total": 82,
+      "us_relevant": 3,
+      "us_relevant_pids": [
+        "1895123370901147650",
+        "1895469081903665154",
+        "4BD7D7F7-9490-49BC-80CF-095A3B87A171"
+      ],
+      "global_search_total": 572,
+      "global_relevant": 7,
+      "global_relevant_pids": [
+        "1403615770684035072",
+        "1544138673338462208",
+        "1895123370901147650",
+        "1895469081903665154",
+        "2406130601411603500",
+        "4BD7D7F7-9490-49BC-80CF-095A3B87A171",
+        "AEF849F4-A2B3-42A9-A1C1-9C6D025EB821"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Screw-down acrylic card holders",
+      "phrases": [
+        "screw down card holder",
+        "acrylic card holder screw"
+      ],
+      "us_search_total": 106,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 1427,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 20,
+      "name": "Multi-card wall display frame",
+      "phrases": [
+        "trading card display frame",
+        "card display case wall"
+      ],
+      "us_search_total": 346,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 2304,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 21,
+      "name": "Card storage boxes / sorting trays",
+      "phrases": [
+        "trading card storage box",
+        "card storage box 800"
+      ],
+      "us_search_total": 2198,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 7558,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 22,
+      "name": "Unbranded deck boxes",
+      "phrases": [
+        "deck box cards",
+        "card deck case 100"
+      ],
+      "us_search_total": 183,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 1309,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 23,
+      "name": "Card mailers shipping kit",
+      "phrases": [
+        "card mailer rigid",
+        "trading card mailer envelope"
+      ],
+      "us_search_total": 20,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 479,
+      "global_relevant": 0,
+      "global_relevant_pids": []
+    },
+    {
+      "id": 24,
+      "name": "Centering gauge / microfibre cloth",
+      "phrases": [
+        "card centering tool",
+        "card grading tool"
+      ],
+      "us_search_total": 184,
+      "us_relevant": 0,
+      "us_relevant_pids": [],
+      "global_search_total": 1057,
+      "global_relevant": 1,
+      "global_relevant_pids": [
+        "1369910667565469696"
+      ]
+    }
+  ]
+}

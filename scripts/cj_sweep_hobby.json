@@ -1,0 +1,91 @@
+{
+ "niche": "hobby-modeling-tools",
+ "types": [
+  {
+   "id": 1,
+   "name": "Sprue cutter / nippers",
+   "phrases": [
+    "model sprue cutter",
+    "hobby nippers"
+   ],
+   "match": "sprue|nipper|model.*(cutter|plier)|gundam"
+  },
+  {
+   "id": 2,
+   "name": "Hobby tweezers set",
+   "phrases": [
+    "model tweezers set",
+    "precision tweezers kit"
+   ],
+   "match": "tweezer",
+   "exclude": "eyebrow|lash|makeup"
+  },
+  {
+   "id": 3,
+   "name": "Sanding sticks / files",
+   "phrases": [
+    "model sanding stick",
+    "hobby file set"
+   ],
+   "match": "sanding|file set|needle file",
+   "exclude": "nail|manicure|foot"
+  },
+  {
+   "id": 4,
+   "name": "Self-healing cutting mat",
+   "phrases": [
+    "self healing cutting mat"
+   ],
+   "match": "cutting mat|self.?healing"
+  },
+  {
+   "id": 5,
+   "name": "Model tool kit",
+   "phrases": [
+    "model building tool kit",
+    "gundam tool kit"
+   ],
+   "match": "model.*(tool|kit)|hobby.*tool|gundam",
+   "exclude": "car model|toy car"
+  },
+  {
+   "id": 6,
+   "name": "Panel line scriber / chisel",
+   "phrases": [
+    "model scriber",
+    "hobby chisel"
+   ],
+   "match": "scrib|chisel|engrav",
+   "exclude": "electric|laser"
+  },
+  {
+   "id": 7,
+   "name": "Hobby clamps / helping hand",
+   "phrases": [
+    "hobby clamp set",
+    "helping hand tool"
+   ],
+   "match": "clamp|helping hand",
+   "exclude": "car|pipe|bike"
+  },
+  {
+   "id": 8,
+   "name": "Parts storage organizer",
+   "phrases": [
+    "small parts organizer box",
+    "hobby storage box compartments"
+   ],
+   "match": "(parts|compartment|grid).*(box|organi[sz]er|storage)|organi[sz]er.*(parts|compartment)"
+  },
+  {
+   "id": 9,
+   "name": "Airbrush/paint stand (no paint)",
+   "phrases": [
+    "paint stand holder model",
+    "model painting stand"
+   ],
+   "match": "(paint|model).*(stand|holder|rack)",
+   "exclude": "phone"
+  }
+ ]
+}

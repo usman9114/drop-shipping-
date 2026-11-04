@@ -1,0 +1,80 @@
+{
+ "niche": "vinyl-record-care",
+ "types": [
+  {
+   "id": 1,
+   "name": "Anti-static record brush",
+   "phrases": [
+    "vinyl record brush",
+    "record cleaning brush carbon fiber"
+   ],
+   "match": "(vinyl|record|lp).*(brush|clean)|carbon fiber brush",
+   "exclude": "car|hair|makeup|tooth"
+  },
+  {
+   "id": 2,
+   "name": "Inner record sleeves",
+   "phrases": [
+    "vinyl record inner sleeves",
+    "record sleeves 12 inch"
+   ],
+   "match": "(vinyl|record|lp|12.?inch).*(sleeve|cover)|(sleeve|cover).*(vinyl|record|lp)",
+   "exclude": "shirt|dress|arm|phone"
+  },
+  {
+   "id": 3,
+   "name": "Outer record sleeves",
+   "phrases": [
+    "record outer sleeves plastic"
+   ],
+   "match": "(vinyl|record|lp).*sleeve|sleeve.*(vinyl|record|lp)"
+  },
+  {
+   "id": 4,
+   "name": "Record display stand / now-playing",
+   "phrases": [
+    "vinyl record stand",
+    "record display holder"
+   ],
+   "match": "(vinyl|record|lp|album).*(stand|holder|display|shelf|rack)",
+   "exclude": "phone|tablet"
+  },
+  {
+   "id": 5,
+   "name": "Record storage crate / box",
+   "phrases": [
+    "vinyl record storage box",
+    "record crate"
+   ],
+   "match": "(vinyl|record|lp|album).*(storage|crate|box|cabinet)"
+  },
+  {
+   "id": 6,
+   "name": "Stylus brush / cleaning kit (dry)",
+   "phrases": [
+    "turntable stylus brush",
+    "record cleaning kit"
+   ],
+   "match": "stylus|turntable|(vinyl|record).*(kit|clean)",
+   "exclude": "electric|ultrasonic"
+  },
+  {
+   "id": 7,
+   "name": "Record weight / clamp",
+   "phrases": [
+    "record weight turntable",
+    "record clamp stabilizer"
+   ],
+   "match": "(record|turntable|vinyl).*(weight|clamp|stabili)"
+  },
+  {
+   "id": 8,
+   "name": "Slipmat",
+   "phrases": [
+    "turntable slipmat",
+    "record mat cork"
+   ],
+   "match": "slipmat|(turntable|record|vinyl).*mat"
+  }
+ ]
+}
