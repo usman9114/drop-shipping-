@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793824716.300204,
-    "seen": 1793824729.0805652,
-    "ast_hash": "6668c349cc21b451039252c0d31de56c",
+    "mtime": 1793828406.8596709,
+    "seen": 1793828423.7295616,
+    "ast_hash": "10941f53ca1321322880435143438496",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "scout/llm.py": {
-    "mtime": 1793824321.746001,
-    "seen": 1793824343.2205243,
-    "ast_hash": "66cb9d5c58a5b2b23689692ede5cd328",
+    "mtime": 1793828148.6289678,
+    "seen": 1793828423.728197,
+    "ast_hash": "8f5bebdcb45048d998e3c6868b67cf37",
     "semantic_hash": ""
   },
   "scout/margin.py": {
@@ -468,9 +468,9 @@
     "semantic_hash": ""
   },
   "warehouse/models/staging/_staging.yml": {
-    "mtime": 1793820002.1856058,
-    "seen": 1793821059.2092066,
-    "ast_hash": "94e17e25af396b36857471a4513b8a28",
+    "mtime": 1793828137.8052022,
+    "seen": 1793828423.7290773,
+    "ast_hash": "f046fb1d1d34ab48d5dc6e2f41809e07",
     "semantic_hash": ""
   },
   "warehouse/profiles.yml": {
@@ -690,15 +690,15 @@
     "semantic_hash": ""
   },
   "scout/store_intel.py": {
-    "mtime": 1793821047.6623752,
-    "seen": 1793821059.2091606,
-    "ast_hash": "ed9d15fdbe4092053a7da174b7ef94c9",
+    "mtime": 1793828364.0021565,
+    "seen": 1793828423.7283316,
+    "ast_hash": "c65cccbd2156eaa456d67b676880b977",
     "semantic_hash": ""
   },
   "scout/stores.py": {
-    "mtime": 1793821047.6663752,
-    "seen": 1793821059.2091618,
-    "ast_hash": "17a337e9fb369fd595d763473a7217dc",
+    "mtime": 1793828364.0013547,
+    "seen": 1793828423.7283332,
+    "ast_hash": "3934b34874a6176e9a2a16a44d015ea0",
     "semantic_hash": ""
   },
   "scripts/store_export.py": {
@@ -714,9 +714,9 @@
     "semantic_hash": ""
   },
   "tests/test_stores.py": {
-    "mtime": 1793821047.6623752,
-    "seen": 1793821059.2091837,
-    "ast_hash": "c7414e166bef98673001eb17fe87f8ae",
+    "mtime": 1793828417.5365827,
+    "seen": 1793828423.7286642,
+    "ast_hash": "a3c97e2ea7e9a241ee9eeb9d950142f8",
     "semantic_hash": ""
   },
   "docs/decisions/0009-best-store-discovery.md": {
@@ -734,7 +734,7 @@
   "warehouse/models/marts/mart_store_categories.sql": {
     "mtime": 1793820024.5105846,
     "seen": 1793821132.0662472,
-    "ast_hash": "48889da2442618f574851fc1e62a43fe",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_store_profile.sql": {
@@ -746,7 +746,7 @@
   "warehouse/models/staging/stg_web_meta.sql": {
     "mtime": 1793820002.182613,
     "seen": 1793821132.0662642,
-    "ast_hash": "fbe562e685b8d9122e44bfa54256619d",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_web_ranks.sql": {
@@ -770,7 +770,7 @@
   "warehouse/models/staging/stg_web_store_deep.sql": {
     "mtime": 1793820002.1842113,
     "seen": 1793821132.066269,
-    "ast_hash": "b871ef1b0949707f81242bf7e14ee13f",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "docs/plan/step1-flow.md": {
@@ -798,9 +798,21 @@
     "semantic_hash": ""
   },
   "scripts/validate_business_model.py": {
-    "mtime": 1793826114.5466764,
-    "seen": 1793826117.061683,
-    "ast_hash": "c6a76d138a614324a7c27947c4a4a1e7",
+    "mtime": 1793828417.5365827,
+    "seen": 1793828423.7285328,
+    "ast_hash": "e6e9a5c09b8546960e8adc70d698c55a",
+    "semantic_hash": ""
+  },
+  "docs/plan/estimating-sales-and-profit.md": {
+    "mtime": 1793828406.8407528,
+    "seen": 1793828423.7298827,
+    "ast_hash": "185610e1301f80f22a13c067c650a08d",
+    "semantic_hash": ""
+  },
+  "docs/reviews/2026-11-04-business-model-validation.md": {
+    "mtime": 1793828406.836582,
+    "seen": 1793828423.7305074,
+    "ast_hash": "584cef69bbecdb93189ff027941e06de",
     "semantic_hash": ""
   }
 }
