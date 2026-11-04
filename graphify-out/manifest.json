@@ -804,9 +804,9 @@
     "semantic_hash": ""
   },
   "docs/plan/estimating-sales-and-profit.md": {
-    "mtime": 1793828935.5935087,
-    "seen": 1793829033.5677502,
-    "ast_hash": "491d628bb307965a3b632053a87fd4d2",
+    "mtime": 1793829046.0346138,
+    "seen": 1793829050.5118997,
+    "ast_hash": "393a38ecfd835c81dbd1cb50f48b27a3",
     "semantic_hash": ""
   },
   "docs/reviews/2026-11-04-business-model-validation.md": {
@@ -837,6 +837,18 @@
     "mtime": 1793829030.732619,
     "seen": 1793829033.5678263,
     "ast_hash": "505599a7693de25d3c5e95aec2c854b7",
+    "semantic_hash": ""
+  },
+  "scout/snapshots.py": {
+    "mtime": 1793829034.9846194,
+    "seen": 1793829050.5117817,
+    "ast_hash": "48389de7a51e2ba5edab42178da84a78",
+    "semantic_hash": ""
+  },
+  "tests/test_snapshots.py": {
+    "mtime": 1793829048.21662,
+    "seen": 1793829050.5118146,
+    "ast_hash": "dbf49f7395c58549597b2a4daf32b15b",
     "semantic_hash": ""
   }
 }
