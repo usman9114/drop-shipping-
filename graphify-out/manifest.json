@@ -1,692 +1,776 @@
 {
   ".claude/settings.json": {
-    "mtime": 1793709623.9283535,
-    "seen": 1793812406.5325856,
+    "mtime": 1793819308.126272,
+    "seen": 1793821059.209122,
     "ast_hash": "932728c53d1a5d6267554a83bdc89f5c",
     "semantic_hash": ""
   },
   ".pre-commit-config.yaml": {
-    "mtime": 1793814591.0367777,
-    "seen": 1793814628.092975,
+    "mtime": 1793819093.1261263,
+    "seen": 1793821059.2091334,
     "ast_hash": "84c8fc3b55b81925a3c923dc240f8b31",
     "semantic_hash": ""
   },
   "scripts/hooks/check_no_ai_attribution.py": {
-    "mtime": 1793703035.786838,
-    "seen": 1793812406.5326152,
+    "mtime": 1793819093.1514335,
+    "seen": 1793821059.2091725,
     "ast_hash": "9e7c7d6913497251e092abd16b2d1609",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793813908.8752494,
-    "seen": 1793813921.2639155,
+    "mtime": 1793819093.1261263,
+    "seen": 1793821059.2092292,
     "ast_hash": "becde8b8037cf27b645f233d77bb65b4",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
-    "mtime": 1793813908.8749611,
-    "seen": 1793813921.2641504,
+    "mtime": 1793819093.1283176,
+    "seen": 1793821059.2092535,
     "ast_hash": "bf5286a8997486a29c6e3aea42b8b906",
     "semantic_hash": ""
   },
   "docs/research/01-ebay-policy.md": {
-    "mtime": 1793702970.1068408,
-    "seen": 1793812406.5326493,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.209255,
     "ast_hash": "adda2cebb08e4c1f2ed7f23a57f0a386",
     "semantic_hash": ""
   },
   "docs/research/02-unit-economics.md": {
-    "mtime": 1793702898.578844,
-    "seen": 1793812406.53265,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.209256,
     "ast_hash": "f8700b6581c2b89211fe653a70c3d942",
     "semantic_hash": ""
   },
   "docs/research/03-suppliers.md": {
-    "mtime": 1793702916.8748434,
-    "seen": 1793812406.5326507,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.209257,
     "ast_hash": "d58724b249e07a7f43df4b8b9e08aa37",
     "semantic_hash": ""
   },
   "docs/research/04-tooling-apis.md": {
-    "mtime": 1793702866.6268456,
-    "seen": 1793812406.5326514,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092583,
     "ast_hash": "dbef7af72721b0f630bb538bf097577e",
     "semantic_hash": ""
   },
   "docs/research/05-legal-and-platforms.md": {
-    "mtime": 1793703472.4068184,
-    "seen": 1793812406.5326524,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092593,
     "ast_hash": "9093a9b6d01e00dabf78e8a1511ce172",
     "semantic_hash": ""
   },
   "docs/research/06-image-sourcing.md": {
-    "mtime": 1793708858.2936254,
-    "seen": 1793812406.532653,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092605,
     "ast_hash": "17f41084257d551497c62f788fe0e666",
     "semantic_hash": ""
   },
   "scout/__init__.py": {
-    "mtime": 1793709488.3691528,
-    "seen": 1793812406.5326018,
+    "mtime": 1793819093.1494124,
+    "seen": 1793821059.2091458,
     "ast_hash": "04b99cc6ae030cde98329b1a594c58a3",
     "semantic_hash": ""
   },
   "scout/llm.py": {
-    "mtime": 1793814234.391639,
-    "seen": 1793814313.4318695,
+    "mtime": 1793819093.149598,
+    "seen": 1793821059.2091525,
     "ast_hash": "1090fd6966539cef87ac937c16ebb1be",
     "semantic_hash": ""
   },
   "scout/margin.py": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.5326064,
+    "mtime": 1793819093.149598,
+    "seen": 1793821059.2091537,
     "ast_hash": "ca0587089b32ccb1f6673e8592e03410",
     "semantic_hash": ""
   },
   "scout/trends.py": {
-    "mtime": 1793722948.2851956,
-    "seen": 1793812406.5326095,
+    "mtime": 1793819093.149598,
+    "seen": 1793821059.2091632,
     "ast_hash": "a48274ed2c83fd115e91bf56f2698493",
     "semantic_hash": ""
   },
   ".claude/agents/_team-rules.md": {
-    "mtime": 1793812367.241221,
-    "seen": 1793812406.5326262,
+    "mtime": 1793819093.1243057,
+    "seen": 1793821059.2092183,
     "ast_hash": "ed4316e5197c56edcad7d93a53920442",
     "semantic_hash": ""
   },
   ".claude/agents/compliance-officer.md": {
-    "mtime": 1793721458.4477122,
-    "seen": 1793812406.5326269,
+    "mtime": 1793819093.1247196,
+    "seen": 1793821059.2092192,
     "ast_hash": "216cf69377e4125064cc86e7cdf5c8f9",
     "semantic_hash": ""
   },
   ".claude/agents/creative-producer.md": {
-    "mtime": 1793709467.1677873,
-    "seen": 1793812406.5326278,
+    "mtime": 1793819093.1247196,
+    "seen": 1793821059.2092206,
     "ast_hash": "628cb152f90d7040e813a823ea94f4cc",
     "semantic_hash": ""
   },
   ".claude/agents/data-analyst.md": {
-    "mtime": 1793709467.16483,
-    "seen": 1793812406.5326288,
+    "mtime": 1793819093.1247196,
+    "seen": 1793821059.2092216,
     "ast_hash": "eb88550b0a6b5a98e7af74b1b20d4639",
     "semantic_hash": ""
   },
   ".claude/agents/head-of-marketing.md": {
-    "mtime": 1793709467.1598651,
-    "seen": 1793812406.5326312,
+    "mtime": 1793819093.1247196,
+    "seen": 1793821059.2092257,
     "ast_hash": "b6808e296981d20e4879bd93cb7750ef",
     "semantic_hash": ""
   },
   ".claude/agents/market-researcher.md": {
-    "mtime": 1793709467.163194,
-    "seen": 1793812406.5326319,
+    "mtime": 1793819093.1247196,
+    "seen": 1793821059.2092268,
     "ast_hash": "34adb233c66afb06ed9ec72b178198e5",
     "semantic_hash": ""
   },
   ".claude/agents/sales-lead.md": {
-    "mtime": 1793709467.1611538,
-    "seen": 1793812406.5326326,
+    "mtime": 1793819093.1247196,
+    "seen": 1793821059.209228,
     "ast_hash": "ec3d0c8f7e213665bfb83476dc25e7f1",
     "semantic_hash": ""
   },
   "docs/plan/ai-team.md": {
-    "mtime": 1793721941.7284849,
-    "seen": 1793812406.532643,
+    "mtime": 1793819093.1280923,
+    "seen": 1793821059.2092452,
     "ast_hash": "667c9e6cb07e801c36d39f4842869ead",
     "semantic_hash": ""
   },
   "docs/research/07-data-and-ai-tooling.md": {
-    "mtime": 1793724965.5446327,
-    "seen": 1793812406.532654,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092617,
     "ast_hash": "b8e3fe9908237bc5de7a86ed32af3afb",
     "semantic_hash": ""
   },
   "docs/research/08-ebay-us-demand.md": {
-    "mtime": 1793709575.8170018,
-    "seen": 1793812406.532655,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092628,
     "ast_hash": "9c98e88e3d4c5349e15b0b48ae92c455",
     "semantic_hash": ""
   },
   "docs/research/09-cj-us-warehouse.md": {
-    "mtime": 1793709575.817149,
-    "seen": 1793812406.532656,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.209264,
     "ast_hash": "52d183757bae448bc763bb4717ef7b65",
     "semantic_hash": ""
   },
   "docs/research/10-category-risk.md": {
-    "mtime": 1793709575.8192387,
-    "seen": 1793812406.5326567,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092652,
     "ast_hash": "1292b1a0ea3a4947c767e28a4372643f",
     "semantic_hash": ""
   },
   "requirements.txt": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.5326686,
+    "mtime": 1793819093.1494124,
+    "seen": 1793821059.2092838,
     "ast_hash": "96cb285d83e1ac8ae037d78aee98d51f",
     "semantic_hash": ""
   },
   "data/evidence/trends/candidates.txt": {
-    "mtime": 1793709796.813139,
-    "seen": 1793812406.5326347,
+    "mtime": 1793819093.126575,
+    "seen": 1793821059.2092304,
     "ast_hash": "d75f3e8f24e0bdaec6f63d85a320af13",
     "semantic_hash": ""
   },
   "docs/decisions/0001-niche-candidates.md": {
-    "mtime": 1793709890.5971348,
-    "seen": 1793812406.5326357,
+    "mtime": 1793819093.1270146,
+    "seen": 1793821059.2092314,
     "ast_hash": "ae62ec3582cb88d90178641ee5d8800f",
     "semantic_hash": ""
   },
   "docs/research/14-video-ai-dropshipping-7-days.md": {
-    "mtime": 1793721458.437623,
-    "seen": 1793812406.53266,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092702,
     "ast_hash": "3fdba5b5e32b67efefc30c99504adf52",
     "semantic_hash": ""
   },
   "docs/research/13-sales-niche-economics.md": {
-    "mtime": 1793721510.6778295,
-    "seen": 1793812406.5326593,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.209269,
     "ast_hash": "fc438d87b1210adf154670d53bc24930",
     "semantic_hash": ""
   },
   "docs/research/12-compliance-niche-cards.md": {
-    "mtime": 1793721526.908359,
-    "seen": 1793812406.5326583,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092676,
     "ast_hash": "44558ad08ae857e87f15424a7172dd31",
     "semantic_hash": ""
   },
   "data/evidence/trends/aggregate_candidates.py": {
-    "mtime": 1793721670.888497,
-    "seen": 1793812406.5325959,
+    "mtime": 1793819093.1263971,
+    "seen": 1793821059.2091358,
     "ast_hash": "3973b697124f7bd43ae371ff3a136cfa",
     "semantic_hash": ""
   },
   "docs/research/11-trends-candidates.md": {
-    "mtime": 1793721641.0000613,
-    "seen": 1793812406.5326574,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092664,
     "ast_hash": "e10187405e2e0c0bed9a7dc8bb4a3f9d",
     "semantic_hash": ""
   },
   "docs/plan/multichannel-shopify.md": {
-    "mtime": 1793721874.984488,
-    "seen": 1793812406.532646,
+    "mtime": 1793819093.1283176,
+    "seen": 1793821059.2092493,
     "ast_hash": "35ecb30a6336842d53c8d2074eadab58",
     "semantic_hash": ""
   },
   "docs/decisions/0002-niche-selection.md": {
-    "mtime": 1793721929.265171,
-    "seen": 1793812406.5326366,
+    "mtime": 1793819093.1272418,
+    "seen": 1793821059.2092326,
     "ast_hash": "cf7983382117897a612713067af642c0",
     "semantic_hash": ""
   },
   "scout/store.py": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.5326087,
+    "mtime": 1793819093.149598,
+    "seen": 1793821059.2091587,
     "ast_hash": "ef427629ca74df94a391e7b2c4c8dbb2",
     "semantic_hash": ""
   },
   "scripts/claude-glm.sh": {
-    "mtime": 1793722932.7633038,
-    "seen": 1793812406.5326145,
+    "mtime": 1793819093.1514335,
+    "seen": 1793821059.209171,
     "ast_hash": "ac5417823d29646a55a551361adac997",
     "semantic_hash": ""
   },
   ".claude/agents/glm-coder.md": {
-    "mtime": 1793722932.761865,
-    "seen": 1793812406.5326302,
+    "mtime": 1793819093.1247196,
+    "seen": 1793821059.2092245,
     "ast_hash": "421fad592bbaaccb77779fd0fa63b8c1",
     "semantic_hash": ""
   },
   "docs/plan/data-pipeline.md": {
-    "mtime": 1793746213.029827,
-    "seen": 1793812406.5326438,
+    "mtime": 1793819093.1283176,
+    "seen": 1793821059.2092462,
     "ast_hash": "e13b8cb90c1658ebb635f97dffd0b7dc",
     "semantic_hash": ""
   },
   "docs/decisions/0003-build-vs-reuse.md": {
-    "mtime": 1793746213.0303676,
-    "seen": 1793812406.5326374,
+    "mtime": 1793819093.1272418,
+    "seen": 1793821059.2092345,
     "ast_hash": "4e4895ff4382f4e448bba2b0036c8060",
     "semantic_hash": ""
   },
   ".claude/agents/data-engineer.md": {
-    "mtime": 1793724703.456278,
-    "seen": 1793812406.5326295,
+    "mtime": 1793819093.1247196,
+    "seen": 1793821059.2092235,
     "ast_hash": "b349ce040b72472a809556125981d61e",
     "semantic_hash": ""
   },
   "docs/plan/warehouse.md": {
-    "mtime": 1793746213.0302224,
-    "seen": 1793812406.5326476,
+    "mtime": 1793819093.1283176,
+    "seen": 1793821059.2092514,
     "ast_hash": "96e06222955a6ebf465ef13b23785f3b",
     "semantic_hash": ""
   },
   "docs/decisions/0004-postgres-warehouse-and-source-terms.md": {
-    "mtime": 1793749657.4297626,
-    "seen": 1793812406.5326385,
+    "mtime": 1793819093.1272418,
+    "seen": 1793821059.2092354,
     "ast_hash": "b47cbb5b1c119c585e08cd0cdaaa5d83",
     "semantic_hash": ""
   },
   "docs/research/15-warehouse-hosting-and-tooling.md": {
-    "mtime": 1793724815.412273,
-    "seen": 1793812406.5326607,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092712,
     "ast_hash": "93824ecb0b42ab9cfe2e4c3d2aae4523",
     "semantic_hash": ""
   },
   "docs/research/16-trend-and-social-sources.md": {
-    "mtime": 1793724834.424272,
-    "seen": 1793812406.5326617,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092726,
     "ast_hash": "2b1bde4876e9ec08b3e0b38bff172eb2",
     "semantic_hash": ""
   },
   "docs/research/17-free-feeds-and-storage-terms.md": {
-    "mtime": 1793749403.7570128,
-    "seen": 1793812406.5326626,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092736,
     "ast_hash": "8e824ffb11164231eb121aab5fc04ffc",
     "semantic_hash": ""
   },
   "infra/vps/docker-compose.yml": {
-    "mtime": 1793745586.417175,
-    "seen": 1793812406.5326009,
+    "mtime": 1793819093.1494124,
+    "seen": 1793821059.209144,
     "ast_hash": "89a63bc6d2885ddc0bf8c339b41f3b7a",
     "semantic_hash": ""
   },
   "docs/runbooks/vps-postgres.md": {
-    "mtime": 1793745608.8611739,
-    "seen": 1793812406.5326662,
+    "mtime": 1793819093.131077,
+    "seen": 1793821059.2092803,
     "ast_hash": "d145856f2c284be9983a89c38d01924a",
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1793745877.989162,
-    "seen": 1793812406.5325916,
+    "mtime": 1793819093.1261263,
+    "seen": 1793821059.2091298,
     "ast_hash": "afb3f3285eb6e804fb32acae9ea95567",
     "semantic_hash": ""
   },
   "tests/test_margin.py": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.532618,
+    "mtime": 1793819093.151903,
+    "seen": 1793821059.209179,
     "ast_hash": "9431a34ade0cf5086f1f86a4de981a53",
     "semantic_hash": ""
   },
   "tests/test_store.py": {
-    "mtime": 1793749793.5591722,
-    "seen": 1793812406.5326188,
+    "mtime": 1793819093.151903,
+    "seen": 1793821059.2091815,
     "ast_hash": "54fa324dfd30d289941c195d4340939f",
     "semantic_hash": ""
   },
   "tests/test_trends_llm.py": {
-    "mtime": 1793814234.3562448,
-    "seen": 1793814313.4320962,
+    "mtime": 1793819093.151903,
+    "seen": 1793821059.2091851,
     "ast_hash": "36d96f19aacdf7f4eac6bf02dfc6efda",
     "semantic_hash": ""
   },
   "requirements-dev.txt": {
-    "mtime": 1793745878.2843654,
-    "seen": 1793812406.5326679,
+    "mtime": 1793819093.1494124,
+    "seen": 1793821059.2092826,
     "ast_hash": "63a0b5fb9c71ef99a768f795f43d01f6",
     "semantic_hash": ""
   },
   "scout/cj.py": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.5326028,
+    "mtime": 1793819093.149598,
+    "seen": 1793821059.2091472,
     "ast_hash": "10e9d0fcdc71ef77288d024abd575c8d",
     "semantic_hash": ""
   },
   "tests/test_cj.py": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.5326169,
+    "mtime": 1793819093.1514335,
+    "seen": 1793821059.2091763,
     "ast_hash": "57cb96d477ab2435396a4e4dbf94a4f3",
     "semantic_hash": ""
   },
   "docs/decisions/0005-cj-client.md": {
-    "mtime": 1793746051.741154,
-    "seen": 1793812406.5326395,
+    "mtime": 1793819093.1272418,
+    "seen": 1793821059.2092366,
     "ast_hash": "27497e43b55802c6290abdba1dbc5055",
     "semantic_hash": ""
   },
   "docs/research/18-cj-api-cheatsheet.md": {
-    "mtime": 1793810895.670866,
-    "seen": 1793812406.5326633,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092745,
     "ast_hash": "c929d53a2c3b5950925e6a54ee065618",
     "semantic_hash": ""
   },
   "docs/handoff/agent2-review-and-shortlist.md": {
-    "mtime": 1793749805.5571477,
-    "seen": 1793812406.5326412,
+    "mtime": 1793819093.1272418,
+    "seen": 1793821059.2092428,
     "ast_hash": "df69eaf188010bbcf82f1e5ce89ee26d",
     "semantic_hash": ""
   },
   "docs/reviews/2026-11-agent2-project-review.md": {
-    "mtime": 1793749657.3469212,
-    "seen": 1793812406.5326643,
+    "mtime": 1793819093.131077,
+    "seen": 1793821059.2092793,
     "ast_hash": "54c42fdbd0b2a2b6b5d0bef1e71010e1",
     "semantic_hash": ""
   },
   "docs/handoff/session-state.md": {
-    "mtime": 1793818946.5206895,
-    "seen": 1793818950.225981,
+    "mtime": 1793819093.1280923,
+    "seen": 1793821059.2092443,
     "ast_hash": "b0bf06e58d66ac2432ebd48055f07eed",
     "semantic_hash": ""
   },
   "docs/plan/operating-plan.md": {
-    "mtime": 1793810895.6671345,
-    "seen": 1793812406.532647,
+    "mtime": 1793819093.1283176,
+    "seen": 1793821059.2092502,
     "ast_hash": "6ef8ccf73c0a87654c76f6e46dfc78c7",
     "semantic_hash": ""
   },
   "docs/shortlists/cj-sweep-hobby.json": {
-    "mtime": 1793810895.6716785,
-    "seen": 1793812406.5325975,
+    "mtime": 1793819093.1318197,
+    "seen": 1793821059.2091393,
     "ast_hash": "38d805bb3f46a34cad7f9e58f09c3e9b",
     "semantic_hash": ""
   },
   "docs/shortlists/cj-sweep-tcg.json": {
-    "mtime": 1793810895.6716785,
-    "seen": 1793812406.5325987,
+    "mtime": 1793819093.1318197,
+    "seen": 1793821059.2091413,
     "ast_hash": "b2eb058efee576707b0a9311a63c7bad",
     "semantic_hash": ""
   },
   "docs/shortlists/cj-sweep-vinyl.json": {
-    "mtime": 1793810895.6716785,
-    "seen": 1793812406.5326,
+    "mtime": 1793819093.1318197,
+    "seen": 1793821059.2091424,
     "ast_hash": "df3a972584e1b3a748051216963e3645",
     "semantic_hash": ""
   },
   "scripts/cj_sweep.py": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.532611,
+    "mtime": 1793819093.150259,
+    "seen": 1793821059.209166,
     "ast_hash": "e58e603bff5290d87a048e93de1d4f6e",
     "semantic_hash": ""
   },
   "scripts/cj_sweep_hobby.json": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.5326118,
+    "mtime": 1793819093.1514335,
+    "seen": 1793821059.2091672,
     "ast_hash": "215e6e64811e8e4b5aab6c60ef05d502",
     "semantic_hash": ""
   },
   "scripts/cj_sweep_tcg.json": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.5326126,
+    "mtime": 1793819093.1514335,
+    "seen": 1793821059.2091687,
     "ast_hash": "d3812ae86bcad7d0adc82b075f38204e",
     "semantic_hash": ""
   },
   "scripts/cj_sweep_vinyl.json": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.5326135,
+    "mtime": 1793819093.1514335,
+    "seen": 1793821059.2091699,
     "ast_hash": "e36d937d5fb010308b785bd47e0e9644",
     "semantic_hash": ""
   },
   "docs/shortlists/2026-11-04-cj-supply-check.md": {
-    "mtime": 1793810895.6711345,
-    "seen": 1793812406.5326672,
+    "mtime": 1793819093.131077,
+    "seen": 1793821059.2092812,
     "ast_hash": "ffafa66be8872168cf0479be244fa33c",
     "semantic_hash": ""
   },
   "scout/classify.py": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.532604,
+    "mtime": 1793819093.149598,
+    "seen": 1793821059.2091486,
     "ast_hash": "bba246eaba2e71e1be96dcd4913742d6",
     "semantic_hash": ""
   },
   "scout/ingest_cj.py": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.5326047,
+    "mtime": 1793819093.149598,
+    "seen": 1793821059.2091498,
     "ast_hash": "fd0822f710961d40c35b067fad1b8553",
     "semantic_hash": ""
   },
   "scripts/wh_export.py": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.5326161,
+    "mtime": 1793819093.1514335,
+    "seen": 1793821059.209175,
     "ast_hash": "2e4b06a39ddbc2b608a342324080d0c9",
     "semantic_hash": ""
   },
   "tests/test_warehouse_helpers.py": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.5326204,
+    "mtime": 1793819093.151903,
+    "seen": 1793821059.2091863,
     "ast_hash": "8104a810e62a197591a41cfa8fd0b56c",
     "semantic_hash": ""
   },
   "warehouse/dbt_project.yml": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.5326214,
+    "mtime": 1793819093.151903,
+    "seen": 1793821059.2091887,
     "ast_hash": "a2abd59229e7ac5c5e0b2e81967546df",
     "semantic_hash": ""
   },
   "warehouse/models/marts/_marts.yml": {
-    "mtime": 1793813219.617934,
-    "seen": 1793813322.2962234,
-    "ast_hash": "81176b39cb192e03d9ae7a5b5dd2f578",
+    "mtime": 1793820024.5105846,
+    "seen": 1793821059.2092,
+    "ast_hash": "fbf7186f9491e66ca709cb6ac72f753f",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_supply_candidates.py": {
-    "mtime": 1793810895.6825066,
-    "seen": 1793812406.5326228,
+    "mtime": 1793819093.1534152,
+    "seen": 1793821059.2092032,
     "ast_hash": "2fb8e4d4f4e073c243d6555e0e7df029",
     "semantic_hash": ""
   },
   "warehouse/models/staging/_staging.yml": {
-    "mtime": 1793810895.6825066,
-    "seen": 1793812406.5326235,
-    "ast_hash": "e72d7ae5a0fd43948eb19e5284101c9c",
+    "mtime": 1793820002.1856058,
+    "seen": 1793821059.2092066,
+    "ast_hash": "94e17e25af396b36857471a4513b8a28",
     "semantic_hash": ""
   },
   "warehouse/profiles.yml": {
-    "mtime": 1793810895.6826122,
-    "seen": 1793812406.5326245,
+    "mtime": 1793819093.153717,
+    "seen": 1793821059.209216,
     "ast_hash": "939f29a16714347b00b067e08d8380f7",
     "semantic_hash": ""
   },
   "warehouse/seeds/_seeds.yml": {
-    "mtime": 1793813271.4166827,
-    "seen": 1793813322.2962751,
-    "ast_hash": "409f1aa50a58d31939a02dc56855dedc",
+    "mtime": 1793819808.7557724,
+    "seen": 1793821059.209217,
+    "ast_hash": "b42dc6d77eedcca1a75b6b5e45185820",
     "semantic_hash": ""
   },
   "docs/decisions/0006-duckdb-warehouse.md": {
-    "mtime": 1793810895.6671345,
-    "seen": 1793812406.5326405,
+    "mtime": 1793819093.1272418,
+    "seen": 1793821059.2092378,
     "ast_hash": "264080c671f4149bbb14bd07d067fa12",
     "semantic_hash": ""
   },
   "scout/screen_images.py": {
-    "mtime": 1793810895.6791344,
-    "seen": 1793812406.5326078,
+    "mtime": 1793819093.149598,
+    "seen": 1793821059.2091568,
     "ast_hash": "2f3ddc20feb11e4b8fc904fc5d6b2470",
     "semantic_hash": ""
   },
   "warehouse/macros/lake.sql": {
-    "mtime": 1793810895.6820118,
-    "seen": 1793814317.020429,
+    "mtime": 1793819093.152729,
+    "seen": 1793821059.20919,
     "ast_hash": "a697efeb66636a1129b11ca7d4fa704e",
     "semantic_hash": ""
   },
   "warehouse/macros/tests.sql": {
-    "mtime": 1793810895.6821787,
-    "seen": 1793814317.02043,
+    "mtime": 1793819093.1527908,
+    "seen": 1793821059.2091908,
     "ast_hash": "c7b1261c67a125c72e2503c368308c15",
     "semantic_hash": ""
   },
   "warehouse/models/core/core_dim_product.sql": {
-    "mtime": 1793810895.682283,
-    "seen": 1793814317.020431,
+    "mtime": 1793819093.152862,
+    "seen": 1793821059.2091923,
     "ast_hash": "8f11d67eeabadf97e19681809c88f2d7",
     "semantic_hash": ""
   },
   "warehouse/models/core/core_fact_offer.sql": {
-    "mtime": 1793810895.6823215,
-    "seen": 1793814317.0204322,
+    "mtime": 1793819093.1530473,
+    "seen": 1793821059.2091935,
     "ast_hash": "d6d319f36c08c77622458758c6780c61",
     "semantic_hash": ""
   },
   "warehouse/models/enrich/enr_product_flags.sql": {
-    "mtime": 1793810895.6824055,
-    "seen": 1793814317.0204344,
+    "mtime": 1793819093.1532478,
+    "seen": 1793821059.2091973,
     "ast_hash": "7a2bcb3dbe1880fb8b00f194a9cbb01d",
     "semantic_hash": ""
   },
   "warehouse/models/enrich/enr_product_type.sql": {
-    "mtime": 1793810895.6824055,
-    "seen": 1793814317.0204356,
+    "mtime": 1793819093.1532478,
+    "seen": 1793821059.2091985,
     "ast_hash": "b92d69048c1881194f14d6aa83d2a783",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_prefilter.sql": {
-    "mtime": 1793810895.6825066,
-    "seen": 1793814317.020437,
+    "mtime": 1793819093.1534152,
+    "seen": 1793821059.2092009,
     "ast_hash": "b30e7a52362ffd055dbbed9841162802",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_terapeak_sheet.sql": {
-    "mtime": 1793810895.6825066,
-    "seen": 1793814317.0204396,
+    "mtime": 1793819093.1534152,
+    "seen": 1793821059.2092044,
     "ast_hash": "42cd8d3f5cbd168f0db6569bf7968682",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_categories.sql": {
-    "mtime": 1793810895.6826122,
-    "seen": 1793814317.0204425,
+    "mtime": 1793819093.153717,
+    "seen": 1793821059.2092078,
     "ast_hash": "df168ceaecdc85f5b4870db50833828d",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_freight.sql": {
-    "mtime": 1793810895.6826122,
-    "seen": 1793814317.0204434,
+    "mtime": 1793819093.153717,
+    "seen": 1793821059.2092087,
     "ast_hash": "8a948e4750a086378d4d22f5760c9553",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_products.sql": {
-    "mtime": 1793810895.6826122,
-    "seen": 1793814317.0204456,
+    "mtime": 1793819093.153717,
+    "seen": 1793821059.209212,
     "ast_hash": "2aa04914541835f3ed55ad29c6f7b6ec",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_stock.sql": {
-    "mtime": 1793810895.6826122,
-    "seen": 1793814317.0204468,
+    "mtime": 1793819093.153717,
+    "seen": 1793821059.2092135,
     "ast_hash": "d7711f44fff7d3fbb797be673e0f4880",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_variants.sql": {
-    "mtime": 1793810895.6826122,
-    "seen": 1793814317.0204475,
+    "mtime": 1793819093.153717,
+    "seen": 1793821059.2092147,
     "ast_hash": "73e4361731a18869b3b865734c188848",
     "semantic_hash": ""
   },
   "warehouse/models/enrich/enr_image_screen.sql": {
-    "mtime": 1793810895.6823215,
-    "seen": 1793814317.0204337,
+    "mtime": 1793819093.1530473,
+    "seen": 1793821059.209196,
     "ast_hash": "a91e16efe39682d9aca3ca7d58bd1b95",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_images.sql": {
-    "mtime": 1793810895.6826122,
-    "seen": 1793814317.0204442,
+    "mtime": 1793819093.153717,
+    "seen": 1793821059.20921,
     "ast_hash": "c5c1db913a854b4d5b49a59e90f074f4",
     "semantic_hash": ""
   },
   "docs/plan/lookalike-intelligence.md": {
-    "mtime": 1793812367.275723,
-    "seen": 1793812406.5326447,
+    "mtime": 1793819093.1283176,
+    "seen": 1793821059.2092478,
     "ast_hash": "56bb3c9897f05e54cce52f3abf177ff5",
     "semantic_hash": ""
   },
   "docs/research/20-source-pilots-scorecard.md": {
-    "mtime": 1793813908.8740134,
-    "seen": 1793813921.2644136,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.2092757,
     "ast_hash": "b8cfe8c4ae9437df8690af91c4c039b6",
     "semantic_hash": ""
   },
   "docs/research/21-what-sells-and-why.md": {
-    "mtime": 1793813908.874338,
-    "seen": 1793813921.264415,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.209277,
     "ast_hash": "df179f5d7ae958f6aed080176a85f302",
     "semantic_hash": ""
   },
   "scout/intel.py": {
-    "mtime": 1793813439.6909142,
-    "seen": 1793813921.2634513,
+    "mtime": 1793819093.149598,
+    "seen": 1793821059.2091513,
     "ast_hash": "94053337928a648a0d80717909ec265c",
     "semantic_hash": ""
   },
   "tests/test_intel.py": {
-    "mtime": 1793813439.6911871,
-    "seen": 1793813921.2636352,
+    "mtime": 1793819093.151903,
+    "seen": 1793821059.2091775,
     "ast_hash": "629dedc59e91dcd142439cf3ec1e5e8b",
     "semantic_hash": ""
   },
   "docs/decisions/0007-harness-and-intelligence-layer.md": {
-    "mtime": 1793813908.8745701,
-    "seen": 1793813921.2640276,
+    "mtime": 1793819093.1272418,
+    "seen": 1793821059.209239,
     "ast_hash": "44131d0b4b56547fb49c3b3d1ed6307b",
     "semantic_hash": ""
   },
   "scout/webmeta.py": {
-    "mtime": 1793814010.8076491,
-    "seen": 1793814037.993127,
-    "ast_hash": "e8cecfeba410b8364916d3eca3a6cc37",
+    "mtime": 1793820205.9970865,
+    "seen": 1793821059.2091649,
+    "ast_hash": "12bd36e73c9e8fbeb3d9c36d919676c1",
     "semantic_hash": ""
   },
   "tests/test_webmeta.py": {
-    "mtime": 1793814010.8019884,
-    "seen": 1793814037.993309,
+    "mtime": 1793819093.151903,
+    "seen": 1793821059.2091873,
     "ast_hash": "a1cb0ca59407222f605fcc131f12f553",
     "semantic_hash": ""
   },
   "docs/decisions/0008-internet-metadata-harness.md": {
-    "mtime": 1793814675.561502,
-    "seen": 1793814677.243399,
+    "mtime": 1793819093.1272418,
+    "seen": 1793821059.2092404,
     "ast_hash": "ffde61f5d98ebf17f1daf92db6e05fa2",
     "semantic_hash": ""
   },
   "warehouse/models/core/core_fact_product_snapshot.sql": {
-    "mtime": 1793813219.5983303,
-    "seen": 1793814317.020433,
+    "mtime": 1793819093.1530473,
+    "seen": 1793821059.2091947,
     "ast_hash": "5106920ce2a318ef5bacb81abdb302cf",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_product_velocity.sql": {
-    "mtime": 1793813219.5993502,
-    "seen": 1793814317.0204377,
+    "mtime": 1793819093.1534152,
+    "seen": 1793821059.2092023,
     "ast_hash": "9c6186cea09c44e50f544e5cba869805",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_product_snapshots.sql": {
-    "mtime": 1793813219.5960295,
-    "seen": 1793814317.0204449,
+    "mtime": 1793819093.153717,
+    "seen": 1793821059.209211,
     "ast_hash": "beec7cbd5bdfd1a75599d6f1222ad837",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_type_evidence.sql": {
-    "mtime": 1793813439.690626,
-    "seen": 1793814317.0204403,
+    "mtime": 1793819093.1534152,
+    "seen": 1793821059.2092054,
     "ast_hash": "2686c4123268c0e869fac5ad2ac1eccd",
     "semantic_hash": ""
   },
   "docs/plan/ideas.yml": {
-    "mtime": 1793814255.535638,
-    "seen": 1793814313.43173,
+    "mtime": 1793819093.1283176,
+    "seen": 1793821059.2091377,
     "ast_hash": "843c1c10feeaa32fdccf75b196148c10",
     "semantic_hash": ""
   },
   "scout/review_panel.py": {
-    "mtime": 1793814591.0381768,
-    "seen": 1793814628.0929916,
+    "mtime": 1793819093.149598,
+    "seen": 1793821059.209155,
     "ast_hash": "64d57782056cab50552c3ded574ba7d3",
     "semantic_hash": ""
   },
   "tests/test_review_panel.py": {
-    "mtime": 1793814291.1476364,
-    "seen": 1793814313.4320807,
+    "mtime": 1793819093.151903,
+    "seen": 1793821059.2091799,
     "ast_hash": "d3407bfc2a5f7554359fa209c2824fcb",
     "semantic_hash": ""
   },
   "docs/reviews/2026-11-04-idea-panel.md": {
-    "mtime": 1793816097.9835553,
-    "seen": 1793818664.7738419,
+    "mtime": 1793819093.1291864,
+    "seen": 1793821059.209278,
     "ast_hash": "690b93881492c736ea22cd574a7dcee1",
+    "semantic_hash": ""
+  },
+  "scout/store_intel.py": {
+    "mtime": 1793821047.6623752,
+    "seen": 1793821059.2091606,
+    "ast_hash": "ed9d15fdbe4092053a7da174b7ef94c9",
+    "semantic_hash": ""
+  },
+  "scout/stores.py": {
+    "mtime": 1793821047.6663752,
+    "seen": 1793821059.2091618,
+    "ast_hash": "17a337e9fb369fd595d763473a7217dc",
+    "semantic_hash": ""
+  },
+  "scripts/store_export.py": {
+    "mtime": 1793821047.6663752,
+    "seen": 1793821059.2091737,
+    "ast_hash": "ed22468d6fb6d4efbf51e33df845a075",
+    "semantic_hash": ""
+  },
+  "tests/test_store_intel.py": {
+    "mtime": 1793821047.6663752,
+    "seen": 1793821059.2091827,
+    "ast_hash": "b7a95a42ca2114d93bcc7c1689baeae3",
+    "semantic_hash": ""
+  },
+  "tests/test_stores.py": {
+    "mtime": 1793821047.6623752,
+    "seen": 1793821059.2091837,
+    "ast_hash": "c7414e166bef98673001eb17fe87f8ae",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0009-best-store-discovery.md": {
+    "mtime": 1793820232.5863268,
+    "seen": 1793821059.2092414,
+    "ast_hash": "d0adf6b46aa35d246a19c35ce7da84d0",
+    "semantic_hash": ""
+  },
+  "scripts/supply_sanity.py": {
+    "mtime": 1793821129.39838,
+    "seen": 1793821132.066214,
+    "ast_hash": "c91178744ebe3df275104f9a5246788f",
+    "semantic_hash": ""
+  },
+  "warehouse/models/marts/mart_store_categories.sql": {
+    "mtime": 1793820024.5105846,
+    "seen": 1793821132.0662472,
+    "ast_hash": "48889da2442618f574851fc1e62a43fe",
+    "semantic_hash": ""
+  },
+  "warehouse/models/marts/mart_store_profile.sql": {
+    "mtime": 1793820924.2156322,
+    "seen": 1793821132.0662484,
+    "ast_hash": "009d5b17cd336f153fdaadd3c0a70e50",
+    "semantic_hash": ""
+  },
+  "warehouse/models/staging/stg_web_meta.sql": {
+    "mtime": 1793820002.182613,
+    "seen": 1793821132.0662642,
+    "ast_hash": "fbe562e685b8d9122e44bfa54256619d",
+    "semantic_hash": ""
+  },
+  "warehouse/models/staging/stg_web_ranks.sql": {
+    "mtime": 1793820002.1856058,
+    "seen": 1793821132.0662656,
+    "ast_hash": "25007aea7da318fed2536130d64a6e4f",
+    "semantic_hash": ""
+  },
+  "warehouse/models/staging/stg_web_scan.sql": {
+    "mtime": 1793820002.178313,
+    "seen": 1793821132.0662665,
+    "ast_hash": "be6835f0fd7970f272b23e0c9117282e",
+    "semantic_hash": ""
+  },
+  "warehouse/models/staging/stg_web_scan_tranches.sql": {
+    "mtime": 1793820943.6294014,
+    "seen": 1793821132.0662677,
+    "ast_hash": "653493ee6f83970724561b6497a08469",
+    "semantic_hash": ""
+  },
+  "warehouse/models/staging/stg_web_store_deep.sql": {
+    "mtime": 1793820002.1842113,
+    "seen": 1793821132.066269,
+    "ast_hash": "b871ef1b0949707f81242bf7e14ee13f",
     "semantic_hash": ""
   }
 }

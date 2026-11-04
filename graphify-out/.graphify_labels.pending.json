@@ -64,6 +64,9 @@
   "62": "fixture",
   "63": "classify.py",
   "64": "20 — Source pilots: what each source actually discovered",
+  "65": "stores.py",
   "66": "review_panel.py",
-  "67": "0007 — Deterministic harness first, intelligence layer on top"
+  "67": "0007 — Deterministic harness first, intelligence layer on top",
+  "68": "store_intel.py",
+  "69": "Data pipeline: feeding the team authentic evidence"
 }
