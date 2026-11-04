@@ -1,6 +1,6 @@
 # Plan: find top-performing Shopify stores to take inspiration from
 
-> 2026-11-04. **Proposed, awaiting owner go.** Owner doubt: "all I want is to figure out how I can get top Shopify stores who are performing well so I can take inspiration from them. Is this approach even good?" This plan re-scopes release R1 around that goal. Standing rules (`CLAUDE.md`) apply: free first, small first, label what we know, terms before automation.
+> 2026-11-04. **Approved by the owner 2026-11-04.** Phase 2 revised after the pilot (see the end). Owner doubt: "all I want is to figure out how I can get top Shopify stores who are performing well so I can take inspiration from them. Is this approach even good?" This plan re-scopes release R1 around that goal. Standing rules (`CLAUDE.md`) apply: free first, small first, label what we know, terms before automation.
 
 ## Is the current approach good? An honest verdict
 
@@ -92,3 +92,15 @@ The 1M scan and rank history, store profiler (catalogue, price, rhythm, marketin
 - A store that performs well may show no public proof; grade C and honest.
 - Ranks lag by weeks; breakouts are late signals.
 - Inspiration can slide into copying: the rule stays "copy the method, never the content" (no copied text, images or product listings).
+
+## Revision after the Phase 2 pilot (2026-11-04)
+
+Pilot (`docs/research/29-proof-of-performance-pilot.md`): 10 stores, **A 0, B 2, C 4, D 4**. Independent proof is rare for mid-size stores; search snippets gave wrong numbers three times; two domains could not be tied to a real company; Trustpilot's terms forbid collection, so it is out.
+
+Changes:
+
+1. **Grade every store first from our own evidence**, which we hold for all of them and which is free: traffic level, 2-year rank trend and stability, release rhythm, marketing intensity (ad pixels, email, SMS, affiliates), longevity ("existed by"), catalogue size. This becomes `performance_grade` in the warehouse, with the inputs shown.
+2. **Identity check before any research:** is the domain tied to a real company (legal name on the store's own pages, contact page, about page)? Unresolved identity = do not recommend.
+3. **External proof only for the top 50**, not 300: company sites, press, growth lists (Inc. 5000, Deloitte), funding announcements. Every number from a fetched page with a date; snippets are leads, never evidence. Each new source's terms are read before use; sources that forbid collection (Trustpilot) are skipped.
+4. **Rebalance the pool:** the growth weight pulled in fast-rising but obscure stores, which rarely have public proof. The pool becomes two slices: the 150 strongest by traffic level (established winners) and the 150 strongest risers.
+5. **Owner's manual ad check** (Meta Ad Library, TikTok Creative Center) stays the best independent sign that a store is spending to grow; it covers the final top 20.
