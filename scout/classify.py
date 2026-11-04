@@ -8,6 +8,10 @@ so the committed cache carries no CJ text. Re-running only asks about titles
 that are not cached yet, so results stay fixed once written.
 
     python -m scout.classify --limit 100
+    python -m scout.classify --phrases          # eBay search phrase per candidate
+
+`--phrases` fills warehouse/seeds/llm_search_phrase_cache.csv the same way: one
+phrase a buyer would type, used as the Terapeak search for that product.
 """
 
 from __future__ import annotations
@@ -25,6 +29,19 @@ DB = Path("data/private/warehouse.duckdb")
 PROMPT_VERSION = "pt-v1"
 FIELDS = ["title_sha256", "product_type", "model", "prompt_version"]
 _TYPE = re.compile(r"^[a-z][a-z0-9 &'-]{1,40}$")
+PHRASE_CACHE = Path("warehouse/seeds/llm_search_phrase_cache.csv")
+PHRASE_VERSION = "phrase-v1"
+PHRASE_FIELDS = ["title_sha256", "search_phrase", "model", "prompt_version"]
+_PHRASE = re.compile(r"^[a-z0-9][a-z0-9 .&'/-]{2,60}$")
+
+PHRASE_PROMPT = """For each product title, write the search a US eBay buyer would type to
+find this exact kind of item: 2-6 lower-case words, the most specific generic
+terms (item type plus the one or two attributes buyers filter on, such as size,
+material or count). No brand names, no marketing words, no colours unless the
+colour is the point. Return only JSON: {{"labels": [{{"i": <index>, "phrase": "<phrase>"}}, ...]}}
+
+Titles:
+{titles}"""
 
 PROMPT = """You label marketplace product titles with a short generic product type.
 Rules: 1-4 lower-case words, a common noun phrase a shopper would search
@@ -48,7 +65,7 @@ def load_cache(path: Path = CACHE) -> dict[str, dict]:
         return {r["title_sha256"]: r for r in csv.DictReader(fh)}
 
 
-def parse_labels(text: str, n: int) -> dict[int, str]:
+def parse_labels(text: str, n: int, key: str = "type", pattern=_TYPE) -> dict[int, str]:
     """Keep only well-formed labels for indexes we asked about."""
     match = re.search(r"\{.*\}", text or "", re.S)
     if not match:
@@ -61,8 +78,8 @@ def parse_labels(text: str, n: int) -> dict[int, str]:
     for item in data.get("labels", []) if isinstance(data, dict) else []:
         if not isinstance(item, dict):
             continue
-        i, t = item.get("i"), str(item.get("type", "")).strip().lower()
-        if isinstance(i, int) and 0 <= i < n and _TYPE.match(t):
+        i, t = item.get("i"), str(item.get(key, "")).strip().lower()
+        if isinstance(i, int) and 0 <= i < n and pattern.match(t):
             out[i] = t
     return out
 
@@ -91,6 +108,34 @@ def classify(
     return rows
 
 
+def phrases(titles: list[str], chat, batch: int = 25) -> list[dict]:
+    rows = []
+    for start in range(0, len(titles), batch):
+        chunk = titles[start : start + batch]
+        listing = "\n".join(f"{i}. {t}" for i, t in enumerate(chunk))
+        reply = chat(PHRASE_PROMPT.format(titles=listing), task="bulk", json_mode=True)
+        found = parse_labels(reply.get("text", ""), len(chunk), "phrase", _PHRASE)
+        for i, phrase in found.items():
+            rows.append(
+                {
+                    "title_sha256": title_hash(chunk[i]),
+                    "search_phrase": phrase,
+                    "model": reply.get("model", "?"),
+                    "prompt_version": PHRASE_VERSION,
+                }
+            )
+    return rows
+
+
+def _append(path: Path, fields: list[str], rows: list[dict]) -> None:
+    write_header = not path.exists() or path.stat().st_size == 0
+    with path.open("a", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=fields, lineterminator="\n")
+        if write_header:
+            w.writeheader()
+        w.writerows(rows)
+
+
 def main(argv: list[str] | None = None) -> int:
     import duckdb
 
@@ -98,9 +143,26 @@ def main(argv: list[str] | None = None) -> int:
 
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--limit", type=int, default=200)
+    ap.add_argument("--phrases", action="store_true", help="search phrases instead")
     a = ap.parse_args(argv)
 
     con = duckdb.connect(str(DB), read_only=True)
+    if a.phrases:
+        titles = [
+            r[0]
+            for r in con.execute(
+                "select p.title from core.core_dim_product p "
+                "join mart.mart_supply_candidates m using (pid) "
+                "where m.is_viable order by m.min_price"
+            ).fetchall()
+        ]
+        con.close()
+        cached = load_cache(PHRASE_CACHE)
+        todo = [t for t in titles if t and title_hash(t) not in cached][: a.limit]
+        new = phrases(todo, chat)
+        _append(PHRASE_CACHE, PHRASE_FIELDS, new)
+        print(f"asked {len(todo)}, cached {len(new)}", file=sys.stderr)
+        return 0
     rows = con.execute(
         "select p.title from core.core_dim_product p "
         "join mart.mart_prefilter f using (pid) "
@@ -117,12 +179,7 @@ def main(argv: list[str] | None = None) -> int:
     cache = load_cache()
     todo = [t for (t,) in rows if t and title_hash(t) not in cache][: a.limit]
     new = classify(todo, known, chat)
-    write_header = not CACHE.exists() or CACHE.stat().st_size == 0
-    with CACHE.open("a", newline="") as fh:
-        w = csv.DictWriter(fh, fieldnames=FIELDS, lineterminator="\n")
-        if write_header:
-            w.writeheader()
-        w.writerows(new)
+    _append(CACHE, FIELDS, new)
     print(f"asked {len(todo)}, cached {len(new)}", file=sys.stderr)
     return 0
 

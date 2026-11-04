@@ -5,7 +5,7 @@ models:
       - name: pid
         data_tests: [not_null, unique]
       - name: cost
-        data_tests: [{in_range: {min: 0}}]
+        data_tests: [{in_range: {arguments: {min: 0}}}]
   - name: mart_supply_candidates
     config:
       max_listing_price: "{{ var('max_listing_price') }}"
@@ -16,5 +16,7 @@ models:
         data_tests: [not_null, unique]
   - name: mart_terapeak_sheet
     columns:
-      - name: product_type
+      - name: search_phrase
+        data_tests: [not_null, unique]
+      - name: priority
         data_tests: [not_null, unique]

@@ -36,9 +36,10 @@ def main() -> int:
     blanks = ", ".join(f"null::varchar as {c}" for c in OBS_COLUMNS)
     con.execute(
         f"""copy (
-            select '{today}' as date, null::varchar as observer, product_type,
-                   search_phrase, cj_products, price_floor_best, price_floor_median,
-                   review_flags, {blanks}
+            select priority, '{today}' as date, null::varchar as observer,
+                   search_phrase, product_type, cj_products, price_floor_best,
+                   price_floor_median, review_flags, all_need_image_review, pids,
+                   {blanks}
             from mart.mart_terapeak_sheet
         ) to '{sheet}' (header true)"""
     )
@@ -46,7 +47,8 @@ def main() -> int:
     con.execute(
         f"""copy (
             select pid, coalesce(product_type, 'unclassified') as product_type,
-                   type_method, min_price, is_viable, fail_reasons, review_rules
+                   type_method, search_phrase, min_price, is_viable, fail_reasons,
+                   review_rules, images_screened, images_clean, needs_image_review
             from mart.mart_supply_candidates
             order by is_viable desc, product_type, min_price
         ) to '{shortlist}' (header true)"""

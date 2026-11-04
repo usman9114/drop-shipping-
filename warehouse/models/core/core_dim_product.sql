@@ -11,7 +11,7 @@ with flags as (
 select
     p.pid, p.title, p.sku, p.cost_low, p.cost_high, p.us_stock, p.listed_num,
     c.level1, c.level2, c.level3,
-    t.product_type, t.type_method,
+    t.product_type, t.type_method, t.search_phrase,
     coalesce(f.is_excluded, false) as is_excluded,
     f.exclude_rules, f.review_rules,
     p.run_id

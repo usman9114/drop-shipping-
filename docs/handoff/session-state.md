@@ -39,16 +39,22 @@
 - `.env` is gitignored and disappears with the container. Keys must come from environment settings. Expected variable names: `CJ_API_KEY`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `ZAI_API_KEY`, `OPENROUTER_API_KEY`. Report names only, never values.
 - The graphify post-commit hook rebuilds the graph in the background. A commit made during the rebuild can fail with "files were modified by this hook". Wait a few seconds and retry. After committing, stage `graphify-out` and commit again if the tree is dirty.
 - OpenRouter credit (€10) bought by the owner on 2026-11-04. See `docs/plan/operating-plan.md` §2 for how it is used.
+- OpenRouter key works (credit registered, `is_free_tier: false`). It was pasted in chat on 2026-11-04 and used from a gitignored `.env` for the day; **owner will rotate it**, then add the new one to "Crypto" as `OPENROUTER_API_KEY`.
 - Keys live in the cloud environment **"Crypto"** (the one this project's sessions use; "Default" also has them). As of 2026-11-04 `OPENROUTER_API_KEY` is not visible in the container; check the variable name.
 - Z.ai and OpenRouter keys were pasted into an earlier chat. The owner was asked to rotate them.
 
 ## Next tasks, in order
 
-Calendar: `docs/plan/operating-plan.md` §3. Done 2026-11-04: setup, live CJ run, client fixes (`scout/cj.py` now has `stock` and `freight`), doc 18 live findings, eBay token test.
+Calendar: `docs/plan/operating-plan.md` §3. **Approach changed 2026-11-04: supply-first** (owner agreed): score what CJ's US warehouse ships in a DuckDB warehouse (decision 0006), then the owner checks demand by hand in Terapeak (no API exists; automation banned by eBay's User Agreement).
 
-1. **Wait for the owner's choice** of option A, B or C in `docs/shortlists/2026-11-04-cj-supply-check.md` §4.
-2. If A: from `data/private/cj-us-catalogue.json` (re-pull with `python -m scout.cj search --country US --pages 45 --out ...` in a fresh container), drop regulated and size-return categories by rule, cluster titles into product types with the free GLM model, run detail + stock + freight + `scout.margin` on the best ~50, commit a derived shortlist, and prepare a Terapeak query list for the owner.
-3. Stop and ask before spending money, creating accounts, or sending anything outside the repo (including CJ sourcing requests).
+Done 2026-11-04: warehouse slice (`warehouse/`, `make wh-*`), CJ catalogue (3,964) → rules → 268 pre-filtered → offers (cost, US stock, real freight: median $4.80) → **252 pass margin at ≤ $45** (`docs/shortlists/supply-candidates-2026-11-04.csv`). Free GLM wrote product types for the 21% the rules missed and one eBay search phrase per product (both cached as hash → label seeds). Terapeak worklist: `data/observations/terapeak-sheet-2026-11-04.csv` (245 phrases, ranked).
+
+1. **Image screen** (`make wh-images`, main image per viable product) was running at session end; re-run to finish (cache skips done images), then `make wh-build wh-export`.
+2. **Owner fills the Terapeak sheet** (top ~40 rows first, runbook `docs/runbooks/terapeak-session.md`). Most CJ US items are cheap; if singles sell below `price_floor_best`, record the 2- or 3-pack price in `notes`.
+3. Load the filled sheet into the warehouse (new seed or `read_csv` source + `mart_shortlist`: avg sold ≥ floor, sell-through ≥ ~50%, ≥ ~20 sold in 90 days), then compliance review and test orders before ~2026-12-01.
+4. Stop and ask before spending money, creating accounts, or sending anything outside the repo.
+
+Rebuild in a fresh container: `make wh-load wh-catalogue wh-offers` (~25 min), `python -m scout.ingest_cj images --from-file data/private/candidates.txt`, `make wh-build`. LLM caches are committed, so no model calls are repeated.
 
 ## Owner tasks outstanding
 

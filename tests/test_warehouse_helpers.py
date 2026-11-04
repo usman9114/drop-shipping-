@@ -153,3 +153,22 @@ def test_screen_skips_failures_and_yields_hash_keyed_rows():
 def test_image_rows_dedupe_and_number_positions():
     rows = ingest_cj.image_rows("P", {"images": ["a", "b", "a"]})
     assert [(r["position"], r["url"]) for r in rows] == [(0, "a"), (1, "b")]
+
+
+def test_phrases_are_cached_by_title_hash_and_validated():
+    def fake_chat(prompt, task, json_mode):
+        return {
+            "model": "m",
+            "text": '{"labels": [{"i": 0, "phrase": "Silicone Watch Band 20mm"},'
+            ' {"i": 1, "phrase": "x"}]}',
+        }
+
+    rows = classify.phrases(["Soft Silicone Watch Band", "odd"], fake_chat)
+    assert rows == [
+        {
+            "title_sha256": classify.title_hash("soft silicone watch band"),
+            "search_phrase": "silicone watch band 20mm",
+            "model": "m",
+            "prompt_version": classify.PHRASE_VERSION,
+        }
+    ]

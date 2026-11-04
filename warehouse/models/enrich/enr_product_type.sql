@@ -1,7 +1,8 @@
 -- Product type per product. Order: deterministic dictionary (seed
 -- product_type_rules, lowest priority number wins) -> cached LLM label (seed
 -- llm_product_type_cache, keyed by sha256 of the lower-cased title) -> null.
--- The LLM never runs inside dbt: scout.classify fills the cache offline.
+-- The LLM never runs inside dbt: scout.classify fills the caches offline.
+-- search_phrase (cached LLM) is the Terapeak search for the product.
 with p as (
     select pid, lower(title) as t, sha256(lower(title)) as title_sha256
     from {{ ref('stg_cj_products') }}
@@ -17,7 +18,9 @@ select
     coalesce(d.product_type, l.product_type) as product_type,
     case when d.product_type is not null then 'rule'
          when l.product_type is not null then 'llm:' || l.model || ':' || l.prompt_version
-    end as type_method
+    end as type_method,
+    s.search_phrase
 from p
 left join dict d using (pid)
 left join {{ ref('llm_product_type_cache') }} l using (title_sha256)
+left join {{ ref('llm_search_phrase_cache') }} s using (title_sha256)

@@ -10,8 +10,6 @@ model-paths: ["models"]
 seed-paths: ["seeds"]
 macro-paths: ["macros"]
 test-paths: ["tests"]
-target-path: "../data/private/dbt/target"
-log-path: "../data/private/dbt/logs"
 packages-install-path: "../data/private/dbt/packages"
 
 vars:

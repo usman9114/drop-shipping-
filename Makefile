@@ -1,4 +1,4 @@
-.PHONY: setup lint graph test wh-load wh-catalogue wh-offers wh-build wh-classify wh-export
+.PHONY: setup lint graph test wh-load wh-catalogue wh-offers wh-build wh-classify wh-images wh-export
 
 setup:
 	python3 -m pip install --upgrade pre-commit graphifyy detect-secrets -r requirements.txt
@@ -16,21 +16,25 @@ test:
 	python3 -m pytest -q
 
 # --- DuckDB warehouse (decision 0006). Raw lake + DB live in data/private/. ---
+DBT = cd warehouse && DBT_TARGET_PATH=../data/private/dbt/target DBT_LOG_PATH=../data/private/dbt/logs dbt
 wh-load:        ## CJ US catalogue + categories -> lake
 	python3 -m scout.ingest_cj catalogue
 
 wh-catalogue:   ## build everything that needs only the catalogue (+ dbt tests)
-	cd warehouse && dbt build --profiles-dir . --select +mart_prefilter
+	$(DBT) build --profiles-dir . --select +mart_prefilter
 
 wh-offers:      ## detail, stock, freight for mart_prefilter -> lake
 	python3 -c "import duckdb; duckdb.connect('data/private/warehouse.duckdb', read_only=True).execute(\"copy mart.mart_prefilter to 'data/private/candidates.txt' (header false)\")"
 	python3 -m scout.ingest_cj offers --from-file data/private/candidates.txt
 
 wh-build:       ## full build: rules, staging, enrich, core, marts (+ dbt tests)
-	cd warehouse && dbt build --profiles-dir .
+	$(DBT) build --profiles-dir .
 
 wh-classify:    ## free LLM labels for titles the rules missed (cached in a seed)
 	python3 -m scout.classify
+
+wh-images:      ## free vision screen of viable candidates' first images (cached in a seed)
+	python3 -m scout.screen_images
 
 wh-export:      ## derived marts only -> committed files
 	python3 scripts/wh_export.py

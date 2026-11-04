@@ -15,3 +15,6 @@ seeds:
   - name: llm_image_screen_cache
     config:
       column_types: {image_sha256: varchar, clean: boolean, text_overlay: boolean, logo_or_brand: boolean, watermark: boolean, border_or_collage: boolean, person: boolean, child: boolean, model: varchar, prompt_version: varchar}
+  - name: llm_search_phrase_cache
+    config:
+      column_types: {title_sha256: varchar, search_phrase: varchar, model: varchar, prompt_version: varchar}

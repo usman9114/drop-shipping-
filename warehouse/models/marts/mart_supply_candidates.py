@@ -20,6 +20,7 @@ def model(dbt, session):
             "pid",
             "product_type",
             "type_method",
+            "search_phrase",
             "level1",
             "level2",
             "level3",

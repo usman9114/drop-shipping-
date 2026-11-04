@@ -8,7 +8,8 @@ models:
       - name: cost_low
         data_tests:
           - in_range:
-              min: 0
+              arguments:
+                min: 0
   - name: stg_cj_categories
     columns:
       - name: category_id
