@@ -16,10 +16,6 @@ ROW = {
     "median_units_per_day": None,
     "total_units_per_day": None,
     "velocity_span_days": None,
-    "ebay_sold_90d": None,
-    "ebay_avg_price": None,
-    "ebay_active_listings": None,
-    "ebay_sell_through_pct": None,
     "why_tags": "problem_solver|video_demo|routine_care",
 }
 
@@ -28,7 +24,6 @@ def test_pack_derives_flags():
     p = intel.pack(ROW)
     assert p["impulse_price"] is True  # 21.5 <= 25
     assert p["velocity_measured"] is False
-    assert p["ebay_measured"] is False
 
 
 def test_pack_hash_is_stable_and_sensitive():
@@ -57,7 +52,7 @@ def test_template_is_deterministic_and_grounded():
     t = intel.template(p)
     assert t == intel.template(intel.pack(ROW))
     assert intel.grounded(t, p)
-    assert "Not measured yet: stock velocity and eBay sold counts." in t
+    assert "Not measured yet: stock velocity and marketplace demand." in t
 
 
 def test_cache_hit_never_calls_the_model():

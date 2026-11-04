@@ -2,6 +2,8 @@
 
 > Status: **accepted** (owner, 2026-11-04: "instead of agents, make deterministic scripts automate this flow; let scripts pull data in an organised manner, then the intelligence layer kicks in"). Extends decision 0006 (DuckDB warehouse). Code: `warehouse/`, `scout/intel.py`, `make pipeline`.
 
+> **2026-11-04: Terapeak dropped** (owner: if it cannot be automated, it is out). Automated replacements are listed in decision 0008.
+
 ## The split
 
 | Layer | What runs | Deterministic? | Where |

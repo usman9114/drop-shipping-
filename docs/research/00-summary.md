@@ -97,6 +97,8 @@ Build `product-scout`:
 
 > **Update 2026-11-03 (PR #1 review):** eBay API License 9.6 prohibits automating orders from other sites, posting tracking for them, and repricing from their prices. The first 10 to 20 listings are handled manually; whether CJ's own eBay integration is allowed is unverified.
 
+> **Update 2026-11-04 (later):** Terapeak and other manual steps are dropped; the evidence pipeline is automated (decisions 0007, 0008). Store discovery and profiling now come from internet metadata: traffic rankings, DNS, sitemaps and storefront product feeds.
+
 ## Confidence
 
 - **High:** eBay fees and seller standards; the dropshipping policy text (UK page); the de minimis timeline (Federal Register); NRF return rate.

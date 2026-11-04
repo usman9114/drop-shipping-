@@ -48,10 +48,6 @@ PACK_KEYS = [
     "median_units_per_day",
     "total_units_per_day",
     "velocity_span_days",
-    "ebay_sold_90d",
-    "ebay_avg_price",
-    "ebay_active_listings",
-    "ebay_sell_through_pct",
     "why_tags",
 ]
 
@@ -67,7 +63,6 @@ PROMPT = """Evidence for one product type sold by a small US eBay dropshipper
   (popular = 500+); high means proven appeal AND crowded competition
 - flagged_products: items needing compliance review
 - units_per_day / velocity_span_days: CJ US stock falling over time (null = not measured yet)
-- ebay_*: the owner's manual eBay (Terapeak) readings (null = not measured yet)
 - why_tags: rule-based reasons this kind of product sells
 - impulse_price: true when the median price floor is $25 or less
 
@@ -90,7 +85,6 @@ def pack(row: dict) -> dict:
     p["impulse_price"] = floor is not None and floor <= IMPULSE_PRICE
     span = p.get("velocity_span_days")
     p["velocity_measured"] = span is not None and span >= MIN_VELOCITY_DAYS
-    p["ebay_measured"] = p.get("ebay_sold_90d") is not None
     return p
 
 
@@ -141,8 +135,7 @@ def template(p: dict) -> str:
     gaps = []
     if not p["velocity_measured"]:
         gaps.append("stock velocity")
-    if not p["ebay_measured"]:
-        gaps.append("eBay sold counts")
+    gaps.append("marketplace demand")
     if gaps:
         parts.append("Not measured yet: " + " and ".join(gaps) + ".")
     return " ".join(parts)
@@ -211,16 +204,16 @@ def render(items: list[tuple[dict, str, str]], built: str) -> str:
         "evidence makes the pipeline fall back to a template. No CJ product text is included.",
         "",
         "| Product type | Viable / CJ | Median floor $ | Median stores listing | Popular | "
-        "Flagged | Units/day | eBay sold 90d | eBay avg $ | Why tags |",
-        "|---|---|---|---|---|---|---|---|---|---|",
+        "Flagged | Units/day | Why tags |",
+        "|---|---|---|---|---|---|---|---|",
     ]
     for p, _, _ in items:
         lines.append(
             f"| {p['product_type']} | {p['viable_products']} / {p['cj_products']} | "
             f"{_cell(p['median_price_floor'])} | {_cell(p['median_listed'])} | "
             f"{_cell(p['popular_products'])} | {_cell(p['flagged_products'])} | "
-            f"{_cell(p['median_units_per_day'])} | {_cell(p['ebay_sold_90d'])} | "
-            f"{_cell(p['ebay_avg_price'])} | {(p.get('why_tags') or '–').replace('|', ', ')} |"
+            f"{_cell(p['median_units_per_day'])} | "
+            f"{(p.get('why_tags') or '–').replace('|', ', ')} |"
         )
     lines.append("")
     for p, text, method in items:

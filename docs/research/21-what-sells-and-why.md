@@ -2,6 +2,8 @@
 
 > 2026-11-04. Combines published demand evidence (pilot E, doc 20) with CJ's live US supply (pilot G) and the margin-viable shortlist from `docs/shortlists/2026-11-04-cj-supply-check.md`. Category-level demand is reasonably evidenced. **Product-level US sales on eBay are not yet measured;** that is the Terapeak step.
 
+> **2026-11-04: Terapeak dropped** (owner: if it cannot be automated, it is out). Automated replacements are listed in decision 0008.
+
 ## 1. What US shoppers buy most online (category level)
 
 | Category | Evidence | Why it sells |

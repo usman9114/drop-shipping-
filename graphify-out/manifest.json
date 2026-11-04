@@ -18,15 +18,15 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793812367.2410235,
-    "seen": 1793812406.5326335,
-    "ast_hash": "7872d3c35d8c3f1f557ac10a9ebbac9d",
+    "mtime": 1793813908.8752494,
+    "seen": 1793813921.2639155,
+    "ast_hash": "becde8b8037cf27b645f233d77bb65b4",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
-    "mtime": 1793810895.670866,
-    "seen": 1793812406.5326486,
-    "ast_hash": "ec411c63246d9e87c28ced6e3c3898a6",
+    "mtime": 1793813908.8749611,
+    "seen": 1793813921.2641504,
+    "ast_hash": "bf5286a8997486a29c6e3aea42b8b906",
     "semantic_hash": ""
   },
   "docs/research/01-ebay-policy.md": {
@@ -323,12 +323,6 @@
     "ast_hash": "0a9f359076855e69517f70832420e180",
     "semantic_hash": ""
   },
-  "docs/runbooks/terapeak-session.md": {
-    "mtime": 1793810895.6711345,
-    "seen": 1793812406.5326653,
-    "ast_hash": "5cd3cfa0f0c07c141ea97a69f1982cfa",
-    "semantic_hash": ""
-  },
   "requirements-dev.txt": {
     "mtime": 1793745878.2843654,
     "seen": 1793812406.5326679,
@@ -506,91 +500,91 @@
   "warehouse/macros/lake.sql": {
     "mtime": 1793810895.6820118,
     "seen": 1793813325.1355355,
-    "ast_hash": "a697efeb66636a1129b11ca7d4fa704e",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/macros/tests.sql": {
     "mtime": 1793810895.6821787,
     "seen": 1793813325.1355367,
-    "ast_hash": "c7b1261c67a125c72e2503c368308c15",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/core/core_dim_product.sql": {
     "mtime": 1793810895.682283,
     "seen": 1793813325.1355376,
-    "ast_hash": "8f11d67eeabadf97e19681809c88f2d7",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/core/core_fact_offer.sql": {
     "mtime": 1793810895.6823215,
     "seen": 1793813325.1355393,
-    "ast_hash": "d6d319f36c08c77622458758c6780c61",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/enrich/enr_product_flags.sql": {
     "mtime": 1793810895.6824055,
     "seen": 1793813325.1355414,
-    "ast_hash": "7a2bcb3dbe1880fb8b00f194a9cbb01d",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/enrich/enr_product_type.sql": {
     "mtime": 1793810895.6824055,
     "seen": 1793813325.1355426,
-    "ast_hash": "b92d69048c1881194f14d6aa83d2a783",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_prefilter.sql": {
     "mtime": 1793810895.6825066,
     "seen": 1793813325.1355624,
-    "ast_hash": "b30e7a52362ffd055dbbed9841162802",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_terapeak_sheet.sql": {
     "mtime": 1793810895.6825066,
     "seen": 1793813325.1355803,
-    "ast_hash": "42cd8d3f5cbd168f0db6569bf7968682",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_categories.sql": {
     "mtime": 1793810895.6826122,
     "seen": 1793813325.135599,
-    "ast_hash": "df168ceaecdc85f5b4870db50833828d",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_freight.sql": {
     "mtime": 1793810895.6826122,
     "seen": 1793813325.1356,
-    "ast_hash": "8a948e4750a086378d4d22f5760c9553",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_products.sql": {
     "mtime": 1793810895.6826122,
     "seen": 1793813325.135602,
-    "ast_hash": "2aa04914541835f3ed55ad29c6f7b6ec",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_stock.sql": {
     "mtime": 1793810895.6826122,
     "seen": 1793813325.135603,
-    "ast_hash": "d7711f44fff7d3fbb797be673e0f4880",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_variants.sql": {
     "mtime": 1793810895.6826122,
     "seen": 1793813325.135604,
-    "ast_hash": "73e4361731a18869b3b865734c188848",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/enrich/enr_image_screen.sql": {
     "mtime": 1793810895.6823215,
     "seen": 1793813325.1355405,
-    "ast_hash": "a91e16efe39682d9aca3ca7d58bd1b95",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_images.sql": {
     "mtime": 1793810895.6826122,
     "seen": 1793813325.1356008,
-    "ast_hash": "c5c1db913a854b4d5b49a59e90f074f4",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "docs/plan/lookalike-intelligence.md": {
@@ -600,33 +594,51 @@
     "semantic_hash": ""
   },
   "docs/research/20-source-pilots-scorecard.md": {
-    "mtime": 1793812946.6036968,
-    "seen": 1793812975.7909672,
-    "ast_hash": "8f8e17f0c6b1c790598fb67de92dfe7e",
+    "mtime": 1793813908.8740134,
+    "seen": 1793813921.2644136,
+    "ast_hash": "b8cfe8c4ae9437df8690af91c4c039b6",
     "semantic_hash": ""
   },
   "docs/research/21-what-sells-and-why.md": {
-    "mtime": 1793812966.407696,
-    "seen": 1793812975.790969,
-    "ast_hash": "f5956b1859af1d7d47b02b93d3ce7855",
+    "mtime": 1793813908.874338,
+    "seen": 1793813921.264415,
+    "ast_hash": "df179f5d7ae958f6aed080176a85f302",
     "semantic_hash": ""
   },
   "scout/intel.py": {
-    "mtime": 1793813323.26768,
-    "seen": 1793813325.1352775,
-    "ast_hash": "cf69bcf0e61a919512faedc784be8942",
+    "mtime": 1793813439.6909142,
+    "seen": 1793813921.2634513,
+    "ast_hash": "94053337928a648a0d80717909ec265c",
     "semantic_hash": ""
   },
   "tests/test_intel.py": {
-    "mtime": 1793813323.26768,
-    "seen": 1793813325.1354642,
-    "ast_hash": "8ba83f142a6d895120f07e4ce08fe330",
+    "mtime": 1793813439.6911871,
+    "seen": 1793813921.2636352,
+    "ast_hash": "629dedc59e91dcd142439cf3ec1e5e8b",
     "semantic_hash": ""
   },
   "docs/decisions/0007-harness-and-intelligence-layer.md": {
-    "mtime": 1793813296.531681,
-    "seen": 1793813322.2965426,
-    "ast_hash": "4ff5ecadb3e219a8c4cce36ad12e2769",
+    "mtime": 1793813908.8745701,
+    "seen": 1793813921.2640276,
+    "ast_hash": "44131d0b4b56547fb49c3b3d1ed6307b",
+    "semantic_hash": ""
+  },
+  "scout/webmeta.py": {
+    "mtime": 1793813822.3276575,
+    "seen": 1793813921.2635214,
+    "ast_hash": "7839afb5232fbebf3ca57cd980974a0f",
+    "semantic_hash": ""
+  },
+  "tests/test_webmeta.py": {
+    "mtime": 1793813822.3276575,
+    "seen": 1793813921.2636898,
+    "ast_hash": "9c3797442c991d34f73259b502ee0c63",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0008-internet-metadata-harness.md": {
+    "mtime": 1793813901.431654,
+    "seen": 1793813921.2640288,
+    "ast_hash": "e593a122c98cb0b238f504743d14b514",
     "semantic_hash": ""
   }
 }

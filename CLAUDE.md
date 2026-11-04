@@ -32,6 +32,8 @@ make lint       # pre-commit run --all-files
 make graph      # graphify update . (refresh knowledge graph)
 python -m scout.store tables|runs|query "SQL"|rebuild   # evidence store (docs/plan/data-pipeline.md)
 python -m scout.llm --task code "..."                  # free models: Z.ai GLM Flash -> OpenRouter
+make pipeline | make wh-snapshot | make intel          # warehouse flow and intelligence layer (decision 0007)
+python -m scout.webmeta discover|sitemaps|products    # internet-metadata harness (decision 0008)
 ```
 
 ## graphify

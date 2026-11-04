@@ -2,6 +2,8 @@
 
 > 2026-11-04. Applies the **source evaluation standard** (`CLAUDE.md`): each source tested on a small sample, scored on what it found. Pilots A–D (look-alike store discovery, fashion jewelry and press-on nails), E (published best-seller evidence), F (product-level sales-volume sources), G (CJ `listedNum`, run by the orchestrator with the live key). Store domains and raw data stay out of this public repo.
 
+> **2026-11-04: Terapeak dropped** (owner: if it cannot be automated, it is out). Automated replacements are listed in decision 0008.
+
 ## Scorecard
 
 | Pilot | Source | Relevant leads found | Terms for automated use | Verdict |
