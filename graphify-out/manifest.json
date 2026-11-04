@@ -850,5 +850,17 @@
     "seen": 1793829082.062979,
     "ast_hash": "9f1aa75fa8b35de062fa28ae670d7681",
     "semantic_hash": ""
+  },
+  "docs/decisions/0011-store-snapshots.md": {
+    "mtime": 1793829186.830108,
+    "seen": 1793829190.8538232,
+    "ast_hash": "14b9521c952742c4abe008a1953e98de",
+    "semantic_hash": ""
+  },
+  "docs/research/25-similar-repos-audit.md": {
+    "mtime": 1793829186.8246284,
+    "seen": 1793829190.8539054,
+    "ast_hash": "686ada67c9e3b2162f64ae39f2d7eb5f",
+    "semantic_hash": ""
   }
 }
