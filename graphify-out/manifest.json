@@ -78,9 +78,9 @@
     "semantic_hash": ""
   },
   "scout/margin.py": {
-    "mtime": 1793750309.43445,
-    "seen": 1793792641.4622056,
-    "ast_hash": "0f67b681a5c31043f301376df163d035",
+    "mtime": 1793797404.8706465,
+    "seen": 1793797813.2816012,
+    "ast_hash": "ca0587089b32ccb1f6673e8592e03410",
     "semantic_hash": ""
   },
   "scout/trends.py": {
@@ -162,9 +162,9 @@
     "semantic_hash": ""
   },
   "requirements.txt": {
-    "mtime": 1793750309.4343233,
-    "seen": 1793792641.4622765,
-    "ast_hash": "cfa1a56cedeb054fdb4c4b4fbe1985d9",
+    "mtime": 1793797651.5262425,
+    "seen": 1793797813.2831602,
+    "ast_hash": "96cb285d83e1ac8ae037d78aee98d51f",
     "semantic_hash": ""
   },
   "data/evidence/trends/candidates.txt": {
@@ -222,9 +222,9 @@
     "semantic_hash": ""
   },
   "scout/store.py": {
-    "mtime": 1793750309.43445,
-    "seen": 1793792641.4622076,
-    "ast_hash": "8be6abba412b56c1528d742f62f2098a",
+    "mtime": 1793797140.778693,
+    "seen": 1793797813.281604,
+    "ast_hash": "ef427629ca74df94a391e7b2c4c8dbb2",
     "semantic_hash": ""
   },
   "scripts/claude-glm.sh": {
@@ -306,9 +306,9 @@
     "semantic_hash": ""
   },
   "tests/test_margin.py": {
-    "mtime": 1793750309.435419,
-    "seen": 1793792641.4622152,
-    "ast_hash": "534c7bec6582c701ea6802c51931857b",
+    "mtime": 1793797414.3783588,
+    "seen": 1793797813.2817988,
+    "ast_hash": "9431a34ade0cf5086f1f86a4de981a53",
     "semantic_hash": ""
   },
   "tests/test_store.py": {
@@ -429,6 +429,72 @@
     "mtime": 1793796269.706579,
     "seen": 1793796316.0303655,
     "ast_hash": "ffafa66be8872168cf0479be244fa33c",
+    "semantic_hash": ""
+  },
+  "scout/classify.py": {
+    "mtime": 1793797790.1382177,
+    "seen": 1793797813.2815752,
+    "ast_hash": "867dd3ff1c56a36488e0116e31547db7",
+    "semantic_hash": ""
+  },
+  "scout/ingest_cj.py": {
+    "mtime": 1793797782.0866687,
+    "seen": 1793797813.281577,
+    "ast_hash": "afedb6d2edef16e1f7c5910feda9086b",
+    "semantic_hash": ""
+  },
+  "scripts/wh_export.py": {
+    "mtime": 1793797782.0866687,
+    "seen": 1793797813.2817776,
+    "ast_hash": "ad635a4a4e6158e422aeb5be3d4221fe",
+    "semantic_hash": ""
+  },
+  "tests/test_warehouse_helpers.py": {
+    "mtime": 1793797782.0866687,
+    "seen": 1793797813.2818336,
+    "ast_hash": "61a24eff6286a50cb218ca2782c89423",
+    "semantic_hash": ""
+  },
+  "warehouse/dbt_project.yml": {
+    "mtime": 1793797790.1330683,
+    "seen": 1793797813.281835,
+    "ast_hash": "de8fe831fa22cc9da056f41f9942f546",
+    "semantic_hash": ""
+  },
+  "warehouse/models/marts/_marts.yml": {
+    "mtime": 1793797608.939935,
+    "seen": 1793797813.2818363,
+    "ast_hash": "e127b435d718d4304dfb749bde0e890a",
+    "semantic_hash": ""
+  },
+  "warehouse/models/marts/mart_supply_candidates.py": {
+    "mtime": 1793797782.090669,
+    "seen": 1793797813.2818372,
+    "ast_hash": "45bacca6169790a66e2a710cbd55ad61",
+    "semantic_hash": ""
+  },
+  "warehouse/models/staging/_staging.yml": {
+    "mtime": 1793797482.5349426,
+    "seen": 1793797813.2818387,
+    "ast_hash": "572b27c06aaba67a6c1798483cfe6bf4",
+    "semantic_hash": ""
+  },
+  "warehouse/profiles.yml": {
+    "mtime": 1793797435.4019256,
+    "seen": 1793797813.2818396,
+    "ast_hash": "939f29a16714347b00b067e08d8380f7",
+    "semantic_hash": ""
+  },
+  "warehouse/seeds/_seeds.yml": {
+    "mtime": 1793797504.744675,
+    "seen": 1793797813.2818403,
+    "ast_hash": "00801e3b32a3b0d068306fc56aa5b174",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0006-duckdb-warehouse.md": {
+    "mtime": 1793797686.365164,
+    "seen": 1793797813.2824082,
+    "ast_hash": "264080c671f4149bbb14bd07d067fa12",
     "semantic_hash": ""
   }
 }
