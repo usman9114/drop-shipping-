@@ -29,6 +29,17 @@ Every store leaves machine records made for other purposes. Read through officia
 | Sitemaps | 17 stores | robots allowed 17/17; catalogue sizes 57 to 3,000+ | **Shopify sets every `lastmod` to today**, so sitemaps give size, not timing. |
 | `/products.json` | 17 stores | **16/17 answered** | Release rhythm works: one store added 250 of its newest products within a month, another 3. Price band and categories work. |
 
+### Wider run (2026-11-04, 1,200 domains)
+
+| Measure | Result |
+|---|---|
+| DNS lookups | 1,200, 1 error |
+| Shopify stores | **103 (8.6%)**; 80 on .com/.us/.co/.shop/.store |
+| Traffic band (Tranco rank) | top 100k: 16; 100k to 300k: 68; below 300k: 19 |
+| Platform signals among Shopify stores | Google Search Console 81, **Klaviyo 48**, **Meta business account 29**, Google Workspace 25, Microsoft 365 25, Shopify Email 13 |
+
+Reading: almost half of these stores run Klaviyo email marketing and over a quarter have a Meta business account, so email and Meta ads are the common traffic engine (traffic-tag step next). Going deeper in the ranking raises the Shopify share (6% at 300, 8.6% at 1,200), as expected: small stores sit lower.
+
 **Verdict:** DNS and the product feed are the strongest new traces: automated, free, and they fill real parts of the store story (platform, marketing stack, catalogue, release rhythm, price). Tranco is a good discovery list but needs a tighter keyword filter.
 
 ## Gaps and fixes for the next run
