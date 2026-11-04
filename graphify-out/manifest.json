@@ -954,15 +954,21 @@
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_candidate_pool.sql": {
-    "mtime": 1793834683.356046,
-    "seen": 1793834850.9207084,
-    "ast_hash": "",
+    "mtime": 1793835040.0461242,
+    "seen": 1793835122.9891508,
+    "ast_hash": "3046753aeb17c152874ecc5c3e1df229",
     "semantic_hash": ""
   },
   "docs/research/29-proof-of-performance-pilot.md": {
     "mtime": 1793835004.0410037,
     "seen": 1793835007.205813,
     "ast_hash": "15eb6e89d40a638d0178906d5aa5abd4",
+    "semantic_hash": ""
+  },
+  "docs/research/28-discovery-miss-rate.md": {
+    "mtime": 1793835119.7781289,
+    "seen": 1793835122.989265,
+    "ast_hash": "5bbb21a5169de20a3d07d30d18782f2e",
     "semantic_hash": ""
   }
 }
