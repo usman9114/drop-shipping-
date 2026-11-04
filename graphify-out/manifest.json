@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793819093.1261263,
-    "seen": 1793821059.2092292,
-    "ast_hash": "becde8b8037cf27b645f233d77bb65b4",
+    "mtime": 1793821226.5890949,
+    "seen": 1793821231.779225,
+    "ast_hash": "1d95f25dbcec3d148d96b00d52888fd6",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "scout/llm.py": {
-    "mtime": 1793819093.149598,
-    "seen": 1793821059.2091525,
-    "ast_hash": "1090fd6966539cef87ac937c16ebb1be",
+    "mtime": 1793821210.2754629,
+    "seen": 1793821231.7789986,
+    "ast_hash": "0eda804f331ee310ba545e644d2a9621",
     "semantic_hash": ""
   },
   "scout/margin.py": {
@@ -594,9 +594,9 @@
     "semantic_hash": ""
   },
   "docs/research/20-source-pilots-scorecard.md": {
-    "mtime": 1793819093.1291864,
-    "seen": 1793821059.2092757,
-    "ast_hash": "b8cfe8c4ae9437df8690af91c4c039b6",
+    "mtime": 1793821226.5914693,
+    "seen": 1793821231.7793727,
+    "ast_hash": "c14b906ecddfaa2c85fe4b03b0d17ce8",
     "semantic_hash": ""
   },
   "docs/research/21-what-sells-and-why.md": {
@@ -720,9 +720,9 @@
     "semantic_hash": ""
   },
   "docs/decisions/0009-best-store-discovery.md": {
-    "mtime": 1793820232.5863268,
-    "seen": 1793821059.2092414,
-    "ast_hash": "d0adf6b46aa35d246a19c35ce7da84d0",
+    "mtime": 1793821226.589495,
+    "seen": 1793821231.7793016,
+    "ast_hash": "ca9928339af39fc31d87422069f52a4d",
     "semantic_hash": ""
   },
   "scripts/supply_sanity.py": {

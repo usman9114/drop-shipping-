@@ -32,7 +32,7 @@
   "30": "Multichannel plan: one pipeline, eBay + Shopify/Instagram",
   "31": "claude-glm.sh",
   "32": "db",
-  "33": "Brief for the second agent: independent review, then build the shortlist engine",
+  "33": "test_stores.py",
   "34": "glm-coder.md",
   "35": "0003 — Build vs reuse: workflow, data loading, connectors, LLM routing",
   "36": "data-engineer.md",
@@ -68,5 +68,11 @@
   "66": "review_panel.py",
   "67": "0007 — Deterministic harness first, intelligence layer on top",
   "68": "store_intel.py",
-  "69": "Data pipeline: feeding the team authentic evidence"
+  "69": "Data pipeline: feeding the team authentic evidence",
+  "70": "__init__.py",
+  "71": "re",
+  "72": "0009 — Step 1: find the best online stores and reconstruct what they do",
+  "73": "scan_tranche",
+  "74": "fit_shop_age",
+  "75": "business_model"
 }
