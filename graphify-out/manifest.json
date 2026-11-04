@@ -506,97 +506,109 @@
   "warehouse/macros/lake.sql": {
     "mtime": 1793810895.6820118,
     "seen": 1793812408.217857,
-    "ast_hash": "a697efeb66636a1129b11ca7d4fa704e",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/macros/tests.sql": {
     "mtime": 1793810895.6821787,
     "seen": 1793812408.2178583,
-    "ast_hash": "c7b1261c67a125c72e2503c368308c15",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/core/core_dim_product.sql": {
     "mtime": 1793810895.682283,
     "seen": 1793812408.2178593,
-    "ast_hash": "8f11d67eeabadf97e19681809c88f2d7",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/core/core_fact_offer.sql": {
     "mtime": 1793810895.6823215,
     "seen": 1793812408.217861,
-    "ast_hash": "d6d319f36c08c77622458758c6780c61",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/enrich/enr_product_flags.sql": {
     "mtime": 1793810895.6824055,
     "seen": 1793812408.2178633,
-    "ast_hash": "7a2bcb3dbe1880fb8b00f194a9cbb01d",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/enrich/enr_product_type.sql": {
     "mtime": 1793810895.6824055,
     "seen": 1793812408.2178648,
-    "ast_hash": "b92d69048c1881194f14d6aa83d2a783",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_prefilter.sql": {
     "mtime": 1793810895.6825066,
     "seen": 1793812408.2178667,
-    "ast_hash": "b30e7a52362ffd055dbbed9841162802",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/marts/mart_terapeak_sheet.sql": {
     "mtime": 1793810895.6825066,
     "seen": 1793812408.2178688,
-    "ast_hash": "42cd8d3f5cbd168f0db6569bf7968682",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_categories.sql": {
     "mtime": 1793810895.6826122,
     "seen": 1793812408.2178705,
-    "ast_hash": "df168ceaecdc85f5b4870db50833828d",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_freight.sql": {
     "mtime": 1793810895.6826122,
     "seen": 1793812408.2178717,
-    "ast_hash": "8a948e4750a086378d4d22f5760c9553",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_products.sql": {
     "mtime": 1793810895.6826122,
     "seen": 1793812408.2178736,
-    "ast_hash": "2aa04914541835f3ed55ad29c6f7b6ec",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_stock.sql": {
     "mtime": 1793810895.6826122,
     "seen": 1793812408.2178748,
-    "ast_hash": "d7711f44fff7d3fbb797be673e0f4880",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_variants.sql": {
     "mtime": 1793810895.6826122,
     "seen": 1793812408.2178757,
-    "ast_hash": "73e4361731a18869b3b865734c188848",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/enrich/enr_image_screen.sql": {
     "mtime": 1793810895.6823215,
     "seen": 1793812408.2178621,
-    "ast_hash": "a91e16efe39682d9aca3ca7d58bd1b95",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "warehouse/models/staging/stg_cj_images.sql": {
     "mtime": 1793810895.6826122,
     "seen": 1793812408.2178726,
-    "ast_hash": "c5c1db913a854b4d5b49a59e90f074f4",
+    "ast_hash": "",
     "semantic_hash": ""
   },
   "docs/plan/lookalike-intelligence.md": {
     "mtime": 1793812367.275723,
     "seen": 1793812406.5326447,
     "ast_hash": "56bb3c9897f05e54cce52f3abf177ff5",
+    "semantic_hash": ""
+  },
+  "docs/research/20-source-pilots-scorecard.md": {
+    "mtime": 1793812946.6036968,
+    "seen": 1793812975.7909672,
+    "ast_hash": "8f8e17f0c6b1c790598fb67de92dfe7e",
+    "semantic_hash": ""
+  },
+  "docs/research/21-what-sells-and-why.md": {
+    "mtime": 1793812966.407696,
+    "seen": 1793812975.790969,
+    "ast_hash": "f5956b1859af1d7d47b02b93d3ce7855",
     "semantic_hash": ""
   }
 }
