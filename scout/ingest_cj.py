@@ -15,6 +15,9 @@ Datasets:
     cj_variants    one row per variant of a product pulled with `offers`
     cj_stock       one row per product x warehouse country
     cj_freight     one row per variant x quote (US -> US, zip FREIGHT_ZIP)
+    cj_images      one row per product image URL (position 0 = main image)
+
+    python -m scout.ingest_cj images PID [PID ...]   # images only (re-reads detail)
 """
 
 from __future__ import annotations
@@ -66,8 +69,33 @@ def catalogue(client: CJClient, country: str = "US", pages: int = 60) -> dict:
     return {"cj_products": (run_p, len(products)), "cj_categories": (run_c, len(cats))}
 
 
+def image_rows(pid: str, detail: dict) -> list[dict]:
+    seen: list[str] = []
+    for url in detail.get("images") or []:
+        if url not in seen:
+            seen.append(url)
+    return [{"pid": pid, "position": i, "url": u} for i, u in enumerate(seen)]
+
+
+def images(client: CJClient, pids: list[str], country: str = "US") -> dict:
+    rows, failed = [], []
+    for pid in pids:
+        try:
+            rows += image_rows(pid, client.detail(pid, country))
+        except CJError as exc:
+            failed.append({"pid": pid, "error": str(exc)})
+    run = store.record_run(
+        "cj_images",
+        rows,
+        source=SOURCE,
+        trust="data",
+        params={"pids": len(pids), "countryCode": country},
+    )
+    return {"cj_images": (run, len(rows)), "failed": failed}
+
+
 def offers(client: CJClient, pids: list[str], country: str = "US") -> dict:
-    variants, stock, freight, failed = [], [], [], []
+    variants, stock, freight, failed, imgs = [], [], [], [], []
     for pid in pids:
         try:
             d = client.detail(pid, country)
@@ -76,6 +104,7 @@ def offers(client: CJClient, pids: list[str], country: str = "US") -> dict:
         except CJError as exc:
             failed.append({"pid": pid, "error": str(exc)})
             continue
+        imgs += image_rows(pid, d)
         for v in d["variants"]:
             length, width, height = (v["dims_mm"] + [None] * 3)[:3]
             variants.append(
@@ -114,6 +143,7 @@ def offers(client: CJClient, pids: list[str], country: str = "US") -> dict:
         ("cj_variants", variants),
         ("cj_stock", stock),
         ("cj_freight", freight),
+        ("cj_images", imgs),
     ):
         out[name] = (
             store.record_run(
@@ -143,6 +173,9 @@ def main(argv: list[str] | None = None) -> int:
     o = sub.add_parser("offers")
     o.add_argument("pids", nargs="*")
     o.add_argument("--from-file", help="one pid per line")
+    im = sub.add_parser("images")
+    im.add_argument("pids", nargs="*")
+    im.add_argument("--from-file", help="one pid per line")
     a = ap.parse_args(argv)
 
     client = CJClient()
@@ -156,7 +189,8 @@ def main(argv: list[str] | None = None) -> int:
             ]
         if not pids:
             ap.error("give pids or --from-file")
-        result = offers(client, list(dict.fromkeys(pids)))
+        pids = list(dict.fromkeys(pids))
+        result = offers(client, pids) if a.cmd == "offers" else images(client, pids)
     for name, value in result.items():
         if name == "failed":
             print(f"failed: {len(value)}", file=sys.stderr)

@@ -28,6 +28,8 @@ def model(dbt, session):
         ]
     ]
     df = offers.merge(products, on="pid", how="left")
+    screen = dbt.ref("enr_image_screen").df()
+    df = df.merge(screen, on="pid", how="left")
 
     def floor(row):
         if row.cost != row.cost or row.ship_usd != row.ship_usd:  # NaN check
@@ -55,4 +57,9 @@ def model(dbt, session):
         reasons.append(",".join(r) or None)
     df["fail_reasons"] = reasons
     df["is_viable"] = df["fail_reasons"].isna()
+    # Image screen only routes to review (CLAUDE.md: never fabricate images; a
+    # product needs at least one clean supplier image to be listable).
+    df["needs_image_review"] = (df["images_screened"].fillna(0) > 0) & (
+        df["images_clean"].fillna(0) == 0
+    )
     return df

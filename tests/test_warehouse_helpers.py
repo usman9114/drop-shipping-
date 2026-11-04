@@ -106,3 +106,50 @@ def test_classify_caches_by_title_hash_not_title():
         }
     ]
     assert "Vase" not in str(rows[0]["title_sha256"])
+
+
+def test_image_verdict_needs_all_checks_and_marks_clean():
+    from scout import screen_images as si
+
+    ok = (
+        '{"text_overlay": false, "logo_or_brand": false, "watermark": false,'
+        ' "border_or_collage": false, "person": true, "child": false}'
+    )
+    v = si.parse_verdict(ok)
+    assert v["clean"] is True and v["person"] is True  # hands/people allowed
+    assert (
+        si.parse_verdict(ok.replace('"child": false', '"child": true'))["clean"]
+        is False
+    )
+    assert si.parse_verdict('{"text_overlay": false}') is None
+    assert (
+        si.parse_verdict(
+            '{"text_overlay": "no", "logo_or_brand": false, "watermark":'
+            ' false, "border_or_collage": false, "person": false,'
+            ' "child": false}'
+        )
+        is None
+    )
+
+
+def test_screen_skips_failures_and_yields_hash_keyed_rows():
+    from scout import screen_images as si
+
+    def fake_chat(prompt, task, image_urls, json_mode):
+        if "bad" in image_urls[0]:
+            raise RuntimeError("model down")
+        return {
+            "model": "m",
+            "text": '{"text_overlay": true, "logo_or_brand": false,'
+            ' "watermark": false, "border_or_collage": false, "person": false,'
+            ' "child": false}',
+        }
+
+    rows = list(si.screen(["https://x/bad.jpg", "https://x/ok.jpg"], fake_chat))
+    assert len(rows) == 1 and rows[0]["clean"] is False
+    assert rows[0]["image_sha256"] == si.url_hash("https://x/ok.jpg")
+
+
+def test_image_rows_dedupe_and_number_positions():
+    rows = ingest_cj.image_rows("P", {"images": ["a", "b", "a"]})
+    assert [(r["position"], r["url"]) for r in rows] == [(0, "a"), (1, "b")]
