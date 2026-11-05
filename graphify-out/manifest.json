@@ -994,5 +994,11 @@
     "seen": 1793872699.0370486,
     "ast_hash": "618f8091c88b35b336d8d49e14386c5a",
     "semantic_hash": ""
+  },
+  "docs/research/32c-trustpilot-and-google-ads-routes.md": {
+    "mtime": 1793872707.0420566,
+    "seen": 1793872731.8598344,
+    "ast_hash": "06c29378786ded1c5a0960340198556f",
+    "semantic_hash": ""
   }
 }
