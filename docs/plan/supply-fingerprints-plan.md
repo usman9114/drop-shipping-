@@ -61,3 +61,26 @@ Three catalogue reports (33a, 33b, 33c). Main finding: **vendors almost never do
 - AliOrders' developer is now "Zopi" (zopi.io domains); Ali Reviews (now Kudosi) may load from `alireviews.fireapps.io` (33a).
 - New Shopify apps load through theme app extensions, so app-embed handles matter more than script tags (33b).
 - 17TRACK can hide China origin on tracking pages; absence of a China carrier is weak evidence (33c).
+
+## P1 result (2026-11-05)
+
+`scout/fingerprints.py` built (31 tests). Pilot 20 stores (10 dropship-labelled, 10 brands): no signature or source signal fired on any brand; all 10 brands ended `unknown` at confidence 0.
+
+**Bug found and fixed:** the DSers SKU rule (`^\d{3,}:\d+`) matched Tommy John's own SKUs (`10045041000:100072:XL`), and the same loose rule sat in the business-model classifier, which is why that brand was labelled dropship. The rule now needs an AliExpress property pair followed by `#name` or `;next-pair` (`14:200004889#Black;5:20129901`); brand SKUs are test cases.
+
+**105 dropship-labelled stores** (run `20261105T110803Z-b4db94`, 2 minutes, 1 page error) `[data]`:
+
+| Supply estimate | Stores |
+|---|---|
+| AliExpress | 65 |
+| CJ Dropshipping | 24 |
+| Print on demand | 2 |
+| No supply trace (`unknown`) | 14 |
+
+- Confidence: strong (0.8 or more) 27, medium 53, weak 12, none 13.
+- Apps seen in page source: Loox 16, Printful 12, Ryviu 9, ParcelPanel 9, Ali Reviews 9, CJ Dropshipping app 4, 17TRACK 4, **AliOrders 3**, DSers 2.
+- Feed traces: AliExpress image names on 61 stores, DSers SKUs 31, CJ SKUs 25, AliExpress item ids 12, Alibaba `O1CN01` images 7, copied AliExpress text 13, **"Ships From" option on 18**.
+- Warehouse: China stated 8, China assumed 41, multi-country option list 13, unknown 43.
+- The 14 `unknown` stores (including tommyjohn.com and renewlife.com) are the likely false positives of the old classifier rule; the full classifier needs a refetch with the corrected rule, since saved counts used the old one.
+
+Caveats: weights are judgement, not measured; "Ships From" with about ten countries looks like AliExpress's all-country list, not a real warehouse split; Printful's script fired on 12 stores but drove a POD estimate on only 2. All of this is `[proxy]` until W3 measures precision.
