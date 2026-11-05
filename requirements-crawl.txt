@@ -1,0 +1,5 @@
+# Optional: browser rendering for review counts (scout.reviews, decision 0014).
+# Install in its own virtualenv. Playwright is pinned to match the preinstalled
+# Chromium build in this environment; do not run "playwright install".
+crawl4ai==0.9.5
+playwright==1.63.0
