@@ -35,3 +35,7 @@
 ## Out of scope
 
 Production code, hosting, authentication, a database migration, sending email.
+
+## Progress
+
+- 2026-11-05: step 1 (small first) done: store card + side panel and lead inbox card as a clickable prototype (private artifact, invented data), IA and flows, and the data contract for those two views: `docs/design/ui-v0-store-card-and-leads.md`. Waiting for owner feedback before the other three views and the stack note.

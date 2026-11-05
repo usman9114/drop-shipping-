@@ -31,7 +31,7 @@ Later on 2026-11-05 (after the first hand-off):
 - **Crawl4AI stealth is ON** by default in `scout/reviews.py` (owner decision; `SCOUT_CRAWL_STEALTH=0` turns it off). Crawl4AI is not installed in a fresh container (`pip install -r requirements-crawl.txt`). The session permission check blocked a curl_cffi impersonation test; the owner was told a permission rule is needed for such runs.
 - Owner's tool list mapped in `docs/plan/tool-shortlist.md` (Supabase, GitHub Actions, PageSpeed API, Empire Flippers as revenue ground truth, outreach stack).
 - **Hosting decided: GitHub Actions** (decision 0016); storage Supabase free tier recommended, owner to create the account and add Actions secrets. Logs are public: jobs print counts only.
-- **UI/UX:** design-only brief in `docs/plan/ui-ux-brief.md`; a separate session does it.
+- **UI/UX:** design-only brief in `docs/plan/ui-ux-brief.md`. Step 1 done (store card, side panel, lead inbox card; prototype + data contract in `docs/design/ui-v0-store-card-and-leads.md`); waiting for owner feedback.
 
 
 ## Next, in order
