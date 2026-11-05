@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793876622.757542,
-    "seen": 1793876638.1859612,
-    "ast_hash": "4831d8b898755db0af5231711a2305a8",
+    "mtime": 1793877273.2966423,
+    "seen": 1793877302.672935,
+    "ast_hash": "61f2fb64f867a6b22072e63f2adec417",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "scout/llm.py": {
-    "mtime": 1793876489.2855341,
-    "seen": 1793876638.1857266,
-    "ast_hash": "1c2358cfbdd3acb32c832f7d6734bbe7",
+    "mtime": 1793877277.813581,
+    "seen": 1793877302.6727972,
+    "ast_hash": "ba7bd211bd992b97cebbcae293e90dbb",
     "semantic_hash": ""
   },
   "scout/margin.py": {
@@ -696,9 +696,9 @@
     "semantic_hash": ""
   },
   "scout/stores.py": {
-    "mtime": 1793829665.2726567,
-    "seen": 1793829668.9167132,
-    "ast_hash": "5abfac0b969753dee2c6de0b889a5deb",
+    "mtime": 1793876711.5558164,
+    "seen": 1793876761.887357,
+    "ast_hash": "c01531930567ef67314a49f20d7f1c32",
     "semantic_hash": ""
   },
   "scripts/store_export.py": {
@@ -1044,9 +1044,9 @@
     "semantic_hash": ""
   },
   "docs/plan/supply-fingerprints-plan.md": {
-    "mtime": 1793876432.3055308,
-    "seen": 1793876435.7611282,
-    "ast_hash": "1619f2990bf520c57cb236ae8ff90d9d",
+    "mtime": 1793876907.1255589,
+    "seen": 1793876910.5410168,
+    "ast_hash": "c353aa7300d3c76f3deffb2e29fe2717",
     "semantic_hash": ""
   },
   "docs/research/33a-fingerprints-aliexpress-tools.md": {
@@ -1068,21 +1068,21 @@
     "semantic_hash": ""
   },
   "scout/fingerprints.py": {
-    "mtime": 1793876597.000087,
-    "seen": 1793876638.1857176,
-    "ast_hash": "7e7445f658a48f103c71f8222f49ac94",
+    "mtime": 1793877237.6599348,
+    "seen": 1793877302.6727917,
+    "ast_hash": "af72d4d4a540a4843c81ba889ec05439",
     "semantic_hash": ""
   },
   "tests/test_fingerprints.py": {
-    "mtime": 1793876597.0004234,
-    "seen": 1793876638.1857996,
-    "ast_hash": "55ed8d5bbd76d77de7212ea26c774401",
+    "mtime": 1793877277.809581,
+    "seen": 1793877302.6728456,
+    "ast_hash": "8d0cd85068f48ea033187433b48ab54a",
     "semantic_hash": ""
   },
   "tests/test_llm_batch.py": {
-    "mtime": 1793876630.9175425,
-    "seen": 1793876638.1858048,
-    "ast_hash": "632caf201d10dbd940d0c1957212d6da",
+    "mtime": 1793877197.9055762,
+    "seen": 1793877302.6728487,
+    "ast_hash": "166e7eb11641434635d7e70fdf490b89",
     "semantic_hash": ""
   },
   ".claude/agents/glm-worker.md": {
@@ -1095,6 +1095,18 @@
     "mtime": 1793876622.537542,
     "seen": 1793876638.1859586,
     "ast_hash": "f1ecc6464e4a757930fe0f4cab33b875",
+    "semantic_hash": ""
+  },
+  "tests/conftest.py": {
+    "mtime": 1793877203.4171112,
+    "seen": 1793877302.6728404,
+    "ast_hash": "455d4b81ac1a7fc6786d0855d2157612",
+    "semantic_hash": ""
+  },
+  "docs/plan/autopilot.md": {
+    "mtime": 1793877267.9575803,
+    "seen": 1793877302.6729596,
+    "ast_hash": "3549dd80d76ef75b2129884e22227a8e",
     "semantic_hash": ""
   }
 }
