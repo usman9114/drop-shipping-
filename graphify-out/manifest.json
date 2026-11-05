@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   "docs/handoff/session-state.md": {
-    "mtime": 1793899858.865352,
-    "seen": 1793899867.7785008,
-    "ast_hash": "310dfa237ef167677db026aa4c7d4602",
+    "mtime": 1793901846.8082957,
+    "seen": 1793901849.1266747,
+    "ast_hash": "0a3c54f5e32661e8fcbf24fe3650d09a",
     "semantic_hash": ""
   },
   "docs/plan/operating-plan.md": {
@@ -1206,9 +1206,9 @@
     "semantic_hash": ""
   },
   "docs/decisions/0017-lake-sync-supabase.md": {
-    "mtime": 1793901078.2002742,
-    "seen": 1793901177.1503148,
-    "ast_hash": "b3a16026182520714cef53a93a658117",
+    "mtime": 1793901808.6893685,
+    "seen": 1793901849.1266708,
+    "ast_hash": "db27ee2242be7d71fdb073182a4a7aa9",
     "semantic_hash": ""
   },
   "requirements-autopilot.txt": {
