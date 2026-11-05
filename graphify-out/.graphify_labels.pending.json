@@ -25,7 +25,7 @@
   "23": "steps",
   "24": "market-researcher.md",
   "25": "3. Candidate cards",
-  "26": "test_webmeta.py",
+  "26": "jsonld",
   "27": "12 — Compliance risk cards for the 8 candidate niches",
   "28": "3. Primary niche: `tcg-supplies`",
   "29": "Warehouse design: Postgres as the source of truth",
@@ -79,7 +79,7 @@
   "77": "test_snapshots.py",
   "78": "parametrize",
   "79": "stores.py",
-  "80": "snapshot_job.py",
+  "80": "Tool shortlist from the owner (2026-11-05)",
   "81": "argparse",
   "82": "snapshot_job.py",
   "83": "27 — Can we pre-filter brands and retailers before fetching a store's feed?",
@@ -110,7 +110,7 @@
   "108": "Inputs",
   "109": "0013 — Automating ad and review checks: official routes only",
   "110": "Opportunity (parked): stores that try hard but underperform",
-  "111": "time",
+  "111": "summarize_feed",
   "112": "30 — Proof of performance for the top 50 candidate stores",
   "113": "31 — What the top-performing Shopify stores have in common",
   "114": "Path",
@@ -130,5 +130,8 @@
   "128": "margin.py",
   "129": "test_webmeta.py",
   "130": "Session state: where the project stands",
-  "131": "products"
+  "131": "products",
+  "132": "deep_targets",
+  "133": "keyword_hits",
+  "134": "meta_summary"
 }

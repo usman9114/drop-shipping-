@@ -1110,9 +1110,15 @@
     "semantic_hash": ""
   },
   "docs/plan/opportunity-store-rescue.md": {
-    "mtime": 1793896416.456853,
-    "seen": 1793896422.7915783,
-    "ast_hash": "609e66b479ca6c6d96c469574bf4019a",
+    "mtime": 1793896791.94814,
+    "seen": 1793896798.6971822,
+    "ast_hash": "dd466a7e16eba6c721c8566642c34e56",
+    "semantic_hash": ""
+  },
+  "docs/plan/tool-shortlist.md": {
+    "mtime": 1793896786.5528748,
+    "seen": 1793896798.6971898,
+    "ast_hash": "f052f61a3d25a4ba284823aaf35d4a8c",
     "semantic_hash": ""
   }
 }
