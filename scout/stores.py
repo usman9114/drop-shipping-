@@ -103,9 +103,14 @@ def product_category(p: dict, rules) -> str:
 AE_IMAGE = re.compile(
     r"/(?:[HSU][0-9a-f]{32}[a-z]?)(?:_[^/]*)?\.(?:jpe?g|png|webp)", re.I
 )
-# DSers/Oberlo-style SKUs carry AliExpress property ids ("200000182:193#Black"),
-# CJ SKUs start with "CJ" plus letters and a long digit run.
-DROPSHIP_SKU = re.compile(r"^\d{3,}:\d+|#\d{3,}|^CJ[A-Z]{2,6}\d{6,}", re.I)
+# DSers/Oberlo-style SKUs carry AliExpress property pairs: a short numeric
+# property id, a numeric value id, then "#name" or ";next-pair"
+# ("14:200004889#Black;5:20129901", "200000182:193#Black"). Brand SKUs such as
+# "5564:XL#L" or "10045041000:100072:XL" (tommyjohn.com, 2026-11-05) must not match.
+DSERS_SKU = re.compile(r"^\d{1,9}:\d{1,12}(?:#|;\d{1,9}:\d)")
+# CJ SKUs start with "CJ" plus letters and a long digit run ("CJYZ319118002BY").
+CJ_SKU = re.compile(r"^CJ[A-Z]{2,6}\d{6,}", re.I)
+DROPSHIP_SKU = re.compile(rf"{DSERS_SKU.pattern}|#\d{{3,}}|{CJ_SKU.pattern}", re.I)
 DROPSHIP_VENDORS = re.compile(
     r"aliexpress|cj ?dropshipping|cjdropshipping|zendrop|autods|spocket|dsers|syncee|"
     r"modalyst|wholesale2b|doba|appscenic",
