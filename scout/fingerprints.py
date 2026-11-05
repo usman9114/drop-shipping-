@@ -870,13 +870,43 @@ def run(domains: list[str], max_concurrent: int = 8, pause: float = 1.0) -> dict
     return {"web_fingerprints": (runid, len(rows))}
 
 
+def queue(limit: int) -> list[str]:
+    """Autopilot work queue: newly discovered stores with a working /meta.json that
+    have no fingerprint row at the current RULE_VERSION, best Tranco rank first.
+    Older stores are re-scored by a separate, reviewed job (docs/plan/autopilot.md)."""
+    new = stores.new_hits()
+    done = {
+        r["domain"]
+        for r in stores._all_rows("web_fingerprints")
+        if r.get("rule_version") == RULE_VERSION and not r.get("error")
+    }
+    metas = stores.latest_good(stores._all_rows("web_meta"))
+    todo = [
+        m
+        for m in metas.values()
+        if m["domain"] in new and m.get("shop_id") and m["domain"] not in done
+    ]
+    todo.sort(key=lambda m: m.get("tranco_rank") or 10**9)
+    return [m["domain"] for m in todo[:limit]]
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Supply fingerprints for Shopify stores")
-    ap.add_argument("--domains-file", required=True, help="one domain per line")
+    src = ap.add_mutually_exclusive_group(required=True)
+    src.add_argument("--domains-file", help="one domain per line")
+    src.add_argument(
+        "--queue", type=int, metavar="N", help="up to N new stores not yet scored"
+    )
     ap.add_argument("--max-concurrent", type=int, default=8)
     ap.add_argument("--pause", type=float, default=1.0)
     a = ap.parse_args(argv)
-    doms = open(a.domains_file, encoding="utf-8").read().split()
+    if a.queue is not None:
+        doms = queue(a.queue)
+        if not doms:
+            print("fingerprints: queue empty", file=sys.stderr)
+            return 0
+    else:
+        doms = open(a.domains_file, encoding="utf-8").read().split()
     for k, (rid, n) in run(doms, a.max_concurrent, a.pause).items():
         print(f"{k}: run {rid}, {n} rows", file=sys.stderr)
     return 0

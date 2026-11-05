@@ -30,15 +30,19 @@ A finding made by Claude in a session becomes a rule, test or prompt in the repo
 | Job | Cadence | Built? | Gap |
 |---|---|---|---|
 | Tranco list download and rank history | daily | yes (`scout.stores ranks`) | none |
-| **New-store discovery**: domains new to the list -> DNS -> Shopify check -> `/meta.json` | daily | partly: full 1M scan exists (about 3 h) | incremental "new since last list" mode |
-| Light profile of new Shopify stores (feed aggregates, business model) | daily, new stores only | yes (`scout.stores light/deep`) | queue fed by discovery |
-| **Supply fingerprints** (`scout.fingerprints`) | daily for new stores; re-score on `RULE_VERSION` change; full refresh monthly | yes (2026-11-05) | queue, re-score-from-shapes job |
+| **New-store discovery**: domains new to the list -> DNS -> Shopify check -> `/meta.json` | daily | yes (2026-11-05): `scout.webmeta scan-new` diffs against the last incremental run's list; `stores meta/light --new-first` | none |
+| Light profile of new Shopify stores (feed aggregates, business model) | daily, new stores first | yes (`scout.stores light/deep`) | none |
+| **Supply fingerprints** (`scout.fingerprints`) | daily for new stores; re-score on `RULE_VERSION` change; full refresh monthly | yes: new-store queue `--queue N` (2026-11-05) | re-score-from-shapes job, monthly refresh |
 | Fuzzy labels by free models (vendor names, unclear stores) | daily batch, cached | runner yes (`scout.llm --batch`) | the prompts, after W3 validation |
 | Feed snapshots and review counts, watchlist | weekly | yes (`scout.snapshot_job`) | watchlist definition |
 | Warehouse build and reports (aggregates committed, store lists private) | daily after the jobs | yes (`make stores-build`, `stores-report`) | none |
-| Health check and alerts | hourly | no | heartbeat files and alert script |
+| Health check and alerts | after each daily run, and every 6 h | yes (`scout.autopilot health`, decision 0017) | alerts are a failed workflow run (GitHub e-mail); no chat/phone channel |
 
-## Where it runs (owner decision needed)
+## Where it runs
+
+**Decided 2026-11-05: GitHub Actions + Supabase Storage free tier** (decision 0016); built in decision 0017: `.github/workflows/autopilot.yml`, `scout/autopilot.py` (job table, heartbeat, health), `scout/lake_sync.py` (bucket sync), `scout/quiet.py` (public-log guard). The options below are kept for the record.
+
+### Options considered
 
 This cloud container is reset when idle and the current data vault (decision 0012, option D) needs a Claude session to sync, so **neither can host a 24/7 loop**. Options, scheduler reused not built (CLAUDE.md "reuse before build"):
 
@@ -53,7 +57,7 @@ Recommendation: **A with cron or systemd timers now**, a private data repo for d
 ## Build order
 
 1. Rule version, SKU shapes and the model-answer cache (done 2026-11-05).
-2. Incremental discovery ("new since last list") and a work queue per job.
-3. Heartbeats, alert script and a `make autopilot-daily` entry point that runs the daily jobs in order.
-4. Host and storage per the owner's decision; crontab committed under `ops/`.
+2. Incremental discovery ("new since last list") and a work queue per job (done 2026-11-05).
+3. Heartbeats, alert script and a `make autopilot-daily` entry point that runs the daily jobs in order (done 2026-11-05).
+4. Host and storage per the owner's decision: GitHub Actions workflow and Supabase sync (done 2026-11-05; waits for the owner's account and secrets).
 5. W3 validation results become weights and free-model prompts in code.

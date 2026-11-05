@@ -405,6 +405,28 @@ def _shop_hits() -> list[dict]:
     ]
 
 
+def new_hits() -> set[str]:
+    """Shopify domains found by incremental discovery (web_scan runs in mode "new")."""
+    import gzip
+    import json
+
+    out: set[str] = set()
+    for run in store._runs():
+        if (
+            run["dataset"] != "web_scan"
+            or (run.get("params") or {}).get("mode") != "new"
+        ):
+            continue
+        with gzip.open(store._checked_path(run), "rt", encoding="utf-8") as fh:
+            out |= {json.loads(x)["domain"] for x in fh if x.strip()}
+    return out
+
+
+def _new_first(items: list[dict], new: set[str]) -> list[dict]:
+    """Stable sort: newly discovered stores first, each group in its own order."""
+    return sorted(items, key=lambda h: h["domain"] not in new)
+
+
 def _all_rows(dataset: str) -> list[dict]:
     import gzip
     import json
@@ -462,9 +484,18 @@ def _meta_one(hit: dict, pause: float) -> dict:
     return row
 
 
-def run_meta(max_stores: int, workers: int, pause: float, batch: int = 500) -> dict:
+def run_meta(
+    max_stores: int,
+    workers: int,
+    pause: float,
+    batch: int = 500,
+    new_first: bool = False,
+) -> dict:
     done = _done("web_meta")
-    todo = [h for h in _shop_hits() if h["domain"] not in done][:max_stores]
+    todo = [h for h in _shop_hits() if h["domain"] not in done]
+    if new_first:
+        todo = _new_first(todo, new_hits())
+    todo = todo[:max_stores]
     out = {}
     for i in range(0, len(todo), batch):
         chunk = todo[i : i + batch]
@@ -654,7 +685,12 @@ def _light_one(hit: dict, pause: float, rules, today: date) -> dict:
 
 
 def run_light(
-    max_stores: int, workers: int, pause: float, stride: int = 1, batch: int = 300
+    max_stores: int,
+    workers: int,
+    pause: float,
+    stride: int = 1,
+    batch: int = 300,
+    new_first: bool = False,
 ) -> dict:
     rules = load_rules()
     today = datetime.now(timezone.utc).date()
@@ -664,7 +700,10 @@ def run_light(
         m
         for m in sorted(metas.values(), key=lambda r: r["tranco_rank"])
         if m.get("shop_id") and us_store(m) and m["domain"] not in done
-    ][::stride][:max_stores]  # stride spreads a sample over the whole rank range
+    ][::stride]  # stride spreads a sample over the whole rank range
+    if new_first:
+        todo = _new_first(todo, new_hits())
+    todo = todo[:max_stores]
     out = {}
     for i in range(0, len(todo), batch):
         chunk = todo[i : i + batch]
@@ -766,6 +805,7 @@ def main(argv: list[str] | None = None) -> int:
     m.add_argument("--max-stores", type=int, default=3000)
     m.add_argument("--workers", type=int, default=4)
     m.add_argument("--pause", type=float, default=1.0)
+    m.add_argument("--new-first", action="store_true", help="newly discovered first")
     d = sub.add_parser("deep")
     d.add_argument("--max-stores", type=int, default=300)
     d.add_argument("--workers", type=int, default=4)
@@ -782,18 +822,21 @@ def main(argv: list[str] | None = None) -> int:
     lt.add_argument("--workers", type=int, default=6)
     lt.add_argument("--pause", type=float, default=1.0)
     lt.add_argument("--stride", type=int, default=1, help="take every Nth store")
+    lt.add_argument("--new-first", action="store_true", help="newly discovered first")
     sub.add_parser("relabel", help="recompute business_model from saved evidence")
     r = sub.add_parser("ranks")
     r.add_argument("--days-back", type=int, nargs="+", default=[90, 365])
     a = ap.parse_args(argv)
     if a.cmd == "meta":
-        out = run_meta(a.max_stores, a.workers, a.pause)
+        out = run_meta(a.max_stores, a.workers, a.pause, new_first=a.new_first)
     elif a.cmd == "deep":
         out = run_deep(
             a.max_stores, a.workers, a.pages, a.pause, not a.all_countries, a.refresh
         )
     elif a.cmd == "light":
-        out = run_light(a.max_stores, a.workers, a.pause, a.stride)
+        out = run_light(
+            a.max_stores, a.workers, a.pause, a.stride, new_first=a.new_first
+        )
     elif a.cmd == "relabel":
         out = relabel()
     else:

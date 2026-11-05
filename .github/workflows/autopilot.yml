@@ -1,0 +1,92 @@
+name: autopilot
+
+# 24/7 store pipeline (docs/plan/autopilot.md, decision 0016).
+# THE REPO IS PUBLIC, SO ARE THESE LOGS. Every step below runs a quiet entry
+# point (scout.autopilot, scout.lake_sync) that prints counts only; child job
+# output goes to private log files in private storage. Never add a step that
+# prints data, never upload artifacts, never trace shell commands.
+# tests/test_autopilot.py checks these rules.
+
+on:
+  schedule:
+    - cron: "23 4 * * *"    # daily jobs (UTC), off the busy top of the hour
+    - cron: "47 */6 * * *"  # heartbeat check: notices a missed or failed daily run
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "daily, dry-run or health"
+        required: true
+        default: dry-run
+        type: choice
+        options: [daily, dry-run, health]
+
+permissions:
+  contents: read
+
+env:
+  SCOUT_ALLOW_PAID: "0"        # free models only; paid routes stay off
+  SCOUT_CRAWL_STEALTH: "0"
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  daily:
+    if: >-
+      (github.event_name == 'schedule' && github.event.schedule == '23 4 * * *') ||
+      (github.event_name == 'workflow_dispatch' && inputs.mode != 'health')
+    runs-on: ubuntu-latest
+    timeout-minutes: 350          # under the 6 h job limit
+    concurrency:
+      group: autopilot-daily      # runs never overlap; a new run waits
+      cancel-in-progress: false
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-autopilot.txt
+      - name: Install
+        run: pip install -q -r requirements.txt -r requirements-autopilot.txt
+      - name: Pull the lake from private storage
+        run: python -m scout.lake_sync pull
+      - name: Daily jobs
+        id: jobs
+        continue-on-error: true
+        run: python -m scout.autopilot daily ${{ inputs.mode == 'dry-run' && '--dry-run' || '' }}
+      - name: Push the lake to private storage
+        if: always() && inputs.mode != 'dry-run'
+        run: python -m scout.lake_sync push
+      - name: Health check
+        if: always()
+        run: python -m scout.autopilot health
+
+  health:
+    if: >-
+      (github.event_name == 'schedule' && github.event.schedule == '47 */6 * * *') ||
+      (github.event_name == 'workflow_dispatch' && inputs.mode == 'health')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: autopilot-health
+      cancel-in-progress: true
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -q requests
+      - name: Pull heartbeats only
+        run: python -m scout.lake_sync pull --prefix lake/_autopilot/
+      - name: Heartbeat check
+        run: python -m scout.autopilot health --no-drift

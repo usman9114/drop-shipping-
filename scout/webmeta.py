@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import ipaddress
+import os
 import re
 
 import sys
@@ -558,10 +559,15 @@ def resolve_a(domain: str) -> tuple[list[str], str]:
 
 
 def tranches_done(dataset: str = "web_scan") -> set[tuple[str, int, int]]:
+    """Full-scan tranches already recorded. Incremental runs (mode "new") have no
+    rank range and are not tranches."""
     return {
         (r["params"].get("list_id"), r["params"]["start"], r["params"]["end"])
         for r in store._runs()
-        if r["dataset"] == dataset and isinstance(r.get("params"), dict)
+        if r["dataset"] == dataset
+        and isinstance(r.get("params"), dict)
+        and r["params"].get("mode", "full") == "full"
+        and "start" in r["params"]
     }
 
 
@@ -628,6 +634,121 @@ def scan(
     return out
 
 
+# ---------------------------------------------------------------------------
+# Incremental discovery (autopilot, docs/plan/autopilot.md): only the domains that
+# entered the Tranco list since the last incremental run are looked up. Same row
+# shape as the full scan, so stg_web_scan and stores._shop_hits read them as-is;
+# params carry mode="new" and the two list ids so the diff is auditable.
+
+
+def new_entries(
+    current: list[str], previous: list[str], known: set[str] = frozenset()
+) -> list[tuple[int, str]]:
+    """(rank, domain) for domains in `current` but not in `previous`, best rank
+    first, skipping domains already known as Shopify hits."""
+    prev = set(previous)
+    return [
+        (rank, d)
+        for rank, d in enumerate(current, 1)
+        if d not in prev and d not in known
+    ]
+
+
+def _last_new_run() -> dict | None:
+    runs = [
+        r
+        for r in store._runs()
+        if r["dataset"] == "web_scan"
+        and isinstance(r.get("params"), dict)
+        and r["params"].get("mode") == "new"
+    ]
+    return runs[-1] if runs else None
+
+
+def scan_new(
+    top: int = 1_000_000,
+    max_lookups: int = 100_000,
+    qps: float = 100.0,
+    workers: int = 48,
+    lists=None,
+    resolver=resolve_a,
+) -> dict:
+    """Look up the domains new to today's Tranco list since the last incremental
+    run (or since the day before, on the first run). Counts only are printed.
+
+    `lists(date=None, list_id=None)` returns an object with .top(n), .list_id and
+    .date; it defaults to the cached Tranco client (tests pass a fake)."""
+    from datetime import date as _date
+    from datetime import timedelta
+
+    if lists is None:
+
+        def lists(date=None, list_id=None):
+            import tranco
+
+            os.makedirs("data/private/tranco", exist_ok=True)
+            t = tranco.Tranco(cache=True, cache_dir="data/private/tranco")
+            if list_id:
+                return t.list(list_id=list_id)
+            return t.list(date=date) if date else t.list()
+
+    cur = lists()
+    cur_id = getattr(cur, "list_id", None)
+    last = _last_new_run()
+    if last and last["params"].get("list_id") == cur_id:
+        print(
+            "discover-new: list unchanged since the last run, nothing to do",
+            file=sys.stderr,
+        )
+        return {}
+    if last and last["params"].get("list_id"):
+        prev = lists(list_id=last["params"]["list_id"])
+    else:
+        cur_date = str(getattr(cur, "date", "") or _date.today().isoformat())
+        prev_date = (_date.fromisoformat(cur_date[:10]) - timedelta(days=1)).isoformat()
+        prev = lists(date=prev_date)
+    known = {h["domain"] for h in _shop_hit_domains()}
+    fresh = new_entries(cur.top(top), prev.top(top), known)
+    todo = fresh[:max_lookups]
+    t0 = time.time()
+    rows, counts = [], {"looked_up": 0, "resolved": 0, "errors": 0, "shopify": 0}
+    # scan_tranche numbers ranks from a start offset; new entries are scattered,
+    # so look them up as one batch and restore each domain's own rank.
+    if todo:
+        found, counts = scan_tranche([d for _, d in todo], 0, qps, workers, resolver)
+        rank_of = {d: r for r, d in todo}
+        rows = [{**r, "tranco_rank": rank_of[r["domain"]]} for r in found]
+    counts.update(
+        {
+            "new_entries": len(fresh),
+            "truncated": len(fresh) - len(todo),
+            "seconds": round(time.time() - t0, 1),
+        }
+    )
+    run = store.record_run(
+        "web_scan",
+        rows,
+        source="tranco+google_public_dns",
+        trust="data",
+        params={
+            "mode": "new",
+            "list_id": cur_id,
+            "prev_list_id": getattr(prev, "list_id", None),
+            "top": top,
+            **counts,
+        },
+        note="incremental: apex A record for domains new to the Tranco list; Shopify hits only",
+    )
+    print(f"discover-new: {counts}", file=sys.stderr, flush=True)
+    return {"web_scan new": (run, len(rows))}
+
+
+def _shop_hit_domains() -> list[dict]:
+    from scout import stores  # local import: stores imports this module
+
+    return stores._shop_hits()
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Internet-metadata harness")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -646,8 +767,15 @@ def main(argv: list[str] | None = None) -> int:
     sc.add_argument("--qps", type=float, default=100.0)
     sc.add_argument("--workers", type=int, default=48)
     sc.add_argument("--max-tranches", type=int)
+    sn = sub.add_parser("scan-new", help="only domains new to the Tranco list")
+    sn.add_argument("--top", type=int, default=1_000_000)
+    sn.add_argument("--max-lookups", type=int, default=100_000)
+    sn.add_argument("--qps", type=float, default=100.0)
+    sn.add_argument("--workers", type=int, default=48)
     a = ap.parse_args(argv)
-    if a.cmd == "scan":
+    if a.cmd == "scan-new":
+        out = scan_new(a.top, a.max_lookups, a.qps, a.workers)
+    elif a.cmd == "scan":
         out = scan(a.top, a.tranche, a.qps, a.workers, a.max_tranches)
     elif a.cmd == "discover":
         out = discover(a.top, a.max_dns)

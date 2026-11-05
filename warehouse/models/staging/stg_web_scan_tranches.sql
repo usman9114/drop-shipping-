@@ -14,6 +14,7 @@ from read_json('{{ env_var('SCOUT_LAKE', '../data/private/lake') }}/_runs.jsonl'
                format = 'newline_delimited',
                columns = {'run_id': 'VARCHAR', 'dataset': 'VARCHAR', 'params': 'JSON'})
 where dataset = 'web_scan'
+  and coalesce(params ->> 'mode', 'full') = 'full'  -- incremental runs (mode new) are not tranches
 qualify row_number() over (partition by rank_from, rank_to order by run_id desc) = 1
 )
 select * from t

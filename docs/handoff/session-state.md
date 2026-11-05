@@ -33,6 +33,8 @@ Later on 2026-11-05 (after the first hand-off):
 - **Hosting decided: GitHub Actions** (decision 0016); storage Supabase free tier recommended, owner to create the account and add Actions secrets. Logs are public: jobs print counts only.
 - **UI/UX:** design-only brief in `docs/plan/ui-ux-brief.md`. Step 1 done (store card, side panel, lead inbox card; prototype + data contract in `docs/design/ui-v0-store-card-and-leads.md`); waiting for owner feedback.
 
+- **Autopilot built** (decision 0017): `.github/workflows/autopilot.yml` (daily 04:23 UTC + 6-hourly heartbeat check + manual trigger with `dry-run`), `scout/autopilot.py` (job table, resumable daily runner, heartbeat, health alerts), `scout/lake_sync.py` (data/private <-> private Supabase bucket, no-op without secrets), `scout/quiet.py` (public-log guard), incremental discovery `scout.webmeta scan-new`, `stores meta/light --new-first`, `fingerprints --queue N`, `make autopilot-daily|autopilot-health|lake-pull|lake-push`. Tests: `tests/test_autopilot*.py`, `tests/test_lake_sync.py`. **Waits for the owner:** Supabase project + private bucket `lake`, Actions secrets `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `ZAI_API_KEY`, `OPENROUTER_API_KEY`; then run the workflow once by hand in `dry-run`, then `daily`. Until the secrets exist, scheduled runs work on an empty lake and lose their data at the end (sync is a no-op). <!-- pragma: allowlist secret (names only, no values) -->
+
 
 ## Next, in order
 
@@ -40,11 +42,11 @@ Later on 2026-11-05 (after the first hand-off):
 2. Add effort/budget apps from the owner's list as signatures (Klaviyo, Gorgias, Recharge, Skio, Nosto, Elevar, Littledata, Judge.me, Yotpo), observed on live stores first (small sample).
 3. Re-run fingerprints on the 105, then (after the sample passes) on all 11,415 screened stores (about 2 hours at 8 concurrent).
 4. Re-fetch and relabel the business-model classifier with the corrected DSers rule (saved counts used the old rule).
-5. Autopilot build order (`docs/plan/autopilot.md`): incremental discovery, job queues, heartbeats, `make autopilot-daily`.
+5. Autopilot: built (decision 0017). Next: owner creates Supabase and secrets; seed the bucket from the vault (`scripts/vault_restore.py`, then `make lake-push`); first manual `dry-run`, then `daily`; then the re-score-from-shapes job and the monthly fingerprint refresh.
 
 ## Owner decisions open
 
-1. **Hosting and storage for the 24/7 pipeline:** recommended Supabase (Postgres) + GitHub Actions or cron on a small box (`docs/plan/autopilot.md`, `docs/plan/tool-shortlist.md`).
+1. **Autopilot storage:** create the Supabase account, bucket `lake` (private) and the Actions secrets (decision 0016 owner steps). Optional: approve installing `storage3` to replace the thin REST client (decision 0017).
 2. Put the **two-week outreach test** (underperforming stores, kill rule: fewer than 2 interested replies from 20) in the plan as the phase after R1? Service (agency) or product (SaaS)?
 3. Free Google API key for PageSpeed / Chrome UX Report.
 4. Older, still open: CJ supply option A/B/C (fact 6 below), eBay production keys, Terapeak session, key rotation, Meta Ad Library manual check of the top 20.
@@ -71,6 +73,8 @@ Later on 2026-11-05 (after the first hand-off):
 - OpenRouter key works (credit registered, `is_free_tier: false`). It was pasted in chat on 2026-11-04 and used from a gitignored `.env` for the day; **owner will rotate it**, then add the new one to "Crypto" as `OPENROUTER_API_KEY`.
 - Keys live in the cloud environment **"Crypto"** (the one this project's sessions use; "Default" also has them). As of 2026-11-04 `OPENROUTER_API_KEY` is not visible in the container; check the variable name.
 - Z.ai and OpenRouter keys were pasted into an earlier chat. The owner was asked to rotate them.
+- `make setup` runs `graphify claude install`, which rewrites `.claude/settings.json` (absolute graphify path, extra SessionStart hook) and leaves a `.graphify-bak`. Restore it with `git checkout -- .claude/settings.json` unless the change is wanted.
+- `tranco` is not in `requirements.txt`; it is pinned in `requirements-autopilot.txt` (`pip install -r requirements-autopilot.txt`).
 - Every commit triggers a background graphify rebuild that dirties `graphify-out/`; commit it as "Refresh knowledge graph".
 - Subagents can hit the Claude 5-hour usage limit; resume them with SendMessage after the reset instead of starting a new one.
 

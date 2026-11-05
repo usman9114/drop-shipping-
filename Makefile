@@ -1,4 +1,4 @@
-.PHONY: niches stores-sanity stores-scan stores-meta stores-deep stores-ranks stores-build stores-report stores setup lint graph test wh-load wh-catalogue wh-offers wh-build wh-classify wh-images wh-export wh-snapshot intel pipeline
+.PHONY: autopilot-daily autopilot-health lake-pull lake-push niches stores-sanity stores-scan stores-meta stores-deep stores-ranks stores-build stores-report stores setup lint graph test wh-load wh-catalogue wh-offers wh-build wh-classify wh-images wh-export wh-snapshot intel pipeline
 
 setup:
 	python3 -m pip install --upgrade pre-commit graphifyy detect-secrets -r requirements.txt
@@ -74,3 +74,16 @@ stores-sanity:  ## quick CJ supply check for the latest niche shortlist (no cost
 	python3 scripts/supply_sanity.py
 
 niches: stores stores-sanity   ## R1: the whole niche-finding run (docs/plan/phase-niche-finder-r1.md)
+
+# --- Autopilot (decisions 0016, 0017). Quiet: counts only, logs are public in Actions. ---
+autopilot-daily:  ## the daily jobs in order, resumable (ranks, discover-new, meta, light, fingerprints, build, report)
+	python3 -m scout.autopilot daily
+
+autopilot-health: ## heartbeat and drift checks; exit 1 on any alert
+	python3 -m scout.autopilot health
+
+lake-pull:        ## private Supabase bucket -> data/private (no-op without SUPABASE_* secrets)
+	python3 -m scout.lake_sync pull
+
+lake-push:        ## data/private -> private Supabase bucket
+	python3 -m scout.lake_sync push
