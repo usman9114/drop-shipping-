@@ -387,6 +387,116 @@ def chat_many(
         return list(ex.map(one, enumerate(prompts)))
 
 
+def _read_jsonl(path: str) -> list[dict]:
+    with open(path, encoding="utf-8") as fh:
+        return [json.loads(line) for line in fh if line.strip()]
+
+
+def run_batch(
+    in_path: str,
+    out_path: str,
+    *,
+    task: str = "bulk",
+    workers: int = 8,
+    spread: float = 0.15,
+    system: str | None = None,
+    json_mode: bool = False,
+    max_tokens: int = 2048,
+    chunk: int = 40,
+    models: list[str] | None = None,
+) -> dict:
+    """Run a JSONL file of prompts through chat_many, resumably.
+
+    Input lines: {"id": ..., "prompt": ..., "image": url (optional), "system": ... (optional)}.
+    Output lines: the input id plus {"model", "text"} or {"error"}. Ids already in
+    the output file with no error are skipped, so a stopped batch picks up where it
+    left off; errored ids are retried. Results are appended chunk by chunk."""
+    rows = _read_jsonl(in_path)
+    ids = [r.get("id", i) for i, r in enumerate(rows)]
+    if len(set(map(str, ids))) != len(ids):
+        raise ValueError("batch ids must be unique")
+    done: set[str] = set()
+    if os.path.exists(out_path):
+        done = {str(r["id"]) for r in _read_jsonl(out_path) if "error" not in r}
+    todo = [(i, r) for i, r in zip(ids, rows) if str(i) not in done]
+    counts = {"total": len(rows), "skipped": len(rows) - len(todo), "ok": 0, "error": 0}
+    os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
+    for start in range(0, len(todo), max(1, chunk)):
+        part = todo[start : start + chunk]
+        # one system prompt per chunk call: group rows sharing it
+        groups: dict[tuple, list[tuple]] = {}
+        for i, r in part:
+            key = (r.get("system") or system, bool(r.get("image")))
+            groups.setdefault(key, []).append((i, r))
+        results: list[tuple] = []
+        for (sys_p, _), items in groups.items():
+            kw = dict(system=sys_p, json_mode=json_mode, max_tokens=max_tokens)
+            if models:
+                kw["models"] = models
+            imgs = [r.get("image") for _, r in items]
+            if any(imgs):  # vision rows: chat_many has no per-prompt images
+                outs = []
+                for (_, r), img in zip(items, imgs):
+                    try:
+                        outs.append(chat(r["prompt"], task, [img], **kw))
+                    except Exception as exc:
+                        outs.append({"error": f"{type(exc).__name__}: {exc}"[:200]})
+            else:
+                outs = chat_many(
+                    [r["prompt"] for _, r in items],
+                    workers=workers,
+                    task=task,
+                    spread=0 if models else spread,
+                    **kw,
+                )
+            results += [(i, o) for (i, _), o in zip(items, outs)]
+        with open(out_path, "a", encoding="utf-8") as fh:
+            for i, o in results:
+                fh.write(json.dumps({"id": i, **o}, ensure_ascii=False) + "\n")
+                counts["error" if "error" in o else "ok"] += 1
+        print(
+            f"batch: {counts['skipped'] + counts['ok'] + counts['error']}/{counts['total']} "
+            f"(ok {counts['ok']}, error {counts['error']}, OR free used today {or_free_used()})",
+            file=sys.stderr,
+        )
+    return counts
+
+
+def second_opinion(prompt: str, **kwargs) -> dict:
+    """The same prompt to two differently trained free models (GLM and the
+    OpenRouter lane) for an independent check (CLAUDE.md principle 5).
+    Returns {'glm': {...}, 'other': {...}, 'agree': bool | None}; 'agree' compares
+    the stripped, lower-cased first line, so ask for a one-word label first."""
+    task = kwargs.pop("task", "bulk")
+    glm = [m for m in FREE_MODELS[task] if m.startswith("zai:")]
+    out = {}
+    for name, models in (("glm", glm), ("other", list(OR_LANE))):
+        try:
+            out[name] = chat(prompt, task, models=models, **kwargs)
+        except Exception as exc:
+            out[name] = {"error": f"{type(exc).__name__}: {exc}"[:200]}
+
+    def first(d: dict) -> str | None:
+        t = (d.get("text") or "").strip().splitlines()
+        return t[0].strip().strip(".*`\"'").lower() if t else None
+
+    a, b = first(out["glm"]), first(out["other"])
+    out["agree"] = (a == b) if a and b else None
+    return out
+
+
+def usage() -> dict:
+    keys = {p: bool(_key(p)) for p in PROVIDERS}
+    return {
+        "date": _today(),
+        "or_free_used": or_free_used(),
+        "or_free_cap": OR_FREE_DAILY_CAP,
+        "or_free_left": max(0, OR_FREE_DAILY_CAP - or_free_used()),
+        "paid_allowed": paid_allowed(),
+        "keys_present": keys,
+    }
+
+
 def list_free() -> list[dict]:
     with urllib.request.urlopen(f"{API}/models", timeout=30) as resp:
         models = json.loads(resp.read())["data"]
@@ -410,8 +520,45 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--system")
     ap.add_argument("--json", action="store_true", help="request JSON output")
     ap.add_argument("--list-free", action="store_true")
+    ap.add_argument("--usage", action="store_true", help="today's free-lane usage")
+    ap.add_argument("--batch", help="JSONL in: {id, prompt, image?, system?} per line")
+    ap.add_argument("--out", help="JSONL out for --batch (resumable)")
+    ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--spread", type=float, default=0.15)
+    ap.add_argument("--max-tokens", type=int, default=2048)
+    ap.add_argument(
+        "--second-opinion",
+        action="store_true",
+        help="ask GLM and the OpenRouter lane the same prompt; report agreement",
+    )
     args = ap.parse_args(argv)
 
+    if args.usage:
+        print(json.dumps(usage(), indent=2))
+        return 0
+    if args.batch:
+        if not args.out:
+            ap.error("--batch needs --out")
+        c = run_batch(
+            args.batch,
+            args.out,
+            task=args.task,
+            workers=args.workers,
+            spread=args.spread,
+            system=args.system,
+            json_mode=args.json,
+            max_tokens=args.max_tokens,
+        )
+        print(json.dumps(c))
+        return 0 if not c["error"] else 2
+    if args.second_opinion:
+        if not args.prompt:
+            ap.error("prompt required")
+        o = second_opinion(
+            args.prompt, task=args.task, system=args.system, json_mode=args.json
+        )
+        print(json.dumps(o, indent=2, ensure_ascii=False))
+        return 0
     if args.list_free:
         for m in list_free():
             print(

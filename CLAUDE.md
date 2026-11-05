@@ -50,6 +50,8 @@ make lint       # pre-commit run --all-files
 make graph      # graphify update . (refresh knowledge graph)
 python -m scout.store tables|runs|query "SQL"|rebuild   # evidence store (docs/plan/data-pipeline.md)
 python -m scout.llm --task code "..."                  # free models: Z.ai GLM Flash -> OpenRouter
+python -m scout.llm --batch in.jsonl --out out.jsonl   # bulk via GLM + OpenRouter free lane, resumable (skill: free-llm)
+python -m scout.llm --usage | --second-opinion "..."    # lane usage today; two-model check
 make pipeline | make wh-snapshot | make intel          # warehouse flow and intelligence layer (decision 0007)
 python -m scout.webmeta discover|sitemaps|products|scan  # internet-metadata harness (decisions 0008, 0009)
 make niches                                             # R1: scan, profile, score, shortlist, supply check (~3 h)
