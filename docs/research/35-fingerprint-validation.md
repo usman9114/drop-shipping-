@@ -74,7 +74,7 @@ Task: label each of the 67 stores from a compact trace summary (vendors, first S
 
 Disagreements hand-checked (13): GLM right on 2 (POD SKU shape, jewelry feed), Nemotron right on 4 (a software demo, two brands GLM called dropship_other, a POD store), both wrong on 2 CJ stores (CJ SKUs only visible beyond the first 6 products), the rest on `unclear` stores where each model guessed. Nemotron defaults to brand_or_own_stock when traces are thin; GLM over-calls dropship_other. Neither is reliable enough to decide alone; useful as a flag on stores the rules label `unknown`. Both found the POD SKU shape (`YYMMDDPOD..#nnn`) that the rules miss.
 
-## Proposed WEIGHTS and rule changes (not applied)
+## Proposed WEIGHTS and rule changes (applied 2026-11-05 in `RULE_VERSION` 2026-11-05.3, see below)
 
 | Item | Now | Proposed | Why `[data]` |
 |---|---|---|---|
@@ -118,3 +118,21 @@ Expected effect on this sample, by re-scoring the saved shares by hand: the 2 wr
 - Recall on the 11,415-store population: sample is biased toward stores the rules already flagged; the 14 `unknown` stores gave 3 misses out of 14 (21%) `[data]`, and unlabelled brands were not hand-checked.
 - Weights for signatures that never fired.
 - Truth labels are my reading of public traces; no supplier confirmed any of them.
+
+## Applied (2026-11-05, `RULE_VERSION` 2026-11-05.3)
+
+All rows of the two tables above went into `scout/fingerprints.py`, except `zopi.io` (optional, never seen) and the rows marked skip/drop. Each W3 error is a test in `tests/test_fingerprints.py` (`test_w3_*`, 18 tests). Choices the tables left open:
+
+- **Bulk burst:** big 0.2 -> 0.1 as proposed; small 0.1 -> 0.05 so a bigger burst never weighs less than a smaller one.
+- **Consequence:** generic hints now sum to at most 0.145, under `min_generic_for_dropship` 0.25, so burst/compare-at/review apps alone no longer produce `unknown_dropship` (the 2 brands W3 saw labelled that way). They stay in `evidence`.
+- **Under 5 products:** applies when the feed has 1 to 4 products. A feed of 0 (products.json missing or robots-blocked) still lets page signatures count.
+- **Vendor rule:** weight 0.05 and only with 10+ products; vendors matching `^cj` / "CJ Dropshipping" count as `cj_vendor_share` -> cj (weight 0.05) instead of aliexpress.
+- **Mixed:** when the top two source scores each reach 0.4, `source_guess` is `mixed`, `mixed_sources` names them, confidence is the weaker of the two (plus the capped generic nudge).
+- **New sources:** `pod_sku_share` (pod 0.6) and `asin_sku_share` (new source `dropship_other` 0.5), both firing at 0.20 share; feed tags `trendsi` (us_supplier, medium/observed) and `shopify_collective` (dropship_other, medium/observed); page host `jewelershowcase.com` (dropship_other, medium/unverified, so 0.15 alone: below the 0.2 source bar until seen again); CJ OSS bucket added to the `cjdropshipping` signature (no double count).
+- **SKU shapes cannot re-score the new SKU rules:** `sku_shape` turns letters into `A`, so `POD` and the `B0` ASIN prefix are lost. Rows from before .3 need a refetch for these two rules; the other rule changes re-score from saved shares.
+
+### Accuracy before/after
+
+- **Before** `[data]`: whole estimate 54/61 (89%), named source 28/31 (90%), dropship-or-not FP 2 / FN 4 (tables above).
+- **After: not measured.** The truth CSV (`data/private/research/fingerprint-truth.csv`) and the fingerprint lake rows were not in the vault (last export 2026-11-04, and `vault_export.py` did not cover them), so the fresh container that applied these rules could not re-score. `vault_export.py` now exports `web_fingerprints` and the truth CSV.
+- **Projection `[proxy]`** from the 7 documented errors, not a measurement: the Printful brand, the demo site, the 2 POD misses and the ASIN store should now be right, and the Amazon+AE store becomes `mixed` (aliexpress + dropship_other); the jewelry-feed store stays missed (unverified host alone is below the bar); the 2 brands called `unknown_dropship` become `unknown`. Risk: the one `dropship_other` store guessed `unknown_dropship` may now fall to `unknown`. Expected range 58 to 60 of 61. Confirm by re-labelling or restoring the truth set and re-running on the 105.

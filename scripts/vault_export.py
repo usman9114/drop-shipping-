@@ -35,6 +35,12 @@ DATASETS = {
     "web_store_deep": ("store_deep", True),
     "web_snapshot_stores": ("snapshot_stores", False),
     "web_snapshot_products": ("snapshot_products", False),
+    "web_fingerprints": ("fingerprints", False),  # all runs: rule versions differ
+}
+# private working files copied as-is; vault_restore.py puts each back at restore_to
+EXTRA_FILES = {
+    "data/private/validation/seen.txt": "validation_seen.txt",
+    "data/private/research/fingerprint-truth.csv": "fingerprint-truth.csv",
 }
 
 
@@ -93,15 +99,16 @@ def main() -> int:
                     "sha256": hashlib.sha256(p.read_bytes()).hexdigest(),
                 }
             )
-    for extra in ("data/private/validation/seen.txt",):
+    for extra, name in EXTRA_FILES.items():
         src = Path(extra)
         if src.exists():
-            dst = out_dir / "validation_seen.txt"
+            dst = out_dir / name
             dst.write_bytes(src.read_bytes())
             files.append(
                 {
                     "file": dst.name,
-                    "dataset": "validation",
+                    "dataset": "file",
+                    "restore_to": extra,
                     "bytes": dst.stat().st_size,
                     "sha256": hashlib.sha256(dst.read_bytes()).hexdigest(),
                 }

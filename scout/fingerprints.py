@@ -41,7 +41,7 @@ from scout import store, stores, webmeta
 # family: importer | supplier | 3pl | pod | tracking | review_import | theme | fomo
 # where: page_source (homepage / product page HTML) | feed (vendor, tags, handles, SKUs, image URLs)
 # implies_source: aliexpress | cj | 1688 | us_supplier | pod | wholesale |
-#                 china_shipping | domestic_shipping | none
+#                 dropship_other | china_shipping | domestic_shipping | none
 # evidence: observed (seen on a live store by us) | docs (vendor docs/listing) | unverified
 SIGNATURES: list[dict] = [
     {
@@ -82,11 +82,13 @@ SIGNATURES: list[dict] = [
         "family": "supplier",
         "name": "CJdropshipping",
         "where": "page_source",
-        "pattern": r"cjdropshipping\.com|cj-?dropshipping",
+        "pattern": r"cjdropshipping\.com|cj-?dropshipping|"
+        r"cc-west-usa\.oss-accelerate\.aliyuncs\.com",
         "implies_source": "cj",
         "strength": "strong",
-        "evidence": "unverified",
-        "note": "app or tracking links",
+        "evidence": "observed",
+        "note": "app, tracking or CJ image-host links (*.cjdropshipping.com, CJ's US OSS "
+        "bucket); W3: 4/4 correct (docs/research/35)",
     },
     {
         "id": "cj_feed",
@@ -204,10 +206,11 @@ SIGNATURES: list[dict] = [
         "name": "Printful",
         "where": "page_source",
         "pattern": r"printful\.com",
-        "implies_source": "pod",
-        "strength": "strong",
-        "evidence": "unverified",
-        "note": "",
+        "implies_source": "none",
+        "strength": "weak",
+        "evidence": "observed",
+        "note": "W3: 1/6 precision; the script/pixel loads on AE, CJ and used-gear stores. "
+        "POD is named by the POD SKU shape, not by this",
     },
     {
         "id": "printify",
@@ -236,11 +239,12 @@ SIGNATURES: list[dict] = [
         "family": "review_import",
         "name": "Ali Reviews",
         "where": "page_source",
-        "pattern": r"ali[-_ ]?reviews|alireviews",
+        "pattern": r"alireviews\.min|ali-reviews-\d+/assets|alireviews-review-|ali-widget",
         "implies_source": "aliexpress",
-        "strength": "medium",
-        "evidence": "unverified",
-        "note": "imports AliExpress reviews",
+        "strength": "weak",
+        "evidence": "observed",
+        "note": "imports AliExpress reviews. Real widget files/classes only: W3 found the old "
+        "loose pattern matching a PageFly name map string",
     },
     {
         "id": "ryviu",
@@ -319,25 +323,66 @@ SIGNATURES: list[dict] = [
         "evidence": "unverified",
         "note": "used by brands and dropshippers alike",
     },
+    {
+        "id": "trendsi",
+        "family": "supplier",
+        "name": "Trendsi (tag 'Ship From Overseas')",
+        "where": "feed",
+        "pattern": r"\bship from overseas\b|\btrendsi\b",
+        "implies_source": "us_supplier",
+        "strength": "medium",
+        "evidence": "observed",
+        "note": "seen on 1 store mixing CJ, a wholesaler and Trendsi (docs/research/35)",
+    },
+    {
+        "id": "shopify_collective",
+        "family": "supplier",
+        "name": "Shopify Collective (tag)",
+        "where": "feed",
+        "pattern": r"\bshopify collective\b",
+        "implies_source": "dropship_other",
+        "strength": "medium",
+        "evidence": "observed",
+        "note": "sells other Shopify brands' stock; seen on 1 store (docs/research/35)",
+    },
+    {
+        "id": "jewelershowcase",
+        "family": "supplier",
+        "name": "Jeweler Showcase feed",
+        "where": "page_source",
+        "pattern": r"jewelershowcase\.com",
+        "implies_source": "dropship_other",
+        "strength": "medium",
+        "evidence": "unverified",
+        "note": "single sighting, a jewelry catalogue feed (docs/research/35)",
+    },
 ]
 
 # --- weights (principle 4: one place) ----------------------------------------
 # A source's score is the noisy-or of its contributions: 1 - prod(1 - w).
 # Strong signals dominate; weak ones can only nudge. All weights are clamped to [0, 1].
-# Calibration is pending W3 (docs/research/35); until then these are judgement, not measurement.
+# Calibrated by W3 on 67 hand-checked stores (docs/research/35, applied in RULE_VERSION .3).
+# Rules that never fired in that sample are still judgement, not measurement.
 WEIGHTS = {
     # page signature: base weight by strength, scaled by how well attested the entry is
     "strength": {"strong": 0.6, "medium": 0.3, "weak": 0.1},
     "evidence_mult": {"observed": 1.0, "docs": 0.9, "unverified": 0.5},
     # feed rules: (min share or count to fire, {source: weight})
     "feed": {
-        "ae_image_share": (0.05, {"aliexpress": 0.55}),
+        # W3: true positives at 0.39+, false positives at 0.004-0.092
+        "ae_image_share": (0.20, {"aliexpress": 0.55}),
         "o1cn_share": (0.05, {"aliexpress": 0.25, "1688": 0.15}),
         "ae_item_id_share": (0.02, {"aliexpress": 0.6}),
-        "dsers_sku_share": (0.05, {"aliexpress": 0.5}),
-        "cj_sku_share": (0.05, {"cj": 0.6}),
+        # W3: true positives at 0.49+; a CJ store sat at 0.072
+        "dsers_sku_share": (0.20, {"aliexpress": 0.5}),
+        "cj_sku_share": (0.05, {"cj": 0.7}),  # W3: 12/12, shares 0.40-1.0
+        # W3 new: POD supplier SKU shape and Amazon ASIN SKUs (both missed before)
+        "pod_sku_share": (0.20, {"pod": 0.6}),
+        "asin_sku_share": (0.20, {"dropship_other": 0.5}),
         "ships_from": (1, {"aliexpress": 0.5}),  # option present (count of products)
-        "vendor_supplier_share": (0.2, {"aliexpress": 0.2}),
+        # W3: 0/2; only with >= min_products_vendor products (see below)
+        "vendor_supplier_share": (0.2, {"aliexpress": 0.05}),
+        "cj_vendor_share": (0.2, {"cj": 0.05}),
         "boilerplate_share": (0.1, {"aliexpress": 0.25}),
         "cjk_share": (
             0.05,
@@ -346,10 +391,11 @@ WEIGHTS = {
     },
     # source-less dropship behaviour: cannot pick a source, only nudge confidence
     "generic": {
-        "bulk_burst_big": 0.2,
-        "bulk_burst_small": 0.1,
-        "grams_zero": 0.1,
-        "compare_ratio": 0.1,
+        # W3: bulk burst 62%, compare-at 71%, grams=0 32% precision (brands rarely fill weights)
+        "bulk_burst_big": 0.1,
+        "bulk_burst_small": 0.05,
+        "grams_zero": 0.0,
+        "compare_ratio": 0.05,
     },
     "bulk_burst_big_n": 50,
     "bulk_burst_small_n": 20,
@@ -361,6 +407,11 @@ WEIGHTS = {
     "min_source_score": 0.2,  # below this the source is 'unknown'
     "min_generic_for_dropship": 0.25,
     "assumed_china_min_conf": 0.5,
+    # W3: demo and app sites with 1-4 products produced source guesses; no source
+    # rule fires below this (0 products = feed missing or blocked, page signatures still count)
+    "min_products_for_source": 5,
+    "min_products_vendor": 10,  # vendor-name rules need a real catalogue
+    "mixed_min_score": 0.4,  # two sources each at this score -> 'mixed' (W3: Amazon+AE store)
 }
 
 # --- patterns ---------------------------------------------------------------
@@ -376,6 +427,9 @@ _O1CN = re.compile(r"O1CN01[0-9A-Za-z]{6,}")
 _ITEM_ID = re.compile(r"(?<!\d)1005\d{12}(?!\d)")
 _DSERS_SKU = stores.DSERS_SKU  # one definition, shared with the classifier
 _CJ_SKU = stores.CJ_SKU
+_POD_SKU = re.compile(r"^\d{6}POD[A-Z]{2}\d+#\d+")  # W3: 2 POD stores, both missed
+_ASIN_SKU = re.compile(r"^B0[0-9A-Z]{8}$")  # Amazon ASIN as SKU: competitor trace only
+_CJ_VENDOR = re.compile(r"^\s*cj\b|cj ?dropshipping|cjdropshipping", re.I)
 _SHIPS_FROM = re.compile(r"^\s*ships?\s*from\s*$", re.I)
 _SUPPLIER_VENDOR = re.compile(
     r"^shop\d{3,}|\bstore\d*$|\b(?:trading|factory|international)\b|co\.?,?\s*ltd|"
@@ -455,7 +509,10 @@ def _tags(p: dict) -> list[str]:
 
 # Bump on any change to SIGNATURES, regexes or WEIGHTS: every row carries it, so
 # the autopilot can tell old-rule rows from new ones and re-score only those.
-RULE_VERSION = "2026-11-05.2"  # .2: DSers SKU rule tightened (tommyjohn.com)
+# .2: DSers SKU rule tightened (tommyjohn.com)
+# .3: W3 validation applied (docs/research/35): thresholds, weights, Printful/Ali Reviews,
+#     <5-product gate, 'mixed', POD/ASIN SKUs, Trendsi/Collective/CJ-host signatures
+RULE_VERSION = "2026-11-05.3"
 
 _SHAPE_DIGITS = re.compile(r"\d+")
 _SHAPE_LETTERS = re.compile(r"[^\W\d_]+")
@@ -498,8 +555,12 @@ def feed_signals(products: list[dict], domain: str | None = None) -> dict:
         c["ae_item_id"] += bool(_ITEM_ID.search(idtext))
         c["dsers_sku"] += any(_DSERS_SKU.search(s) for s in skus)
         c["cj_sku"] += any(_CJ_SKU.search(s) for s in skus)
+        c["pod_sku"] += any(_POD_SKU.search(s) for s in skus)
+        c["asin_sku"] += any(_ASIN_SKU.search(s) for s in skus)
         shapes.update({sku_shape(skus[0])} if skus else ())  # one per product
-        if vendor and not (domain and stores.vendor_is_shop(vendor, "", domain)):
+        if _CJ_VENDOR.search(vendor):
+            c["cj_vendor"] += 1  # W3: "Cj Dropshipping" vendor was routed to aliexpress
+        elif vendor and not (domain and stores.vendor_is_shop(vendor, "", domain)):
             c["vendor_supplier"] += bool(_SUPPLIER_VENDOR.search(vendor))
         blob = f"{vendor} {' '.join(tags)}"
         feed_sig_ids.update(i for i, rx in feed_rx if rx.search(blob))
@@ -538,10 +599,13 @@ def feed_signals(products: list[dict], domain: str | None = None) -> dict:
         "ae_item_id_share": _share(c["ae_item_id"], n),
         "dsers_sku_share": _share(c["dsers_sku"], n),
         "cj_sku_share": _share(c["cj_sku"], n),
+        "pod_sku_share": _share(c["pod_sku"], n),
+        "asin_sku_share": _share(c["asin_sku"], n),
         "sku_shapes": dict(shapes.most_common(8)),
         "ships_from": c["ships_from"],
         "ships_from_values": sorted(ships_values),
         "vendor_supplier_share": _share(c["vendor_supplier"], n),
+        "cj_vendor_share": _share(c["cj_vendor"], n),
         "boilerplate_count": c["boilerplate"],
         "boilerplate_share": _share(c["boilerplate"], n),
         "cjk_count": c["cjk"],
@@ -568,6 +632,12 @@ def supply_estimate(page: dict | None, feed: dict | None) -> dict:
     ship: dict[str, list[float]] = defaultdict(list)
     generic: list[float] = []
     evidence: list[str] = []
+    n_products = feed.get("n_products")
+    tiny = bool(n_products) and n_products < W["min_products_for_source"]
+    if tiny:
+        evidence.append(
+            f"only {n_products} products: no source rule fires (demo or app site?)"
+        )
 
     for sid in sorted(
         set(page.get("signature_ids") or []) | set(feed.get("signature_ids") or [])
@@ -582,12 +652,17 @@ def supply_estimate(page: dict | None, feed: dict | None) -> dict:
         elif imp == "none":
             if s["family"] in ("theme", "fomo", "review_import"):
                 generic.append(W["family_nudge"])
-        else:
+        elif not tiny:
             src[imp].append(w)
         evidence.append(f"signature {sid} ({s['strength']}/{s['evidence']}) -> {imp}")
 
     for key, (thr, targets) in W["feed"].items():
         val = feed.get(key) or 0
+        if tiny or (
+            key in ("vendor_supplier_share", "cj_vendor_share")
+            and (n_products or 0) < W["min_products_vendor"]
+        ):
+            continue
         if val and val >= thr:
             for source, w in targets.items():
                 src[source].append(w)
@@ -603,7 +678,9 @@ def supply_estimate(page: dict | None, feed: dict | None) -> dict:
         evidence.append(
             f"bulk import burst {feed['bulk_burst_max']} products in one minute"
         )
-    if (feed.get("grams_zero_share") or 0) >= W["grams_zero_share"]:
+    if (feed.get("grams_zero_share") or 0) >= W["grams_zero_share"] and W["generic"][
+        "grams_zero"
+    ]:
         generic.append(W["generic"]["grams_zero"])
         evidence.append(f"grams=0 on {feed['grams_zero_share']:.0%} of variants")
     if (feed.get("compare_ratio_median") or 0) >= W["compare_ratio_min"]:
@@ -614,7 +691,14 @@ def supply_estimate(page: dict | None, feed: dict | None) -> dict:
     gscore = _noisy_or(generic)
     best, best_src = scores[0] if scores else (0.0, "unknown")
     second = scores[1][0] if len(scores) > 1 else 0.0
-    if best >= W["min_source_score"]:
+    mixed: list[str] = []
+    if second >= W["mixed_min_score"]:
+        # two sources each well attested: no single-source answer is right (W3)
+        mixed = sorted(k for v, k in scores if v >= W["mixed_min_score"])
+        guess = "mixed"
+        conf = second + min(W["generic_nudge_cap"], gscore * 0.3)
+        evidence.append(f"mixed sources: {mixed}")
+    elif best >= W["min_source_score"]:
         guess = best_src
         conf = (
             best
@@ -643,6 +727,7 @@ def supply_estimate(page: dict | None, feed: dict | None) -> dict:
         warehouse = "unknown"
     return {
         "source_guess": guess,
+        "mixed_sources": mixed,
         "warehouse_guess": warehouse,
         "confidence": conf,
         "evidence": evidence,

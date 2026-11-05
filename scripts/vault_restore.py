@@ -43,6 +43,18 @@ def main(argv: list[str]) -> int:
     manifest = json.loads((folder / "manifest.json").read_text(encoding="utf-8"))
     by_ds: dict[str, list[dict]] = {}
     for f in manifest["files"]:
+        if f.get("restore_to"):  # a private working file, copied back as-is
+            dst = Path(f["restore_to"])
+            if not dst.resolve().is_relative_to(Path("data/private").resolve()):
+                print(
+                    f"skip {f['file']}: restore_to outside data/private",
+                    file=sys.stderr,
+                )
+                continue
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            dst.write_bytes((folder / f["file"]).read_bytes())
+            print(f"{f['file']} -> {dst}", file=sys.stderr)
+            continue
         if not f["file"].endswith(".csv"):
             continue
         with (folder / f["file"]).open(newline="", encoding="utf-8") as fh:

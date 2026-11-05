@@ -217,12 +217,16 @@ def test_weak_signals_alone_do_not_pick_source():
     assert e["source_guess"] == "unknown"
 
 
-def test_generic_only_is_unknown_dropship():
+def test_generic_only_no_longer_claims_dropship():
+    """W3: bulk burst 62%, compare-at 71%, grams=0 32% precision; 2 brands were
+    called unknown_dropship on these alone. They stay as evidence, not a verdict."""
     e = fp.supply_estimate(
         {},
         {"bulk_burst_max": 80, "grams_zero_share": 0.95, "compare_ratio_median": 3.0},
     )
-    assert e["source_guess"] == "unknown_dropship" and 0 < e["confidence"] < 0.5
+    assert e["source_guess"] == "unknown" and e["confidence"] == 0.0
+    assert any("bulk import burst" in x for x in e["evidence"])
+    assert not any("grams=0" in x for x in e["evidence"])  # weight 0: dropped
 
 
 def test_ships_from_sets_warehouse():
@@ -322,3 +326,145 @@ def test_feed_keeps_sku_shapes_not_skus():
         [prod(variants=[{"price": "5", "sku": "CJYZ319118002BY", "grams": 0}])]
     )
     assert f["sku_shapes"] == {"AAAA999999999AA": 1}
+
+
+# --- W3 validation errors (docs/research/35), one test each -------------------
+def _feed(n=60, **kw):
+    return {"n_products": n, **kw}
+
+
+def test_w3_cj_store_with_small_ae_image_share_stays_cj():
+    e = fp.supply_estimate({}, _feed(cj_sku_share=0.5, ae_image_share=0.09))
+    assert e["source_guess"] == "cj" and e["confidence"] >= 0.7
+
+
+def test_w3_cj_store_with_small_dsers_share_stays_cj():
+    e = fp.supply_estimate({}, _feed(cj_sku_share=0.5, dsers_sku_share=0.072))
+    assert e["source_guess"] == "cj"
+
+
+def test_w3_real_ae_image_and_dsers_shares_still_fire():
+    assert fp.supply_estimate({}, _feed(ae_image_share=0.39))["source_guess"] == (
+        "aliexpress"
+    )
+    assert fp.supply_estimate({}, _feed(dsers_sku_share=0.49))["source_guess"] == (
+        "aliexpress"
+    )
+
+
+def test_w3_printful_pixel_alone_is_not_pod():
+    page = fp.page_signals('<script src="https://www.printful.com/pixel.js">')
+    assert "printful" in page["signature_ids"]
+    assert fp.supply_estimate(page, _feed())["source_guess"] == "unknown"
+
+
+def test_w3_pagefly_alireviews_name_map_does_not_fire():
+    html = '{"Judgeme":"judgeme","AliReviews":"ali-reviews","Loox":"loox"}'
+    assert "ali_reviews" not in fp.page_signals(html)["signature_ids"]
+
+
+def test_w3_real_ali_reviews_widget_fires_weakly():
+    html = (
+        "https://cdn.shopify.com/extensions/0198a1b2-1234-7abc-8def-0123456789ab/"
+        "ali-reviews-301/assets/alireviews.min.js"
+    )
+    page = fp.page_signals(html)
+    assert "ali_reviews" in page["signature_ids"]
+    assert fp.supply_estimate(page, _feed())["source_guess"] == "unknown"  # weak alone
+
+
+def test_w3_cj_vendor_routes_to_cj_not_aliexpress():
+    f = fp.feed_signals([prod(vendor="Cj Dropshipping") for _ in range(12)], "x.com")
+    assert f["cj_vendor_share"] == 1.0 and f["vendor_supplier_share"] == 0.0
+    assert "aliexpress" not in str(fp.supply_estimate({}, f)["evidence"])
+
+
+def test_w3_vendor_rule_needs_ten_products():
+    f = fp.feed_signals([prod(vendor="Shop1102345 Store") for _ in range(9)], "x.com")
+    assert f["vendor_supplier_share"] == 1.0
+    assert not any(
+        "vendor_supplier" in x for x in fp.supply_estimate({}, f)["evidence"]
+    )
+
+
+def test_w3_demo_site_with_one_product_gets_no_source():
+    f = fp.feed_signals(
+        [prod(vendor="TPO Demo store", images=[{"src": "/H" + "a" * 32 + ".jpg"}])],
+        "tpo.com",
+    )
+    e = fp.supply_estimate({"signature_ids": ["aliorders"]}, f)
+    assert e["source_guess"] == "unknown" and e["confidence"] == 0.0
+
+
+def test_w3_blocked_feed_keeps_page_signatures():
+    e = fp.supply_estimate({"signature_ids": ["aliorders"]}, fp.feed_signals([]))
+    assert e["source_guess"] == "aliexpress"
+
+
+def test_w3_amazon_plus_aliexpress_store_is_mixed():
+    skus = ["B0ABC12345", "B0XYZ98765"]  # pragma: allowlist secret (fake ASIN)
+    ps = [
+        prod(
+            images=[{"src": "/H" + "b" * 32 + ".jpg"}],
+            variants=[{"price": "9", "sku": skus[i % 2], "grams": 0}],
+        )
+        for i in range(10)
+    ]
+    f = fp.feed_signals(ps, "x.com")
+    assert f["asin_sku_share"] == 1.0
+    e = fp.supply_estimate({}, {**f, "ships_from": 4, "ships_from_values": ["China"]})
+    assert e["source_guess"] == "mixed"
+    assert e["mixed_sources"] == ["aliexpress", "dropship_other"]
+    assert e["confidence"] < 0.9
+
+
+def test_w3_asin_only_store_is_dropship_other():
+    ps = [prod(variants=[{"price": "9", "sku": "B0ABC1234%d" % i}]) for i in range(8)]
+    e = fp.supply_estimate({}, fp.feed_signals(ps))
+    assert e["source_guess"] == "dropship_other"
+
+
+def test_w3_pod_sku_shape_is_pod():
+    ps = [
+        prod(variants=[{"price": "25", "sku": "250311PODAB12#%d" % i}])
+        for i in range(8)
+    ]
+    f = fp.feed_signals(ps)
+    assert f["pod_sku_share"] == 1.0
+    assert fp.supply_estimate({}, f)["source_guess"] == "pod"
+
+
+def test_w3_asin_and_pod_rules_reject_lookalikes():
+    near_asins = (
+        "B0ABC1234 B0ABC123456 b0abc12345 AB0ABC12345"  # pragma: allowlist secret
+    )
+    for sku in near_asins.split():
+        assert not fp._ASIN_SKU.search(sku), sku
+    assert not fp._POD_SKU.search("25031PODAB12#3")
+    assert not fp._POD_SKU.search("250311POD-AB12#3")
+
+
+def test_w3_trendsi_and_collective_tags():
+    f = fp.feed_signals(
+        [prod(tags=["Ship From Overseas"]), prod(tags=["Shopify Collective"])]
+    )
+    assert {"trendsi", "shopify_collective"} <= set(f["signature_ids"])
+
+
+def test_w3_cj_image_hosts_are_cj_observed():
+    for host in (
+        "https://cf.cjdropshipping.com/a.jpg",
+        "https://cc-west-usa.oss-accelerate.aliyuncs.com/b.jpg",
+    ):
+        page = fp.page_signals(host)
+        assert page["signature_ids"] == ["cjdropshipping"], host
+        e = fp.supply_estimate(page, _feed())
+        assert e["source_guess"] == "cj" and e["confidence"] >= 0.6
+
+
+def test_w3_cj_sku_weight():
+    assert fp.WEIGHTS["feed"]["cj_sku_share"][1]["cj"] == 0.7
+
+
+def test_rule_version_bumped_for_w3():
+    assert fp.RULE_VERSION == "2026-11-05.3"

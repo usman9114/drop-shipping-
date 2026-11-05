@@ -26,7 +26,7 @@ Nothing is running in the background at hand-off.
 
 ## Next, in order
 
-1. **Apply the W3 changes to `scout/fingerprints.py`** (doc 35 lists them): thresholds 0.05 -> 0.20 for AliExpress-image and DSers shares; CJ SKU weight 0.7; CJ page signature `observed`; Printful weak and implies nothing alone; Ali Reviews only on the real widget (`alireviews.min` / `ali-reviews-NNN/assets`); vendor-supplier weight 0.05, only with 10+ products, "CJ" vendor -> cj; drop grams=0; bulk burst 0.1, compare-at 0.05; no source call under 5 products; a `mixed` outcome when two sources reach 0.4. New signatures: POD SKU shape `\d{6}POD[A-Z]{2}\d+#\d+`, Amazon ASIN SKUs `^B0[0-9A-Z]{8}$` (dropship_other), tags "Ship From Overseas" (Trendsi) and "Shopify Collective", CJ hosts (`*.cjdropshipping.com`, `cc-west-usa.oss-accelerate.aliyuncs.com`). Each error from doc 35 becomes a test. Bump `RULE_VERSION`, re-score from the truth CSV, report accuracy before/after.
+1. **Done 2026-11-05 (later session):** W3 changes applied, `RULE_VERSION` 2026-11-05.3, 18 `test_w3_*` tests (`docs/research/35` "Applied"). Accuracy after is **not measured**: the truth CSV and fingerprint rows were never exported to the vault and were lost with the container. Re-score needs the truth set rebuilt (67 stores, about an hour by hand from public data) or a vault that has it. `vault_export.py` now includes both; export after every labelling job.
 2. Add effort/budget apps from the owner's list as signatures (Klaviyo, Gorgias, Recharge, Skio, Nosto, Elevar, Littledata, Judge.me, Yotpo), observed on live stores first (small sample).
 3. Re-run fingerprints on the 105, then (after the sample passes) on all 11,415 screened stores (about 2 hours at 8 concurrent).
 4. Re-fetch and relabel the business-model classifier with the corrected DSers rule (saved counts used the old rule).
@@ -51,6 +51,8 @@ Nothing is running in the background at hand-off.
 
 ## Traps in a fresh container
 
+- **Vault lag:** the vault holds only what `vault_export.py` covered at the last export (2026-11-04). Fingerprint runs and `data/private/research/` from 2026-11-05 were lost. Run `python scripts/vault_export.py` and upload after every scan or labelling job.
+- **Stale local branch:** a fresh clone may hold an old pre-rewrite `research/feasibility-poc` (ahead/behind origin by about 50). Origin is canonical: `git reset --hard origin/research/feasibility-poc` after checking `git log origin/...`.
 - **Git identity defaults to an AI name.** The commit-msg hook then rejects every commit. Set `git config user.name` and `user.email` to match the repo owner's existing commits (`git log --format='%an <%ae>' | sort -u`).
 - Git hooks are not cloned. Run `make setup`, then `pip install -r requirements.txt -r requirements-dev.txt`.
 - `.env` is gitignored and disappears with the container. Keys must come from environment settings. Expected variable names: `CJ_API_KEY`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `ZAI_API_KEY`, `OPENROUTER_API_KEY`. Report names only, never values.
@@ -59,18 +61,6 @@ Nothing is running in the background at hand-off.
 - OpenRouter key works (credit registered, `is_free_tier: false`). It was pasted in chat on 2026-11-04 and used from a gitignored `.env` for the day; **owner will rotate it**, then add the new one to "Crypto" as `OPENROUTER_API_KEY`.
 - Keys live in the cloud environment **"Crypto"** (the one this project's sessions use; "Default" also has them). As of 2026-11-04 `OPENROUTER_API_KEY` is not visible in the container; check the variable name.
 - Z.ai and OpenRouter keys were pasted into an earlier chat. The owner was asked to rotate them.
-
-## Traps in a fresh container
-
-- **Git identity defaults to an AI name.** The commit-msg hook then rejects every commit. Set `git config user.name` and `user.email` to match the repo owner's existing commits (`git log --format='%an <%ae>' | sort -u`).
-- Git hooks are not cloned. Run `make setup`, then `pip install -r requirements.txt -r requirements-dev.txt`.
-- `.env` is gitignored and disappears with the container. Keys must come from environment settings. Expected variable names: `CJ_API_KEY`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `ZAI_API_KEY`, `OPENROUTER_API_KEY`. Report names only, never values.
-- The graphify post-commit hook rebuilds the graph in the background. A commit made during the rebuild can fail with "files were modified by this hook". Wait a few seconds and retry. After committing, stage `graphify-out` and commit again if the tree is dirty.
-- OpenRouter credit (€10) bought by the owner on 2026-11-04. See `docs/plan/operating-plan.md` §2 for how it is used.
-- OpenRouter key works (credit registered, `is_free_tier: false`). It was pasted in chat on 2026-11-04 and used from a gitignored `.env` for the day; **owner will rotate it**, then add the new one to "Crypto" as `OPENROUTER_API_KEY`.
-- Keys live in the cloud environment **"Crypto"** (the one this project's sessions use; "Default" also has them). As of 2026-11-04 `OPENROUTER_API_KEY` is not visible in the container; check the variable name.
-- Z.ai and OpenRouter keys were pasted into an earlier chat. The owner was asked to rotate them.
-
 - Every commit triggers a background graphify rebuild that dirties `graphify-out/`; commit it as "Refresh knowledge graph".
 - Subagents can hit the Claude 5-hour usage limit; resume them with SendMessage after the reset instead of starting a new one.
 
