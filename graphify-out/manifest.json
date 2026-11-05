@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   "docs/handoff/session-state.md": {
-    "mtime": 1793834845.4680712,
-    "seen": 1793834850.920767,
-    "ast_hash": "7eebce5a5a1ea51d321260075f5d254f",
+    "mtime": 1793896874.4358945,
+    "seen": 1793896880.682481,
+    "ast_hash": "a6274da6cbe2942dfc17c7fb7f6f48c4",
     "semantic_hash": ""
   },
   "docs/plan/operating-plan.md": {
@@ -1044,9 +1044,9 @@
     "semantic_hash": ""
   },
   "docs/plan/supply-fingerprints-plan.md": {
-    "mtime": 1793876907.1255589,
-    "seen": 1793876910.5410168,
-    "ast_hash": "c353aa7300d3c76f3deffb2e29fe2717",
+    "mtime": 1793896874.43688,
+    "seen": 1793896880.682496,
+    "ast_hash": "c32a4bcf559be5f8b7f098f7131065b7",
     "semantic_hash": ""
   },
   "docs/research/33a-fingerprints-aliexpress-tools.md": {
@@ -1119,6 +1119,12 @@
     "mtime": 1793896786.5528748,
     "seen": 1793896798.6971898,
     "ast_hash": "f052f61a3d25a4ba284823aaf35d4a8c",
+    "semantic_hash": ""
+  },
+  "docs/research/35-fingerprint-validation.md": {
+    "mtime": 1793896818.1786292,
+    "seen": 1793896880.6825528,
+    "ast_hash": "830941bcec8d163542ae318c5fd13ec2",
     "semantic_hash": ""
   }
 }
