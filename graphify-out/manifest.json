@@ -1176,9 +1176,9 @@
     "semantic_hash": ""
   },
   "scout/lake_sync.py": {
-    "mtime": 1793899858.865853,
-    "seen": 1793899867.777861,
-    "ast_hash": "e282b797ff1ae02f521c4f583304dcec",
+    "mtime": 1793900897.6337,
+    "seen": 1793901177.150158,
+    "ast_hash": "eca1e66e629aeafef58262aca0c438c1",
     "semantic_hash": ""
   },
   "scout/quiet.py": {
@@ -1200,15 +1200,15 @@
     "semantic_hash": ""
   },
   "tests/test_lake_sync.py": {
-    "mtime": 1793899858.8664777,
-    "seen": 1793899867.7780595,
-    "ast_hash": "430518b71568aa7daca02ba8a5944d86",
+    "mtime": 1793901167.6802773,
+    "seen": 1793901177.150232,
+    "ast_hash": "ec0e31090fd5560a90cb35cdf5f68a35",
     "semantic_hash": ""
   },
   "docs/decisions/0017-lake-sync-supabase.md": {
-    "mtime": 1793900139.7038732,
-    "seen": 1793900184.474563,
-    "ast_hash": "2d4eb182f06c70766557ff3918967ba2",
+    "mtime": 1793901078.2002742,
+    "seen": 1793901177.1503148,
+    "ast_hash": "b3a16026182520714cef53a93a658117",
     "semantic_hash": ""
   },
   "requirements-autopilot.txt": {
