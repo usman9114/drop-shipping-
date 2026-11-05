@@ -246,9 +246,13 @@ def main() -> int:
         "",
         "## Funnel",
         "",
-        f"Scanned {tr['looked_up']} Tranco domains (ranks {tr['rank_from'] + 1}–{tr['rank_to']}, "
-        f"{tr['tranches']} tranches); {tr['resolved']} resolved; **{funnel['shopify_domains']} on "
-        f"Shopify**.",
+        (
+            f"Scanned {tr['looked_up']} Tranco domains (ranks {tr['rank_from'] + 1}–{tr['rank_to']}, "
+            f"{tr['tranches']} tranches); {tr['resolved']} resolved; "
+            if tr.get("rank_from") is not None
+            else "No full-scan tranches in this lake (incremental discovery only); "
+        )
+        + f"**{funnel['shopify_domains']} on Shopify**.",
         "",
         *table([funnel], list(funnel)),
         "",

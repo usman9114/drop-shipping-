@@ -80,6 +80,7 @@ JOBS: list[tuple[str, list[str], int]] = [
         45,
     ),
     ("fingerprints", [PY, "-m", "scout.fingerprints", "--queue", "200"], 60),
+    ("seed", [PY, "-m", "scout.autopilot", "seed"], 2),
     ("build", ["make", "stores-build"], 30),
     ("report", ["make", "stores-report"], 30),
 ]
@@ -241,6 +242,36 @@ def daily(
     return 1 if failed else 0
 
 
+# Datasets the store build reads (warehouse/models/staging/stg_web_*.sql). dbt's
+# read_json fails on a dataset with no files, so an empty lake needs one empty run.
+BUILD_DATASETS = [
+    "web_scan",
+    "web_meta",
+    "web_store_light",
+    "web_store_deep",
+    "web_ranks",
+]
+
+
+def seed_empty_datasets(datasets: list[str] = BUILD_DATASETS) -> int:
+    """Record one empty, labelled run for each dataset that has no files yet.
+    Never for a dataset with data: a newer empty run would hide the latest rows."""
+    n = 0
+    for ds in datasets:
+        if any((store.LAKE / ds).glob("*/*.jsonl.gz")):
+            continue
+        store.record_run(
+            ds,
+            [],
+            source="autopilot",
+            trust="data",
+            params={"seed": True},
+            note="empty placeholder so the warehouse build can read the dataset",
+        )
+        n += 1
+    return n
+
+
 # --------------------------------------------------------------------------- health
 
 
@@ -369,7 +400,13 @@ def main(argv: list[str] | None = None) -> int:
         help="heartbeat only (when the fingerprint rows were not pulled)",
     )
     sub.add_parser("jobs")
+    sub.add_parser(
+        "seed", help="empty placeholder runs for build datasets with no files"
+    )
     a = ap.parse_args(argv)
+    if a.cmd == "seed":
+        say("seed", datasets=seed_empty_datasets())
+        return 0
     if a.cmd == "jobs":
         for name, _cmd, tmin in JOBS:
             say("job", job=name, timeout_min=tmin)

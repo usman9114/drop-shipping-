@@ -41,6 +41,7 @@ GitHub Actions logs of a public repo are public. Rule, enforced in code:
 | meta | `scout.stores meta --new-first` | 500 stores |
 | light | `scout.stores light --new-first` | 300 stores |
 | fingerprints | `scout.fingerprints --queue 200` | 200 new stores not scored at the current `RULE_VERSION` |
+| seed | empty placeholder run for a build dataset with no files yet (fresh bucket) | — |
 | build | `make stores-build` | — |
 | report | `make stores-report` (private stories to `data/private/reports/`; the committed-style aggregate report is written in the runner and discarded, Actions does not commit) | — |
 
@@ -56,3 +57,7 @@ Health (`python -m scout.autopilot health`, autopilot.md rule 8) alerts on: no h
 - The incremental diff is against the list of the last incremental run. When a day has more than 100,000 new entries, the rest are not looked up later (recorded as `truncated` in the run params).
 - New stores are queued for fingerprints; the 11,415 older screened stores are not (that full run waits for the owner/session decision in `docs/handoff/session-state.md`).
 - The lake starts empty in Supabase: seed it once from the vault (`scripts/vault_restore.py`, then `python -m scout.lake_sync push`) or let it grow from new stores only.
+
+## Small-first run (2026-11-05, scratch lake, this container)
+
+All 8 jobs ran end to end on an empty lake: ranks ok (0 rows, no hits yet); discover-new 6,853 domains new to the list, 167 Shopify `[data]` in 73 s; meta 167 stores (3 fetch errors); light 73 US stores; fingerprints 158 stores, 0 errors, 168 s; seed, build and report ok after two fixes the run found (dbt fails on a dataset with no files: `seed` job; the report crashed when the lake has no full-scan tranche: guarded). Health: 0 alerts after the run, and it flagged the failed report job correctly before the fix. Public output was counts only.

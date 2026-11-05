@@ -211,3 +211,20 @@ def test_signal_fire_rate_doubling_week_on_week_alerts():
     assert ap.drift(steady, NOW) == []
     small = _rows(2, 10, 0.9) + _rows(9, 10, 0.1)
     assert ap.drift(small, NOW) == []
+
+
+def test_seed_fills_only_missing_build_datasets(lake):
+    store.record_run("web_meta", [{"domain": "a"}], source="t", trust="data")
+    assert ap.seed_empty_datasets() == len(ap.BUILD_DATASETS) - 1
+    assert ap.seed_empty_datasets() == 0  # idempotent
+    meta_runs = [r for r in store._runs() if r["dataset"] == "web_meta"]
+    assert len(meta_runs) == 1  # a dataset with data is never given an empty run
+
+
+def test_build_datasets_match_the_staging_models():
+    import re
+
+    found = set()
+    for f in (ROOT / "warehouse/models/staging").glob("stg_web_*.sql"):
+        found |= set(re.findall(r"lake\('([a-z_]+)'", f.read_text()))
+    assert found == set(ap.BUILD_DATASETS)
