@@ -17,7 +17,7 @@
 
 ## Settings that keep us inside our rules
 
-Crawl4AI ships stealth components (playwright-stealth, patchright, a fake user-agent generator) built to hide automation. We switch them **off**: `enable_stealth=False` and our fixed, honest User-Agent. A challenge page (Cloudflare, captcha) or a 403/429/430 ends the attempt as `blocked`. Only counts and the review app's name are stored, never review text. It runs in its own virtualenv, with Playwright pinned to 1.63.0 to match the preinstalled Chromium (no `playwright install`).
+Crawl4AI ships stealth components (playwright-stealth, patchright, a fake user-agent generator) built to hide automation. **Owner decision 2026-11-05: stealth is ON** (`enable_stealth=True`, switch `SCOUT_CRAWL_STEALTH=0`), together with the paid fallback tier of decision 0015; our project User-Agent stays. A page that is still blocked (Cloudflare, captcha, 403/429/430) is recorded as `blocked` and can go to `scout.unblock` (ZenRows, ScrapingBee). Only counts and the review app's name are stored, never review text. It runs in its own virtualenv, with Playwright pinned to 1.63.0 to match the preinstalled Chromium (no `playwright install`).
 
 ## Pilot (small first)
 

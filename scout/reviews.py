@@ -7,7 +7,8 @@ Apache-2.0 headless-browser crawler), pinned in requirements-crawl.txt.
 
 Rules kept (CLAUDE.md principles 6 and 10):
 - robots.txt is read for every URL; Crawl4AI also checks it (check_robots_txt=True).
-- One fixed, honest User-Agent naming the project; Crawl4AI's stealth mode is OFF.
+- One fixed User-Agent naming the project. Crawl4AI's stealth mode is ON by default
+  (owner decision 2026-11-05, decisions 0014 and 0015); SCOUT_CRAWL_STEALTH=0 turns it off.
 - A bot check or challenge page (Cloudflare, captcha, 403/429/430) ends the attempt
   and is recorded as "blocked". Nothing is done to get around it.
 - Only counts and the review app's name are kept, never review text.
@@ -20,6 +21,7 @@ Rules kept (CLAUDE.md principles 6 and 10):
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 import time
@@ -33,6 +35,9 @@ PATTERNS = {
     "visible_text": re.compile(r"(\d[\d,]*)\s+(?:Reviews|reviews|Ratings|ratings)\b"),
 }
 MAX_PLAUSIBLE = 5_000_000
+# Crawl4AI stealth (hides headless-browser traces). On by owner decision
+# 2026-11-05; set SCOUT_CRAWL_STEALTH=0 to render without it.
+STEALTH = os.environ.get("SCOUT_CRAWL_STEALTH", "1") != "0"
 BLOCK_MARKERS = re.compile(
     r"cf-challenge|challenge-platform|captcha|verify you are human|access denied", re.I
 )
@@ -93,7 +98,7 @@ def _render(urls: list[str]) -> dict[str, tuple[int | None, str, str]]:
     from crawl4ai import AsyncWebCrawler, BrowserConfig, CacheMode, CrawlerRunConfig
 
     browser = BrowserConfig(
-        headless=True, user_agent=webmeta.UA, enable_stealth=False, verbose=False
+        headless=True, user_agent=webmeta.UA, enable_stealth=STEALTH, verbose=False
     )
     run = CrawlerRunConfig(
         cache_mode=CacheMode.BYPASS,
@@ -202,7 +207,7 @@ def run(domains: list[str], render: bool = True, pause: float = 1.0) -> dict:
         trust="data",
         params={"n": len(rows), "render": render},
         note="review counts shown on one product page per store; robots.txt respected; "
-        "honest UA, no stealth; counts only, no review text",
+        f"project UA, stealth {'on' if STEALTH else 'off'}; counts only, no review text",
     )
     found = sum(1 for r in rows if r.get("review_count"))
     print(
