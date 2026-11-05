@@ -46,7 +46,7 @@ Later on 2026-11-05 (after the first hand-off):
 
 ## Owner decisions open
 
-1. **Autopilot storage:** create the Supabase account, bucket `lake` (private) and the Actions secrets (decision 0016 owner steps). Optional: approve installing `storage3` to replace the thin REST client (decision 0017).
+1. **Autopilot storage:** Supabase project and private bucket `lake` exist and a live round trip passed (decision 0017). **Still open:** the GitHub Actions secrets `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` (the real `sb_secret_` key, not the publishable one), `ZAI_API_KEY`, `OPENROUTER_API_KEY`; merge to the default branch; then a manual `dry-run`. `ZAI_API_KEY` is missing from the "Crypto" environment since 2026-11-05 (removed by accident during the Supabase edit); re-add it. `SUPABASE_PUBLISHABLE_KEY` in "Crypto" is unused. Optional: approve installing `storage3` to replace the thin REST client (decision 0017). <!-- pragma: allowlist secret (placeholder, no value) -->
 2. Put the **two-week outreach test** (underperforming stores, kill rule: fewer than 2 interested replies from 20) in the plan as the phase after R1? Service (agency) or product (SaaS)?
 3. Free Google API key for PageSpeed / Chrome UX Report.
 4. Older, still open: CJ supply option A/B/C (fact 6 below), eBay production keys, Terapeak session, key rotation, Meta Ad Library manual check of the top 20.
@@ -74,6 +74,7 @@ Later on 2026-11-05 (after the first hand-off):
 - Keys live in the cloud environment **"Crypto"** (the one this project's sessions use; "Default" also has them). As of 2026-11-04 `OPENROUTER_API_KEY` is not visible in the container; check the variable name.
 - Z.ai and OpenRouter keys were pasted into an earlier chat. The owner was asked to rotate them.
 - `make setup` runs `graphify claude install`, which rewrites `.claude/settings.json` (absolute graphify path, extra SessionStart hook) and leaves a `.graphify-bak`. Restore it with `git checkout -- .claude/settings.json` unless the change is wanted.
+- Supabase key in sessions: a network secret on "Crypto" (proxy injects the `apikey` header); `SUPABASE_SERVICE_KEY=proxy-injected` is a placeholder. Test with `python -m scout.lake_sync status`.
 - `tranco` is not in `requirements.txt`; it is pinned in `requirements-autopilot.txt` (`pip install -r requirements-autopilot.txt`).
 - Every commit triggers a background graphify rebuild that dirties `graphify-out/`; commit it as "Refresh knowledge graph".
 - Subagents can hit the Claude 5-hour usage limit; resume them with SendMessage after the reset instead of starting a new one.
