@@ -303,3 +303,22 @@ def test_dsers_sku_rejects_brand_style_skus():
         "200000182:193#Black",
     ):
         assert stores.DSERS_SKU.search(ds), ds
+
+
+def test_sku_shape_is_content_free_and_rule_compatible():
+    from scout import stores
+
+    assert fp.sku_shape("14:200004889#Black") == "99:999999999#AAAAA"
+    assert fp.sku_shape("10045041000:100072:XL/XXL") == "99999999999:999999:AA/AAA"
+    # the corrected DSers rule gives the same verdict on the shape as on the SKU
+    for sku in ("14:200004889#Black;5:20129901", "5564:XL#L", "10045041000:100072:XL"):
+        assert bool(stores.DSERS_SKU.search(sku)) == bool(
+            stores.DSERS_SKU.search(fp.sku_shape(sku))
+        )
+
+
+def test_feed_keeps_sku_shapes_not_skus():
+    f = fp.feed_signals(
+        [prod(variants=[{"price": "5", "sku": "CJYZ319118002BY", "grams": 0}])]
+    )
+    assert f["sku_shapes"] == {"AAAA999999999AA": 1}

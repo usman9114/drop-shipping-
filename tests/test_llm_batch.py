@@ -85,3 +85,24 @@ def test_usage_reports_cap(monkeypatch):
     monkeypatch.setattr(llm, "or_free_used", lambda: 100)
     u = llm.usage()
     assert u["or_free_left"] == u["or_free_cap"] - 100
+
+
+def test_chat_cache_hit_skips_the_call(tmp_path, monkeypatch):
+    monkeypatch.setattr(llm, "CACHE_FILE", str(tmp_path / "c.jsonl"))
+    monkeypatch.setattr(llm, "_cache", None)
+    monkeypatch.setattr(llm, "_key", lambda p: "k")
+    calls = []
+
+    def post(payload, provider, key, timeout=180):
+        calls.append(1)
+        return {"choices": [{"message": {"content": "answer"}}], "model": "m"}
+
+    monkeypatch.setattr(llm, "_post", post)
+    a = llm.chat("same prompt", models=["zai:glm-4.5-flash"])
+    b = llm.chat("same prompt", models=["zai:glm-4.5-flash"])
+    assert len(calls) == 1 and b["cached"] and a["text"] == b["text"]
+    llm.chat("same prompt", models=["zai:glm-4.5-flash"], cache=False)
+    assert len(calls) == 2
+    monkeypatch.setattr(llm, "_cache", None)  # a new process reads the file
+    assert llm.chat("same prompt", models=["zai:glm-4.5-flash"])["cached"]
+    assert len(calls) == 2

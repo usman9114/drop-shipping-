@@ -248,6 +248,59 @@ def _extract_text(data) -> str | None:
     return text
 
 
+CACHE_FILE = os.environ.get("SCOUT_LLM_CACHE", "data/private/llm_cache.jsonl")
+_cache_lock = threading.Lock()
+_cache: dict[str, dict] | None = None
+
+
+def cache_key(
+    task: str, prompt: str, system: str | None, image_urls, json_mode: bool
+) -> str:
+    """Same input, same answer: the key ignores which free model served it, so an
+    autopilot rerun reads the cache instead of spending calls (and stays
+    reproducible). Bump the prompt or system text to force fresh answers."""
+    import hashlib
+
+    raw = json.dumps(
+        [task, system or "", prompt, sorted(image_urls or []), bool(json_mode)]
+    )
+    return hashlib.sha256(raw.encode()).hexdigest()
+
+
+def _cache_get(key: str) -> dict | None:
+    global _cache
+    if CACHE_FILE in ("", "0", "off"):
+        return None
+    with _cache_lock:
+        if _cache is None:
+            _cache = {}
+            try:
+                with open(CACHE_FILE, encoding="utf-8") as fh:
+                    for line in fh:
+                        try:
+                            r = json.loads(line)
+                            _cache[r["key"]] = {"model": r["model"], "text": r["text"]}
+                        except (ValueError, KeyError):
+                            continue  # a torn last line from a killed run
+            except OSError:
+                pass
+        return _cache.get(key)
+
+
+def _cache_put(key: str, out: dict) -> None:
+    if CACHE_FILE in ("", "0", "off"):
+        return
+    with _cache_lock:
+        os.makedirs(os.path.dirname(os.path.abspath(CACHE_FILE)), exist_ok=True)
+        with open(CACHE_FILE, "a", encoding="utf-8") as fh:
+            fh.write(
+                json.dumps({"key": key, "ts": _today(), **out}, ensure_ascii=False)
+                + "\n"
+            )
+        if _cache is not None:
+            _cache[key] = out
+
+
 def chat(
     prompt: str,
     task: str = "bulk",
@@ -257,11 +310,16 @@ def chat(
     max_tokens: int = 2048,  # reasoning models spend part of this on hidden thinking
     models: list[str]
     | None = None,  # exact 'provider:model' specs; overrides the task list
+    cache: bool = True,
 ) -> dict:
     """Return {'model': ..., 'text': ...}. Tries each free model for the task.
 
     An empty or malformed reply counts as a failure and falls through to the
-    next model."""
+    next model. Successful answers are cached by input (cache_key); a hit returns
+    {'model', 'text', 'cached': True} without a call. cache=False asks afresh."""
+    ckey = cache_key(task, prompt, system, image_urls, json_mode) if cache else None
+    if ckey and (hit := _cache_get(ckey)):
+        return {**hit, "cached": True}
     candidates = models or FREE_MODELS[task]
     if not paid_allowed():  # phase one: free models only (owner, 2026-11-04)
         candidates = [m for m in candidates if not is_paid(m)]
@@ -328,7 +386,10 @@ def chat(
                 errors.append(f"{spec}: empty or malformed reply")
                 break
             actual = data.get("model", model) if isinstance(data, dict) else model
-            return {"model": f"{provider}:{actual}", "text": text}
+            out = {"model": f"{provider}:{actual}", "text": text}
+            if ckey:
+                _cache_put(ckey, out)
+            return out
     raise LLMError("all free models failed:\n  " + "\n  ".join(errors))
 
 
@@ -472,7 +533,7 @@ def second_opinion(prompt: str, **kwargs) -> dict:
     out = {}
     for name, models in (("glm", glm), ("other", list(OR_LANE))):
         try:
-            out[name] = chat(prompt, task, models=models, **kwargs)
+            out[name] = chat(prompt, task, models=models, cache=False, **kwargs)
         except Exception as exc:
             out[name] = {"error": f"{type(exc).__name__}: {exc}"[:200]}
 

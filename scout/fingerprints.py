@@ -453,6 +453,22 @@ def _tags(p: dict) -> list[str]:
     return [str(x) for x in (t.split(",") if isinstance(t, str) else t)]
 
 
+# Bump on any change to SIGNATURES, regexes or WEIGHTS: every row carries it, so
+# the autopilot can tell old-rule rows from new ones and re-score only those.
+RULE_VERSION = "2026-11-05.2"  # .2: DSers SKU rule tightened (tommyjohn.com)
+
+_SHAPE_DIGITS = re.compile(r"\d+")
+_SHAPE_LETTERS = re.compile(r"[^\W\d_]+")
+
+
+def sku_shape(sku: str) -> str:
+    """Content-free shape of a SKU: each digit -> 9, each letter -> A (runs capped at
+    12 digits, 6 letters). '14:200004889#Black' -> '99:999999999#AAAAA'. Saved so SKU rules can be re-run on
+    stored shapes after a rule change, without refetching the store."""
+    s = _SHAPE_DIGITS.sub(lambda m: "9" * min(len(m.group()), 12), sku[:40])
+    return _SHAPE_LETTERS.sub(lambda m: "A" * min(len(m.group()), 6), s)
+
+
 def feed_signals(products: list[dict], domain: str | None = None) -> dict:
     """products.json list in, counts and shares out. No titles, text or URLs kept."""
     items = [p for p in products if isinstance(p, dict)]
@@ -463,6 +479,7 @@ def feed_signals(products: list[dict], domain: str | None = None) -> dict:
     minutes: Counter = Counter()
     nvar = zero_g = 0
     ratios: list[float] = []
+    shapes: Counter = Counter()
     feed_rx = [(s["id"], rx) for s, rx in _COMPILED if s["where"] == "feed"]
     for p in items:
         imgs = [
@@ -481,6 +498,7 @@ def feed_signals(products: list[dict], domain: str | None = None) -> dict:
         c["ae_item_id"] += bool(_ITEM_ID.search(idtext))
         c["dsers_sku"] += any(_DSERS_SKU.search(s) for s in skus)
         c["cj_sku"] += any(_CJ_SKU.search(s) for s in skus)
+        shapes.update({sku_shape(skus[0])} if skus else ())  # one per product
         if vendor and not (domain and stores.vendor_is_shop(vendor, "", domain)):
             c["vendor_supplier"] += bool(_SUPPLIER_VENDOR.search(vendor))
         blob = f"{vendor} {' '.join(tags)}"
@@ -520,6 +538,7 @@ def feed_signals(products: list[dict], domain: str | None = None) -> dict:
         "ae_item_id_share": _share(c["ae_item_id"], n),
         "dsers_sku_share": _share(c["dsers_sku"], n),
         "cj_sku_share": _share(c["cj_sku"], n),
+        "sku_shapes": dict(shapes.most_common(8)),
         "ships_from": c["ships_from"],
         "ships_from_values": sorted(ships_values),
         "vendor_supplier_share": _share(c["vendor_supplier"], n),
@@ -742,12 +761,19 @@ def run(domains: list[str], max_concurrent: int = 8, pause: float = 1.0) -> dict
             }
         )
     rows = asyncio.run(fingerprint_many(targets, max_concurrent, pause))
+    for r in rows:
+        r["rule_version"] = RULE_VERSION
     runid = store.record_run(
         "web_fingerprints",
         rows,
         source="store_public_pages",
         trust="data",
-        params={"n": len(rows), "max_concurrent": max_concurrent, "pause": pause},
+        params={
+            "n": len(rows),
+            "max_concurrent": max_concurrent,
+            "pause": pause,
+            "rule_version": RULE_VERSION,
+        },
         note="supply fingerprints: signature ids, counts and shares only; no page text or images; "
         "one honest UA, robots.txt respected per URL, no rendering",
     )
