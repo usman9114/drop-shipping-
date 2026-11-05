@@ -84,3 +84,16 @@ Three catalogue reports (33a, 33b, 33c). Main finding: **vendors almost never do
 - The 14 `unknown` stores (including tommyjohn.com and renewlife.com) are the likely false positives of the old classifier rule; the full classifier needs a refetch with the corrected rule, since saved counts used the old one.
 
 Caveats: weights are judgement, not measured; "Ships From" with about ten countries looks like AliExpress's all-country list, not a real warehouse split; Printful's script fired on 12 stores but drove a POD estimate on only 2. All of this is `[proxy]` until W3 measures precision.
+
+## P2 result (2026-11-05)
+
+Validation on 67 hand-checked stores (`docs/research/35-fingerprint-validation.md`) `[data]`, within a non-random sample:
+
+- The supply estimate named a source on 31 stores and was right on 28 (90%); dropship-or-not 54/61 (89%).
+- Strong rules held: AliOrders 3/3, CJ app 4/4, CJ SKUs 12/12, AliExpress item ids 4/4, `O1CN01` images 4/4; AliExpress image names 14/16 and "Ships From" 7/8.
+- Below 80% (hints only): DSers SKUs 6/8, Printful script 1/6, Ali Reviews 2/6 (a page-builder app map, not the widget), bulk-import burst, compare-at ratio; grams = 0 at 32% is dropped.
+- Missed: Amazon-ASIN dropshippers and POD stores with supplier SKU shapes; new signatures proposed.
+- Free models as second opinion: GLM 85%, the OpenRouter model 92% against the hand labels; where both agree, 50/53 correct. Use them to flag stores the rules leave `unknown`, not to decide.
+- Warehouse country cannot be verified from public data `[unknown]`.
+
+Next: apply the proposed weights and signatures with tests, bump `RULE_VERSION`, re-score (`docs/handoff/session-state.md`, next steps).

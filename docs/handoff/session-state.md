@@ -1,26 +1,43 @@
 # Session state: where the project stands
 
-> Written 2026-11-04 so a fresh session can resume. Read `CLAUDE.md` first (binding rules). This file says what is done, what is next, and the traps. It contains no secrets.
+> Rewritten 2026-11-05 for a hand-off (CLAUDE.md principle 14). Read `CLAUDE.md` first (binding rules, principles 1 to 14). This file says what is done, what is running, what is next, and the traps. No secrets.
 
 ## Repo
 
-- GitHub: https://github.com/usman9114/drop-shipping- (**public**). Default branch and working branch: `research/feasibility-poc`.
-- Second agent: branch `agent2/review-and-shortlist` is merged (PR #1). For its Part 2 it uses a new branch `agent2/shortlist-engine` (not created yet; no open PRs). Brief: `docs/handoff/agent2-review-and-shortlist.md`. Its paths: `scout/shortlist.py`, `scout/rules.py`, `rules/`, matching tests and docs.
-- CI: `.github/workflows/ci.yml` (pytest + pre-commit, no secrets). Last known state: green, 64 tests.
+- GitHub: https://github.com/usman9114/drop-shipping- (**public**). Working branch: `research/feasibility-poc`. No open PRs.
+- Private data lives in `data/private/` (gitignored; survived the last worker restart but not a new container) and in the owner's private artifact "Store Data Vault" (decision 0012; restore with `scripts/vault_restore.py`).
 
-## What exists
+## Where we are (2026-11-05)
 
-| Area | Where |
-|---|---|
-| Verdict and phased plan | `docs/research/00-summary.md` |
-| Niche decision: **trading-card supplies** (backups: vinyl-record care, hobby/modelling tools) | `docs/decisions/0002-niche-selection.md` (24 product types in §3.3) |
-| Source terms and what we may store; Postgres **parked** | `docs/decisions/0004-*.md`, `docs/research/17-*.md` |
-| CJ client decision (thin, home-grown) and API cheat sheet | `docs/decisions/0005-cj-client.md`, `docs/research/18-cj-api-cheatsheet.md` |
-| Independent review of the project | `docs/reviews/2026-11-agent2-project-review.md` |
-| Team roles | `.claude/agents/*.md`, `docs/plan/ai-team.md` |
-| Code | `scout/margin.py` (decision engine), `scout/cj.py`, `scout/store.py`, `scout/llm.py`, `scout/trends.py`; tests in `tests/` |
-| Operating plan (calendar, model routing, €10 use, SaaS option, anti-trap rules) | `docs/plan/operating-plan.md` |
-| Manual eBay research kit | `docs/runbooks/terapeak-session.md`, `data/observations/terapeak-prefilled.csv` |
+Phase R1 re-scoped by the owner to **finding real dropshippers and their supply source** (not brands). Done today:
+
+| Work | Result | Where |
+|---|---|---|
+| Policy-page dropship profiler | 105 dropship-labelled stores profiled; shipping text is a weak signal (promo banners) | `scout/dropship_profile.py`, run `20261105T104753Z-deacb2` |
+| **Supply fingerprints** (owner's "street smart" idea after spotting `aliorders.fireapps.io`) | 105 stores: AliExpress 65, CJ 24, POD 2, no trace 14 | `scout/fingerprints.py`, `docs/plan/supply-fingerprints-plan.md` (P0, P1, P2 results) |
+| App-trace catalogue | vendors rarely document storefront traces; catalogue must come from observation | `docs/research/33a/33b/33c` |
+| **Validation (W3)** | 67 stores hand-checked: named source right 28/31 (90%); dropship-or-not 89%; strong rules 100% precision; several weak signals below 80% | `docs/research/35-fingerprint-validation.md`, truth CSV `data/private/research/fingerprint-truth.csv` |
+| Bug fixed | DSers SKU rule matched brand SKUs (tommyjohn.com); also in the business-model classifier | `scout/stores.py` `DSERS_SKU`, tests |
+| Free-model harness | `scout.llm --batch` (resumable), `--second-opinion`, `--usage`, answer cache; skill `free-llm`; agent `glm-worker` | `.claude/skills/free-llm/SKILL.md` |
+| Autopilot design (owner: pipeline runs 24/7 on scripts, only GLM/OpenRouter at runtime) | rule versions, SKU shapes, cached answers built; jobs, gaps, hosting options written | `docs/plan/autopilot.md`, principle 13 |
+| Parked ideas | underperforming-store leads and the owner's audit-SaaS blueprint reviewed; owner's tool shortlist mapped | `docs/plan/opportunity-store-rescue.md`, `docs/plan/tool-shortlist.md` |
+
+Nothing is running in the background at hand-off.
+
+## Next, in order
+
+1. **Apply the W3 changes to `scout/fingerprints.py`** (doc 35 lists them): thresholds 0.05 -> 0.20 for AliExpress-image and DSers shares; CJ SKU weight 0.7; CJ page signature `observed`; Printful weak and implies nothing alone; Ali Reviews only on the real widget (`alireviews.min` / `ali-reviews-NNN/assets`); vendor-supplier weight 0.05, only with 10+ products, "CJ" vendor -> cj; drop grams=0; bulk burst 0.1, compare-at 0.05; no source call under 5 products; a `mixed` outcome when two sources reach 0.4. New signatures: POD SKU shape `\d{6}POD[A-Z]{2}\d+#\d+`, Amazon ASIN SKUs `^B0[0-9A-Z]{8}$` (dropship_other), tags "Ship From Overseas" (Trendsi) and "Shopify Collective", CJ hosts (`*.cjdropshipping.com`, `cc-west-usa.oss-accelerate.aliyuncs.com`). Each error from doc 35 becomes a test. Bump `RULE_VERSION`, re-score from the truth CSV, report accuracy before/after.
+2. Add effort/budget apps from the owner's list as signatures (Klaviyo, Gorgias, Recharge, Skio, Nosto, Elevar, Littledata, Judge.me, Yotpo), observed on live stores first (small sample).
+3. Re-run fingerprints on the 105, then (after the sample passes) on all 11,415 screened stores (about 2 hours at 8 concurrent).
+4. Re-fetch and relabel the business-model classifier with the corrected DSers rule (saved counts used the old rule).
+5. Autopilot build order (`docs/plan/autopilot.md`): incremental discovery, job queues, heartbeats, `make autopilot-daily`.
+
+## Owner decisions open
+
+1. **Hosting and storage for the 24/7 pipeline:** recommended Supabase (Postgres) + GitHub Actions or cron on a small box (`docs/plan/autopilot.md`, `docs/plan/tool-shortlist.md`).
+2. Put the **two-week outreach test** (underperforming stores, kill rule: fewer than 2 interested replies from 20) in the plan as the phase after R1? Service (agency) or product (SaaS)?
+3. Free Google API key for PageSpeed / Chrome UX Report.
+4. Older, still open: CJ supply option A/B/C (fact 6 below), eBay production keys, Terapeak session, key rotation, Meta Ad Library manual check of the top 20.
 
 ## Facts that change plans
 
@@ -43,58 +60,20 @@
 - Keys live in the cloud environment **"Crypto"** (the one this project's sessions use; "Default" also has them). As of 2026-11-04 `OPENROUTER_API_KEY` is not visible in the container; check the variable name.
 - Z.ai and OpenRouter keys were pasted into an earlier chat. The owner was asked to rotate them.
 
-## Review panel result (2026-11-04) — read before starting
+## Traps in a fresh container
 
-`docs/reviews/2026-11-04-idea-panel.md` (2–3 of 4 free models answered per idea; weak sample):
-- **Drop or split:** look-alike discovery (I06), traffic footprint (I07), the warehouse (I11), the intelligence layer (I10), CJ listing count (I05), and studying Shopify stores for an eBay-first test (I08, split or drop).
-- **Keep or modify:** live micro-test (I13), jewelry only with changes (I12), supplier-image listings (I03), free LLMs (I14).
-- **Shared message:** stop building analysis tooling; list 3–5 margin-viable, compliance-clean CJ US products on eBay and measure real sales.
-- **Wrong reasons to ignore:** "Shopify feeds break eBay's API terms" and "this collects personal data" are both untrue.
-- **Orchestrator's recommendation:** do both, in this order. First a small live test (3–5 products from the less crowded types: cleaning tools, pet grooming tools, hand tools; CJ test orders also keep the CJ API active). Then use the store-story work for the **Shopify channel** it actually fits.
-- **Owner decision (2026-11-04, latest): step 1 is finding the best stores and what they do, with no CJ or supplier focus yet; step 2 is sourcing (CJ) for what step 1 finds.** The live test comes later.
-- **myip.ms:** the idea is in (a popularity-ranked list of Shopify stores); the site is not automated until its terms allow it or it offers an API with suitable terms. The owner is checking that in a browser. Meanwhile the same list comes from open data: Tranco top 1M plus DNS (Shopify IP range), run at scale without a keyword filter.
-- **How to define "best":** traffic rank, rank growth (compare daily Tranco lists), release rhythm, marketing stack. Separate brands that make their own goods from resellers and dropshippers, because a brand's success does not transfer to zero inventory.
-- Keep the panel's caution in view: Shopify success shows demand and method, not eBay demand.
+- **Git identity defaults to an AI name.** The commit-msg hook then rejects every commit. Set `git config user.name` and `user.email` to match the repo owner's existing commits (`git log --format='%an <%ae>' | sort -u`).
+- Git hooks are not cloned. Run `make setup`, then `pip install -r requirements.txt -r requirements-dev.txt`.
+- `.env` is gitignored and disappears with the container. Keys must come from environment settings. Expected variable names: `CJ_API_KEY`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `ZAI_API_KEY`, `OPENROUTER_API_KEY`. Report names only, never values.
+- The graphify post-commit hook rebuilds the graph in the background. A commit made during the rebuild can fail with "files were modified by this hook". Wait a few seconds and retry. After committing, stage `graphify-out` and commit again if the tree is dirty.
+- OpenRouter credit (€10) bought by the owner on 2026-11-04. See `docs/plan/operating-plan.md` §2 for how it is used.
+- OpenRouter key works (credit registered, `is_free_tier: false`). It was pasted in chat on 2026-11-04 and used from a gitignored `.env` for the day; **owner will rotate it**, then add the new one to "Crypto" as `OPENROUTER_API_KEY`.
+- Keys live in the cloud environment **"Crypto"** (the one this project's sessions use; "Default" also has them). As of 2026-11-04 `OPENROUTER_API_KEY` is not visible in the container; check the variable name.
+- Z.ai and OpenRouter keys were pasted into an earlier chat. The owner was asked to rotate them.
 
-## Next tasks, in order (focus from 2026-11-04: reconstruct and recreate store success)
+- Every commit triggers a background graphify rebuild that dirties `graphify-out/`; commit it as "Refresh knowledge graph".
+- Subagents can hit the Claude 5-hour usage limit; resume them with SendMessage after the reset instead of starting a new one.
 
-**Focus:** pick successful stores, rebuild the story of how they did it end to end (what they sell, from whom, at what price and margin, since when, how they get traffic), mark the gaps, then turn the story into a recreation plan inside our constraints. Method: `CLAUDE.md` source evaluation standard; decisions 0007 (harness + intelligence layer) and 0008 (internet-metadata harness).
+## History
 
-1. **Set up and rebuild local data** (container is ephemeral): git identity, `make setup`, `pip install -r requirements.txt -r requirements-dev.txt tranco`, `make test`, then `make pipeline` (about 25 minutes, mostly CJ offers).
-2. **Discover stores** with `python -m scout.webmeta discover --max-dns 1200`, then `sitemaps`, `products` and `footprint` for the Shopify stores found. Improve first:
-   - a tighter keyword list (drop noisy words such as "craft" and "mop")
-   - a US filter (TLD, storefront currency or shipping country)
-3. **Build the store story** as warehouse models plus the intelligence layer:
-   - stage the `web_*` lake datasets
-   - match each store's products to CJ US products by type and price, to estimate their margin at CJ cost
-   - combine with DNS platform signals, traffic tags (ads, email and SMS, affiliates), social links, catalogue size, release rhythm, price band and Tranco rank
-   - `scout.intel` writes a grounded "how they did it" story per store (every number from the evidence, gaps named), then a **recreation plan**: product mix, price points and channels we would copy within C1 to C8, with eBay first
-4. **Review panel:** `python -m scout.review_panel` fills any missing reviews (cached). Read `docs/reviews/<date>-idea-panel.md`, especially I06 to I08 (does studying Shopify stores serve an eBay-first test?). Act on drop consensus or split votes.
-5. **Velocity:** `make wh-snapshot` once a day. History needs durable storage; the owner's choice is still open (private data repo recommended, decision 0007).
-6. Stop and ask before spending money, creating accounts, or sending anything outside the repo.
-
-**State at handoff:**
-- Warehouse built with 48 of 48 models and tests passing.
-- First what-sells report in template mode. Jewelry tops supply but every item is flagged for metal content; press-on nails and cleaning tools are far less crowded (median 57 and 96 stores against 423 to 786).
-- Metadata pilot: 4,510 keyword domains; 17 Shopify stores profiled; DNS and `/products.json` are the strongest traces.
-- Shopify sitemaps' `lastmod` is always today, so it is useless for timing.
-- The panel and a 1,200-domain discovery were still running when this session ended. Their local results do not carry over; rerun them.
-
-## Owner tasks outstanding
-
-Choose option A/B/C (supply check §4); CJ and eBay seller account setup (eBay developer approval pending; current eBay keys are sandbox), Terapeak session, rotate leaked keys, add the 5 env vars to the cloud environment, ask CJ about customer returns and the return address, decide public versus private repo and the commit email, answer the Shopify questions (wife's Instagram details, beauty route, sequencing).
-
-## Update: phase Niche Finder R1 (2026-11-04, later)
-
-Read first: `docs/plan/phase-niche-finder-r1.md` (goal, exit criteria, scope), `docs/plan/step1-flow.md` (diagram), decision 0009, and the "How we think" section of `CLAUDE.md`.
-
-- **Built and pushed:** `scout/webmeta.py scan` (Tranco 1M, DNS, resumable batches), `scout/stores.py` (profiler), `scout/store_intel.py` (grounded stories), `scripts/store_export.py`, `scripts/supply_sanity.py`, store staging and mart models, `make niches`.
-- **Raw data is not in git.** The scan (about 20 batches, ~3 h) and profiles live in `data/private/` and are lost with the container. In a fresh container run `make niches`; `scan` skips finished batches only if the lake survived.
-- **Free models only** in phase one (`SCOUT_ALLOW_PAID=1` to override). **myip.ms:** terms forbid scraping; API only if the owner buys access. **archify skill:** found (`tt-a1i/archify`), install blocked by the permission check; waiting for the owner.
-- **Next:** finish scan, `make stores-meta stores-deep stores-ranks`, validate the business-model rules on 30 stores, build report and shortlist, supply sanity, compliance review, decision pack 0010, tag `niche-finder-r1`.
-
-## Update: data vault and approved re-scope (2026-11-04, late)
-
-- **Owner approved** `docs/plan/top-stores-inspiration-plan.md` (find top-performing stores for inspiration; copyable is one column). Phase 1 running: discovery miss-rate pilot (`scout/shopify_detect.py`), candidate pool (`mart_candidate_pool`, 300 stores), proof-of-performance pilot on 10 stores.
-- **Data survives in the owner's Claude storage:** private artifact "Store Data Vault" (find it with the Artifact tool's `list`). Restore: download its files, then `python scripts/vault_restore.py <folder>`; rebuild rank history with `python -m scout.stores ranks --days-back ...` (dates in the manifest). Decision 0012.
-- **Lake writes are now atomic** (write then rename) after a killed process left a 0-byte run file that broke the warehouse build.
+Earlier states (2026-11-04: CJ supply check, review panel, niche finder R1, top-stores re-scope, data vault) are in git history of this file and in `docs/plan/` and `docs/decisions/`.
