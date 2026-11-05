@@ -40,7 +40,7 @@ What would change the order: a verified issue outranks any amount of effort sign
 ## Rules if this becomes a phase
 
 - **Compliance first** (compliance officer reviews before any send): US CAN-SPAM rules for commercial email (accurate sender, physical address, working opt-out) `[unverified: to be sourced]`; UK and EU stores fall under GDPR and PECR, which are stricter for unsolicited email `[unverified]`. Start with US stores and business contact channels only.
-- **No harvesting personal data.** Contact only through the store's own published business channels (contact form, published support address). No scraping of personal emails, LinkedIn or WHOIS.
+- **Contacts from licensed sources, verified.** The store's published business channels, or a licensed B2B data provider (Apollo, Hunter) that carries its own compliance; every address verified (NeverBounce) before sending. We do not build our own crawler for personal emails (LinkedIn, WHOIS, scraped pages): legal exposure and spam traps, see `docs/plan/tool-shortlist.md`.
 - **Small first.** 10 hand-picked leads, hand-written messages, measure reply rate, before any automation.
 - **Owner approves** the offer, pricing and each first batch.
 
