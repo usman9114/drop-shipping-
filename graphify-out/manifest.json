@@ -1030,5 +1030,17 @@
     "seen": 1793874073.7672095,
     "ast_hash": "d65a59ba90f96dcb16f47a234541c32a",
     "semantic_hash": ""
+  },
+  "scout/dropship_profile.py": {
+    "mtime": 1793875566.3214793,
+    "seen": 1793875714.0570433,
+    "ast_hash": "a11ed2d0c7c8fe03fa482a31c5eb6e5e",
+    "semantic_hash": ""
+  },
+  "tests/test_dropship_profile.py": {
+    "mtime": 1793875487.1454744,
+    "seen": 1793875496.318,
+    "ast_hash": "b3063f080a2134aa759eed9cfbb12c6e",
+    "semantic_hash": ""
   }
 }
