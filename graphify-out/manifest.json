@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   "docs/handoff/session-state.md": {
-    "mtime": 1793899058.2090976,
-    "seen": 1793899064.9238732,
-    "ast_hash": "f4b2e26aa25f772cf4135937afe84840",
+    "mtime": 1793899126.7431006,
+    "seen": 1793899144.912,
+    "ast_hash": "75c403eb5edcd2e16187b903348ad842",
     "semantic_hash": ""
   },
   "docs/plan/operating-plan.md": {
@@ -1149,6 +1149,12 @@
     "mtime": 1793899048.4476519,
     "seen": 1793899064.9239058,
     "ast_hash": "dc98ff9284836d481d6749afbe85e287",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0016-autopilot-hosting.md": {
+    "mtime": 1793899141.8147702,
+    "seen": 1793899144.9119954,
+    "ast_hash": "8b02be32042ddd4ef901ed19321670f5",
     "semantic_hash": ""
   }
 }
