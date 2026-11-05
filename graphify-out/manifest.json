@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793877273.2966423,
-    "seen": 1793877302.672935,
-    "ast_hash": "61f2fb64f867a6b22072e63f2adec417",
+    "mtime": 1793896308.4591537,
+    "seen": 1793896353.1750708,
+    "ast_hash": "e9dc55953d58272ec5acd6d0944feb64",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
@@ -1107,6 +1107,12 @@
     "mtime": 1793877267.9575803,
     "seen": 1793877302.6729596,
     "ast_hash": "3549dd80d76ef75b2129884e22227a8e",
+    "semantic_hash": ""
+  },
+  "docs/plan/opportunity-store-rescue.md": {
+    "mtime": 1793896333.764848,
+    "seen": 1793896353.1751037,
+    "ast_hash": "4702638b3db78f83f4d33f6638885391",
     "semantic_hash": ""
   }
 }
