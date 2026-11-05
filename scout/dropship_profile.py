@@ -5,6 +5,9 @@ Policy page URLs are Shopify-standard slugs (auto-generated on every Shopify
 store, so we don't need to discover them from navigation):
     /policies/shipping-policy
     /policies/refund-policy
+If the standard shipping-policy slug 404s or is blocked, a short list of
+common custom slugs is tried next (SHIPPING_FALLBACKS), first hit wins. Many
+stores genuinely have neither -- that's recorded as not-found, never guessed.
 
 Concurrency model (decision 0014 extended): many stores fetched in parallel
 under ONE honest, identified User-Agent (scout.webmeta.UA), each store's own
@@ -33,6 +36,16 @@ POLICY_PATHS = {
     "shipping": "/policies/shipping-policy",
     "refund": "/policies/refund-policy",
 }
+
+# Tried in order after the standard slug above fails (404/blocked); first hit
+# wins. Shipping info is the one merchants most often move to a custom page.
+SHIPPING_FALLBACKS = [
+    "/pages/shipping",
+    "/pages/shipping-policy",
+    "/pages/shipping-info",
+    "/pages/shipping-returns",
+    "/pages/delivery",
+]
 
 # Phrases that signal multi-week / overseas fulfillment -- the strongest
 # single tell for drop-shipping among public-facing policy text.
@@ -162,21 +175,29 @@ async def _fetch_policies_async(domain: str, host: str | None, pause: float) -> 
             out["error"] = f"robots:{type(exc).__name__}"
             return out
         html = {}
+        found_path = {}
         for name, path in POLICY_PATHS.items():
-            url = base + path
-            if not rp.can_fetch(webmeta.UA, url):
-                html[name] = None
-                continue
-            try:
-                resp = s.get(url, timeout=25)
-                html[name] = resp.text if resp.ok else None
-            except Exception as exc:
-                html[name] = None
-                out.setdefault("fetch_errors", []).append(
-                    f"{name}:{type(exc).__name__}"
-                )
-            time.sleep(pause)  # politeness pause between the two requests to this host
+            candidates = [path] + (SHIPPING_FALLBACKS if name == "shipping" else [])
+            html[name] = None
+            for try_path in candidates:
+                url = base + try_path
+                if not rp.can_fetch(webmeta.UA, url):
+                    continue
+                try:
+                    resp = s.get(url, timeout=25)
+                except Exception as exc:
+                    out.setdefault("fetch_errors", []).append(
+                        f"{name}:{type(exc).__name__}"
+                    )
+                    time.sleep(pause)
+                    continue
+                time.sleep(pause)  # politeness pause between requests to this host
+                if resp.ok and len(resp.text) > 200:  # skip thin/placeholder pages
+                    html[name] = resp.text
+                    found_path[name] = try_path
+                    break
         out["_html"] = html
+        out["_found_path"] = found_path
         return out
 
     return await asyncio.to_thread(work)
@@ -197,6 +218,7 @@ async def profile_many(
                 t["domain"], t.get("final_host"), pause
             )
             html = fetched.pop("_html", {})
+            found_path = fetched.pop("_found_path", {})
             sig = extract_policy_signals(html.get("shipping"), html.get("refund"))
             verdict = dropship_confidence(
                 t.get("business_model", "unclear"),
@@ -214,6 +236,8 @@ async def profile_many(
                     "fast_ship_phrase": sig.fast_ship_phrase,
                     "boilerplate_refund": sig.boilerplate_refund,
                     "has_street_address": sig.has_street_address_anywhere,
+                    "shipping_path_used": found_path.get("shipping"),
+                    "refund_path_used": found_path.get("refund"),
                     "verdict": verdict["verdict"],
                     "confidence": verdict["confidence"],
                     "reasons": verdict["reasons"],
