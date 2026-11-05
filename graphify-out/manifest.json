@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793828848.3292284,
-    "seen": 1793828854.332506,
-    "ast_hash": "3caf5b008efd191b6d7ec5fc18c4d617",
+    "mtime": 1793876622.757542,
+    "seen": 1793876638.1859612,
+    "ast_hash": "4831d8b898755db0af5231711a2305a8",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
@@ -72,9 +72,9 @@
     "semantic_hash": ""
   },
   "scout/llm.py": {
-    "mtime": 1793828851.2206085,
-    "seen": 1793828854.3324075,
-    "ast_hash": "74f869185ff83677c5f18876c3c3d9e6",
+    "mtime": 1793876489.2855341,
+    "seen": 1793876638.1857266,
+    "ast_hash": "1c2358cfbdd3acb32c832f7d6734bbe7",
     "semantic_hash": ""
   },
   "scout/margin.py": {
@@ -90,9 +90,9 @@
     "semantic_hash": ""
   },
   ".claude/agents/_team-rules.md": {
-    "mtime": 1793819093.1243057,
-    "seen": 1793821059.2092183,
-    "ast_hash": "ed4316e5197c56edcad7d93a53920442",
+    "mtime": 1793876622.75749,
+    "seen": 1793876638.1859338,
+    "ast_hash": "e5f7b9558be295ecd4febc31479b6b0e",
     "semantic_hash": ""
   },
   ".claude/agents/compliance-officer.md": {
@@ -1041,6 +1041,60 @@
     "mtime": 1793875487.1454744,
     "seen": 1793875496.318,
     "ast_hash": "b3063f080a2134aa759eed9cfbb12c6e",
+    "semantic_hash": ""
+  },
+  "docs/plan/supply-fingerprints-plan.md": {
+    "mtime": 1793876432.3055308,
+    "seen": 1793876435.7611282,
+    "ast_hash": "1619f2990bf520c57cb236ae8ff90d9d",
+    "semantic_hash": ""
+  },
+  "docs/research/33a-fingerprints-aliexpress-tools.md": {
+    "mtime": 1793876409.1935294,
+    "seen": 1793876435.7612674,
+    "ast_hash": "0e8cb1cfffcfbb7cd69d036ef47093b9",
+    "semantic_hash": ""
+  },
+  "docs/research/33b-fingerprints-us-suppliers-3pl.md": {
+    "mtime": 1793876399.0255287,
+    "seen": 1793876435.76127,
+    "ast_hash": "ef81758208e07aa6af776389e449376c",
+    "semantic_hash": ""
+  },
+  "docs/research/33c-fingerprints-pod-themes-tracking.md": {
+    "mtime": 1793876432.3026245,
+    "seen": 1793876435.7612717,
+    "ast_hash": "b5abc4c3c4a9de2c6e83600a7e3ca5f1",
+    "semantic_hash": ""
+  },
+  "scout/fingerprints.py": {
+    "mtime": 1793876597.000087,
+    "seen": 1793876638.1857176,
+    "ast_hash": "7e7445f658a48f103c71f8222f49ac94",
+    "semantic_hash": ""
+  },
+  "tests/test_fingerprints.py": {
+    "mtime": 1793876597.0004234,
+    "seen": 1793876638.1857996,
+    "ast_hash": "55ed8d5bbd76d77de7212ea26c774401",
+    "semantic_hash": ""
+  },
+  "tests/test_llm_batch.py": {
+    "mtime": 1793876630.9175425,
+    "seen": 1793876638.1858048,
+    "ast_hash": "632caf201d10dbd940d0c1957212d6da",
+    "semantic_hash": ""
+  },
+  ".claude/agents/glm-worker.md": {
+    "mtime": 1793876622.557542,
+    "seen": 1793876638.1859486,
+    "ast_hash": "29d2c225cb9cb819dc451cbf4afc9adf",
+    "semantic_hash": ""
+  },
+  ".claude/skills/free-llm/SKILL.md": {
+    "mtime": 1793876622.537542,
+    "seen": 1793876638.1859586,
+    "ast_hash": "f1ecc6464e4a757930fe0f4cab33b875",
     "semantic_hash": ""
   }
 }
