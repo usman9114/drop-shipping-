@@ -44,6 +44,6 @@
 - Tenable, Qualys, CyCognito, Jira, ServiceNow (enterprise security and IT). CyCognito's idea, mapping what an organisation exposes publicly, is the same method as our fingerprinting, but the tools themselves do not serve us.
 - Cursor, GitHub Copilot: coding assistants; the repo is already developed with Claude Code and the free models.
 
-## Held back, with the reason
+## Adopted after owner decision (2026-11-05)
 
-- **ScrapingBee, ZenRows, Bright Data Web Unlocker** (the unblocking features). Their purpose is to get past bot checks; decision 0014 and principle 6 keep that off. In practice we have not needed them: the 105-store fingerprint run had 0 robots blocks and 1 page error, and Shopify's public `/products.json` and `/meta.json` rarely block an honest client. If a measured block rate ever limits the pipeline, the owner decides with the site's terms in hand. Their plain proxy or rendering features, without bot-check bypass, are not ruled out.
+- **ZenRows, ScrapingBee**: all features, as a paid fallback tier behind our own plain fetch (`scout/unblock.py`, decision 0015). Bright Data Web Unlocker would be a third tier if the first two are not enough.
