@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1793896308.4591537,
-    "seen": 1793896353.1750708,
-    "ast_hash": "e9dc55953d58272ec5acd6d0944feb64",
+    "mtime": 1793897049.6323957,
+    "seen": 1793897127.195624,
+    "ast_hash": "6c64f1e96efdcaf6abcc73b790b57e2f",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
@@ -1116,15 +1116,33 @@
     "semantic_hash": ""
   },
   "docs/plan/tool-shortlist.md": {
-    "mtime": 1793896786.5528748,
-    "seen": 1793896798.6971898,
-    "ast_hash": "f052f61a3d25a4ba284823aaf35d4a8c",
+    "mtime": 1793897049.6327496,
+    "seen": 1793897127.1956704,
+    "ast_hash": "9792265f251a8288a59a6e28e318b729",
     "semantic_hash": ""
   },
   "docs/research/35-fingerprint-validation.md": {
     "mtime": 1793896818.1786292,
     "seen": 1793896880.6825528,
     "ast_hash": "830941bcec8d163542ae318c5fd13ec2",
+    "semantic_hash": ""
+  },
+  "scout/unblock.py": {
+    "mtime": 1793897073.348892,
+    "seen": 1793897127.195481,
+    "ast_hash": "545e977599c4800ba49691e97d275440",
+    "semantic_hash": ""
+  },
+  "tests/test_unblock.py": {
+    "mtime": 1793897123.2144244,
+    "seen": 1793897127.195533,
+    "ast_hash": "6f84166b9fb843b9472827b403d28af9",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0015-unblocking-apis.md": {
+    "mtime": 1793897049.6168904,
+    "seen": 1793897127.1956482,
+    "ast_hash": "8a89e945505c0e53f23e405fa7387160",
     "semantic_hash": ""
   }
 }
