@@ -1000,5 +1000,11 @@
     "seen": 1793872731.8598344,
     "ast_hash": "06c29378786ded1c5a0960340198556f",
     "semantic_hash": ""
+  },
+  "docs/decisions/0013-ads-and-reviews-automation.md": {
+    "mtime": 1793872754.8110852,
+    "seen": 1793872759.0579343,
+    "ast_hash": "b6a165668c0334b1e4ef2b4530108760",
+    "semantic_hash": ""
   }
 }
