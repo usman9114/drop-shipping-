@@ -982,5 +982,11 @@
     "seen": 1793836289.2411184,
     "ast_hash": "b15212ce2f259972063a938bb32a7dd2",
     "semantic_hash": ""
+  },
+  "docs/research/32a-meta-ad-library-api.md": {
+    "mtime": 1793872638.9013028,
+    "seen": 1793872672.7197595,
+    "ast_hash": "79abcf8a4676bc0a4e80f486d1549726",
+    "semantic_hash": ""
   }
 }
