@@ -24,6 +24,15 @@ Phase R1 re-scoped by the owner to **finding real dropshippers and their supply 
 
 Nothing is running in the background at hand-off.
 
+Later on 2026-11-05 (after the first hand-off):
+
+- **W3 changes applied** by the follow-up session (commit `8145d71`, `RULE_VERSION` 2026-11-05.3); see that commit and doc 35 for accuracy before/after.
+- **Decision 0015:** ZenRows and ScrapingBee adopted as a paid fallback fetch tier (`scout/unblock.py`: plain first, escalate only on a block, daily credit cap 1,000). Keys `ZENROWS_API_KEY`, `SCRAPINGBEE_API_KEY` not set yet (owner step). CLAUDE.md principle 6 amended.
+- **Crawl4AI stealth is ON** by default in `scout/reviews.py` (owner decision; `SCOUT_CRAWL_STEALTH=0` turns it off). Crawl4AI is not installed in a fresh container (`pip install -r requirements-crawl.txt`). The session permission check blocked a curl_cffi impersonation test; the owner was told a permission rule is needed for such runs.
+- Owner's tool list mapped in `docs/plan/tool-shortlist.md` (Supabase, GitHub Actions, PageSpeed API, Empire Flippers as revenue ground truth, outreach stack).
+- **UI/UX:** design-only brief in `docs/plan/ui-ux-brief.md`; a separate session does it.
+
+
 ## Next, in order
 
 1. **Done 2026-11-05 (later session):** W3 changes applied, `RULE_VERSION` 2026-11-05.3, 18 `test_w3_*` tests (`docs/research/35` "Applied"). Accuracy after is **not measured**: the truth CSV and fingerprint rows were never exported to the vault and were lost with the container. Re-score needs the truth set rebuilt (67 stores, about an hour by hand from public data) or a vault that has it. `vault_export.py` now includes both; export after every labelling job.
