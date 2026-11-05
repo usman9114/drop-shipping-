@@ -1006,5 +1006,29 @@
     "seen": 1793872759.0579343,
     "ast_hash": "b6a165668c0334b1e4ef2b4530108760",
     "semantic_hash": ""
+  },
+  "scout/reviews.py": {
+    "mtime": 1793874070.209388,
+    "seen": 1793874073.7668073,
+    "ast_hash": "36ce2f47ca5d51e111f4e6d53f2230db",
+    "semantic_hash": ""
+  },
+  "tests/test_reviews.py": {
+    "mtime": 1793873769.7578092,
+    "seen": 1793874073.766874,
+    "ast_hash": "7141f3b1d61b96f71aa0aa9d3f99807b",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0014-crawl4ai-review-counts.md": {
+    "mtime": 1793874065.8733878,
+    "seen": 1793874073.7670772,
+    "ast_hash": "4cd987fd7c5419d6e91f72e8d62b86a0",
+    "semantic_hash": ""
+  },
+  "requirements-crawl.txt": {
+    "mtime": 1793873769.7559485,
+    "seen": 1793874073.7672095,
+    "ast_hash": "d65a59ba90f96dcb16f47a234541c32a",
+    "semantic_hash": ""
   }
 }
