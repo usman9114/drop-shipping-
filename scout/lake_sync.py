@@ -69,7 +69,11 @@ class SupabaseStorage:
         self.base = url.rstrip("/") + "/storage/v1/object"
         self.bucket = bucket
         self.s = session or requests.Session()
-        self.s.headers.update({"Authorization": f"Bearer {key}", "apikey": key})
+        # Every key goes in `apikey`. Only a legacy JWT key (service_role) also goes
+        # in Authorization: new `sb_secret_` keys are not JWTs and must not.
+        self.s.headers["apikey"] = key
+        if key.startswith("eyJ"):
+            self.s.headers["Authorization"] = f"Bearer {key}"
 
     def _url(self, path: str) -> str:
         return f"{self.base}/{quote(self.bucket)}/{quote(path)}"

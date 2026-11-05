@@ -61,3 +61,7 @@ Health (`python -m scout.autopilot health`, autopilot.md rule 8) alerts on: no h
 ## Small-first run (2026-11-05, scratch lake, this container)
 
 All 8 jobs ran end to end on an empty lake: ranks ok (0 rows, no hits yet); discover-new 6,853 domains new to the list, 167 Shopify `[data]` in 73 s; meta 167 stores (3 fetch errors); light 73 US stores; fingerprints 158 stores, 0 errors, 168 s; seed, build and report ok after two fixes the run found (dbt fails on a dataset with no files: `seed` job; the report crashed when the lake has no full-scan tranche: guarded). Health: 0 alerts after the run, and it flagged the failed report job correctly before the fix. Public output was counts only.
+
+## Live check against the owner's project (2026-11-05)
+
+Key saved as a network secret on the "Crypto" environment (proxy injects it as the `apikey` header; the session runs with `SUPABASE_SERVICE_KEY=proxy-injected`). The client now sends `Authorization: Bearer` only for legacy JWT keys; new `sb_secret_` keys go in `apikey` only. Result: reads answer HTTP 200, but bucket creation was refused with "new row violates row-level security policy" and the bucket list is empty: the saved key is the **publishable** key, not the secret key. Blocked until the secret key replaces it and the private bucket `lake` exists.

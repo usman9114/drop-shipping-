@@ -25,6 +25,8 @@ class FakeStorage:
         self.puts.append(path)
 
 
+FAKE_JWT = "eyJk"  # pragma: allowlist secret (fake test key)
+FAKE_SECRET = "sb_secret_x"  # pragma: allowlist secret (fake test key)
 RUN = "lake/web_meta/2026-11-05/20261105T010101Z-abc123.jsonl.gz"
 
 
@@ -162,13 +164,22 @@ class _Session:
 
 def test_supabase_client_shapes_requests():
     s = _Session(_Resp(200))
-    st = ls.SupabaseStorage("https://p.supabase.co/", "k", "lake", session=s)
+    st = ls.SupabaseStorage("https://p.supabase.co/", FAKE_JWT, "lake", session=s)
     st.put("lake/a b.json", b"x", upsert=False)
     method, url, kw = s.calls[0]
     assert method == "POST"
     assert url == "https://p.supabase.co/storage/v1/object/lake/lake/a%20b.json"
     assert kw["headers"]["x-upsert"] == "false"
-    assert s.headers["apikey"] == "k" and s.headers["Authorization"] == "Bearer k"
+    assert (
+        s.headers["apikey"] == FAKE_JWT
+        and s.headers["Authorization"] == "Bearer " + FAKE_JWT
+    )
+
+
+def test_new_secret_keys_go_in_apikey_only():
+    s = _Session(_Resp(200))
+    ls.SupabaseStorage("https://p.supabase.co", FAKE_SECRET, session=s)
+    assert s.headers == {"apikey": FAKE_SECRET}
 
 
 @pytest.mark.parametrize("resp", [_Resp(404), _Resp(400, '{"error":"not_found"}')])
