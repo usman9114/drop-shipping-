@@ -1068,9 +1068,9 @@
     "semantic_hash": ""
   },
   "scout/fingerprints.py": {
-    "mtime": 1793899858.8656566,
-    "seen": 1793899867.7778332,
-    "ast_hash": "bdf281dcf8fb015bd06c0b9b82d4c2bb",
+    "mtime": 1794437548.035041,
+    "seen": 1794437566.0766137,
+    "ast_hash": "cf989ac11d273f32e88496b91509e864",
     "semantic_hash": ""
   },
   "tests/test_fingerprints.py": {
@@ -1146,9 +1146,9 @@
     "semantic_hash": ""
   },
   "docs/plan/ui-ux-brief.md": {
-    "mtime": 1793899858.8402305,
-    "seen": 1793899867.7785835,
-    "ast_hash": "eb8a3643e50563b78078f5df411c8009",
+    "mtime": 1794437545.915881,
+    "seen": 1794437566.0768967,
+    "ast_hash": "97dfa1899b413f7133bec1c0b1071d58",
     "semantic_hash": ""
   },
   "docs/decisions/0016-autopilot-hosting.md": {
@@ -1176,9 +1176,9 @@
     "semantic_hash": ""
   },
   "scout/lake_sync.py": {
-    "mtime": 1793900897.6337,
-    "seen": 1793901177.150158,
-    "ast_hash": "eca1e66e629aeafef58262aca0c438c1",
+    "mtime": 1794437054.3682597,
+    "seen": 1794437566.0766213,
+    "ast_hash": "0fc16139b7ab2df23287eb49e254f447",
     "semantic_hash": ""
   },
   "scout/quiet.py": {
@@ -1194,9 +1194,9 @@
     "semantic_hash": ""
   },
   "tests/test_autopilot_discovery.py": {
-    "mtime": 1793899858.8662221,
-    "seen": 1793899867.77803,
-    "ast_hash": "fad4463fe30855a1267ece7aa3d26785",
+    "mtime": 1794437548.0310411,
+    "seen": 1794437566.076737,
+    "ast_hash": "a9feaa56c546e8b88db3118dc07350c9",
     "semantic_hash": ""
   },
   "tests/test_lake_sync.py": {
@@ -1215,6 +1215,24 @@
     "mtime": 1793899858.865352,
     "seen": 1793899867.7789624,
     "ast_hash": "5da1849cc8d0eb46975b24525acdbba0",
+    "semantic_hash": ""
+  },
+  "scripts/ui_export.py": {
+    "mtime": 1794437548.035041,
+    "seen": 1794437566.0767133,
+    "ast_hash": "a0344090d48371139c35c786734ecc0a",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0018-ui-stack.md": {
+    "mtime": 1794437225.647022,
+    "seen": 1794437566.0768666,
+    "ast_hash": "84c80796a990c2517791301421e451f2",
+    "semantic_hash": ""
+  },
+  "ui/store-scout.html": {
+    "mtime": 1794437517.509054,
+    "seen": 1794437566.0769603,
+    "ast_hash": "ccc2d62113870d63eda552b9cebac299",
     "semantic_hash": ""
   }
 }
