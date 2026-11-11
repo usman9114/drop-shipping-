@@ -228,3 +228,11 @@ def test_build_datasets_match_the_staging_models():
     for f in (ROOT / "warehouse/models/staging").glob("stg_web_*.sql"):
         found |= set(re.findall(r"lake\('([a-z_]+)'", f.read_text()))
     assert found == set(ap.BUILD_DATASETS)
+
+
+def test_derived_steps_rerun_the_same_day(lake, capsys):
+    calls = []
+    jobs = [("meta", ["meta"], 5), ("build", ["build"], 5)]
+    ap.daily(jobs=jobs, runner=_ok_runner(calls))
+    ap.daily(jobs=jobs, runner=_ok_runner(calls))
+    assert [c[0][0] for c in calls] == ["meta", "build", "build"]

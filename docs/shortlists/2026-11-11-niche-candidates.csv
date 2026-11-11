@@ -1,0 +1,9 @@
+category,niche_score,stores,copyable_stores,brands,retailers,copyable_median_rank,copyable_median_entry_price,copyable_median_added_90d,copyable_share_rank_rising,copyable_avg_discount_share,deep_stores,share_meta_pixel,share_tiktok_pixel,share_klaviyo,share_sms,note,example_types
+apparel,49.748,2085,120,1511,454,554628,40.3,66.0,0.54,0.37,85,0.61,0.41,0.58,0.19,,t-shirts
+home_decor,17.761,447,39,320,88,471242,44.99,92.0,0.67,0.55,23,0.74,0.48,0.65,0.0,,
+jewelry_watches,17.236,570,26,447,97,527460,51.0,29.0,0.54,0.3,23,0.65,0.43,0.52,0.09,,
+hobby_crafts_art,5.732,308,10,217,81,571778,28.98,29.5,0.7,0.57,11,0.73,0.27,0.64,0.09,,
+fitness_sports,5.304,148,13,92,43,410955,79.99,35.0,0.54,0.4,3,0.67,0.0,1.0,0.0,,
+toys_games,4.872,251,12,141,98,564526,29.97,103.0,0.5,0.54,8,0.63,0.38,0.88,0.13,CPSIA if for children,
+bags_accessories,4.487,562,22,425,115,584618,34.37,11.0,0.59,0.49,37,0.57,0.35,0.57,0.14,,
+pet,4.037,169,8,122,39,441011,33.58,107.0,0.88,0.3,5,0.4,0.6,0.6,0.0,,

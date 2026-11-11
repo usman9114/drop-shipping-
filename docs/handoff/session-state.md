@@ -36,13 +36,27 @@ Later on 2026-11-05 (after the first hand-off):
 - **Autopilot built** (decision 0017): `.github/workflows/autopilot.yml` (daily 04:23 UTC + 6-hourly heartbeat check + manual trigger with `dry-run`), `scout/autopilot.py` (job table, resumable daily runner, heartbeat, health alerts), `scout/lake_sync.py` (data/private <-> private Supabase bucket, no-op without secrets), `scout/quiet.py` (public-log guard), incremental discovery `scout.webmeta scan-new`, `stores meta/light --new-first`, `fingerprints --queue N`, `make autopilot-daily|autopilot-health|lake-pull|lake-push`. Tests: `tests/test_autopilot*.py`, `tests/test_lake_sync.py`. **Waits for the owner:** Supabase project + private bucket `lake`, Actions secrets `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `ZAI_API_KEY`, `OPENROUTER_API_KEY`; then run the workflow once by hand in `dry-run`, then `daily`. Until the secrets exist, scheduled runs work on an empty lake and lose their data at the end (sync is a no-op). <!-- pragma: allowlist secret (names only, no values) -->
 
 
+## 2026-11-11 session (owner: "complete all remaining tasks, start fetching the data, start the UI")
+
+Done:
+
+- **Lake restored from the vault** and pushed to Supabase (bucket `lake`): 30,372 Shopify hits, 30,245 meta, 11,412 light, 437 deep `[data]`. Rank history rebuilt: 642,423 rows, 28 list dates. Warehouse build 34/34.
+- **Fingerprints at scale** (`python -m scout.fingerprints --backlog N --batch 300`): batched, resumable, copyable models (dropship, reseller, general, pod) first, a store that failed outright is not retried unless `--retry-errors`. Sample of 30 passed (0 hard errors) before the full run. All 535 copyable-model stores are scored; brands and retailers follow by rank.
+- **First real daily run:** discover-new 6,094 new list entries -> 124 Shopify `[data]`; meta, light, fingerprints for new stores, build, report all ok.
+- **Fixes the real run found:** stores that fail 3 fetches are no longer retried daily (`stores.MAX_FAILS`); derived jobs (seed, build, report) always rerun (`autopilot.ALWAYS`).
+- **Relabel** with the corrected DSers rule: 0 labels changed.
+- **Effort apps:** 18 paid tools observed on live stores (`fingerprints.EFFORT_APPS`, derived from saved evidence, no refetch). Skio and Elevar were not observed and are not listed.
+- **UI v1 on real data** (decision 0018): private artifact "Store Scout" https://claude.ai/artifact/8W7nFMj25E5xSbW3ded3Af; page `ui/store-scout.html` (no data), data file from `python scripts/ui_export.py` (`make ui-data`, private). Refresh = export, then republish the page with `data.json` beside it.
+
+Running at hand-off time: the fingerprint backlog loop (see "Next" 1). It pushes to Supabase after every batch, so a lost container loses at most one batch.
+
 ## Next, in order
 
-1. **Done 2026-11-05 (later session):** W3 changes applied, `RULE_VERSION` 2026-11-05.3, 18 `test_w3_*` tests (`docs/research/35` "Applied"). Accuracy after is **not measured**: the truth CSV and fingerprint rows were never exported to the vault and were lost with the container. Re-score needs the truth set rebuilt (67 stores, about an hour by hand from public data) or a vault that has it. `vault_export.py` now includes both; export after every labelling job.
-2. Add effort/budget apps from the owner's list as signatures (Klaviyo, Gorgias, Recharge, Skio, Nosto, Elevar, Littledata, Judge.me, Yotpo), observed on live stores first (small sample).
-3. Re-run fingerprints on the 105, then (after the sample passes) on all 11,415 screened stores (about 2 hours at 8 concurrent).
-4. Re-fetch and relabel the business-model classifier with the corrected DSers rule (saved counts used the old rule).
-5. Autopilot: built (decision 0017). Next: owner creates Supabase and secrets; seed the bucket from the vault (`scripts/vault_restore.py`, then `make lake-push`); first manual `dry-run`, then `daily`; then the re-score-from-shapes job and the monthly fingerprint refresh.
+1. **Finish the fingerprint backlog** if `python -c "from scout import fingerprints as f; print(len(f.backlog(10**6)))"` is above about 50: `make lake-pull`, then `python -m scout.fingerprints --backlog 300 --batch 300 && make lake-push` in a loop (5 minutes per 300 stores). Then `python -m scout.autopilot daily --only build`, `make ui-data`, republish the UI.
+2. **Truth set** (67 stores, about an hour by hand): still lost; accuracy after rule version 2026-11-05.3 is unmeasured. Export it to the vault and Supabase the day it is rebuilt.
+3. Owner: GitHub Actions secrets + merge to the default branch, then the manual `dry-run` (decision 0017). `ZAI_API_KEY` is missing from "Crypto": without it the report's 40 stories fall back to the template and the step takes 22 minutes.
+4. UI: owner feedback on v1; then decisions synced across devices (needs the `ui_decisions` table, UI version 2), lead inbox only if the outreach phase is approved.
+5. Autopilot: re-score-from-shapes job and the monthly fingerprint refresh.
 
 ## Owner decisions open
 

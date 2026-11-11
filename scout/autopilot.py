@@ -84,6 +84,9 @@ JOBS: list[tuple[str, list[str], int]] = [
     ("build", ["make", "stores-build"], 30),
     ("report", ["make", "stores-report"], 30),
 ]
+# Derived steps rerun on every invocation: they are cheap, and a rerun the same
+# day must pick up what the fetch jobs added since the first run.
+ALWAYS = {"seed", "build", "report"}
 DAILY_BUDGET_MIN = 330  # under the 6 h job limit with room for sync and setup
 
 STATE = store.LAKE / "_autopilot"
@@ -199,7 +202,7 @@ def daily(
     for name, cmd, tmin in jobs:
         if only and name not in only:
             continue
-        if state.get(name) == "ok":
+        if state.get(name) == "ok" and name not in ALWAYS:
             say("job", job=name, status="done-today")
             continue
         if dry_run:

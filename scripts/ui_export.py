@@ -285,7 +285,8 @@ def build(con) -> dict:
         )
         by_model.setdefault(m, Counter())[est.get("source_guess") or "unknown"] += 1
         if est.get("source_guess") not in (None, "unknown"):
-            wh[est.get("warehouse_guess") or "unknown"] += 1
+            w = est.get("warehouse_guess") or "unknown"
+            wh["several countries" if w.startswith("mixed") else w] += 1
         apps.update((f.get("page") or {}).get("app_embed_handles") or [])
         effort.update(fingerprints.effort_apps(f.get("page") or {}))
         sigs.update((f.get("page") or {}).get("signature_ids") or [])
