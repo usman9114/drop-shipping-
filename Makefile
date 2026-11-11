@@ -1,4 +1,4 @@
-.PHONY: autopilot-daily autopilot-health lake-pull lake-push niches stores-sanity stores-scan stores-meta stores-deep stores-ranks stores-build stores-report stores setup lint graph test wh-load wh-catalogue wh-offers wh-build wh-classify wh-images wh-export wh-snapshot intel pipeline
+.PHONY: ui-data autopilot-daily autopilot-health lake-pull lake-push niches stores-sanity stores-scan stores-meta stores-deep stores-ranks stores-build stores-report stores setup lint graph test wh-load wh-catalogue wh-offers wh-build wh-classify wh-images wh-export wh-snapshot intel pipeline
 
 setup:
 	python3 -m pip install --upgrade pre-commit graphifyy detect-secrets -r requirements.txt
@@ -87,3 +87,6 @@ lake-pull:        ## private Supabase bucket -> data/private (no-op without SUPA
 
 lake-push:        ## data/private -> private Supabase bucket
 	python3 -m scout.lake_sync push
+
+ui-data:          ## private data file for the Store Scout UI (decision 0018)
+	python3 scripts/ui_export.py

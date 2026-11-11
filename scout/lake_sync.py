@@ -48,7 +48,7 @@ from scout.quiet import exc_token, say
 
 ROOT = Path(os.environ.get("SCOUT_PRIVATE", "data/private"))
 MANIFEST = "_manifest.json"
-SKIP_DIRS = {"tranco", "dbt", "vault"}
+SKIP_DIRS = {"tranco", "dbt", "vault", "vault_download"}
 MAX_BYTES = 50 * 1024 * 1024  # Supabase free plan: 50 MB per file
 _RUN_FILE = re.compile(
     r"^lake/[a-z][a-z0-9_]{0,62}/\d{4}-\d{2}-\d{2}/[^/]+\.jsonl\.gz$"

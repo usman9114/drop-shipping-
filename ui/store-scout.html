@@ -1,0 +1,339 @@
+<title>Store Scout</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a working tool. Sticky tab bar, a filter row, a card grid; evidence opens in a right-hand panel. */
+:root{
+  --bg:#f3f5f4; --surface:#ffffff; --ink:#16211d; --muted:#5a6964; --line:#d7dedb;
+  --accent:#0d6b57; --accent-ink:#ffffff; --soft:#e6efec;
+  --data:#1d5fa8; --data-bg:#e3eefb; --proxy:#9a4b00; --proxy-bg:#fdeed9; --unk:#59636b; --unk-bg:#eceff1;
+  --good:#1b7a43; --warn:#a15c00; --bad:#b3261e;
+  --display:"Space Grotesk","Inter",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#101614; --surface:#18211e; --ink:#e8efec; --muted:#9db0a9; --line:#2c3a35;
+  --accent:#4fc3a6; --accent-ink:#06251d; --soft:#1f2d29;
+  --data:#8ec1ff; --data-bg:#17304d; --proxy:#ffbd73; --proxy-bg:#44290a; --unk:#b5c0c7; --unk-bg:#262f34;
+  --good:#6fd695; --warn:#ffc266; --bad:#ff8a80; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#101614; --surface:#18211e; --ink:#e8efec; --muted:#9db0a9; --line:#2c3a35;
+  --accent:#4fc3a6; --accent-ink:#06251d; --soft:#1f2d29;
+  --data:#8ec1ff; --data-bg:#17304d; --proxy:#ffbd73; --proxy-bg:#44290a; --unk:#b5c0c7; --unk-bg:#262f34;
+  --good:#6fd695; --warn:#ffc266; --bad:#ff8a80; color-scheme:dark }
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+h1{font-size:20px} h2{font-size:17px} h3{font-size:14px}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:12px 8px;border-bottom:1px solid var(--line)}
+.bar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.bar .sub{color:var(--muted);font-size:12px}
+nav.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-left:auto}
+nav.tabs a{padding:6px 12px;border-radius:6px;text-decoration:none;color:var(--muted);font-weight:500}
+nav.tabs a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
+main{padding-block:16px;display:flex;flex-direction:column;gap:16px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters input,.filters select{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 8px;min-width:0}
+.filters input{flex:1 1 180px;max-width:260px}
+.seg{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:none;padding:6px 10px;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--soft);font-weight:600;color:var(--accent)}
+.count{color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card .head{display:flex;gap:8px;align-items:flex-start}
+.card .name{font-weight:600;overflow-wrap:anywhere;flex:1;min-width:0}
+.card .meta{color:var(--muted);font-size:12px}
+.grade{font-family:var(--display);font-weight:600;width:28px;height:28px;border-radius:6px;display:grid;place-items:center;background:var(--soft);color:var(--accent);flex:none}
+.grade.none{color:var(--muted);font-size:11px}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.num b{display:block;font-family:var(--display);font-size:16px;font-variant-numeric:tabular-nums}
+.num span{font-size:11px;color:var(--muted);display:block}
+.chip{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.04em;padding:1px 5px;border-radius:4px;vertical-align:middle}
+.chip.DATA{background:var(--data-bg);color:var(--data)}
+.chip.PROXY{background:var(--proxy-bg);color:var(--proxy)}
+.chip.UNKNOWN{background:var(--unk-bg);color:var(--unk);outline:1px dashed var(--unk)}
+.supply{font-size:12px;border-top:1px solid var(--line);padding-top:8px}
+.supply b{text-transform:capitalize}
+svg.spark{width:100%;height:34px;display:block}
+.actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.actions .why{margin-right:auto;background:none;border:0;color:var(--accent);font-weight:600;padding:4px 0}
+.dec{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:4px 8px;font-size:12px}
+.dec[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.more{align-self:center;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:8px 16px}
+aside.panel{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--surface);border-left:1px solid var(--line);z-index:20;display:flex;flex-direction:column;
+  padding:calc(12px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) 16px;gap:12px;overflow:auto}
+.panel .ph{display:flex;gap:8px;align-items:flex-start}
+.panel .ph h2{flex:1;overflow-wrap:anywhere;min-width:0}
+.panel .x{border:1px solid var(--line);background:none;border-radius:6px;padding:4px 10px}
+.ptabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--line)}
+.ptabs button{border:0;background:none;padding:6px 10px;color:var(--muted);border-bottom:2px solid transparent}
+.ptabs button[aria-selected="true"]{color:var(--accent);border-color:var(--accent);font-weight:600}
+.gaps{background:var(--unk-bg);border:1px dashed var(--unk);border-radius:6px;padding:8px 10px;font-size:12px}
+.gaps ul,.ev ul{margin:4px 0 0;padding-left:18px}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500;font-size:11.5px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}
+.mono{font-family:var(--mono);font-size:12px;overflow-wrap:anywhere}
+.barrow{display:flex;height:10px;border-radius:3px;overflow:hidden;background:var(--unk-bg);min-width:80px}
+.barrow i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.note{color:var(--muted);font-size:12.5px;max-width:75ch}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11.5px;font-weight:600}
+.pill.ok{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.pill.failed,.pill.timeout{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad)}
+.pill.none{background:var(--unk-bg);color:var(--unk)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.kv b{display:block;font-family:var(--display);font-size:20px;font-variant-numeric:tabular-nums}
+.kv span{font-size:11.5px;color:var(--muted)}
+a{color:var(--accent)}
+.empty{padding:32px 0;color:var(--muted);text-align:center}
+</style>
+
+<div class="wrap">
+<header class="top"><div class="bar">
+  <h1>Store Scout</h1><span class="sub" id="asof">loading…</span>
+  <nav class="tabs" aria-label="Views">
+    <a href="#stores">Stores</a><a href="#niches">Niches</a><a href="#supply">Supply</a><a href="#autopilot">Autopilot</a>
+  </nav>
+</div></header>
+<main id="view"><p class="empty">Loading the data file…</p></main>
+</div>
+<aside class="panel" id="panel" hidden aria-label="Store details"></aside>
+
+<script>
+"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = n => n == null ? "–" : Number(n).toLocaleString("en-US");
+const pct = x => x == null ? "–" : Math.round(x * 100) + "%";
+const nice = s => String(s ?? "unclassified").replace(/_/g, " ");
+const SRC_COLORS = { aliexpress: "#d9622b", cj: "#2f7fd1", pod: "#8a5cc7", "1688": "#b8860b", unknown: "#9aa5a1", mixed: "#3b9c8f" };
+const srcColor = s => SRC_COLORS[s] || "#6b7f99";
+let D = null, state = { slice: "copyable", q: "", model: "", cat: "", src: "", dec: "", sort: "rank", shown: 60, tab: "story", open: null };
+let decisions = {};
+try { decisions = JSON.parse(localStorage.getItem("scout-decisions") || "{}"); } catch (e) {}
+const saveDec = () => { try { localStorage.setItem("scout-decisions", JSON.stringify(decisions)); } catch (e) {} };
+const chip = k => { const l = (D.labels || {})[k] || "UNKNOWN"; return `<span class="chip ${l}">${l}</span>`; };
+
+function spark(vals) {
+  if (!vals || !vals.some(v => v != null)) return `<svg class="spark" role="img" aria-label="No rank history"><text x="0" y="20" font-size="11" fill="currentColor" opacity=".6">no rank history</text></svg>`;
+  const W = 280, H = 34, P = 3, xs = vals.map((v, i) => P + i * (W - 2 * P) / Math.max(1, vals.length - 1));
+  const ls = vals.filter(v => v != null).map(Math.log10), lo = Math.min(...ls), hi = Math.max(...ls), span = (hi - lo) || 1;
+  const y = v => P + (Math.log10(v) - lo) / span * (H - 2 * P);   // smaller rank = higher on the chart
+  let d = "", pen = false, last = null;
+  vals.forEach((v, i) => { if (v == null) { pen = false; return; } d += (pen ? "L" : "M") + xs[i].toFixed(1) + " " + y(v).toFixed(1) + " "; pen = true; last = [xs[i], y(v)]; });
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Traffic rank over ${vals.length} lists; gaps mean outside the top 1M">
+    <path d="${d}" fill="none" stroke="var(--accent)" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+    <circle cx="${last[0]}" cy="${last[1]}" r="2.6" fill="var(--accent)"/></svg>`;
+}
+function supplyLine(s) {
+  const u = s.supply;
+  if (!u) return `<div class="supply">Supply source: not checked yet ${`<span class="chip UNKNOWN">UNKNOWN</span>`}</div>`;
+  if (!u.guess || u.guess === "unknown") return `<div class="supply">Supply source: no trace found ${chip("supply")}</div>`;
+  return `<div class="supply">Supply source: <b>${esc(u.guess)}</b>${u.warehouse && u.warehouse !== "unknown" ? ", ships from " + esc(u.warehouse) : ""} · confidence ${pct(u.conf)} ${chip("supply")}</div>`;
+}
+function decButtons(d) {
+  return ["shortlist", "watch", "skip"].map(k => `<button class="dec" data-dec="${k}" data-dom="${esc(d)}" aria-pressed="${decisions[d] === k}">${k[0].toUpperCase() + k.slice(1)}</button>`).join("");
+}
+function card(s) {
+  return `<article class="card">
+    <div class="head"><span class="grade ${s.grade ? "" : "none"}" title="Own-evidence grade (A = 4+ signals)">${esc(s.grade || "–")}</span>
+      <div style="flex:1;min-width:0"><div class="name">${esc(s.d)}</div>
+      <div class="meta">${esc(nice(s.cat))} · ${esc(s.model)}${s.slice ? " · " + esc(s.slice) : ""}</div></div></div>
+    <div class="nums">
+      <div class="num"><b>${fmt(s.rank)}</b><span>traffic rank ${chip("rank")}</span></div>
+      <div class="num"><b>${s.price[1] == null ? "–" : "$" + fmt(s.price[1])}</b><span>median price ${chip("price")}</span></div>
+      <div class="num"><b>${fmt(s.added[1])}</b><span>added in 90 days ${chip("added")}</span></div>
+    </div>
+    ${spark(s.spark)}
+    <div class="meta">${esc(s.trend)}</div>
+    ${supplyLine(s)}
+    <div class="actions"><button class="why" data-open="${esc(s.d)}">Why this store?</button>${decButtons(s.d)}</div>
+  </article>`;
+}
+function filtered() {
+  const q = state.q.trim().toLowerCase();
+  let r = D.stores.filter(s => {
+    if (state.slice === "established" || state.slice === "riser") { if (s.slice !== state.slice) return false; }
+    else if (state.slice === "copyable") { if (!["dropship", "reseller", "general", "pod"].includes(s.model)) return false; }
+    else if (state.slice === "named") { if (!s.supply || !s.supply.guess || s.supply.guess === "unknown") return false; }
+    if (state.model && s.model !== state.model) return false;
+    if (state.cat && s.cat !== state.cat) return false;
+    if (state.src && ((s.supply && s.supply.guess) || "") !== state.src) return false;
+    if (state.dec && (decisions[s.d] || "none") !== state.dec) return false;
+    if (q && !(s.d.toLowerCase().includes(q) || nice(s.cat).includes(q))) return false;
+    return true;
+  });
+  const key = { rank: s => s.rank ?? 1e9, growth: s => -(s.growth ?? -9), added: s => -(s.added[1] ?? -1), price: s => -(s.price[1] ?? -1), conf: s => -((s.supply && s.supply.conf) ?? -1) }[state.sort];
+  return r.sort((a, b) => key(a) - key(b));
+}
+function opts(vals, cur, all) { return `<option value="">${all}</option>` + vals.map(v => `<option value="${esc(v)}" ${v === cur ? "selected" : ""}>${esc(nice(v))}</option>`).join(""); }
+function viewStores() {
+  const uniq = f => [...new Set(D.stores.map(f).filter(Boolean))].sort();
+  const seg = [["copyable", "Copyable models"], ["named", "Source found"], ["established", "Established"], ["riser", "Risers"], ["all", "All"]];
+  const rows = filtered();
+  const nDec = Object.keys(decisions).length;
+  return `<div class="filters">
+      <div class="seg" role="group" aria-label="Slice">${seg.map(([k, t]) => `<button data-slice="${k}" aria-pressed="${state.slice === k}">${t}</button>`).join("")}</div>
+      <input id="f-q" type="search" placeholder="Search store or category" value="${esc(state.q)}" aria-label="Search">
+      <select id="f-model" aria-label="Business model">${opts(uniq(s => s.model), state.model, "Any model")}</select>
+      <select id="f-cat" aria-label="Category">${opts(uniq(s => s.cat), state.cat, "Any category")}</select>
+      <select id="f-src" aria-label="Supply source">${opts(uniq(s => s.supply && s.supply.guess), state.src, "Any source")}</select>
+      <select id="f-dec" aria-label="Decision">${opts(["shortlist", "watch", "skip", "none"], state.dec, "Any decision")}</select>
+      <select id="f-sort" aria-label="Sort">${[["rank", "Best traffic rank"], ["growth", "Fastest rising"], ["added", "Most products added"], ["price", "Highest price"], ["conf", "Source confidence"]].map(([k, t]) => `<option value="${k}" ${state.sort === k ? "selected" : ""}>Sort: ${t}</option>`).join("")}</select>
+    </div>
+    <div class="bar"><span class="count">${fmt(rows.length)} of ${fmt(D.stores.length)} stores · ${nDec} decided</span>
+      <button class="dec" id="copy-dec" ${nDec ? "" : "disabled"}>Copy decisions</button><span class="count" id="copy-msg"></span></div>
+    <p class="note">Traffic rank is a position in the Tranco top 1M list, a proxy for visits. It is not sales. Revenue, orders, ad spend and margin are not public for any store here.</p>
+    ${rows.length ? `<div class="grid">${rows.slice(0, state.shown).map(card).join("")}</div>` : `<p class="empty">No store matches these filters.</p>`}
+    ${rows.length > state.shown ? `<button class="more" id="more">Show 60 more</button>` : ""}`;
+}
+function panel(s) {
+  const tabs = [["story", "Story"], ["evidence", "Evidence"], ["score", "Score"], ["raw", "Raw numbers"]];
+  const base = "https://" + s.d;
+  let body = "";
+  if (state.tab === "story") {
+    body = `<p>${esc(s.story)}</p>
+      <div class="gaps"><b>Not known for this store</b> <span class="chip UNKNOWN">UNKNOWN</span><ul>${s.gaps.map(g => `<li>${esc(g)}</li>`).join("")}</ul></div>
+      <p class="note">Business model "${esc(s.model)}" is a classifier's label ${chip("model")}${s.model_why.length ? ": " + esc(s.model_why.join("; ")) : ""}. Hand-check: dropship-or-not right ${esc(D.supply.validation.dropship_or_not)}.</p>`;
+  } else if (state.tab === "evidence") {
+    const u = s.supply, ev = [];
+    ev.push(["Traffic rank " + fmt(s.rank) + "; " + s.trend, "Tranco list", D.rank_dates[D.rank_dates.length - 1], "rank", "https://tranco-list.eu/"]);
+    ev.push(["Entry prices $" + s.price[0] + " to $" + s.price[2] + ", median $" + s.price[1] + "; discount on " + pct(s.disc) + " of products", "store product feed", s.seen, "price", base + "/products.json"]);
+    ev.push(["Products added: " + s.added.map(fmt).join(" / ") + " in 30 / 90 / 365 days; " + fmt(s.products) + " published", "store product feed and /meta.json", s.seen, "added", base + "/meta.json"]);
+    if (s.ads.length || s.retention.length || s.conversion.length) ev.push(["Code seen: ads " + (s.ads.join(", ") || "none") + "; retention " + (s.retention.join(", ") || "none") + "; conversion " + (s.conversion.join(", ") || "none"), "store homepage", s.seen, "stack", base + "/"]);
+    if (s.theme || s.apps.length) ev.push(["Theme " + (s.theme || "–") + "; app embeds: " + (s.apps.join(", ") || "none"), "store homepage", u ? u.seen : s.seen, "theme", base + "/"]);
+    if (u) ev.push(["Supply: " + (u.guess || "unknown") + (u.evidence.length ? " — " + u.evidence.join("; ") : " (no trace found)") + (u.mixed.length ? "; also " + u.mixed.join(", ") : ""), "homepage, product feed, one product page (rule " + u.rule + ")", u.seen, "supply", base + "/products.json"]);
+    body = `<div class="scroll"><table><thead><tr><th>Claim</th><th>Where seen</th><th>Date</th><th></th></tr></thead><tbody>${ev.map(e => `<tr><td>${esc(e[0])} ${chip(e[3])}</td><td>${esc(e[1])}</td><td>${esc(e[2] || "–")}</td><td><a href="${esc(e[4])}" target="_blank" rel="noopener noreferrer">Verify</a></td></tr>`).join("")}</tbody></table></div>
+      <p class="note">Named supply source was right on ${esc(D.supply.validation.named_source_right)} hand-checked stores; ${esc(D.supply.validation.note)}.</p>`;
+  } else if (state.tab === "score") {
+    const sig = s.signals ? `<h3>Grade ${esc(s.grade)} ${chip("grade")}</h3><table><tbody>${Object.entries(D.grade_signals).map(([k, t]) => `<tr><td>${s.signals[k] ? "✓" : "–"}</td><td>${esc(t)}</td></tr>`).join("")}</tbody></table><p class="note">A = 4 or more signals, B = 3, C = 2, D = 0 or 1.</p>` : `<p class="note">No grade: this store is outside the 300-store candidate pool.</p>`;
+    const sc = s.score ? `<h3>Best score ${s.score.best} ${chip("score")}</h3><div class="scroll"><table><thead><tr><th>Part</th><th class="n">Percentile</th><th class="n">Weight</th><th class="n">Points</th></tr></thead><tbody>${Object.entries(D.score_weights).map(([k, [w, t]]) => `<tr><td>${esc(t)}</td><td class="n">${pct(s.score[k])}</td><td class="n">${w}</td><td class="n">${((s.score[k] || 0) * w).toFixed(3)}</td></tr>`).join("")}</tbody></table></div><p class="note">What would change the order: a higher weight on growth moves risers up; the stack part only counts tools visible in page code.</p>` : `<p class="note">No best score: it needs a deep profile (homepage tags and four feed pages). This store has a light profile only.</p>`;
+    body = sig + sc;
+  } else {
+    const raw = Object.entries(s).filter(([k]) => !["story", "gaps", "spark"].includes(k));
+    body = `<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>${raw.map(([k, v]) => `<tr><td class="mono">${esc(k)}</td><td class="mono">${esc(typeof v === "object" ? JSON.stringify(v) : v)}</td></tr>`).join("")}</tbody></table></div>
+      <h3>Rank by list date ${chip("spark")}</h3><div class="scroll"><table><tbody>${D.rank_dates.map((d, i) => `<tr><td class="mono">${d}</td><td class="n">${s.spark && s.spark[i] != null ? fmt(s.spark[i]) : "outside top 1M"}</td></tr>`).join("")}</tbody></table></div>`;
+  }
+  return `<div class="ph"><span class="grade ${s.grade ? "" : "none"}">${esc(s.grade || "–")}</span><h2>${esc(s.d)}</h2><button class="x" data-close="1" aria-label="Close details">Close</button></div>
+    <div class="meta">${esc(nice(s.cat))} (${pct(s.cat_share)} of sampled products) · ${esc(s.model)} · ${esc(s.country || "country unknown")} · existed by ${esc(s.existed_by || "–")} ${chip("existed_by")}</div>
+    <div class="ptabs" role="tablist">${tabs.map(([k, t]) => `<button role="tab" data-tab="${k}" aria-selected="${state.tab === k}">${t}</button>`).join("")}</div>
+    <div style="display:flex;flex-direction:column;gap:12px">${body}</div>
+    <div class="actions" style="margin-top:auto;border-top:1px solid var(--line);padding-top:10px"><span class="why" style="color:var(--muted)">Decision</span>${decButtons(s.d)}</div>`;
+}
+function mixBar(mix) {
+  const tot = Object.values(mix).reduce((a, b) => a + b, 0);
+  if (!tot) return `<span class="count">not checked</span>`;
+  return `<div class="barrow" title="${esc(Object.entries(mix).map(([k, v]) => k + " " + v).join(", "))}">${Object.entries(mix).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<i style="width:${v / tot * 100}%;background:${srcColor(k)}"></i>`).join("")}</div>`;
+}
+const legend = keys => `<div class="legend">${keys.map(k => `<span><i style="background:${srcColor(k)}"></i>${esc(k)}</span>`).join("")}</div>`;
+function viewNiches() {
+  const srcs = [...new Set(D.niches.flatMap(n => Object.keys(n.supply_mix)))];
+  return `<h2>Niche board</h2>
+    <p class="note">One row per product category among the ${fmt(D.counts.screened)} screened US Shopify stores. "Copyable" stores are the ones the classifier calls dropship, reseller, general or print-on-demand: their method can work with zero inventory. Brands and retailers show demand only. Ordered by the traffic weight of copyable stores.</p>
+    ${legend(srcs)}
+    <div class="box"><div class="scroll"><table><thead><tr><th>Category</th><th class="n">Stores</th><th class="n">Copyable ${chip("model")}</th><th class="n">Brands</th><th class="n">Median entry price ${chip("price")}</th><th class="n">Added in 90 d ${chip("added")}</th><th class="n">Rank rising ${chip("trend")}</th><th class="n">Median rank ${chip("rank")}</th><th>Supply sources seen ${chip("supply")}</th><th></th></tr></thead><tbody>
+    ${D.niches.map(n => `<tr><td><b>${esc(nice(n.category))}</b></td><td class="n">${fmt(n.stores)}</td><td class="n">${fmt(n.copyable_stores)}</td><td class="n">${fmt(n.brands)}</td><td class="n">${n.copyable_median_entry_price == null ? "–" : "$" + fmt(n.copyable_median_entry_price)}</td><td class="n">${fmt(n.copyable_median_added_90d)}</td><td class="n">${pct(n.copyable_share_rank_rising)}</td><td class="n">${fmt(n.copyable_median_rank)}</td><td>${mixBar(n.supply_mix)}</td><td><button class="dec" data-gocat="${esc(n.category)}">See stores</button></td></tr>`).join("")}
+    </tbody></table></div></div>
+    <p class="note">This board ranks niches by evidence that copyable stores exist and get traffic. It does not show eBay demand; only our own live test measures that.</p>`;
+}
+function countTable(obj, h1, h2) {
+  const rows = Object.entries(obj).sort((a, b) => b[1] - a[1]), tot = rows.reduce((a, r) => a + r[1], 0) || 1;
+  return `<table><thead><tr><th>${h1}</th><th class="n">${h2}</th><th class="n">Share</th></tr></thead><tbody>${rows.map(([k, v]) => `<tr><td>${esc(nice(k))}</td><td class="n">${fmt(v)}</td><td class="n">${pct(v / tot)}</td></tr>`).join("")}</tbody></table>`;
+}
+function viewSupply() {
+  const S = D.supply, models = Object.keys(S.by_model).sort((a, b) => Object.values(S.by_model[b]).reduce((x, y) => x + y, 0) - Object.values(S.by_model[a]).reduce((x, y) => x + y, 0));
+  const srcs = Object.keys(S.by_source).sort((a, b) => S.by_source[b] - S.by_source[a]);
+  return `<h2>Supply view</h2>
+    <div class="box"><div class="kv">
+      <div><b>${fmt(S.fingerprinted)}</b><span>stores checked for supply traces</span></div>
+      <div><b>${fmt(S.screened)}</b><span>stores screened</span></div>
+      <div><b>${pct(S.fingerprinted / (S.screened || 1))}</b><span>coverage</span></div>
+      <div><b>${esc(S.validation.named_source_right)}</b><span>named source right, hand-checked</span></div>
+    </div><p class="note">A supply source is a guess from traces in the store's own pages: app code, SKU shapes, image hosts, vendor names ${chip("supply")}. "Unknown" means no trace was found, which is the normal result for a brand. Rule version ${esc(S.rule_version)}; ${esc(S.validation.note)}.</p></div>
+    <div class="cols">
+      <div class="box"><h3>Source found, all checked stores</h3>${countTable(S.by_source, "Source", "Stores")}</div>
+      <div class="box"><h3>Where named-source stores ship from</h3>${Object.keys(S.warehouse_of_named).length ? countTable(S.warehouse_of_named, "Warehouse guess", "Stores") : `<p class="note">No named sources yet.</p>`}</div>
+    </div>
+    <div class="box"><h3>Source by business model</h3>${legend(srcs)}<div class="scroll"><table><thead><tr><th>Model</th><th class="n">Checked</th><th>Mix</th>${srcs.map(s => `<th class="n">${esc(s)}</th>`).join("")}</tr></thead><tbody>
+      ${models.map(m => { const c = S.by_model[m], t = Object.values(c).reduce((a, b) => a + b, 0); return `<tr><td><b>${esc(m)}</b></td><td class="n">${fmt(t)}</td><td style="min-width:120px">${mixBar(c)}</td>${srcs.map(s => `<td class="n">${fmt(c[s] || 0)}</td>`).join("")}</tr>`; }).join("")}
+    </tbody></table></div></div>
+    <div class="cols">
+      <div class="box"><h3>Most common app embeds ${chip("theme")}</h3><div class="scroll"><table><tbody>${S.top_apps.map(([k, v]) => `<tr><td class="mono">${esc(k)}</td><td class="n">${fmt(v)}</td></tr>`).join("") || `<tr><td>none yet</td></tr>`}</tbody></table></div></div>
+      <div class="box"><h3>Most common supply signatures ${chip("supply")}</h3><div class="scroll"><table><tbody>${S.top_signatures.map(([k, v]) => `<tr><td class="mono">${esc(k)}</td><td class="n">${fmt(v)}</td></tr>`).join("") || `<tr><td>none yet</td></tr>`}</tbody></table></div></div>
+    </div>
+    <p class="note">Can we get the same from CJ? CJ's US warehouse held 3,964 products on 2026-11-04, mostly furniture, women's clothing, beauty and jewelry. The supply decision (options A, B, C) is still open with the owner.</p>`;
+}
+function viewAutopilot() {
+  const A = D.autopilot, hb = A.heartbeat || {}, jobs = hb.jobs || {}, ds = A.datasets || {};
+  const alerts = (A.health && A.health.alerts) || [];
+  return `<h2>Autopilot</h2>
+    <div class="box"><div class="kv">
+      <div><b>${esc((hb.daily_last_start || "never").replace("T", " ").slice(0, 16))}</b><span>last daily run started (UTC)</span></div>
+      <div><b>${esc((hb.daily_last_success || "never").replace("T", " ").slice(0, 16))}</b><span>last run with every job ok</span></div>
+      <div><b>${alerts.length}</b><span>open alerts${A.health ? " at " + esc(A.health.checked_at.slice(0, 16).replace("T", " ")) : ""}</span></div>
+      <div><b>${fmt(D.counts.shopify_hits)}</b><span>Shopify stores known</span></div>
+    </div>${alerts.length ? `<ul>${alerts.map(a => `<li><span class="pill failed">${esc(a[0])}</span> ${esc(a[1])}</li>`).join("")}</ul>` : ""}</div>
+    <div class="box"><h3>Jobs</h3>${Object.keys(jobs).length ? `<div class="scroll"><table><thead><tr><th>Job</th><th>Status</th><th>Last success (UTC)</th><th class="n">Seconds</th><th class="n">Rows added</th><th class="n">Error rows</th></tr></thead><tbody>
+      ${Object.entries(jobs).map(([k, j]) => `<tr><td><b>${esc(k)}</b></td><td><span class="pill ${esc(j.status || "none")}">${esc(j.status || "–")}</span></td><td>${esc((j.last_success || "never").replace("T", " ").slice(0, 16))}</td><td class="n">${fmt(j.seconds)}</td><td class="n">${fmt(j.rows_added)}</td><td class="n">${fmt(j.error_rows)}</td></tr>`).join("")}
+      </tbody></table></div>` : `<p class="note">No daily run recorded in this data file yet.</p>`}</div>
+    <div class="box"><h3>Data held</h3><div class="scroll"><table><thead><tr><th>Dataset</th><th class="n">Runs</th><th class="n">Rows</th><th>Last run (UTC)</th></tr></thead><tbody>
+      ${Object.entries(ds).sort().map(([k, v]) => `<tr><td class="mono">${esc(k)}</td><td class="n">${fmt(v.runs)}</td><td class="n">${fmt(v.rows)}</td><td>${esc(v.last.replace("T", " "))}</td></tr>`).join("")}
+    </tbody></table></div></div>
+    <p class="note">This page is a snapshot. It changes when the data file is rebuilt and republished, not when a job runs.</p>`;
+}
+function render() {
+  if (!D) return;
+  const v = (location.hash || "#stores").slice(1);
+  document.querySelectorAll("nav.tabs a").forEach(a => a.setAttribute("aria-current", a.getAttribute("href") === "#" + v ? "page" : "false"));
+  const focusId = document.activeElement && document.activeElement.id, pos = focusId === "f-q" ? document.activeElement.selectionStart : null;
+  $("#view").innerHTML = v === "niches" ? viewNiches() : v === "supply" ? viewSupply() : v === "autopilot" ? viewAutopilot() : viewStores();
+  if (focusId && $("#" + focusId)) { $("#" + focusId).focus(); if (pos != null) $("#" + focusId).setSelectionRange(pos, pos); }
+  const s = state.open && D.stores.find(x => x.d === state.open);
+  $("#panel").hidden = !s;
+  if (s) $("#panel").innerHTML = panel(s);
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("button");
+  if (!t) return;
+  if (t.dataset.slice) { state.slice = t.dataset.slice; state.shown = 60; }
+  else if (t.dataset.open) { state.open = t.dataset.open; state.tab = "story"; }
+  else if (t.dataset.close) state.open = null;
+  else if (t.dataset.tab) state.tab = t.dataset.tab;
+  else if (t.dataset.dec) { const d = t.dataset.dom; if (decisions[d] === t.dataset.dec) delete decisions[d]; else decisions[d] = t.dataset.dec; saveDec(); }
+  else if (t.dataset.gocat) { state.cat = t.dataset.gocat; state.slice = "copyable"; state.shown = 60; location.hash = "#stores"; }
+  else if (t.id === "more") state.shown += 60;
+  else if (t.id === "copy-dec") {
+    const txt = Object.entries(decisions).map(([d, k]) => k + "\t" + d).sort().join("\n");
+    const done = m => { const el = $("#copy-msg"); if (el) el.textContent = m; };
+    navigator.clipboard.writeText(txt).then(() => done("Copied " + Object.keys(decisions).length + " decisions"), () => done("Copy was blocked by the browser"));
+    return;
+  } else return;
+  render();
+});
+document.addEventListener("input", e => {
+  const m = { "f-q": "q", "f-model": "model", "f-cat": "cat", "f-src": "src", "f-dec": "dec", "f-sort": "sort" }[e.target.id];
+  if (!m) return;
+  state[m] = e.target.value; state.shown = 60; render();
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && state.open) { state.open = null; render(); } });
+window.addEventListener("hashchange", render);
+fetch("data.json").then(r => { if (!r.ok) throw new Error("http " + r.status); return r.json(); }).then(d => {
+  D = d;
+  $("#asof").textContent = "Data as of " + d.generated_at.slice(0, 16).replace("T", " ") + " UTC · " + fmt(d.counts.in_ui) + " stores shown of " + fmt(d.counts.screened) + " screened";
+  render();
+}).catch(() => { $("#asof").textContent = "no data"; $("#view").innerHTML = `<p class="empty">The data file could not be loaded. Rebuild it with <span class="mono">python scripts/ui_export.py</span> and publish it beside this page as <span class="mono">data.json</span>.</p>`; });
+</script>

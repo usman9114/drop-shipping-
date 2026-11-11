@@ -39,3 +39,4 @@ Production code, hosting, authentication, a database migration, sending email.
 ## Progress
 
 - 2026-11-05: step 1 (small first) done: store card + side panel and lead inbox card as a clickable prototype (private artifact, invented data), IA and flows, and the data contract for those two views: `docs/design/ui-v0-store-card-and-leads.md`. Waiting for owner feedback before the other three views and the stack note.
+- 2026-11-11: owner asked to start the UI. Stack decided in `docs/decisions/0018-ui-stack.md` (private artifact first, Next.js on Supabase later). **Version 1 built on real data**: `ui/store-scout.html` (page, no data) + `scripts/ui_export.py` (private data file). Four views: Stores (cards, side panel with Story / Evidence / Score / Raw numbers, Shortlist / Watch / Skip), Niches, Supply, Autopilot. Lead inbox stays design-only. Refresh: `python scripts/ui_export.py`, then republish the page with `data.json` beside it.

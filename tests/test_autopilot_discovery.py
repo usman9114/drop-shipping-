@@ -131,3 +131,36 @@ def test_new_stores_go_first_in_meta_and_fingerprint_queues(lake):
         trust="data",
     )
     assert fingerprints.queue(10) == []  # scored at the current version already
+
+
+def test_backlog_runs_in_batches_and_never_retries_within_a_run(lake, monkeypatch):
+    store.record_run(
+        "web_store_light",
+        [{"domain": f"s{i}", "tranco_rank": i + 1} for i in range(5)],
+        source="t",
+        trust="data",
+    )
+    calls = []
+
+    def fake_run(doms, max_concurrent, pause):
+        calls.append(list(doms))
+        rows = [
+            {
+                "domain": d,
+                "rule_version": fingerprints.RULE_VERSION,
+                **({"error": "x"} if d == "s1" else {}),
+            }
+            for d in doms
+        ]
+        rid = store.record_run("web_fingerprints", rows, source="t", trust="data")
+        return {"web_fingerprints": (rid, len(rows))}
+
+    monkeypatch.setattr(fingerprints, "run", fake_run)
+    fingerprints.run_backlog(limit=10, batch=2)
+    assert calls == [
+        ["s0", "s1"],
+        ["s2", "s3"],
+        ["s4"],
+    ]  # s1 failed but is not retried now
+    assert fingerprints.backlog(10) == []  # failures do not refill the backlog
+    assert fingerprints.backlog(10, retry_errors=True) == ["s1"]

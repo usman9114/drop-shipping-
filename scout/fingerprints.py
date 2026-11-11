@@ -890,6 +890,57 @@ def queue(limit: int) -> list[str]:
     return [m["domain"] for m in todo[:limit]]
 
 
+BACKLOG_FIRST = {"dropship", "reseller", "general", "pod"}
+
+
+def backlog(limit: int, retry_errors: bool = False) -> list[str]:
+    """Screened stores (a light or deep profile) with no fingerprint row at the
+    current RULE_VERSION, best Tranco rank first. The scale run of
+    docs/plan/supply-fingerprints-plan.md; `queue()` covers newly found stores.
+    A store that failed outright at this version is left out unless
+    retry_errors, so failures cannot fill every batch."""
+    done = {
+        r["domain"]
+        for r in stores._all_rows("web_fingerprints")
+        if r.get("rule_version") == RULE_VERSION
+        and (not r.get("error") or not retry_errors)
+    }
+    prof = stores.latest_good(stores._all_rows("web_store_light"))
+    prof.update(stores.latest_good(stores._all_rows("web_store_deep")))
+    todo = [p for p in prof.values() if p["domain"] not in done]
+    # The question is where dropshippers source (owner re-scope, R1): stores the
+    # classifier calls dropship, reseller, general or pod go first, then the rest.
+    todo.sort(
+        key=lambda p: (
+            p.get("business_model") not in BACKLOG_FIRST,
+            p.get("tranco_rank") or 10**9,
+        )
+    )
+    return [p["domain"] for p in todo[:limit]]
+
+
+def run_backlog(
+    limit: int,
+    batch: int = 300,
+    max_concurrent: int = 8,
+    pause: float = 1.0,
+    retry_errors: bool = False,
+) -> dict:
+    """Work through the backlog in batches, one lake run per batch, so a killed
+    job loses at most one batch and a restart continues where it stopped."""
+    out, tried = {}, set()
+    while len(tried) < limit:
+        doms = [d for d in backlog(limit, retry_errors) if d not in tried][
+            : min(batch, limit - len(tried))
+        ]
+        if not doms:
+            break
+        tried |= set(doms)
+        for k, v in run(doms, max_concurrent, pause).items():
+            out[f"{k} {len(out)}"] = v
+    return out
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Supply fingerprints for Shopify stores")
     src = ap.add_mutually_exclusive_group(required=True)
@@ -897,9 +948,18 @@ def main(argv: list[str] | None = None) -> int:
     src.add_argument(
         "--queue", type=int, metavar="N", help="up to N new stores not yet scored"
     )
+    src.add_argument(
+        "--backlog", type=int, metavar="N", help="up to N screened stores, in batches"
+    )
+    ap.add_argument("--batch", type=int, default=300)
+    ap.add_argument("--retry-errors", action="store_true")
     ap.add_argument("--max-concurrent", type=int, default=8)
     ap.add_argument("--pause", type=float, default=1.0)
     a = ap.parse_args(argv)
+    if a.backlog is not None:
+        out = run_backlog(a.backlog, a.batch, a.max_concurrent, a.pause, a.retry_errors)
+        print(f"fingerprints backlog: {len(out)} batches", file=sys.stderr)
+        return 0
     if a.queue is not None:
         doms = queue(a.queue)
         if not doms:
