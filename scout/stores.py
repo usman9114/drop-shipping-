@@ -451,9 +451,24 @@ def latest_good(rows: list[dict]) -> dict[str, dict]:
     return out
 
 
+MAX_FAILS = 3  # a store that failed this many fetches is left alone (no daily retry)
+
+
+def gave_up(rows: list[dict], max_fails: int = MAX_FAILS) -> set[str]:
+    """Domains with max_fails or more failed fetches and no good row."""
+    fails: dict[str, int] = {}
+    for r in rows:
+        if r.get("error"):
+            fails[r["domain"]] = fails.get(r["domain"], 0) + 1
+    good = set(latest_good(rows))
+    return {d for d, n in fails.items() if n >= max_fails and d not in good}
+
+
 def _done(dataset: str) -> set[str]:
-    """Domains already answered. Failed fetches are not done: they get retried."""
-    return set(latest_good(_all_rows(dataset)))
+    """Domains already answered, plus those that failed MAX_FAILS times. Other
+    failed fetches are not done: they get retried."""
+    rows = _all_rows(dataset)
+    return set(latest_good(rows)) | gave_up(rows)
 
 
 def _parallel(fn, items: list, workers: int) -> list:
@@ -694,7 +709,7 @@ def run_light(
 ) -> dict:
     rules = load_rules()
     today = datetime.now(timezone.utc).date()
-    done = set(latest_good(_all_rows("web_store_light")))
+    done = _done("web_store_light")
     metas = latest_good(_all_rows("web_meta"))
     todo = [
         m

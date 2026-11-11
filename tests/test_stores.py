@@ -327,3 +327,17 @@ def test_general_store_pattern_is_separate_from_brand():
     assert stores.business_model(focused)[0] == "brand"
     not_discounted = {**general, "discount_share": 0.05}
     assert stores.business_model(not_discounted)[0] == "brand"
+
+
+def test_a_store_that_keeps_failing_is_given_up_after_three_tries():
+    from scout import stores as st
+
+    rows = [{"domain": "bad", "error": "SSLError"}] * 3 + [
+        {"domain": "flaky", "error": "Timeout"},
+        {"domain": "flaky", "error": "Timeout"},
+        {"domain": "back", "error": "x"},
+        {"domain": "back", "error": "x"},
+        {"domain": "back", "error": "x"},
+        {"domain": "back", "shop_id": 1},
+    ]
+    assert st.gave_up(rows) == {"bad"}
