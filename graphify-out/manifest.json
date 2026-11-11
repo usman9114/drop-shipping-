@@ -696,9 +696,9 @@
     "semantic_hash": ""
   },
   "scout/stores.py": {
-    "mtime": 1793899858.8660147,
-    "seen": 1793899867.777911,
-    "ast_hash": "2fe2a6c1895cfb74470159ada0e58e37",
+    "mtime": 1794437808.0833368,
+    "seen": 1794437835.133142,
+    "ast_hash": "38f0a0dcc2f477cfee4cc079337dd350",
     "semantic_hash": ""
   },
   "scripts/store_export.py": {
@@ -714,9 +714,9 @@
     "semantic_hash": ""
   },
   "tests/test_stores.py": {
-    "mtime": 1793899162.2522056,
-    "seen": 1793899867.7780979,
-    "ast_hash": "ac2063a324c2fa0dda178dbe3bb040de",
+    "mtime": 1794437808.0833368,
+    "seen": 1794437835.1332073,
+    "ast_hash": "ee69a36923c7b1570902b7f9d694a251",
     "semantic_hash": ""
   },
   "docs/decisions/0009-best-store-discovery.md": {
