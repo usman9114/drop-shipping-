@@ -1068,15 +1068,15 @@
     "semantic_hash": ""
   },
   "scout/fingerprints.py": {
-    "mtime": 1794437548.035041,
-    "seen": 1794437566.0766137,
-    "ast_hash": "cf989ac11d273f32e88496b91509e864",
+    "mtime": 1794437655.4582155,
+    "seen": 1794437679.0562835,
+    "ast_hash": "8eac5582b31ac4a50bc3092f0100a0ca",
     "semantic_hash": ""
   },
   "tests/test_fingerprints.py": {
-    "mtime": 1793899162.2522056,
-    "seen": 1793899867.7780457,
-    "ast_hash": "202d2a80f351b13b004c15adf8d3479b",
+    "mtime": 1794437675.5190487,
+    "seen": 1794437679.0563498,
+    "ast_hash": "c79e5b4b28f95c8dfab26a4a516c9036",
     "semantic_hash": ""
   },
   "tests/test_llm_batch.py": {
@@ -1218,9 +1218,9 @@
     "semantic_hash": ""
   },
   "scripts/ui_export.py": {
-    "mtime": 1794437548.035041,
-    "seen": 1794437566.0767133,
-    "ast_hash": "a0344090d48371139c35c786734ecc0a",
+    "mtime": 1794437655.4586997,
+    "seen": 1794437679.056333,
+    "ast_hash": "2ff29b3d7697adfa4809e169a29bdc0a",
     "semantic_hash": ""
   },
   "docs/decisions/0018-ui-stack.md": {
@@ -1230,9 +1230,9 @@
     "semantic_hash": ""
   },
   "ui/store-scout.html": {
-    "mtime": 1794437517.509054,
-    "seen": 1794437566.0769603,
-    "ast_hash": "ccc2d62113870d63eda552b9cebac299",
+    "mtime": 1794437665.4006972,
+    "seen": 1794437679.0565772,
+    "ast_hash": "8dcb294e2a2c4c13c6e9e75817ebacd4",
     "semantic_hash": ""
   }
 }
