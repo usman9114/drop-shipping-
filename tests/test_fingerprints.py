@@ -468,3 +468,24 @@ def test_w3_cj_sku_weight():
 
 def test_rule_version_bumped_for_w3():
     assert fp.RULE_VERSION == "2026-11-05.3"
+
+
+def test_effort_apps_read_saved_handles_and_hosts():
+    from scout import fingerprints as fp
+
+    page = {
+        "app_embed_handles": ["klaviyo-email-marketing", "judgeme", "loop-returns"],
+        "asyncload_hosts": [
+            "config.gorgias.chat",
+            "static.rechargecdn.com",
+            "cdn.example.com",
+        ],
+    }
+    assert fp.effort_apps(page) == [
+        "Gorgias",
+        "Judge.me",
+        "Klaviyo",
+        "Loop Returns",
+        "Recharge",
+    ]
+    assert fp.effort_apps({}) == []

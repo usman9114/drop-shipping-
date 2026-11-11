@@ -216,6 +216,7 @@ function panel(s) {
     ev.push(["Products added: " + s.added.map(fmt).join(" / ") + " in 30 / 90 / 365 days; " + fmt(s.products) + " published", "store product feed and /meta.json", s.seen, "added", base + "/meta.json"]);
     if (s.ads.length || s.retention.length || s.conversion.length) ev.push(["Code seen: ads " + (s.ads.join(", ") || "none") + "; retention " + (s.retention.join(", ") || "none") + "; conversion " + (s.conversion.join(", ") || "none"), "store homepage", s.seen, "stack", base + "/"]);
     if (s.theme || s.apps.length) ev.push(["Theme " + (s.theme || "–") + "; app embeds: " + (s.apps.join(", ") || "none"), "store homepage", u ? u.seen : s.seen, "theme", base + "/"]);
+    if (s.effort && s.effort.length) ev.push(["Paid tools seen: " + s.effort.join(", "), "app code on the store's pages", u ? u.seen : s.seen, "stack", base + "/"]);
     if (u) ev.push(["Supply: " + (u.guess || "unknown") + (u.evidence.length ? " — " + u.evidence.join("; ") : " (no trace found)") + (u.mixed.length ? "; also " + u.mixed.join(", ") : ""), "homepage, product feed, one product page (rule " + u.rule + ")", u.seen, "supply", base + "/products.json"]);
     body = `<div class="scroll"><table><thead><tr><th>Claim</th><th>Where seen</th><th>Date</th><th></th></tr></thead><tbody>${ev.map(e => `<tr><td>${esc(e[0])} ${chip(e[3])}</td><td>${esc(e[1])}</td><td>${esc(e[2] || "–")}</td><td><a href="${esc(e[4])}" target="_blank" rel="noopener noreferrer">Verify</a></td></tr>`).join("")}</tbody></table></div>
       <p class="note">Named supply source was right on ${esc(D.supply.validation.named_source_right)} hand-checked stores; ${esc(D.supply.validation.note)}.</p>`;
@@ -273,6 +274,7 @@ function viewSupply() {
     </tbody></table></div></div>
     <div class="cols">
       <div class="box"><h3>Most common app embeds ${chip("theme")}</h3><div class="scroll"><table><tbody>${S.top_apps.map(([k, v]) => `<tr><td class="mono">${esc(k)}</td><td class="n">${fmt(v)}</td></tr>`).join("") || `<tr><td>none yet</td></tr>`}</tbody></table></div></div>
+      <div class="box"><h3>Paid tools seen (effort and budget) ${chip("stack")}</h3><div class="scroll"><table><tbody>${(S.effort_apps || []).map(([k, v]) => `<tr><td>${esc(k)}</td><td class="n">${fmt(v)}</td><td class="n">${pct(v / (S.fingerprinted || 1))}</td></tr>`).join("") || `<tr><td>none yet</td></tr>`}</tbody></table></div></div>
       <div class="box"><h3>Most common supply signatures ${chip("supply")}</h3><div class="scroll"><table><tbody>${S.top_signatures.map(([k, v]) => `<tr><td class="mono">${esc(k)}</td><td class="n">${fmt(v)}</td></tr>`).join("") || `<tr><td>none yet</td></tr>`}</tbody></table></div></div>
     </div>
     <p class="note">Can we get the same from CJ? CJ's US warehouse held 3,964 products on 2026-11-04, mostly furniture, women's clothing, beauty and jewelry. The supply decision (options A, B, C) is still open with the owner.</p>`;

@@ -890,6 +890,44 @@ def queue(limit: int) -> list[str]:
     return [m["domain"] for m in todo[:limit]]
 
 
+# --- effort apps -------------------------------------------------------------
+# Paid tools a store runs = effort and budget, not supply. Derived from evidence
+# we already save (app embed handles, asyncLoad hosts), so adding one never needs
+# a refetch. Every entry was OBSERVED on live stores on 2026-11-11 (329 stores);
+# Skio and Elevar from the owner's list were not seen and are not listed.
+# (name, kind, pattern matched against each handle and host)
+EFFORT_VERSION = "2026-11-11.1"
+EFFORT_APPS: list[tuple[str, str, str]] = [
+    ("Klaviyo", "email_sms", r"klaviyo"),
+    ("Omnisend", "email_sms", r"omnisend"),
+    ("Postscript", "email_sms", r"postscript\.io"),
+    ("Attentive", "email_sms", r"^attentive"),
+    ("Gorgias", "support", r"gorgias"),
+    ("Recharge", "subscriptions", r"rechargecdn|rechargepayments"),
+    ("Loop Subscriptions", "subscriptions", r"^loop-subscriptions"),
+    ("Loop Returns", "returns", r"^loop-returns"),
+    ("Judge.me", "reviews", r"judge\.me|^judgeme"),
+    ("Yotpo", "reviews_loyalty", r"yotpo"),
+    ("Loox", "reviews", r"loox\.io"),
+    ("Stamped", "reviews", r"stamped\.io"),
+    ("Nosto", "personalization", r"nosto"),
+    ("Rebuy", "personalization", r"rebuy"),
+    ("Littledata", "analytics", r"littledata"),
+    ("Klarna", "bnpl", r"klarna"),
+    ("Afterpay", "bnpl", r"afterpay"),
+    ("PageFly", "page_builder", r"pagefly"),
+]
+_EFFORT = [(n, k, re.compile(rx, re.I)) for n, k, rx in EFFORT_APPS]
+
+
+def effort_apps(page: dict) -> list[str]:
+    """Names of paid tools seen in a saved fingerprint `page` dict."""
+    traces = list(page.get("app_embed_handles") or []) + list(
+        page.get("asyncload_hosts") or []
+    )
+    return sorted({n for n, _k, rx in _EFFORT if any(rx.search(t) for t in traces)})
+
+
 BACKLOG_FIRST = {"dropship", "reseller", "general", "pod"}
 
 

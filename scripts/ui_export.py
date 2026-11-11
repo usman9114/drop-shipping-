@@ -244,6 +244,7 @@ def build(con) -> dict:
             else None,
             "theme": page.get("theme_name"),
             "apps": (page.get("app_embed_handles") or [])[:12],
+            "effort": fingerprints.effort_apps(page) if f else None,
             "score": {
                 "best": _c(p.get("best_score")),
                 **{k: _c(p.get(k)) for k in SCORE_WEIGHTS},
@@ -274,7 +275,7 @@ def build(con) -> dict:
 
     # supply view
     by_model: dict[str, Counter] = {}
-    apps, sigs, wh = Counter(), Counter(), Counter()
+    apps, sigs, wh, effort = Counter(), Counter(), Counter(), Counter()
     for d, f in fps.items():
         est = f.get("estimate") or {}
         m = (
@@ -286,6 +287,7 @@ def build(con) -> dict:
         if est.get("source_guess") not in (None, "unknown"):
             wh[est.get("warehouse_guess") or "unknown"] += 1
         apps.update((f.get("page") or {}).get("app_embed_handles") or [])
+        effort.update(fingerprints.effort_apps(f.get("page") or {}))
         sigs.update((f.get("page") or {}).get("signature_ids") or [])
         sigs.update((f.get("feed") or {}).get("signature_ids") or [])
     supply = {
@@ -296,6 +298,7 @@ def build(con) -> dict:
         "by_model": {m: dict(c) for m, c in by_model.items()},
         "warehouse_of_named": dict(wh),
         "top_apps": apps.most_common(25),
+        "effort_apps": effort.most_common(),
         "top_signatures": sigs.most_common(25),
         "validation": VALIDATION,
     }
