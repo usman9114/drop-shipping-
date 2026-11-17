@@ -1,7 +1,7 @@
 # Graph Report - drop-shipping-  (2026-11-17)
 
 ## Corpus Check
-- 199 files · ~174,741 words
+- 199 files · ~174,901 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 22 file(s) not represented in the graph (top: .csv 16, (none) 4, .example 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b4866a8a`
+- Built from commit: `1700cff7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -748,15 +748,15 @@ Nodes (6): _reply(), test_all_empty_replies_raise(), test_empty_or_malformed_rep
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `record_run()` connect `record_run` to `store.py`, `stores.py`, `supply_sanity.py`, `daily`, `pathlib`, `_checked_path`, `__init__.py`, `json`, `CJClient`, `reviews.py`, `snapshot_job.py`, `_shop_hits`, `autopilot.py`, `webmeta.py`, `Data pipeline: feeding the team authentic evidence`, `Autopilot: the store pipeline runs 24/7 on scripts`, `unblock.py`, `test_autopilot_discovery.py`, `min_price`?**
-  _High betweenness centrality (0.015) - this node is a cross-community bridge._
+  _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `How to get good results`) actually correct?**
   _`record_run()` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL` to the rest of the system?**
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
-- **Why does `say()` connect `quiet.py` to `lake_sync.py`, `autopilot.py`, `daily`?**
-  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+- **Why does `chat_many()` connect `chat_many` to `run_batch`, `llm.py`, `__init__.py`?**
+  _High betweenness centrality (0.009) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `chat()` (e.g. with `main()` and `main()`) actually correct?**
   _`chat()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Should `chat_many` be split into smaller, more focused modules?**
