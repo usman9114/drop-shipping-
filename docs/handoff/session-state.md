@@ -50,11 +50,17 @@ Done:
 
 Running at hand-off time: the fingerprint backlog loop (see "Next" 1). It pushes to Supabase after every batch, so a lost container loses at most one batch.
 
+## 2026-11-12 to 2026-11-17 (status check, owner: "where are we")
+
+- **2026-11-12:** the backlog loop reached 6,740 stores fingerprinted, 4,800 left, then stopped at the Claude 5-hour usage limit. Data was safe in Supabase (56 files). No commit was made for it.
+- **GitHub Actions autopilot** runs on schedule on `research/feasibility-poc` (runs 30 to 39, 2026-11-14 to 11-17). The daily job passes (8 jobs, 0 failed), but **all four Actions secrets are empty**: lake pull and push log `skipped=true reason=no-supabase-secrets`, so every daily run starts from an empty lake and its results are discarded. The 6-hourly health job then fails with `alert kind=no-heartbeat subject=daily` because no heartbeat survives. These red runs are the missing secrets, not a code bug.
+- **2026-11-17:** lake pulled (56 files), backlog confirmed at 4,800, loop restarted. First batch: 300 stores in 5 minutes, 2 errors, push ok.
+
 ## Next, in order
 
 1. **Finish the fingerprint backlog** if `python -c "from scout import fingerprints as f; print(len(f.backlog(10**6)))"` is above about 50: `make lake-pull`, then `python -m scout.fingerprints --backlog 300 --batch 300 && make lake-push` in a loop (5 minutes per 300 stores). Then `python -m scout.autopilot daily --only build`, `make ui-data`, republish the UI.
 2. **Truth set** (67 stores, about an hour by hand): still lost; accuracy after rule version 2026-11-05.3 is unmeasured. Export it to the vault and Supabase the day it is rebuilt.
-3. Owner: GitHub Actions secrets + merge to the default branch, then the manual `dry-run` (decision 0017). `ZAI_API_KEY` is missing from "Crypto": without it the report's 40 stories fall back to the template and the step takes 22 minutes.
+3. Owner: GitHub Actions secrets (still empty on 2026-11-17; the workflow is already on the default branch and running, so only the secrets are missing), then the manual `dry-run` (decision 0017). `ZAI_API_KEY` is missing from "Crypto": without it the report's 40 stories fall back to the template and the step takes 22 minutes.
 4. UI: owner feedback on v1; then decisions synced across devices (needs the `ui_decisions` table, UI version 2), lead inbox only if the outreach phase is approved.
 5. Autopilot: re-score-from-shapes job and the monthly fingerprint refresh.
 
