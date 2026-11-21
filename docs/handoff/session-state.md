@@ -1,106 +1,76 @@
 # Session state: where the project stands
 
-> Rewritten 2026-11-05 for a hand-off (CLAUDE.md principle 14). Read `CLAUDE.md` first (binding rules, principles 1 to 14). This file says what is done, what is running, what is next, and the traps. No secrets.
+> Rewritten 2026-11-21 as a clean start (CLAUDE.md principle 14). The project moves from cloud sessions to the owner's machine: setup in `docs/runbooks/local-setup.md`. Read `CLAUDE.md` first (binding rules, principles 1 to 14). Earlier versions of this file are in git history.
 
 ## Repo
 
-- GitHub: https://github.com/usman9114/drop-shipping- (**public**). Working branch: `research/feasibility-poc`. No open PRs.
-- Private data lives in `data/private/` (gitignored; survived the last worker restart but not a new container) and in the owner's private artifact "Store Data Vault" (decision 0012; restore with `scripts/vault_restore.py`).
+- GitHub: https://github.com/usman9114/drop-shipping- (**public**). Default branch **`main`** (created by the owner 2026-11-21). `research/feasibility-poc` is the old working branch and is behind `main`. No open PRs.
+- Private data: `data/private/` (gitignored) and its only off-machine copy, the private Supabase bucket `lake` (75 files, decision 0017). Restore with `make lake-pull`. The older artifact "Store Data Vault" (decision 0012) is stale since 2026-11-04; Supabase replaces it.
 
-## Where we are (2026-11-05)
+## What the project is and where it stands
 
-Phase R1 re-scoped by the owner to **finding real dropshippers and their supply source** (not brands). Done today:
+Proof of concept: eBay dropshipping with CJ Dropshipping as the zero-inventory supplier. **Phase 0, release R1 "Niche Finder"**: find successful online stores, learn what they sell and where they get it, and end with a ranked niche shortlist (goal and exit criteria: `docs/plan/phase-niche-finder-r1.md`). Products, listings and the live eBay test are later phases.
 
-| Work | Result | Where |
+### Done so far `[data]` unless marked
+
+| Area | Result | Where |
 |---|---|---|
-| Policy-page dropship profiler | 105 dropship-labelled stores profiled; shipping text is a weak signal (promo banners) | `scout/dropship_profile.py`, run `20261105T104753Z-deacb2` |
-| **Supply fingerprints** (owner's "street smart" idea after spotting `aliorders.fireapps.io`) | 105 stores: AliExpress 65, CJ 24, POD 2, no trace 14 | `scout/fingerprints.py`, `docs/plan/supply-fingerprints-plan.md` (P0, P1, P2 results) |
-| App-trace catalogue | vendors rarely document storefront traces; catalogue must come from observation | `docs/research/33a/33b/33c` |
-| **Validation (W3)** | 67 stores hand-checked: named source right 28/31 (90%); dropship-or-not 89%; strong rules 100% precision; several weak signals below 80% | `docs/research/35-fingerprint-validation.md`, truth CSV `data/private/research/fingerprint-truth.csv` |
-| Bug fixed | DSers SKU rule matched brand SKUs (tommyjohn.com); also in the business-model classifier | `scout/stores.py` `DSERS_SKU`, tests |
-| Free-model harness | `scout.llm --batch` (resumable), `--second-opinion`, `--usage`, answer cache; skill `free-llm`; agent `glm-worker` | `.claude/skills/free-llm/SKILL.md` |
-| Autopilot design (owner: pipeline runs 24/7 on scripts, only GLM/OpenRouter at runtime) | rule versions, SKU shapes, cached answers built; jobs, gaps, hosting options written | `docs/plan/autopilot.md`, principle 13 |
-| Parked ideas | underperforming-store leads and the owner's audit-SaaS blueprint reviewed; owner's tool shortlist mapped | `docs/plan/opportunity-store-rescue.md`, `docs/plan/tool-shortlist.md` |
+| Research | eBay policy, unit economics, suppliers, APIs, legal, images, plus app-trace and validation studies | `docs/research/00-summary.md` and 01 to 35 |
+| Decisions | 0001 to 0018 (warehouse, store discovery, unblock APIs, autopilot on Actions, Supabase lake, UI stack) | `docs/decisions/` |
+| Store discovery | Tranco top 1M → 30,372 Shopify stores; 30,245 `/meta.json` answers; 11,141 US stores screened; 437 deep-profiled; rank history 642,423 rows over 28 list dates | `scout/webmeta.py`, `scout/stores.py` |
+| Business model | of the screened US stores: 8,152 brand, 2,390 retailer, **535 copyable** (dropship, general, reseller, print on demand, unclear) `[proxy: our rules]` | `docs/reports/2026-11-11-best-stores.md` |
+| Supply fingerprints | **11,532 stores** checked for supply traces (backlog finished 2026-11-17). Sources: AliExpress 287, CJ 29, other dropship apps 566, US supplier 9, mixed 8, print on demand 4, no trace 10,629. Dropship-labelled stores: 62 AliExpress, 19 CJ of 105 | `scout/fingerprints.py` |
+| Validation | 67 stores hand-checked on 2026-11-05: named source right 28/31 (90%), dropship-or-not 89% | `docs/research/35-fingerprint-validation.md` |
+| Niche shortlist (2026-11-11) | apparel 49.7 (120 copyable stores), home decor 17.8 (39), jewelry and watches 17.2 (26), hobby and crafts 5.7 (10), fitness 5.3 (13), toys 4.9 (12), bags 4.5 (22), pet 4.0 (8) `[proxy: score]` | `docs/shortlists/2026-11-11-niche-candidates.csv` |
+| CJ supply (2026-11-04) | first niche `tcg-supplies` **fails kill criterion K1**: 0 relevant US-warehouse SKUs; CJ US warehouse holds only 3,964 products | `docs/shortlists/2026-11-04-cj-supply-check.md` |
+| Free models | `scout.llm`: GLM Flash first, OpenRouter free lane, cache, resumable batches, second opinion | `.claude/skills/free-llm/SKILL.md` |
+| Autopilot | daily job runner, heartbeat, health alerts, lake sync; GitHub Actions workflow on schedule | `scout/autopilot.py`, `.github/workflows/autopilot.yml` |
+| UI | private artifact "Store Scout" https://claude.ai/artifact/8W7nFMj25E5xSbW3ded3Af, **still on 2026-11-11 data** (republish was blocked by a permission check on 2026-11-17) | `ui/store-scout.html`, `make ui-data` |
 
-Nothing is running in the background at hand-off.
+What public records cannot show: revenue, orders, ad spend, supplier cost, margin. Traffic rank is a proxy for visits, not sales. Store success is demand evidence, not eBay demand.
 
-Later on 2026-11-05 (after the first hand-off):
+### 2026-11-21 changes
 
-- **W3 changes applied** by the follow-up session (commit `8145d71`, `RULE_VERSION` 2026-11-05.3); see that commit and doc 35 for accuracy before/after.
-- **Decision 0015:** ZenRows and ScrapingBee adopted as a paid fallback fetch tier (`scout/unblock.py`: plain first, escalate only on a block, daily credit cap 1,000). Keys `ZENROWS_API_KEY`, `SCRAPINGBEE_API_KEY` not set yet (owner step). CLAUDE.md principle 6 amended.
-- **Crawl4AI stealth is ON** by default in `scout/reviews.py` (owner decision; `SCOUT_CRAWL_STEALTH=0` turns it off). Crawl4AI is not installed in a fresh container (`pip install -r requirements-crawl.txt`). The session permission check blocked a curl_cffi impersonation test; the owner was told a permission rule is needed for such runs.
-- Owner's tool list mapped in `docs/plan/tool-shortlist.md` (Supabase, GitHub Actions, PageSpeed API, Empire Flippers as revenue ground truth, outreach stack).
-- **Hosting decided: GitHub Actions** (decision 0016); storage Supabase free tier recommended, owner to create the account and add Actions secrets. Logs are public: jobs print counts only.
-- **UI/UX:** design-only brief in `docs/plan/ui-ux-brief.md`. Step 1 done (store card, side panel, lead inbox card; prototype + data contract in `docs/design/ui-v0-store-card-and-leads.md`); waiting for owner feedback.
+- `scout/lake_sync.py` now reads `.env` when run as a command, so `make lake-pull` works locally (it was a silent no-op without exported variables). Tests still never read a developer's `.env`.
+- `requirements-dev.txt` gains `requests`: CI on `main` failed 14 tests with `ModuleNotFoundError: requests`.
+- `.env.example` lists every variable the code reads; `docs/runbooks/local-setup.md` written.
 
-- **Autopilot built** (decision 0017): `.github/workflows/autopilot.yml` (daily 04:23 UTC + 6-hourly heartbeat check + manual trigger with `dry-run`), `scout/autopilot.py` (job table, resumable daily runner, heartbeat, health alerts), `scout/lake_sync.py` (data/private <-> private Supabase bucket, no-op without secrets), `scout/quiet.py` (public-log guard), incremental discovery `scout.webmeta scan-new`, `stores meta/light --new-first`, `fingerprints --queue N`, `make autopilot-daily|autopilot-health|lake-pull|lake-push`. Tests: `tests/test_autopilot*.py`, `tests/test_lake_sync.py`. **Waits for the owner:** Supabase project + private bucket `lake`, Actions secrets `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `ZAI_API_KEY`, `OPENROUTER_API_KEY`; then run the workflow once by hand in `dry-run`, then `daily`. Until the secrets exist, scheduled runs work on an empty lake and lose their data at the end (sync is a no-op). <!-- pragma: allowlist secret (names only, no values) -->
+## Running now
 
-
-## 2026-11-11 session (owner: "complete all remaining tasks, start fetching the data, start the UI")
-
-Done:
-
-- **Lake restored from the vault** and pushed to Supabase (bucket `lake`): 30,372 Shopify hits, 30,245 meta, 11,412 light, 437 deep `[data]`. Rank history rebuilt: 642,423 rows, 28 list dates. Warehouse build 34/34.
-- **Fingerprints at scale** (`python -m scout.fingerprints --backlog N --batch 300`): batched, resumable, copyable models (dropship, reseller, general, pod) first, a store that failed outright is not retried unless `--retry-errors`. Sample of 30 passed (0 hard errors) before the full run. All 535 copyable-model stores are scored; brands and retailers follow by rank.
-- **First real daily run:** discover-new 6,094 new list entries -> 124 Shopify `[data]`; meta, light, fingerprints for new stores, build, report all ok.
-- **Fixes the real run found:** stores that fail 3 fetches are no longer retried daily (`stores.MAX_FAILS`); derived jobs (seed, build, report) always rerun (`autopilot.ALWAYS`).
-- **Relabel** with the corrected DSers rule: 0 labels changed.
-- **Effort apps:** 18 paid tools observed on live stores (`fingerprints.EFFORT_APPS`, derived from saved evidence, no refetch). Skio and Elevar were not observed and are not listed.
-- **UI v1 on real data** (decision 0018): private artifact "Store Scout" https://claude.ai/artifact/8W7nFMj25E5xSbW3ded3Af; page `ui/store-scout.html` (no data), data file from `python scripts/ui_export.py` (`make ui-data`, private). Refresh = export, then republish the page with `data.json` beside it.
-
-Running at hand-off time: the fingerprint backlog loop (see "Next" 1). It pushes to Supabase after every batch, so a lost container loses at most one batch.
-
-## 2026-11-12 to 2026-11-17 (status check, owner: "where are we")
-
-- **2026-11-12:** the backlog loop reached 6,740 stores fingerprinted, 4,800 left, then stopped at the Claude 5-hour usage limit. Data was safe in Supabase (56 files). No commit was made for it.
-- **GitHub Actions autopilot** runs on schedule on `research/feasibility-poc` (runs 30 to 39, 2026-11-14 to 11-17). The daily job passes (8 jobs, 0 failed), but **all four Actions secrets are empty**: lake pull and push log `skipped=true reason=no-supabase-secrets`, so every daily run starts from an empty lake and its results are discarded. The 6-hourly health job then fails with `alert kind=no-heartbeat subject=daily` because no heartbeat survives. These red runs are the missing secrets, not a code bug.
-- **2026-11-17:** lake pulled (56 files), backlog confirmed at 4,800, loop restarted. **Backlog finished** 19:23 UTC: 16 batches, 4,800 stores, 8 errors; this run found aliexpress 101, dropship_other 201, cj 7, us_supplier 3, mixed 2, unknown 4,478. Totals `[data]`: 11,532 stores fingerprinted (screened 11,141 plus 315 unprofiled); sources aliexpress 287, cj 29, dropship_other 566, us_supplier 9, mixed 8, pod 4, unknown 10,629. Build ok, `make ui-data` ok (1,554 stores in the UI), lake pushed (75 files).
-- **Open question from these numbers:** 173 stores labelled *brand* carry an AliExpress trace and 322 carry a dropship_other trace (retailers: 31 and 204). Either the business-model rule misses dropshippers that look like brands, or weak supply signals fire on brands (doc 35 measured several weak signals below 80% precision). Hand-check a sample of about 30 before either label feeds a decision (principles 5, 10).
-- **UI not republished:** the session's permission check blocked the Artifact publish. The new data file is in `data/private/ui/store-scout.json` and in the lake; republish the page with it as `data.json` when allowed.
+Nothing in a session. GitHub Actions autopilot runs on schedule but **keeps nothing**: its four secrets are empty, so lake pull and push log `skipped=true reason=no-supabase-secrets`, and the 6-hourly health job fails with `no-heartbeat`. Not a code bug.
 
 ## Next, in order
 
-1. **Done 2026-11-17** (backlog 0); only republish the UI is left. Rerun this step only if `python -c "from scout import fingerprints as f; print(len(f.backlog(10**6)))"` is above about 50: `make lake-pull`, then `python -m scout.fingerprints --backlog 300 --batch 300 && make lake-push` in a loop (5 minutes per 300 stores). Then `python -m scout.autopilot daily --only build`, `make ui-data`, republish the UI.
-2. **Truth set** (67 stores, about an hour by hand): still lost; accuracy after rule version 2026-11-05.3 is unmeasured. Export it to the vault and Supabase the day it is rebuilt.
-3. Owner: GitHub Actions secrets (still empty on 2026-11-17; the workflow is already on the default branch and running, so only the secrets are missing), then the manual `dry-run` (decision 0017). `ZAI_API_KEY` is missing from "Crypto": without it the report's 40 stories fall back to the template and the step takes 22 minutes.
-4. UI: owner feedback on v1; then decisions synced across devices (needs the `ui_decisions` table, UI version 2), lead inbox only if the outreach phase is approved.
-5. Autopilot: re-score-from-shapes job and the monthly fingerprint refresh.
+1. **Owner: local setup** (`docs/runbooks/local-setup.md`), keys in `.env`, run section 4 checks.
+2. **Hand-check "brand with a supply trace"**: 173 brand-labelled stores carry an AliExpress trace, 322 a dropship-app trace (retailers 31 and 204). Either the business-model rule misses dropshippers that look like brands, or weak signals fire on brands. Sample about 30, measure, fix the rule, add tests (principles 5, 10).
+3. **Rebuild the truth set** (67 stores, about an hour by hand; lost with an old container). Accuracy after rule version 2026-11-05.3 is unmeasured. Keep it in `data/private/research/` and push the lake.
+4. **Finish R1 exit criteria**: deep profiles up to 600 or more (now 437); CJ supply sanity for each shortlist niche (`make stores-sanity`, needs `CJ_API_KEY`); compliance officer review; at least 3 niches ranked, one recommended.
+5. Republish the Store Scout UI with the new `data/private/ui/store-scout.json` as `data.json`.
+6. Autopilot: Actions secrets or disable the workflow; then the re-score-from-shapes job and the monthly fingerprint refresh.
 
 ## Owner decisions open
 
-1. **Autopilot storage:** Supabase project and private bucket `lake` exist and a live round trip passed (decision 0017). **Still open:** the GitHub Actions secrets `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` (the real `sb_secret_` key, not the publishable one), `ZAI_API_KEY`, `OPENROUTER_API_KEY`; merge to the default branch; then a manual `dry-run`. `ZAI_API_KEY` is missing from the "Crypto" environment since 2026-11-05 (removed by accident during the Supabase edit); re-add it. `SUPABASE_PUBLISHABLE_KEY` in "Crypto" is unused. Optional: approve installing `storage3` to replace the thin REST client (decision 0017). <!-- pragma: allowlist secret (placeholder, no value) -->
-2. Put the **two-week outreach test** (underperforming stores, kill rule: fewer than 2 interested replies from 20) in the plan as the phase after R1? Service (agency) or product (SaaS)?
-3. Free Google API key for PageSpeed / Chrome UX Report.
-4. Older, still open: CJ supply option A/B/C (fact 6 below), eBay production keys, Terapeak session, key rotation, Meta Ad Library manual check of the top 20.
+1. **Actions autopilot:** add the four repository secrets (the Supabase one is the `sb_secret_` key) or disable the workflow now that runs are local. <!-- pragma: allowlist secret (names only) -->
+2. **CJ supply option** after the K1 fail: A supply-first on CJ US (recommended), B ship tcg from China, C another US supplier.
+3. **CJ API clock:** CJ may disable API access after 30 days with no transaction `[unverified]`; the key dates from about 2026-11-04, so about 2026-12-04.
+4. Outreach test (underperforming stores, kill rule fewer than 2 interested replies from 20) as the phase after R1? Service or SaaS?
+5. Older: free Google API key (PageSpeed, Chrome UX Report), eBay production keys, Terapeak session, Meta Ad Library manual check of the top 20, rotation of keys that were pasted in chat on 2026-11-04.
 
 ## Facts that change plans
 
-1. **eBay API License 9.6 (seller arbitrage):** no automated ordering from CJ, no posting tracking for CJ-sourced orders, no repricing or stock sync from CJ prices through the eBay API. Order forwarding and tracking upload are **manual**.
-2. **eBay API License 8.1.4, 9.5, 9.7, 9.10:** no storing eBay data, no statistics or average selling prices, no price modelling, no ML on it without written permission. eBay market evidence comes from manual Terapeak reading and, later, our own account's data.
-3. **CJ API data terms are unconfirmed.** Raw CJ output goes only to `data/private/` (gitignored). Commit derived results only (product id plus our computed metrics).
-4. **CJ may disable API access after 30 days with no transaction** [unverified reading]. The key was created around 2026-11-04. Place the first test order within about a month.
-5. Google Trends via pytrends is terms-unclear. Do not add pulls; licensed providers (SerpApi, DataForSEO) are the route. Raw points were removed from git.
-6. **2026-11-04 live CJ run: `tcg-supplies` fails kill criterion K1** (0 relevant US-warehouse SKUs across 24 types), and both backups fail the same bar. CJ's US warehouse holds only 3,964 products, mostly furniture, women's clothing, beauty and jewelry. Real US→US shipping is ~$5.2–6.0 per light parcel. See `docs/shortlists/2026-11-04-cj-supply-check.md`. **Owner decision pending** between options A (supply-first on CJ US, recommended), B (tcg shipped from China), C (other US supplier).
-7. eBay keys in the environment are **sandbox** keys (production returns 401).
+1. **eBay API License 9.6:** no automated ordering from CJ, no tracking upload for CJ-sourced orders, no repricing or stock sync from CJ prices through the eBay API. Those steps are manual.
+2. **eBay API License 8.1.4, 9.5, 9.7, 9.10:** no storing eBay data, no statistics or average prices, no price modelling without written permission (decision 0004).
+3. **CJ API data terms are unconfirmed:** raw CJ output stays in `data/private/`; commit derived results only.
+4. Google Trends via pytrends is terms-unclear: no pulls.
+5. eBay keys so far are sandbox keys (production returns 401).
+6. OpenRouter has €10 credit (2026-11-04); paid Claude routes stay off unless `SCOUT_ALLOW_PAID` is 1.
 
-## Traps in a fresh container
+## Traps
 
-- **Vault lag:** the vault holds only what `vault_export.py` covered at the last export (2026-11-04). Fingerprint runs and `data/private/research/` from 2026-11-05 were lost. Run `python scripts/vault_export.py` and upload after every scan or labelling job.
-- **Stale local branch:** a fresh clone may hold an old pre-rewrite `research/feasibility-poc` (ahead/behind origin by about 50). Origin is canonical: `git reset --hard origin/research/feasibility-poc` after checking `git log origin/...`.
-- **Git identity defaults to an AI name.** The commit-msg hook then rejects every commit. Set `git config user.name` and `user.email` to match the repo owner's existing commits (`git log --format='%an <%ae>' | sort -u`).
-- Git hooks are not cloned. Run `make setup`, then `pip install -r requirements.txt -r requirements-dev.txt`.
-- `.env` is gitignored and disappears with the container. Keys must come from environment settings. Expected variable names: `CJ_API_KEY`, `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `ZAI_API_KEY`, `OPENROUTER_API_KEY`. Report names only, never values.
-- The graphify post-commit hook rebuilds the graph in the background. A commit made during the rebuild can fail with "files were modified by this hook". Wait a few seconds and retry. After committing, stage `graphify-out` and commit again if the tree is dirty.
-- OpenRouter credit (€10) bought by the owner on 2026-11-04. See `docs/plan/operating-plan.md` §2 for how it is used.
-- OpenRouter key works (credit registered, `is_free_tier: false`). It was pasted in chat on 2026-11-04 and used from a gitignored `.env` for the day; **owner will rotate it**, then add the new one to "Crypto" as `OPENROUTER_API_KEY`.
-- Keys live in the cloud environment **"Crypto"** (the one this project's sessions use; "Default" also has them). As of 2026-11-04 `OPENROUTER_API_KEY` is not visible in the container; check the variable name.
-- Z.ai and OpenRouter keys were pasted into an earlier chat. The owner was asked to rotate them.
-- `make setup` runs `graphify claude install`, which rewrites `.claude/settings.json` (absolute graphify path, extra SessionStart hook) and leaves a `.graphify-bak`. Restore it with `git checkout -- .claude/settings.json` unless the change is wanted.
-- Supabase key in sessions: a network secret on "Crypto" (proxy injects the `apikey` header); `SUPABASE_SERVICE_KEY=proxy-injected` is a placeholder. Test with `python -m scout.lake_sync status`.
-- `tranco` is not in `requirements.txt`; it is pinned in `requirements-autopilot.txt` (`pip install -r requirements-autopilot.txt`).
-- Every commit triggers a background graphify rebuild that dirties `graphify-out/`; commit it as "Refresh knowledge graph".
-- Subagents can hit the Claude 5-hour usage limit; resume them with SendMessage after the reset instead of starting a new one.
-
-## History
-
-Earlier states (2026-11-04: CJ supply check, review panel, niche finder R1, top-stores re-scope, data vault) are in git history of this file and in `docs/plan/` and `docs/decisions/`.
+- `make setup` rewrites `.claude/settings.json` and `CLAUDE.md`; restore with `git checkout -- .claude/settings.json CLAUDE.md`.
+- Git identity must match the owner's existing commits; the commit-msg hook rejects AI names and emails.
+- Every commit starts a background graphify rebuild that dirties `graphify-out/`; commit it as "Refresh knowledge graph".
+- `.env` loader in `scout/llm.py` does not strip trailing comments: keep comments on their own lines.
+- `tranco` is pinned in `requirements-autopilot.txt`, Crawl4AI in `requirements-crawl.txt`.
+- Push the lake (`make lake-push`) after every long job; a lost machine loses everything since the last push.
+- Cloud sessions only: keys come from the "Crypto" environment and the Supabase key is injected by the proxy; the four Actions secrets are separate.

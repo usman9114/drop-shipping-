@@ -46,6 +46,8 @@ Project context lives in the graphify knowledge graph (`graphify-out/`). Use it 
 
 ## Commands
 
+Local machine setup (venv, `.env`, checks): `docs/runbooks/local-setup.md`.
+
 ```bash
 make setup      # pip install pre-commit graphifyy detect-secrets; install all hooks
 make lint       # pre-commit run --all-files

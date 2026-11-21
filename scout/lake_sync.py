@@ -357,4 +357,9 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
+    # Local runs keep the Supabase keys in .env; the real environment wins (Actions).
+    # Loaded here, not in storage_from_env, so tests never read a developer's .env.
+    from scout.llm import _load_dotenv
+
+    _load_dotenv()
     sys.exit(main())
