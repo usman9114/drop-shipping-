@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1794938217.1427393,
-    "seen": 1794938642.4519756,
-    "ast_hash": "6c64f1e96efdcaf6abcc73b790b57e2f",
+    "mtime": 1795292885.4189565,
+    "seen": 1795292894.1972365,
+    "ast_hash": "b7e32340dbf751cf8cf650307fac5e81",
     "semantic_hash": ""
   },
   "docs/research/00-summary.md": {
@@ -324,9 +324,9 @@
     "semantic_hash": ""
   },
   "requirements-dev.txt": {
-    "mtime": 1794937819.0681255,
-    "seen": 1794938642.4521513,
-    "ast_hash": "63a0b5fb9c71ef99a768f795f43d01f6",
+    "mtime": 1795292781.7209306,
+    "seen": 1795292894.1973808,
+    "ast_hash": "2df05a1eb663e57b4f32fff7d902aa9c",
     "semantic_hash": ""
   },
   "scout/cj.py": {
@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   "docs/handoff/session-state.md": {
-    "mtime": 1794943435.3270495,
-    "seen": 1794943440.9016747,
-    "ast_hash": "316a3be4ae8c939b391717cfa12628b6",
+    "mtime": 1795292877.437352,
+    "seen": 1795292894.1972718,
+    "ast_hash": "52e403ec38e8ab2bc3e18b5d28fdea58",
     "semantic_hash": ""
   },
   "docs/plan/operating-plan.md": {
@@ -1176,9 +1176,9 @@
     "semantic_hash": ""
   },
   "scout/lake_sync.py": {
-    "mtime": 1794937819.0682995,
-    "seen": 1794938642.4517376,
-    "ast_hash": "0fc16139b7ab2df23287eb49e254f447",
+    "mtime": 1795292781.7205238,
+    "seen": 1795292894.1970572,
+    "ast_hash": "54543f7c227210a7e790b3a2c6abe02b",
     "semantic_hash": ""
   },
   "scout/quiet.py": {
@@ -1239,6 +1239,12 @@
     "mtime": 1794937819.0400724,
     "seen": 1794938642.45206,
     "ast_hash": "ed2812eb2f1c59f6c1f443a3beda11a8",
+    "semantic_hash": ""
+  },
+  "docs/runbooks/local-setup.md": {
+    "mtime": 1795292826.0333488,
+    "seen": 1795292894.1973705,
+    "ast_hash": "184da5ca8c56928c967f73b8370b80f3",
     "semantic_hash": ""
   }
 }
