@@ -16,6 +16,24 @@
 - Sample of 20 at 6 workers: 20/20 answered. Full run at 6 workers: Shopify answered HTTP 429 to 861 requests after about 50 stores. Shopify throttles by our declared user agent across all its stores, so parallel workers do not help. We keep the honest user agent (no browser disguise; principle 6) and run at 1 worker, 4 s apart, in rounds of 100 with a 10-minute back-off when throttled.
 - Fix: an HTTP 429 no longer counts toward `MAX_FAILS` (`stores.gave_up`); a throttled store is ours, not the store's, failure. Test in `tests/test_market_rank.py`.
 
+## Business-model validation for Pakistan (2026-11-22, principle 5)
+
+Truth set: the 44 best-ranked profiled PKR stores, hand-labelled from feed evidence plus public knowledge of the brands (`data/private/research/pk-business-model-truth.csv`, private; 4 left "unclear"). Checker: `python scripts/check_truth.py <truth.csv>`.
+
+| Step | Rules vs hand (40) | What changed |
+|---|---|---|
+| US rules as they were | 25/40 = 62% | — |
+| + line-word vendors, resold-brand titles, no "general" pattern for pk | 31/40 = 78% | `LINE_VENDOR`, `KNOWN_BRANDS`, `GENERAL_UNVALIDATED` |
+| + collection-name vendors for pk ("Lux Pret Vol-2 Winter 2026") | **36/40 = 90%** (high-confidence 31/32) | `LINE_WORDS_PK`, used only when market = pk |
+
+Error groups found, each now a test in `tests/test_market_rank.py`: (1) vendors hold product lines and collections, so a brand looked like a 30-brand retailer (J., Nishat, Bonanza, Asim Jofa, Stylo, Outfitters, Bata, Saeed Ghani); (2) brands on permanent sale across apparel, home and kids matched the "general store" pattern (Beechtree, Gul Ahmed); (3) department stores enter their own name as vendor on resold goods (Mi Store fixed via brand names in titles).
+
+**Known errors left (4):** Al-Fatah and Chase Value (own name on resold local brands the lexicon does not know), Baby Planet (dominant vendor is a third-party brand), Dawood Designers (low-confidence truth). Not fixed: each fix would fit one store.
+
+**Second opinion:** free models (GLM 4.5 Flash 37 calls, Nemotron free 7), from the same evidence only: 34/40 = 85% vs hand, 30/40 vs rules. The model is right on all 4 rule errors; the rules are right on all 6 model errors (mostly footwear brands the model called retailers). Disagreement between rule and model is a cheap review flag.
+
+**Caveat:** the 90% is in-sample (the rules were tuned on these 40). A held-out hand check of 20 further PKR stores is due before the copyable filter is used. Evidence now saved per store: every vendor with its count (`vendor_names`, capped at 100), so `stores relabel` re-scores vendor rules without refetching.
+
 ## What we know and don't
 
 - Tranco rank is a traffic-popularity `[proxy]`, not sales. Revenue, orders, ad spend and margin are `[unknown]` for every store.

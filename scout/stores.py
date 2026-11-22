@@ -149,6 +149,79 @@ def vendor_is_shop(vendor: str, shop_name: str, domain: str) -> bool:
     return any(n and (v in n or n in v) for n in names)
 
 
+# Vendor values that name a product line of the store itself, not another brand.
+# Pakistani fashion brands fill the vendor field with lines and collections
+# ("Unstitched", "Pret", "Men"), which made one brand look like a 30-brand
+# retailer (hand check 2026-11-22, docs/decisions/0019). Whole value only.
+LINE_VENDOR = re.compile(
+    r"^(?:(?:un)?stitched|pret|ready[ -]?to[ -]?wear|rtw|luxury|lawn|kurta|eastern|"
+    r"western|festive|formals?|casuals?|basics|essentials|signature|premium|"
+    r"(?:wo)?men|ladies|gents|kids|girls|boys|baby|infants?|teens?|junior|home|"
+    r"fragrances?|perfumes?|accessories|jewel(?:le)?ry|footwear|shoes|bags|"
+    r"makeup|skin ?care|beauty|fabrics?|textiles?|bedding|towels|winter|summer|"
+    r"eid|wedding|bridal|collections?|new arrivals?|sale|outlet|default|"
+    r"vendor|unknown|na|n/?a)$",
+    re.I,
+)
+
+# Third-party brands sold by Pakistani department, baby, beauty and electronics
+# stores (hand check 2026-11-22). A title naming one of them, when the vendor is
+# the store's own name, means a resold product. Lower-case whole words.
+KNOWN_BRANDS = re.compile(
+    r"\b(?:xiaomi|redmi|samsung|apple|iphone|oppo|vivo|realme|infinix|tecno|"
+    r"huawei|honor|anker|baseus|ugreen|jbl|sony|lenovo|hp|dell|logitech|philips|"
+    r"panasonic|braun|tefal|kenwood|black ?\+? ?decker|westpoint|anex|dawlance|"
+    r"haier|pel|chicco|pigeon|philips avent|avent|tommee tippee|mee mee|"
+    r"huggies|pampers|molfix|johnson'?s|mothercare|fisher[- ]price|lego|"
+    r"hasbro|mattel|barbie|hot wheels|l'?or[eé]al|maybelline|garnier|nivea|"
+    r"dove|ponds?|olay|neutrogena|cetaphil|the ordinary|cerave|revlon|"
+    r"rimmel|nyx|mac|clinique|est[eé]e lauder|loreal|nestl[eé]|unilever|"
+    r"colgate|gillette|oral[- ]?b|dettol|lux|sunsilk|head ?& ?shoulders|"
+    r"pantene|tresemm[eé]|nike|adidas|puma|skechers|reebok|casio|"
+    r"tupperware|pyrex|corelle|luminarc|borosil)\b",
+    re.I,
+)
+
+
+# Pakistani brands name vendors after whole collections ("Lux Pret Vol-2 Winter
+# 2026", "Men Kurta", "Luxury Attars"), so for that market a line word anywhere
+# in the value counts. Used only when market == "pk" (business_model): in the US
+# "Nike Men" is another brand, not a line.
+LINE_WORDS_PK = re.compile(
+    r"(?:\b(?:(?:un)?stitched|pret|ready to wear|luxury|lux|lawn|kurtas?|kameez|"
+    r"shalwar|shirts?|trousers?|sweaters?|activewear|eastern|western|festive|"
+    r"formals?|casuals?|ethnic|fancy|basics|essentials|signature|premium|"
+    r"(?:wo)?mens?|ladies|gents|kids|girls|boys|baby|toddlers?|infants?|"
+    r"junior|home|fragrances?|perfumes?|attars?|bakhoor|testers?|deals?|kits?|"
+    r"accessories|jewel(?:le)?ry|footwear|shoes|bags|makeup|fabrics?|bedding|"
+    r"winter|summer|spring|autumn|eid|wedding|bridal|collections?|edit|drop|"
+    r"vol|boutique|limited edition|silk|khaddar|jalabiyas?)\b|"
+    r"(?:^|[\s'_-])(?:20)?2\d\b)",
+    re.I,
+)
+
+
+def line_share(s: dict, shop_name: str, domain: str) -> float | None:
+    """line_vendor_share recomputed from saved vendor_names (None if not saved)."""
+    names = s.get("vendor_names")
+    n = s.get("products_sampled") or 0
+    if not names or not n:
+        return None
+    hit = sum(c for v, c in names.items() if vendor_is_line(v, shop_name, domain))
+    return round(hit / n, 3)
+
+
+def vendor_is_line(vendor: str, shop_name: str, domain: str) -> bool:
+    """The store's own name, or a product-line or collection name of its label
+    (broad match; business_model trusts it only for the Pakistan market)."""
+    v = vendor.strip()
+    return (
+        vendor_is_shop(v, shop_name, domain)
+        or bool(LINE_VENDOR.match(v))
+        or bool(LINE_WORDS_PK.search(v))
+    )
+
+
 def _quantile(xs: list[float], q: float) -> float | None:
     if not xs:
         return None
@@ -178,7 +251,8 @@ def summarize_feed(
     cats: dict[str, int] = {}
     types: dict[str, int] = {}
     traces = {"ae_image": 0, "dropship_sku": 0, "dropship_vendor": 0, "pod_vendor": 0}
-    own_vendor = 0
+    own_vendor = line_vendor = brand_titles = 0
+    brands_seen: set[str] = set()
     for p in items:
         vs = [v for v in (p.get("variants") or []) if isinstance(v, dict)]
         variants += len(vs)
@@ -206,6 +280,12 @@ def summarize_feed(
         if vend:
             vendors[vend] = vendors.get(vend, 0) + 1
             own_vendor += vendor_is_shop(vend, shop_name, domain)
+            line_vendor += vendor_is_line(vend, shop_name, domain)
+        title = str(p.get("title") or "")
+        hit = KNOWN_BRANDS.search(title)
+        if hit and not vendor_is_shop(hit.group(0), shop_name, domain):
+            brand_titles += 1
+            brands_seen.add(_norm(hit.group(0)))
         c = product_category(p, rules)
         cats[c] = cats.get(c, 0) + 1
         t = (p.get("product_type") or "").strip().lower()
@@ -242,6 +322,12 @@ def summarize_feed(
         "vendors": len(vendors),
         "top_vendor_share": share(top_vendor),
         "own_vendor_share": share(own_vendor),
+        "line_vendor_share": share(line_vendor),
+        # every vendor with its count (capped): lets relabel re-score vendor
+        # rules from saved evidence, no refetch (principle 13)
+        "vendor_names": dict(sorted(vendors.items(), key=lambda kv: -kv[1])[:100]),
+        "brand_title_share": share(brand_titles),
+        "brands_named": len(brands_seen),
         "category_counts": cats,
         "top_category": top_cat,
         "top_category_share": share(real_cats[top_cat]) if top_cat else None,
@@ -276,6 +362,13 @@ def category_spread(s: dict) -> int:
 GENERAL_MIN_CATEGORIES = 4
 GENERAL_MIN_DISCOUNT = 0.5
 GENERAL_MIN_PRODUCTS = 50
+# Markets where the general-store pattern is not used: Pakistani brands run
+# near-permanent sales across apparel, home and kids lines, so the pattern
+# labelled real brands "general" (hand check 2026-11-22). Dropship traces still apply.
+GENERAL_UNVALIDATED = {"pk"}
+# Share of titles naming a known third-party brand that marks a store as a
+# reseller of other brands' goods (hand check 2026-11-22).
+RESOLD_MIN_BRAND_TITLES = 0.3
 
 
 def business_model(
@@ -318,12 +411,24 @@ def business_model(
         return "dropship", why
     if (s.get("pod_share") or 0) >= 0.3:
         return "pod", [f"print-on-demand vendor on {s['pod_share']:.0%} of products"]
+    # Resold goods under the store's own vendor name (Pakistani department and
+    # electronics stores, hand check 2026-11-22): titles name other brands.
+    bt = s.get("brand_title_share")
+    if bt is not None and bt >= RESOLD_MIN_BRAND_TITLES:
+        named = s.get("brands_named") or 0
+        kind = "retailer" if named >= 3 else "reseller"
+        return kind, [f"{bt:.0%} of titles name another brand ({named} brands)"]
     own = s.get("own_vendor_share") or 0
+    line = s.get("line_vendor_share") if s.get("market") == "pk" else None
+    if line is not None and line > own:
+        why.append(f"vendor is own name or a product line on {line:.0%}")
+        own = line
     top = s.get("top_vendor_share") or 0
     vendors = s.get("vendors") or 0
     spread = category_spread(s)
     if (
-        (own >= 0.5 or top >= 0.5)
+        s.get("market") not in GENERAL_UNVALIDATED
+        and (own >= 0.5 or top >= 0.5)
         and n >= GENERAL_MIN_PRODUCTS
         and spread >= GENERAL_MIN_CATEGORIES
         and (s.get("discount_share") or 0) >= GENERAL_MIN_DISCOUNT
@@ -336,7 +441,7 @@ def business_model(
             f"{s['discount_share']:.0%} of products discounted"
         ]
     if own >= 0.5:
-        return "brand", [f"own name is the vendor on {own:.0%} of products"]
+        return "brand", why or [f"own name is the vendor on {own:.0%} of products"]
     if top >= 0.5:
         return "brand", [f"one vendor holds {top:.0%} of {vendors} vendors"]
     if vendors <= 5:  # a handful of labels is a brand with sub-labels
@@ -563,6 +668,8 @@ def _deep_one(hit: dict, pages: int, pause: float, rules, today: date) -> dict:
     host = hit.get("final_host") or d
     base = f"https://{host}"
     row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
+    if pk_store(hit):
+        row["market"] = "pk"
     s = webmeta._session()
     try:
         rp = _robots(s, base)
@@ -699,6 +806,8 @@ def _light_one(hit: dict, pause: float, rules, today: date) -> dict:
     d = hit["domain"]
     base = f"https://{hit.get('final_host') or d}"
     row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
+    if pk_store(hit):
+        row["market"] = "pk"
     s = webmeta._session()
     try:
         rp = _robots(s, base)
@@ -735,15 +844,20 @@ def run_light(
     batch: int = 300,
     new_first: bool = False,
     market: str = "us",
+    domains: set[str] | None = None,
 ) -> dict:
+    """domains: re-read exactly these stores (any market, even if done), e.g. a
+    hand-check set after a rule change that needs new evidence."""
     rules = load_rules()
     today = datetime.now(timezone.utc).date()
-    done = _done("web_store_light")
+    done = set() if domains else _done("web_store_light")
     metas = latest_good(_all_rows("web_meta"))
     todo = [
         m
         for m in sorted(metas.values(), key=lambda r: r["tranco_rank"])
-        if m.get("shop_id") and in_market(m, market) and m["domain"] not in done
+        if m.get("shop_id")
+        and (m["domain"] in domains if domains else in_market(m, market))
+        and m["domain"] not in done
     ][::stride]  # stride spreads a sample over the whole rank range
     if new_first:
         todo = _new_first(todo, new_hits())
@@ -776,6 +890,7 @@ def relabel() -> dict:
     Rule changes need no refetching: the evidence is already in the lake. Writes
     one new run per dataset (deep and light) holding the latest good row per domain."""
     out = {}
+    metas = latest_good(_all_rows("web_meta"))
     for ds in ("web_store_deep", "web_store_light"):
         latest = latest_good(_all_rows(ds))
         if not latest:
@@ -785,6 +900,12 @@ def relabel() -> dict:
             if not r.get("products_sampled"):
                 rows.append(r)
                 continue
+            m = metas.get(r["domain"], {})
+            if pk_store(m):
+                r = {**r, "market": "pk"}
+            ls = line_share(r, m.get("shop_name") or "", r["domain"])
+            if ls is not None:
+                r = {**r, "line_vendor_share": ls}
             model, why = business_model(
                 r, "dropship_app" in (r.get("traffic_tags") or [])
             )
@@ -869,6 +990,7 @@ def main(argv: list[str] | None = None) -> int:
     lt.add_argument("--stride", type=int, default=1, help="take every Nth store")
     lt.add_argument("--new-first", action="store_true", help="newly discovered first")
     lt.add_argument("--market", choices=sorted(MARKETS), default="us")
+    lt.add_argument("--domains", help="file with one domain per line: re-read these")
     sub.add_parser("relabel", help="recompute business_model from saved evidence")
     r = sub.add_parser("ranks")
     r.add_argument("--days-back", type=int, nargs="+", default=[90, 365])
@@ -893,6 +1015,9 @@ def main(argv: list[str] | None = None) -> int:
             a.stride,
             new_first=a.new_first,
             market=a.market,
+            domains=(
+                {x.strip() for x in open(a.domains) if x.strip()} if a.domains else None
+            ),
         )
     elif a.cmd == "relabel":
         out = relabel()
