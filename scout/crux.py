@@ -2,6 +2,8 @@
 
     python -m scout.crux pull --country pk            # latest month -> lake dataset crux_origins
     python -m scout.crux match --country pk            # coverage of our market stores
+    python -m scout.crux discover --country pk --max-bucket 50000 [--limit N]
+        # DNS-check (apex + www) unscanned origins for Shopify; resumable
 
 Source: Google's public BigQuery dataset `chrome-ux-report.country_<cc>.<YYYYMM>`
 (free tier, 1 TB of queries a month; we read two columns, a few MB). Terms:
@@ -112,13 +114,92 @@ def match(country: str) -> None:
     )
 
 
+# Stores found through CrUX are not in our Tranco scan: they get this marker rank
+# (sorts after every Tranco store) and keep their CrUX bucket for ranking.
+OUTSIDE_TRANCO = 1_000_001
+
+
+def discover(
+    country: str, max_bucket: int, limit: int | None, batch: int = 5000
+) -> dict:
+    """DNS only (Google Public DNS), no request to the sites themselves."""
+    from concurrent.futures import ThreadPoolExecutor
+
+    from scout import stores, webmeta
+
+    crux = {}
+    for r in stores._all_rows("crux_origins"):
+        if r["country"] == country and r["rank_bucket"] <= max_bucket:
+            crux[r["domain"]] = min(r["rank_bucket"], crux.get(r["domain"], 10**9))
+    seen = {r["domain"] for r in stores._all_rows("web_scan")}
+    seen |= {r["domain"] for r in stores._all_rows("crux_scan")}
+    todo = sorted((b, d) for d, b in crux.items() if d not in seen)[:limit]
+    print(f"{len(todo)} origins to check", file=sys.stderr, flush=True)
+
+    def check(bd):
+        b, d = bd
+        row = {"domain": d, "country": country, "rank_bucket": b, "is_shopify": False}
+        for host in (d, "www." + d):
+            ips, err = webmeta.resolve_a(host)
+            if webmeta.is_shopify(ips, []):
+                row.update(is_shopify=True, host=host, a="|".join(ips))
+                break
+            row.setdefault("error", err or None)
+        return row
+
+    out = {}
+    for i in range(0, len(todo), batch):
+        with ThreadPoolExecutor(8) as ex:
+            rows = list(ex.map(check, todo[i : i + batch]))
+        run = store.record_run(
+            "crux_scan",
+            rows,
+            source="chrome-ux-report+google_public_dns",
+            trust="data",
+            params={"country": country, "max_bucket": max_bucket, "n": len(rows)},
+            note="DNS A records of apex and www vs Shopify IP range; no site requests",
+        )
+        hits = [
+            {
+                "domain": r["domain"],
+                "tranco_rank": OUTSIDE_TRANCO,
+                "a": r["a"],
+                "crux_bucket": r["rank_bucket"],
+                "found_by": "crux",
+            }
+            for r in rows
+            if r["is_shopify"]
+        ]
+        if hits:
+            store.record_run(
+                "web_scan",
+                hits,
+                source="chrome-ux-report+google_public_dns",
+                trust="data",
+                params={"country": country, "found_by": "crux", "n": len(hits)},
+                note=f"Shopify stores outside the Tranco scan; tranco_rank={OUTSIDE_TRANCO} is a marker",
+            )
+        print(
+            f"crux_scan batch {i}: {len(rows)} checked, {len(hits)} Shopify",
+            file=sys.stderr,
+            flush=True,
+        )
+        out[f"crux_scan {i}"] = (run, len(rows))
+    return out
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Chrome UX Report country popularity")
-    ap.add_argument("cmd", choices=["pull", "match"])
+    ap.add_argument("cmd", choices=["pull", "match", "discover"])
     ap.add_argument("--country", default="pk")
+    ap.add_argument("--max-bucket", type=int, default=50000)
+    ap.add_argument("--limit", type=int)
     a = ap.parse_args(argv)
     if a.cmd == "pull":
         for k, (run, n) in pull(a.country).items():
+            print(f"{k}: run {run}, {n} rows", file=sys.stderr)
+    elif a.cmd == "discover":
+        for k, (run, n) in discover(a.country, a.max_bucket, a.limit).items():
             print(f"{k}: run {run}, {n} rows", file=sys.stderr)
     else:
         match(a.country)
