@@ -691,7 +691,11 @@ def _home_one(hit: dict, pause: float) -> dict:
 def run_home(domains: list[str], workers: int, pause: float) -> dict:
     """Homepage signals for a chosen list of stores (e.g. the top-ranked)."""
     metas = latest_good(_all_rows("web_meta"))
-    todo = [metas[d] for d in domains if d in metas]
+    done = set(latest_good(_all_rows("web_store_home"))) | gave_up(
+        _all_rows("web_store_home")
+    )
+    todo = [metas[d] for d in domains if d in metas and d not in done]
+    print(f"home: {len(todo)} to read", file=sys.stderr, flush=True)
     rows = _parallel(lambda h: _home_one(h, pause), todo, workers)
     run = store.record_run(
         "web_store_home",
