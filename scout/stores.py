@@ -36,8 +36,8 @@ import sys
 import time
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from urllib import robotparser
 
+from scout.robots import RobotRules
 from scout import store, webmeta
 
 RULES = Path("warehouse/seeds/store_category_rules.csv")
@@ -484,7 +484,7 @@ def shop_started_by(shop_id: int | None, curve: list[tuple[int, str]]) -> str | 
 
 
 def _robots(s, base: str):
-    rp = robotparser.RobotFileParser()
+    rp = RobotRules()
     r = s.get(base + "/robots.txt", timeout=20)
     rp.parse(r.text.splitlines() if r.ok else [])
     return rp
@@ -661,6 +661,135 @@ def homepage_signals(html: str) -> dict:
     same_as = {u for b in blocks for u in (b.get("sameAs") or []) if isinstance(u, str)}
     socials = webmeta.social_links(html + " " + " ".join(sorted(same_as)))
     return {"traffic_tags": sorted(tags), "social_networks": sorted(socials)}
+
+
+BEST_NAME = re.compile(
+    r"best[- ]?sell|top[- ]?sell|most[- ]?popular|hot[- ]?sell|trending|fan[- ]?favou?rite",
+    re.I,
+)
+# evergreen handles beat campaign ones ("best-sellers" over "eid-sale-best-seller-2026")
+BEST_EVERGREEN = re.compile(
+    r"^(?:all-)?(?:best[- ]?sell(?:er|ing)s?(?:-products?)?|top[- ]?sell(?:er|ing)s?|most-popular)$",
+    re.I,
+)
+
+
+def pick_best_collection(collections: list[dict]) -> dict | None:
+    """The store's best-seller collection: evergreen handle first, then the
+    largest of the rest. Empty collections are skipped."""
+    cands = [
+        c
+        for c in collections
+        if BEST_NAME.search((c.get("handle") or "") + " " + (c.get("title") or ""))
+        and (c.get("products_count") or 0) > 0
+    ]
+    if not cands:
+        return None
+    green = [c for c in cands if BEST_EVERGREEN.match(c.get("handle") or "")]
+    return max(green or cands, key=lambda c: c.get("products_count") or 0)
+
+
+def summarize_best(products: list[dict], today: date) -> dict:
+    """Aggregates over a best-seller collection's products (ids only, no titles)."""
+    prices, disc, new90 = [], 0, 0
+    for p in products:
+        vs = [v for v in (p.get("variants") or []) if isinstance(v, dict)]
+        pp = []
+        for v in vs:
+            try:
+                x = float(v.get("price"))
+            except (TypeError, ValueError):
+                continue
+            if x > 0:
+                pp.append(x)
+        if pp:
+            prices.append(min(pp))
+        try:
+            disc += any(
+                float(v.get("compare_at_price") or 0) > float(v.get("price"))
+                for v in vs
+            )
+        except (TypeError, ValueError):
+            pass
+        try:
+            new90 += (
+                today - date.fromisoformat(str(p.get("created_at"))[:10])
+            ).days <= 90
+        except ValueError:
+            pass
+    n = len(products)
+    return {
+        "best_n": n,
+        "best_product_ids": [p.get("id") for p in products if p.get("id")],
+        "best_price_median": _quantile(prices, 0.5),
+        "best_discount_share": round(disc / n, 3) if n else None,
+        "best_added_90d_share": round(new90 / n, 3) if n else None,
+    }
+
+
+def _best_one(hit: dict, pause: float, today: date) -> dict:
+    """Two requests: /collections.json, then the best-seller collection's feed.
+    Never uses sort_by (robots.txt forbids it, decision 0021)."""
+    d = hit["domain"]
+    base = f"https://{hit.get('final_host') or d}"
+    row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
+    s = webmeta._session()
+    try:
+        rp = _robots(s, base)
+        url = base + "/collections.json?limit=250"
+        if not rp.can_fetch(webmeta.UA, url):
+            row["feed_allowed"] = False
+            return row
+        time.sleep(pause)
+        r = s.get(url, timeout=30)
+        if not r.ok:
+            row["error"] = f"HTTP{r.status_code}"
+            return row
+        cols = r.json().get("collections") or []
+        row["collections_seen"] = len(cols)
+        pick = pick_best_collection(cols)
+        if not pick:
+            row["best_collection"] = None
+            return row
+        row["best_collection"] = pick["handle"]
+        feed = f"{base}/collections/{pick['handle']}/products.json?limit=50"
+        if not rp.can_fetch(webmeta.UA, feed):
+            row["feed_allowed"] = False
+            return row
+        time.sleep(pause)
+        r = s.get(feed, timeout=30)
+        if not r.ok:
+            row["error"] = f"HTTP{r.status_code}"
+            return row
+        row.update(summarize_best(r.json().get("products") or [], today))
+    except Exception as exc:
+        row["error"] = type(exc).__name__
+    return row
+
+
+def run_best(domains: list[str], workers: int, pause: float) -> dict:
+    """Best-seller collection evidence for a chosen list of stores."""
+    metas = latest_good(_all_rows("web_meta"))
+    rows_all = _all_rows("web_store_best")
+    done = set(latest_good(rows_all)) | gave_up(rows_all)
+    todo = [metas[d] for d in domains if d in metas and d not in done]
+    today = datetime.now(timezone.utc).date()
+    print(f"best: {len(todo)} to read", file=sys.stderr, flush=True)
+    rows = _parallel(lambda h: _best_one(h, pause, today), todo, workers)
+    run = store.record_run(
+        "web_store_best",
+        rows,
+        source="shopify_collections_json",
+        trust="data",
+        params={"n": len(rows)},
+        note="merchant best-seller collection; no sort_by (robots.txt); ids and aggregates only",
+    )
+    got = sum(1 for r in rows if r.get("best_n"))
+    print(
+        f"best: {len(rows)} stores, {got} with a best-seller collection",
+        file=sys.stderr,
+    )
+    return {"web_store_best": (run, len(rows))}
 
 
 def _home_one(hit: dict, pause: float) -> dict:
@@ -1044,6 +1173,12 @@ def main(argv: list[str] | None = None) -> int:
     hp.add_argument("--domains", required=True, help="file, one domain per line")
     hp.add_argument("--workers", type=int, default=1)
     hp.add_argument("--pause", type=float, default=4.0)
+    bp = sub.add_parser(
+        "best", help="best-seller collection of stores listed in a file"
+    )
+    bp.add_argument("--domains", required=True, help="file, one domain per line")
+    bp.add_argument("--workers", type=int, default=1)
+    bp.add_argument("--pause", type=float, default=4.0)
     sub.add_parser("relabel", help="recompute business_model from saved evidence")
     r = sub.add_parser("ranks")
     r.add_argument("--days-back", type=int, nargs="+", default=[90, 365])
@@ -1074,6 +1209,10 @@ def main(argv: list[str] | None = None) -> int:
         )
     elif a.cmd == "home":
         out = run_home(
+            [x.strip() for x in open(a.domains) if x.strip()], a.workers, a.pause
+        )
+    elif a.cmd == "best":
+        out = run_best(
             [x.strip() for x in open(a.domains) if x.strip()], a.workers, a.pause
         )
     elif a.cmd == "relabel":

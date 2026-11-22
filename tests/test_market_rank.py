@@ -131,3 +131,42 @@ def test_line_share_recomputed_from_saved_vendor_names():
     r = {"products_sampled": 10, "vendor_names": {"Men Kurta": 6, "Chicco": 4}}
     assert stores.line_share(r, "J.", "junaidjamshed.com") == 0.6
     assert stores.line_share({"products_sampled": 10}, "x", "x.pk") is None
+
+
+# Best-seller collection (decision 0021)
+def test_pick_best_prefers_evergreen_over_campaign_and_skips_empty():
+    cols = [
+        {"handle": "eid-sale-best-seller-2026", "title": "Eid", "products_count": 900},
+        {"handle": "best-sellers", "title": "Best Sellers", "products_count": 40},
+        {"handle": "best-seller-empty", "title": "x", "products_count": 0},
+        {"handle": "shoes", "title": "Shoes", "products_count": 500},
+    ]
+    assert stores.pick_best_collection(cols)["handle"] == "best-sellers"
+    only_campaign = [cols[0], cols[3]]
+    assert (
+        stores.pick_best_collection(only_campaign)["handle"]
+        == "eid-sale-best-seller-2026"
+    )
+    assert stores.pick_best_collection([cols[3]]) is None
+
+
+def test_summarize_best_aggregates_only():
+    from datetime import date
+
+    prods = [
+        {
+            "id": 1,
+            "created_at": "2026-11-01",
+            "variants": [{"price": "100", "compare_at_price": "150"}],
+        },
+        {
+            "id": 2,
+            "created_at": "2025-01-01",
+            "variants": [{"price": "300", "compare_at_price": None}],
+        },
+    ]
+    s = stores.summarize_best(prods, date(2026, 11, 22))
+    assert s["best_n"] == 2 and s["best_product_ids"] == [1, 2]
+    assert s["best_price_median"] == 200.0
+    assert s["best_discount_share"] == 0.5 and s["best_added_90d_share"] == 0.5
+    assert "title" not in s

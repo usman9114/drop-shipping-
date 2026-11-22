@@ -128,10 +128,10 @@ def product_url(
     session, domain: str, host: str | None = None
 ) -> tuple[str | None, str]:
     """First product page of a store, if robots.txt allows the feed and the page."""
-    from urllib import robotparser
+    from scout.robots import RobotRules
 
     base = f"https://{host or domain}"
-    rp = robotparser.RobotFileParser()
+    rp = RobotRules()
     r = session.get(base + "/robots.txt", timeout=20)
     rp.parse(r.text.splitlines() if r.ok else [])
     feed = base + "/products.json?limit=5"

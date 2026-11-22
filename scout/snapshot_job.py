@@ -25,8 +25,8 @@ import argparse
 import sys
 import time
 from datetime import datetime, timezone
-from urllib import robotparser
 
+from scout.robots import RobotRules
 from scout import snapshots, store, stores, webmeta
 
 PAGE_SIZE = 250
@@ -163,7 +163,7 @@ def snapshot_store(meta: dict, today: str) -> tuple[dict, dict[int, dict]]:
     }
     s = webmeta._session()
     try:
-        rp = robotparser.RobotFileParser()
+        rp = RobotRules()
         r = s.get(base + "/robots.txt", timeout=20)
         rp.parse(r.text.splitlines() if r.ok else [])
         feed = fetch_feed(s, base, rp, meta.get("published_products"))
