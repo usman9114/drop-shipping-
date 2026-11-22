@@ -455,10 +455,13 @@ MAX_FAILS = 3  # a store that failed this many fetches is left alone (no daily r
 
 
 def gave_up(rows: list[dict], max_fails: int = MAX_FAILS) -> set[str]:
-    """Domains with max_fails or more failed fetches and no good row."""
+    """Domains with max_fails or more failed fetches and no good row.
+
+    HTTP 429 is not counted: it means we were throttled (Shopify limits by our
+    user agent across all its stores), not that the store is broken."""
     fails: dict[str, int] = {}
     for r in rows:
-        if r.get("error"):
+        if r.get("error") and r.get("error") != "HTTP429":
             fails[r["domain"]] = fails.get(r["domain"], 0) + 1
     good = set(latest_good(rows))
     return {d for d, n in fails.items() if n >= max_fails and d not in good}
@@ -615,8 +618,27 @@ def us_store(m: dict) -> bool:
     )
 
 
+def pk_store(m: dict) -> bool:
+    """Sells to Pakistan in rupees: PKR storefront (owner, 2026-11-22).
+
+    Currency, not the registered country: Pakistani brands registered in the
+    UK, US or UAE still price in PKR for Pakistani buyers."""
+    return m.get("currency") == "PKR"
+
+
+MARKETS = {"us": us_store, "pk": pk_store}
+
+
+def in_market(m: dict, market: str | None) -> bool:
+    """True when the store sells in `market` ("us", "pk"); None means any market."""
+    return market is None or MARKETS[market](m)
+
+
 def deep_targets(
-    max_stores: int, us_only: bool = True, refresh: bool = False
+    max_stores: int,
+    us_only: bool = True,
+    refresh: bool = False,
+    market: str | None = None,
 ) -> list[dict]:
     """Stores with a working /meta.json, best Tranco rank first, not yet profiled."""
     done = set() if refresh else _done("web_store_deep")
@@ -628,7 +650,7 @@ def deep_targets(
     for m in sorted(metas.values(), key=lambda r: r["tranco_rank"]):
         if m["domain"] in done:
             continue
-        if us_only and not us_store(m):
+        if not in_market(m, market or ("us" if us_only else None)):
             continue
         out.append(m)
     return out[:max_stores]
@@ -642,10 +664,11 @@ def run_deep(
     us_only: bool,
     refresh: bool = False,
     batch: int = 100,
+    market: str | None = None,
 ) -> dict:
     rules = load_rules()
     today = datetime.now(timezone.utc).date()
-    todo = deep_targets(max_stores, us_only, refresh)
+    todo = deep_targets(max_stores, us_only, refresh, market)
     out = {}
     for i in range(0, len(todo), batch):
         chunk = todo[i : i + batch]
@@ -657,7 +680,12 @@ def run_deep(
             rows,
             source="shopify_storefront+google_public_dns",
             trust="data",
-            params={"n": len(chunk), "pages": pages, "us_only": us_only},
+            params={
+                "n": len(chunk),
+                "pages": pages,
+                "us_only": us_only,
+                "market": market or ("us" if us_only else "all"),
+            },
             note="robots.txt respected; feed aggregates (no titles), homepage tags, DNS TXT/MX",
         )
         print(f"deep batch {i}: {len(rows)} stores", file=sys.stderr, flush=True)
@@ -706,6 +734,7 @@ def run_light(
     stride: int = 1,
     batch: int = 300,
     new_first: bool = False,
+    market: str = "us",
 ) -> dict:
     rules = load_rules()
     today = datetime.now(timezone.utc).date()
@@ -714,7 +743,7 @@ def run_light(
     todo = [
         m
         for m in sorted(metas.values(), key=lambda r: r["tranco_rank"])
-        if m.get("shop_id") and us_store(m) and m["domain"] not in done
+        if m.get("shop_id") and in_market(m, market) and m["domain"] not in done
     ][::stride]  # stride spreads a sample over the whole rank range
     if new_first:
         todo = _new_first(todo, new_hits())
@@ -728,7 +757,7 @@ def run_light(
             rows,
             source="shopify_products_json",
             trust="data",
-            params={"n": len(chunk)},
+            params={"n": len(chunk), "market": market},
             note="one feed page per store, robots.txt respected; aggregates only",
         )
         ok = sum(1 for r in rows if r.get("business_model"))
@@ -827,6 +856,7 @@ def main(argv: list[str] | None = None) -> int:
     d.add_argument("--pages", type=int, default=4)
     d.add_argument("--pause", type=float, default=1.0)
     d.add_argument("--all-countries", action="store_true")
+    d.add_argument("--market", choices=sorted(MARKETS), help="us (default) or pk")
     d.add_argument(
         "--refresh", action="store_true", help="re-profile stores already done"
     )
@@ -838,6 +868,7 @@ def main(argv: list[str] | None = None) -> int:
     lt.add_argument("--pause", type=float, default=1.0)
     lt.add_argument("--stride", type=int, default=1, help="take every Nth store")
     lt.add_argument("--new-first", action="store_true", help="newly discovered first")
+    lt.add_argument("--market", choices=sorted(MARKETS), default="us")
     sub.add_parser("relabel", help="recompute business_model from saved evidence")
     r = sub.add_parser("ranks")
     r.add_argument("--days-back", type=int, nargs="+", default=[90, 365])
@@ -846,11 +877,22 @@ def main(argv: list[str] | None = None) -> int:
         out = run_meta(a.max_stores, a.workers, a.pause, new_first=a.new_first)
     elif a.cmd == "deep":
         out = run_deep(
-            a.max_stores, a.workers, a.pages, a.pause, not a.all_countries, a.refresh
+            a.max_stores,
+            a.workers,
+            a.pages,
+            a.pause,
+            not a.all_countries,
+            a.refresh,
+            market=a.market,
         )
     elif a.cmd == "light":
         out = run_light(
-            a.max_stores, a.workers, a.pause, a.stride, new_first=a.new_first
+            a.max_stores,
+            a.workers,
+            a.pause,
+            a.stride,
+            new_first=a.new_first,
+            market=a.market,
         )
     elif a.cmd == "relabel":
         out = relabel()
