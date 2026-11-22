@@ -28,3 +28,21 @@
 1. Adopt CrUX as a **source** for country popularity. In `scout.market_rank`, the CrUX bucket is the better traffic input for a single-country ranking than the global Tranco rank (change pending; weights stay in `WEIGHTS`).
 2. **Next (small first, then scale):** DNS-check every unscanned CrUX Pakistan origin in buckets up to 50k (about 47k, DNS only, no store traffic), then `/meta.json` for the hits at 1 worker and 4 s (Shopify throttles our user agent; about 4 h for 4,000 stores), keep the PKR ones, light-profile them.
 3. Not yet a recommendation for other countries: piloted on Pakistan only.
+
+## Social signals pilot (2026-11-22, top 30 ranked Pakistan stores)
+
+Question (owner): how much traffic comes from Instagram, TikTok and similar? **Inbound referrals are not observable** from public data (no referrer in Tranco or CrUX; paid estimators such as SimilarWeb are modelled guesses and need the owner's approval). What a homepage shows is effort `[proxy]`. `python -m scout.stores home --domains <file>` reads one homepage per store (robots.txt respected, 1 worker, 4 s apart), dataset `web_store_home`.
+
+| Signal on the homepage of the top 30 | Stores |
+|---|---|
+| Instagram link | 29 |
+| Facebook link | 27 |
+| YouTube link | 21 |
+| TikTok link | 18 |
+| Pinterest / X link | 10 / 8 |
+| No social link at all | 1 |
+| Meta pixel (Facebook/Instagram ads tracking) | 30 |
+| Google Ads tag | 29 |
+| TikTok pixel | 18 |
+
+Reading: every top store runs Meta and nearly all run Google Ads; about 60% also run TikTok. This shows channels in use, not visits, orders or ad spend `[unknown]`. Stores that sell through Instagram or WhatsApp chat leave no trace on their own pages, so Pakistan social reliance is likely under-counted. Not yet run on the other stores.

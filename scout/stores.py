@@ -663,6 +663,51 @@ def homepage_signals(html: str) -> dict:
     return {"traffic_tags": sorted(tags), "social_networks": sorted(socials)}
 
 
+def _home_one(hit: dict, pause: float) -> dict:
+    """Homepage only: social accounts linked, ad pixels, apps. One request."""
+    d = hit["domain"]
+    base = f"https://{hit.get('final_host') or d}"
+    row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
+    s = webmeta._session()
+    try:
+        rp = _robots(s, base)
+        if not rp.can_fetch(webmeta.UA, base + "/"):
+            row["home_allowed"] = False
+            return row
+        time.sleep(pause)
+        r = s.get(base + "/", timeout=30)
+        row["home_status"] = r.status_code
+        if not r.ok:
+            row["error"] = f"HTTP{r.status_code}"
+            return row
+        html = r.text
+        row.update(homepage_signals(html))
+        row["social_handles"] = webmeta.social_links(html)
+    except Exception as exc:
+        row["error"] = type(exc).__name__
+    return row
+
+
+def run_home(domains: list[str], workers: int, pause: float) -> dict:
+    """Homepage signals for a chosen list of stores (e.g. the top-ranked)."""
+    metas = latest_good(_all_rows("web_meta"))
+    todo = [metas[d] for d in domains if d in metas]
+    rows = _parallel(lambda h: _home_one(h, pause), todo, workers)
+    run = store.record_run(
+        "web_store_home",
+        rows,
+        source="shopify_homepage",
+        trust="data",
+        params={"n": len(rows)},
+        note="one homepage request per store, robots.txt respected; social links, pixels, apps",
+    )
+    print(
+        f"home: {len(rows)} stores, {sum(1 for r in rows if not r.get('error'))} ok",
+        file=sys.stderr,
+    )
+    return {"web_store_home": (run, len(rows))}
+
+
 def _deep_one(hit: dict, pages: int, pause: float, rules, today: date) -> dict:
     d = hit["domain"]
     host = hit.get("final_host") or d
@@ -991,6 +1036,10 @@ def main(argv: list[str] | None = None) -> int:
     lt.add_argument("--new-first", action="store_true", help="newly discovered first")
     lt.add_argument("--market", choices=sorted(MARKETS), default="us")
     lt.add_argument("--domains", help="file with one domain per line: re-read these")
+    hp = sub.add_parser("home", help="homepage signals for stores listed in a file")
+    hp.add_argument("--domains", required=True, help="file, one domain per line")
+    hp.add_argument("--workers", type=int, default=1)
+    hp.add_argument("--pause", type=float, default=4.0)
     sub.add_parser("relabel", help="recompute business_model from saved evidence")
     r = sub.add_parser("ranks")
     r.add_argument("--days-back", type=int, nargs="+", default=[90, 365])
@@ -1018,6 +1067,10 @@ def main(argv: list[str] | None = None) -> int:
             domains=(
                 {x.strip() for x in open(a.domains) if x.strip()} if a.domains else None
             ),
+        )
+    elif a.cmd == "home":
+        out = run_home(
+            [x.strip() for x in open(a.domains) if x.strip()], a.workers, a.pause
         )
     elif a.cmd == "relabel":
         out = relabel()
