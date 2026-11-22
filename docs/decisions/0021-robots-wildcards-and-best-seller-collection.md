@@ -20,7 +20,7 @@ Pilot, top 30 Pakistan stores `[data]`: 27 have a best-seller-type collection; 1
 
 - **Is:** what the merchant chooses to promote as best sellers `[proxy]`. Price of best sellers vs the catalogue median is visible (e.g. best sellers far cheaper than the catalogue at 6 of 18).
 - **Is not:** verified sales. Order inside a collection may be manual. Some collections are campaigns ("eid-sale-best-seller") or narrow ("bestsellers-maybelline"). `[unknown]` sales, orders.
-- **Not validated:** the collection picker (evergreen handle first, else the largest) sometimes chooses a narrow collection. Needs a hand check of about 20 stores before the signal enters any score (principle 5). It is not in `market_rank.WEIGHTS`.
+- **Picker:** first version was wrong on 8 of 30 stores (it sometimes chose a narrow or seasonal collection); rewritten and validated below. The signal is not in `market_rank.WEIGHTS`.
 
 ## Best-seller picker validation (2026-11-22, principle 5)
 
