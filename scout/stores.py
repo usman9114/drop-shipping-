@@ -667,21 +667,43 @@ BEST_NAME = re.compile(
     r"best[- ]?sell|top[- ]?sell|most[- ]?popular|hot[- ]?sell|trending|fan[- ]?favou?rite",
     re.I,
 )
-# evergreen handles beat campaign ones ("best-sellers" over "eid-sale-best-seller-2026")
+# evergreen handles beat the rest ("best-sellers" over "best-selling-collection")
 BEST_EVERGREEN = re.compile(
     r"^(?:all-)?(?:best[- ]?sell(?:er|ing)s?(?:-products?)?|top[- ]?sell(?:er|ing)s?|most-popular)$",
     re.I,
 )
+# Seasons, events, dated and numbered campaigns: never a standing best-seller list
+BEST_CAMPAIGN = re.compile(
+    r"sale|eid|summer|winter|spring|autumn|fall|festive|azadi|restock|hit-codes|"
+    r"(?:^|-)(?:ws|ss|aw|fw|w|s)-?\d{2}(?:-|$)|\d{1,2}-\d{1,2}(?:-\d{2,4})?",
+    re.I,
+)
+_GENERIC = re.compile(
+    r"(?:best|sell(?:er|ers|ing|ings)?|top|hot|most|popular|trending|fan|"
+    r"favou?rites?|products?|collection|all|our|the|\d+)+",
+    re.I,
+)
+
+
+def _unscoped(handle: str) -> bool:
+    """Only best-seller words: no category, gender or brand in the handle."""
+    return all(_GENERIC.fullmatch(t) for t in handle.split("-") if t)
 
 
 def pick_best_collection(collections: list[dict]) -> dict | None:
-    """The store's best-seller collection: evergreen handle first, then the
-    largest of the rest. Empty collections are skipped."""
+    """The store's whole-store best-seller collection, or None.
+
+    Matches on the handle (not the title: "Eid Sale" collections are titled
+    "Best Sellers"), skips empty and campaign collections, and refuses scoped ones
+    (boys, accessories, one brand). None means "no clean best-seller list", which
+    is better than a wrong one (hand check 2026-11-22, decision 0021)."""
     cands = [
         c
         for c in collections
-        if BEST_NAME.search((c.get("handle") or "") + " " + (c.get("title") or ""))
+        if BEST_NAME.search(c.get("handle") or "")
         and (c.get("products_count") or 0) > 0
+        and not BEST_CAMPAIGN.search(c.get("handle") or "")
+        and _unscoped(c.get("handle") or "")
     ]
     if not cands:
         return None
@@ -747,6 +769,13 @@ def _best_one(hit: dict, pause: float, today: date) -> dict:
             return row
         cols = r.json().get("collections") or []
         row["collections_seen"] = len(cols)
+        # every best-seller-named candidate, kept so the picker can be re-scored
+        # from saved evidence (principle 13)
+        row["best_candidates"] = [
+            [c.get("handle"), c.get("title"), c.get("products_count")]
+            for c in cols
+            if BEST_NAME.search((c.get("handle") or "") + " " + (c.get("title") or ""))
+        ][:12]
         pick = pick_best_collection(cols)
         if not pick:
             row["best_collection"] = None
@@ -767,11 +796,13 @@ def _best_one(hit: dict, pause: float, today: date) -> dict:
     return row
 
 
-def run_best(domains: list[str], workers: int, pause: float) -> dict:
+def run_best(
+    domains: list[str], workers: int, pause: float, refresh: bool = False
+) -> dict:
     """Best-seller collection evidence for a chosen list of stores."""
     metas = latest_good(_all_rows("web_meta"))
     rows_all = _all_rows("web_store_best")
-    done = set(latest_good(rows_all)) | gave_up(rows_all)
+    done = set() if refresh else set(latest_good(rows_all)) | gave_up(rows_all)
     todo = [metas[d] for d in domains if d in metas and d not in done]
     today = datetime.now(timezone.utc).date()
     print(f"best: {len(todo)} to read", file=sys.stderr, flush=True)
@@ -1179,6 +1210,9 @@ def main(argv: list[str] | None = None) -> int:
     bp.add_argument("--domains", required=True, help="file, one domain per line")
     bp.add_argument("--workers", type=int, default=1)
     bp.add_argument("--pause", type=float, default=4.0)
+    bp.add_argument(
+        "--refresh", action="store_true", help="re-read stores already done"
+    )
     sub.add_parser("relabel", help="recompute business_model from saved evidence")
     r = sub.add_parser("ranks")
     r.add_argument("--days-back", type=int, nargs="+", default=[90, 365])
@@ -1213,7 +1247,10 @@ def main(argv: list[str] | None = None) -> int:
         )
     elif a.cmd == "best":
         out = run_best(
-            [x.strip() for x in open(a.domains) if x.strip()], a.workers, a.pause
+            [x.strip() for x in open(a.domains) if x.strip()],
+            a.workers,
+            a.pause,
+            a.refresh,
         )
     elif a.cmd == "relabel":
         out = relabel()

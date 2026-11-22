@@ -21,3 +21,17 @@ Pilot, top 30 Pakistan stores `[data]`: 27 have a best-seller-type collection; 1
 - **Is:** what the merchant chooses to promote as best sellers `[proxy]`. Price of best sellers vs the catalogue median is visible (e.g. best sellers far cheaper than the catalogue at 6 of 18).
 - **Is not:** verified sales. Order inside a collection may be manual. Some collections are campaigns ("eid-sale-best-seller") or narrow ("bestsellers-maybelline"). `[unknown]` sales, orders.
 - **Not validated:** the collection picker (evergreen handle first, else the largest) sometimes chooses a narrow collection. Needs a hand check of about 20 stores before the signal enters any score (principle 5). It is not in `market_rank.WEIGHTS`.
+
+## Best-seller picker validation (2026-11-22, principle 5)
+
+Hand-labelled from each store's candidate list (`data/private/research/pk-bestseller-truth*.csv`, private): the label is the handle of the whole-store best-seller collection, or none.
+
+| Picker | Stores | Right |
+|---|---|---|
+| First version (title or handle match, largest count) | top 30 Pakistan | 22/30 = 73% |
+| Rewritten (handle only; skips empty, campaign and scoped handles; evergreen first), same 30 | in-sample | 26/30 = 87% |
+| Rewritten, **held-out** (ranks 41 to 70, labelled before reading the picker's answer) | 20 | **19/20 = 95%** |
+
+Errors found and now tests (`test_pick_best_rules_from_hand_check`): best-seller only in a collection's title ("Eid Sale" titled "Best Sellers"); seasonal and dated campaigns (`summer-trending-hit-codes`, `12-12-top-sellings`, `ws-23`); one gender, category or brand (`boys-most-popular-products`, `bestsellers-maybelline`); empty collections; one-word handles (`bestsellers`); counts that cannot be trusted (31,930 on a small shop). **Known limit:** it refuses a scoped handle even when the store sells only that range (a lawn shop's `1-lawn-best-selling`, an abaya shop's `best-seller-abayas`): 5 misses over 50 stores, all "none" where a list existed. Chosen on purpose: no list beats a wrong one.
+
+Result on the top 70: 32 stores have best-seller data (of 68 read). Best-seller median price is **0.89 of the catalogue median** and below it at 18 of 32 `[proxy]`, so merchants' best sellers skew cheaper than their range. Signal still not in `market_rank.WEIGHTS`; adding it is a separate, explained change.

@@ -134,20 +134,42 @@ def test_line_share_recomputed_from_saved_vendor_names():
 
 
 # Best-seller collection (decision 0021)
-def test_pick_best_prefers_evergreen_over_campaign_and_skips_empty():
-    cols = [
-        {"handle": "eid-sale-best-seller-2026", "title": "Eid", "products_count": 900},
-        {"handle": "best-sellers", "title": "Best Sellers", "products_count": 40},
-        {"handle": "best-seller-empty", "title": "x", "products_count": 0},
-        {"handle": "shoes", "title": "Shoes", "products_count": 500},
-    ]
-    assert stores.pick_best_collection(cols)["handle"] == "best-sellers"
-    only_campaign = [cols[0], cols[3]]
+def test_pick_best_rules_from_hand_check():
+    def pick(*cols):
+        c = stores.pick_best_collection(
+            [{"handle": h, "title": ttl, "products_count": n} for h, ttl, n in cols]
+        )
+        return c and c["handle"]
+
+    # evergreen beats a bigger non-evergreen; empty and campaign are skipped
     assert (
-        stores.pick_best_collection(only_campaign)["handle"]
-        == "eid-sale-best-seller-2026"
+        pick(("best-sellers", "B", 40), ("best-selling-collection", "B", 9000))
+        == "best-sellers"
     )
-    assert stores.pick_best_collection([cols[3]]) is None
+    assert (
+        pick(("best-seller", "B", 0), ("best-seller-2026", "B", 34))
+        == "best-seller-2026"
+    )
+    # adanslibas, sabritextile: best-seller only in the title
+    assert pick(("eid-sale-2026", "Best Sellers", 42)) is None
+    assert pick(("printed-kaftaan", "Best Seller", 28)) is None
+    # campaigns and dates
+    assert (
+        pick(("12-12-top-sellings", "x", 103), ("best-selling-5-14-25", "x", 99))
+        is None
+    )
+    assert pick(("best-seller-products-ws-23", "x", 911)) is None
+    assert pick(("summer-trending-hit-codes", "x", 11)) is None
+    # scoped: one gender, category or brand
+    assert pick(("boys-most-popular-products", "x", 50)) is None
+    assert pick(("bestsellers-maybelline", "x", 139)) is None
+    assert pick(("accessories-seasonal-best-seller", "x", 171)) is None
+    # unscoped generic names, counts unreliable (31,930 products on a small shop)
+    assert (
+        pick(("best-selling-products", "x", 31930), ("hot-selling", "x", 5))
+        == "best-selling-products"
+    )
+    assert pick(("bestseller", "x", 313)) == "bestseller"
 
 
 def test_summarize_best_aggregates_only():
