@@ -35,3 +35,7 @@ Hand-labelled from each store's candidate list (`data/private/research/pk-bestse
 Errors found and now tests (`test_pick_best_rules_from_hand_check`): best-seller only in a collection's title ("Eid Sale" titled "Best Sellers"); seasonal and dated campaigns (`summer-trending-hit-codes`, `12-12-top-sellings`, `ws-23`); one gender, category or brand (`boys-most-popular-products`, `bestsellers-maybelline`); empty collections; one-word handles (`bestsellers`); counts that cannot be trusted (31,930 on a small shop). **Known limit:** it refuses a scoped handle even when the store sells only that range (a lawn shop's `1-lawn-best-selling`, an abaya shop's `best-seller-abayas`): 5 misses over 50 stores, all "none" where a list existed. Chosen on purpose: no list beats a wrong one.
 
 Result on the top 70: 32 stores have best-seller data (of 68 read). Best-seller median price is **0.89 of the catalogue median** and below it at 18 of 32 `[proxy]`, so merchants' best sellers skew cheaper than their range. Signal still not in `market_rank.WEIGHTS`; adding it is a separate, explained change.
+
+## Owner decision 2026-11-23: no VPN or proxy to get around rate limits
+
+When Shopify answers HTTP 429 we slow down (1 worker, 4 to 6 s apart, 10-minute back-off); we do not rotate IPs through a VPN or proxy to dodge the limit. A proxy stays open only as a narrow option to view Pakistani stores as a local visitor (prices, redirects), if ever needed. Check that the VPN location is Pakistan or neutral during `/meta.json` runs, since stores can change currency by visitor country.
