@@ -23,20 +23,45 @@ def test_growth_log():
     assert market_rank.growth_log(1000, None) is None
 
 
-def test_score_orders_busier_and_growing_first():
+def test_score_orders_popular_growing_active_first_and_skips_unprofiled():
     rows = [
-        {"domain": "flat", "tranco_rank": 5000, "rank_growth_log": 0, "added_90d": 5},
-        {"domain": "top", "tranco_rank": 1000, "rank_growth_log": 1, "added_90d": 50},
         {
-            "domain": "slow",
-            "tranco_rank": 9000,
+            "domain": "flat",
+            "profiled": True,
+            "tranco_rank": 5000,
+            "crux_bucket": 5000,
+            "rank_growth_log": 0,
+            "added_90d": 5,
+        },
+        {
+            "domain": "top",
+            "profiled": True,
+            "tranco_rank": 1000,
+            "crux_bucket": 1000,
+            "rank_growth_log": 1,
+            "added_90d": 50,
+        },
+        {
+            "domain": "small",
+            "profiled": True,
+            "tranco_rank": None,
+            "crux_bucket": 50000,
             "rank_growth_log": None,
             "added_90d": None,
         },
+        {
+            "domain": "unread",
+            "profiled": False,
+            "tranco_rank": 100,
+            "crux_bucket": 1000,
+        },
     ]
     ranked = market_rank.score(rows)
-    assert [r["domain"] for r in ranked] == ["top", "flat", "slow"]
+    assert [r["domain"] for r in ranked] == ["top", "flat", "small", "unread"]
     assert ranked[0]["best_score"] == 1.0
+    assert ranked[-1]["best_score"] is None  # not scored, listed last
+    # a store outside the Tranco top 1M gets no global-rank points
+    assert next(r for r in ranked if r["domain"] == "small")["pct_global"] == 0.0
 
 
 def test_throttled_store_is_not_given_up():

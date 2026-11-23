@@ -46,3 +46,10 @@ Question (owner): how much traffic comes from Instagram, TikTok and similar? **I
 | TikTok pixel | 18 |
 
 Reading: every top store runs Meta and nearly all run Google Ads; about 60% also run TikTok. This shows channels in use, not visits, orders or ad spend `[unknown]`. Stores that sell through Instagram or WhatsApp chat leave no trace on their own pages, so Pakistan social reliance is likely under-counted. Not yet run on the other stores.
+
+## Ranking and UI (2026-11-23)
+
+- **Score now uses CrUX** (`scout.market_rank`): Pakistan popularity 0.35, global Tranco rank 0.20, rank growth 0.25, products added in 90 days 0.20 (weights only in `WEIGHTS`; reasons in the module docstring). Only profiled stores are scored; stores outside the Tranco top 1M can rank but earn no global-rank or growth points. Median "added in 90 days" is capped at 250 (one feed page).
+- **Discovery result:** 46,817 Pakistani origins DNS-checked, **4,929 Shopify stores** outside our Tranco scan; of the first 377 read, 355 (94%) price in PKR. `/meta.json` and light profiling of the rest run in the background (1 worker, 5 to 6 s apart).
+- **UI:** the Pakistan view is its own page, `ui/pakistan.html`, reading `pakistan.json` from `python scripts/ui_export_pk.py` (lake only; private, never committed). It is separate on purpose: the live Store Scout page was redesigned by another session (worktree `ui-work-inventory-b6d22a`, not yet committed), so the Pakistan block is to be ported into it once that settles. Private artifact: https://claude.ai/artifact/8Th3FfVt5ADaa1AuBDugqd. Refresh = rerun the export, republish with `pakistan.json` beside the page.
+- **Not visually checked** (browser pane hidden when published); the page script was run against the real data in Node (every view, every panel tab, filters and sorts).
