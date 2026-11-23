@@ -36,6 +36,10 @@ Errors found and now tests (`test_pick_best_rules_from_hand_check`): best-seller
 
 Result on the top 70: 32 stores have best-seller data (of 68 read). Best-seller median price is **0.89 of the catalogue median** and below it at 18 of 32 `[proxy]`, so merchants' best sellers skew cheaper than their range. Signal still not in `market_rank.WEIGHTS`; adding it is a separate, explained change.
 
-## Owner decision 2026-11-23: no VPN or proxy to get around rate limits
+## Owner decision 2026-11-23: a fixed SOCKS5 proxy (NordVPN) is allowed
 
-When Shopify answers HTTP 429 we slow down (1 worker, 4 to 6 s apart, 10-minute back-off); we do not rotate IPs through a VPN or proxy to dodge the limit. A proxy stays open only as a narrow option to view Pakistani stores as a local visitor (prices, redirects), if ever needed. Check that the VPN location is Pakistan or neutral during `/meta.json` runs, since stores can change currency by visitor country.
+First answer was "not for rate limits"; the owner then corrected it: **yes, use NordVPN's SOCKS5 proxy.** Built as `SCOUT_PROXY` in `.env` (value `socks5://<service user>:<service password>@<host>:1080`, credentials from the NordVPN account's manual-setup page; never in chat or git). It routes **store-site fetches only** (meta, light, deep, homepage, best-seller via `webmeta._session(via_proxy=True)`); DNS-over-HTTPS and APIs stay direct. `socks5h` resolves names at the proxy. Check with `python -m scout.proxy_check` (prints the exit country only).
+
+Rules that do not change: one fixed exit, **no IP rotation, no switching exit on HTTP 429**; pacing and the 10-minute back-off stay as they are. A proxy is for routing and geography, not a way to ignore a limit. Revisit if the owner decides otherwise.
+
+Notes: with the NordVPN desktop app connected the whole machine already exits through it, so the proxy adds nothing until the app is off or a different exit is wanted. On 2026-11-23 the direct exit was GB; no Pakistani price was skewed (44 stores read before and after: none moved more than 20%), but use a Pakistan exit for profile runs. Dependency: `PySocks` 1.7.1 (the SOCKS extra `requests` documents), installed with `requests[socks]`.

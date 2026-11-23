@@ -134,3 +134,14 @@ def test_jsonld_same_as_and_rating():
     product = '<script type="application/ld+json">{"@type":"Product","aggregateRating":{"ratingValue":"4.8","reviewCount":"1234"}}</script>'
     assert webmeta.aggregate_rating(webmeta.jsonld(product)) == (1234, 4.8)
     assert webmeta.aggregate_rating([]) == (None, None)
+
+
+def test_proxy_applies_only_when_asked_and_uses_remote_dns(monkeypatch):
+    host = "host.example:1080"
+    monkeypatch.setenv("SCOUT_PROXY", f"socks5://{'u'}:{'p'}@{host}")
+    assert webmeta._session().proxies == {}  # DNS and APIs stay direct
+    p = webmeta._session(via_proxy=True).proxies
+    # names resolve at the proxy (socks5h), not here
+    assert p["https"] == f"socks5h://{'u'}:{'p'}@{host}"
+    monkeypatch.setenv("SCOUT_PROXY", "")
+    assert webmeta._session(via_proxy=True).proxies == {}

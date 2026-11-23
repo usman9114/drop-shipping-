@@ -590,7 +590,7 @@ def _meta_one(hit: dict, pause: float) -> dict:
     d = hit["domain"]
     base = f"https://{d}"
     row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
-    s = webmeta._session()
+    s = webmeta._session(via_proxy=True)
     try:
         rp = _robots(s, base)
         row["meta_allowed"] = rp.can_fetch(webmeta.UA, base + "/meta.json")
@@ -755,7 +755,7 @@ def _best_one(hit: dict, pause: float, today: date) -> dict:
     d = hit["domain"]
     base = f"https://{hit.get('final_host') or d}"
     row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
-    s = webmeta._session()
+    s = webmeta._session(via_proxy=True)
     try:
         rp = _robots(s, base)
         url = base + "/collections.json?limit=250"
@@ -828,7 +828,7 @@ def _home_one(hit: dict, pause: float) -> dict:
     d = hit["domain"]
     base = f"https://{hit.get('final_host') or d}"
     row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
-    s = webmeta._session()
+    s = webmeta._session(via_proxy=True)
     try:
         rp = _robots(s, base)
         if not rp.can_fetch(webmeta.UA, base + "/"):
@@ -879,7 +879,7 @@ def _deep_one(hit: dict, pages: int, pause: float, rules, today: date) -> dict:
     row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
     if pk_store(hit):
         row["market"] = "pk"
-    s = webmeta._session()
+    s = webmeta._session(via_proxy=True)
     try:
         rp = _robots(s, base)
         prods: list[dict] = []
@@ -1017,7 +1017,7 @@ def _light_one(hit: dict, pause: float, rules, today: date) -> dict:
     row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
     if pk_store(hit):
         row["market"] = "pk"
-    s = webmeta._session()
+    s = webmeta._session(via_proxy=True)
     try:
         rp = _robots(s, base)
         url = base + "/products.json?limit=250"
