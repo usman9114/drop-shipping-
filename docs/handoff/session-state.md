@@ -96,3 +96,31 @@ Running at hand-off time: the fingerprint backlog loop (see "Next" 1). It pushes
 ## History
 
 Earlier states (2026-11-04: CJ supply check, review panel, niche finder R1, top-stores re-scope, data vault) are in git history of this file and in `docs/plan/` and `docs/decisions/`.
+
+
+## 2026-11-22/23 session: Pakistan market (owner: "search in Pakistan, rank the top stores")
+
+Branch `claude/pakistan-store-search-rank-238fdc` (local commits, **not pushed**; head about `0264872`). Decisions: **0019** (Pakistan market rule, business-model validation), **0020** (CrUX source, ranking, UI), **0021** (robots.txt wildcard bug, best-seller signal, proxy).
+
+Done:
+- **Market rule:** a Pakistan store prices in PKR (`stores.pk_store`); `--market pk` on `stores light|deep`. 1,267 PKR Shopify stores known (911 from the Tranco scan, 355+ from CrUX so far).
+- **Business-model rules for Pakistan:** 62% to 90% on 40 hand-checked stores (in-sample; **held-out check of 20 more still due**). Free-model second opinion 85%. `scripts/check_truth.py`; truth CSVs in `data/private/research/` (private, lost with the container: export to the vault).
+- **CrUX** (Google Chrome UX Report, BigQuery, CC BY 4.0): `python -m scout.crux pull|match|discover`. 46,817 Pakistani origins DNS-checked: **4,929 Shopify stores outside Tranco**. Needs `GOOGLE_APPLICATION_CREDENTIALS` in `.env` (key file outside the repo, `~/.config/scout/gcp-sa.json`).
+- **robots.txt bug fixed:** stdlib parser ignored wildcards (`Disallow: /collections/*sort_by*`); `scout/robots.py` (HOMEGROWN, protego is the swap) now in all nine modules. Audit of 59 stores: no earlier fetch affected.
+- **Best-seller signal:** `stores best --domains <file>` reads the merchant's own best-seller collection (never `sort_by`). Picker hand-checked: 73% to 87% in-sample, **95% held-out**. Not in any score.
+- **Homepage signals:** `stores home --domains <file>`: social links, ad pixels, apps. Done for all 900 originally profiled stores.
+- **Score and UI:** `python -m scout.market_rank --market pk`; weights in `market_rank.WEIGHTS` (Pakistan popularity 0.35, global rank 0.20, growth 0.25, rhythm 0.20). `python scripts/ui_export_pk.py` then publish `ui/pakistan.html` with `pakistan.json` beside it: https://claude.ai/artifact/8Th3FfVt5ADaa1AuBDugqd (private).
+- **Proxy:** optional `SCOUT_PROXY` (fixed NordVPN SOCKS5 exit, store fetches only). Owner chose to skip it for now; never rotate IPs or use it to dodge HTTP 429.
+
+Running at hand-off (started by this session, output under the session's tasks folder; all resumable, rerunning continues):
+1. `/meta.json` of the 4,929 CrUX-found stores: `scout.stores meta --max-stores 500 --workers 1 --pause 5`, 14 rounds, about 7 h from 00:40 on 2026-11-23 (rounds of about 42 min; 379 of 500 answered in round 2).
+2. Light profile of every PKR store not yet profiled: `scout.stores light --market pk --max-stores 100 --workers 1 --pause 6` in a loop; idles 10 min when nothing is new. **94% of the first 377 CrUX hits are PKR**, so expect about 4,500 more stores.
+Shopify throttles our user agent (HTTP 429 at 6 workers); both jobs wait 10 min on a 429.
+
+Next, in order:
+1. When both jobs finish: homepage pass for the new stores (`stores home --domains`, list the new PKR domains), `python scripts/ui_export_pk.py`, republish `ui/pakistan.html` (owner asked for the refresh).
+2. Hand-check 20 held-out PKR stores for the business-model rules before using a "copyable" filter; the 6 `dropship` labels in Pakistan are unchecked.
+3. Port the Pakistan block into the redesigned Store Scout page once the UI session (worktree `ui-work-inventory-b6d22a`, live artifact `8W7nFMj25E5xSbW3ded3Af`) commits it. Do not overwrite that artifact from the old `ui/store-scout.html`.
+4. Owner decisions: what the Pakistan list is for (sell inside Pakistan vs learn categories for eBay US; CJ does not fit the first); push the branch; swap the homegrown robots matcher for `protego`; paid referral-traffic estimators (SimilarWeb) need approval.
+
+Traps: pre-commit hooks must run from `.venv/bin` (`PATH=$PWD/.venv/bin:$PATH git commit`); never run `ruff check --fix` over the repo (newer ruff than pre-commit's rewrites 20 files, and `datetime.UTC` breaks Python 3.9); `tests/test_snapshots.py` and `test_snapshot_job.py` fail on Python 3.9 (pre-existing); `.env` is a symlink to the main checkout's file; the `stores light` loop and the `meta` loop each spawn a fresh Python per round, so code edits apply mid-run.
