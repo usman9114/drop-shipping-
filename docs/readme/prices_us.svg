@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 218" width="640" height="218" role="img" aria-label="Product price bands, US (USD)">
+<style>.t{fill:#1f2328;font:12px -apple-system,Segoe UI,Helvetica,Arial,sans-serif}.h{font-weight:600;font-size:14px}.m{fill:#59636e}.g{stroke:#8c959f;stroke-opacity:.35}.s0{fill:#0969da}.s1{fill:#bf3989}@media (prefers-color-scheme:dark){.t{fill:#e6edf3}.m{fill:#9198a1}.s0{fill:#4493f8}.s1{fill:#db61a2}}</style>
+<text class="t h" x="12" y="22">Product price bands, US (USD)</text>
+<text class="t m" x="12" y="40">stores by median product price [data]</text>
+<line class="g" x1="150" y1="54" x2="150" y2="214"/>
+<text class="t" x="142" y="72" text-anchor="end">under 10 USD</text>
+<rect class="s0" x="150" y="58" width="77.9" height="16" rx="3"/><text class="t m" x="233.9" y="70">604</text>
+<text class="t" x="142" y="104" text-anchor="end">10 to 25 USD</text>
+<rect class="s0" x="150" y="90" width="231.2" height="16" rx="3"/><text class="t m" x="387.2" y="102">1,792</text>
+<text class="t" x="142" y="136" text-anchor="end">25 to 50 USD</text>
+<rect class="s0" x="150" y="122" width="406.1" height="16" rx="3"/><text class="t m" x="562.1" y="134">3,147</text>
+<text class="t" x="142" y="168" text-anchor="end">50 to 100 USD</text>
+<rect class="s0" x="150" y="154" width="295.4" height="16" rx="3"/><text class="t m" x="451.4" y="166">2,289</text>
+<text class="t" x="142" y="200" text-anchor="end">100+ USD</text>
+<rect class="s0" x="150" y="186" width="420.0" height="16" rx="3"/><text class="t m" x="576.0" y="198">3,255</text>
+</svg>

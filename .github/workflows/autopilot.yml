@@ -38,14 +38,17 @@ jobs:
     concurrency:
       group: autopilot-daily      # runs never overlap; a new run waits
       cancel-in-progress: false
+    permissions:
+      contents: write             # only to commit README.md and docs/readme/ below
     env:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
       ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
       OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      GCP_SA_JSON: ${{ secrets.GCP_SA_JSON }}   # CrUX (BigQuery); optional
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
@@ -54,6 +57,8 @@ jobs:
             requirements-autopilot.txt
       - name: Install
         run: pip install -q -r requirements.txt -r requirements-autopilot.txt
+      - name: Google credentials file (only if the secret is set)
+        run: python -m scout.autopilot gcp-credentials
       - name: Pull the lake from private storage
         run: python -m scout.lake_sync pull
       - name: Daily jobs
@@ -63,6 +68,21 @@ jobs:
       - name: Push the lake to private storage
         if: always() && inputs.mode != 'dry-run'
         run: python -m scout.lake_sync push
+      - name: Commit the README refresh
+        if: always() && inputs.mode != 'dry-run'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md docs/readme/
+          if git diff --cached --quiet; then
+            echo "readme unchanged"
+          else
+            git commit -q -m "README: daily refresh $(date -u +%F)" -- README.md docs/readme/
+            git pull -q --rebase
+            git push -q
+          fi
       - name: Health check
         if: always()
         run: python -m scout.autopilot health
@@ -80,8 +100,8 @@ jobs:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Install
@@ -89,4 +109,4 @@ jobs:
       - name: Pull heartbeats only
         run: python -m scout.lake_sync pull --prefix lake/_autopilot/
       - name: Heartbeat check
-        run: python -m scout.autopilot health --no-drift
+        run: python -m scout.autopilot health --no-drift --need-storage

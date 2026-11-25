@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 454" width="640" height="454" role="img" aria-label="Business-model mix">
+<style>.t{fill:#1f2328;font:12px -apple-system,Segoe UI,Helvetica,Arial,sans-serif}.h{font-weight:600;font-size:14px}.m{fill:#59636e}.g{stroke:#8c959f;stroke-opacity:.35}.s0{fill:#0969da}.s1{fill:#bf3989}@media (prefers-color-scheme:dark){.t{fill:#e6edf3}.m{fill:#9198a1}.s0{fill:#4493f8}.s1{fill:#db61a2}}</style>
+<text class="t h" x="12" y="22">Business-model mix</text>
+<text class="t m" x="12" y="40">share of profiled stores, rule-based [proxy]</text>
+<rect class="s0" x="12" y="46" width="10" height="10" rx="2"/><text class="t" x="26" y="55">US</text>
+<rect class="s1" x="102" y="46" width="10" height="10" rx="2"/><text class="t" x="116" y="55">PK</text>
+<line class="g" x1="150" y1="72" x2="150" y2="450"/>
+<text class="t" x="142" y="90" text-anchor="end">brand</text>
+<rect class="s0" x="150" y="76" width="353.3" height="16" rx="3"/><text class="t m" x="509.3" y="88">73.6%</text>
+<rect class="s1" x="150" y="96" width="420.0" height="16" rx="3"/><text class="t m" x="576.0" y="108">87.5%</text>
+<text class="t" x="142" y="144" text-anchor="end">retailer</text>
+<rect class="s0" x="150" y="130" width="102.7" height="16" rx="3"/><text class="t m" x="258.7" y="142">21.4%</text>
+<rect class="s1" x="150" y="150" width="45.1" height="16" rx="3"/><text class="t m" x="201.1" y="162">9.4%</text>
+<text class="t" x="142" y="198" text-anchor="end">general</text>
+<rect class="s0" x="150" y="184" width="8.6" height="16" rx="3"/><text class="t m" x="164.6" y="196">1.8%</text>
+<rect class="s1" x="150" y="204" width="0.0" height="16" rx="3"/><text class="t m" x="156.0" y="216">0.0%</text>
+<text class="t" x="142" y="252" text-anchor="end">reseller</text>
+<rect class="s0" x="150" y="238" width="8.6" height="16" rx="3"/><text class="t m" x="164.6" y="250">1.8%</text>
+<rect class="s1" x="150" y="258" width="10.1" height="16" rx="3"/><text class="t m" x="166.1" y="270">2.1%</text>
+<text class="t" x="142" y="306" text-anchor="end">dropship</text>
+<rect class="s0" x="150" y="292" width="4.3" height="16" rx="3"/><text class="t m" x="160.3" y="304">0.9%</text>
+<rect class="s1" x="150" y="312" width="4.8" height="16" rx="3"/><text class="t m" x="160.8" y="324">1.0%</text>
+<text class="t" x="142" y="360" text-anchor="end">pod</text>
+<rect class="s0" x="150" y="346" width="1.9" height="16" rx="3"/><text class="t m" x="157.9" y="358">0.4%</text>
+<rect class="s1" x="150" y="366" width="0.0" height="16" rx="3"/><text class="t m" x="156.0" y="378">0.0%</text>
+<text class="t" x="142" y="414" text-anchor="end">other</text>
+<rect class="s0" x="150" y="400" width="0.0" height="16" rx="3"/><text class="t m" x="156.0" y="412">0.0%</text>
+<rect class="s1" x="150" y="420" width="0.0" height="16" rx="3"/><text class="t m" x="156.0" y="432">0.0%</text>
+</svg>

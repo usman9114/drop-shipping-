@@ -11,9 +11,11 @@ from __future__ import annotations
 
 import math
 import re
-from datetime import UTC
+from datetime import timezone
 from email.utils import parsedate_to_datetime
 from typing import Any
+
+UTC = timezone.utc
 
 NOTE = "availability flips are a demand proxy, not units sold"
 INCOMPLETE_WARNING = "incomplete snapshot: removals not computed"

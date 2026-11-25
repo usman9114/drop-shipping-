@@ -613,9 +613,15 @@ def run_meta(
     pause: float,
     batch: int = 500,
     new_first: bool = False,
+    outside_tranco: bool = False,
 ) -> dict:
+    """outside_tranco: only stores found through CrUX (marker rank), not the Tranco scan."""
     done = _done("web_meta")
     todo = [h for h in _shop_hits() if h["domain"] not in done]
+    if outside_tranco:
+        from scout.crux import OUTSIDE_TRANCO
+
+        todo = [h for h in todo if h["tranco_rank"] >= OUTSIDE_TRANCO]
     if new_first:
         todo = _new_first(todo, new_hits())
     todo = todo[:max_stores]
@@ -794,6 +800,51 @@ def _best_one(hit: dict, pause: float, today: date) -> dict:
     except Exception as exc:
         row["error"] = type(exc).__name__
     return row
+
+
+def market_queue(
+    market: str,
+    dataset: str,
+    max_stores: int,
+    refresh: bool = False,
+    metas: dict | None = None,
+    light: dict | None = None,
+    crux: dict | None = None,
+    done: set | None = None,
+) -> list[str]:
+    """Domains for a follow-up read (homepage, best sellers): profiled stores in
+    `market` with no good row in `dataset` yet, most popular first.
+
+    Profiled = has a good web_store_light row. Popularity = CrUX bucket inside the
+    market (smaller is better, no bucket sorts last), then Tranco rank. A store
+    that failed MAX_FAILS times counts as done. refresh: ignore `done`."""
+    metas = latest_good(_all_rows("web_meta")) if metas is None else metas
+    light = latest_good(_all_rows("web_store_light")) if light is None else light
+    if crux is None:
+        crux = {}
+        for r in _all_rows("crux_origins"):
+            if r["country"] == market and r["rank_bucket"] < crux.get(
+                r["domain"], 10**9
+            ):
+                crux[r["domain"]] = r["rank_bucket"]
+    if done is None:
+        rows = _all_rows(dataset)
+        done = set() if refresh else set(latest_good(rows)) | gave_up(rows)
+    elif refresh:
+        done = set()
+    cand = [
+        m
+        for d, m in metas.items()
+        if m.get("shop_id") and d in light and d not in done and in_market(m, market)
+    ]
+    cand.sort(
+        key=lambda m: (
+            crux.get(m["domain"], 10**9),
+            m.get("tranco_rank") or 10**9,
+            m["domain"],
+        )
+    )
+    return [m["domain"] for m in cand[:max_stores]]
 
 
 def run_best(
@@ -1172,6 +1223,15 @@ def run_ranks(days_back: list[int]) -> dict:
     return {"web_ranks": (run, len(rows))}
 
 
+def _queue_or_file(ap, a, dataset: str, refresh: bool = False) -> list[str]:
+    """Domains from --domains FILE, or the market queue (--market M --max-stores N)."""
+    if a.domains:
+        return [x.strip() for x in open(a.domains) if x.strip()]
+    if a.market:
+        return market_queue(a.market, dataset, a.max_stores, refresh)
+    ap.error(f"{a.cmd}: give --domains FILE or --market M")
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Shopify store profiler (public records)")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -1180,6 +1240,11 @@ def main(argv: list[str] | None = None) -> int:
     m.add_argument("--workers", type=int, default=4)
     m.add_argument("--pause", type=float, default=1.0)
     m.add_argument("--new-first", action="store_true", help="newly discovered first")
+    m.add_argument(
+        "--outside-tranco",
+        action="store_true",
+        help="only stores found through CrUX (not in the Tranco scan)",
+    )
     d = sub.add_parser("deep")
     d.add_argument("--max-stores", type=int, default=300)
     d.add_argument("--workers", type=int, default=4)
@@ -1201,13 +1266,17 @@ def main(argv: list[str] | None = None) -> int:
     lt.add_argument("--market", choices=sorted(MARKETS), default="us")
     lt.add_argument("--domains", help="file with one domain per line: re-read these")
     hp = sub.add_parser("home", help="homepage signals for stores listed in a file")
-    hp.add_argument("--domains", required=True, help="file, one domain per line")
+    hp.add_argument("--domains", help="file, one domain per line")
+    hp.add_argument("--market", choices=sorted(MARKETS), help="queue mode")
+    hp.add_argument("--max-stores", type=int, default=100, help="queue mode cap")
     hp.add_argument("--workers", type=int, default=1)
     hp.add_argument("--pause", type=float, default=4.0)
     bp = sub.add_parser(
         "best", help="best-seller collection of stores listed in a file"
     )
-    bp.add_argument("--domains", required=True, help="file, one domain per line")
+    bp.add_argument("--domains", help="file, one domain per line")
+    bp.add_argument("--market", choices=sorted(MARKETS), help="queue mode")
+    bp.add_argument("--max-stores", type=int, default=100, help="queue mode cap")
     bp.add_argument("--workers", type=int, default=1)
     bp.add_argument("--pause", type=float, default=4.0)
     bp.add_argument(
@@ -1218,7 +1287,13 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--days-back", type=int, nargs="+", default=[90, 365])
     a = ap.parse_args(argv)
     if a.cmd == "meta":
-        out = run_meta(a.max_stores, a.workers, a.pause, new_first=a.new_first)
+        out = run_meta(
+            a.max_stores,
+            a.workers,
+            a.pause,
+            new_first=a.new_first,
+            outside_tranco=a.outside_tranco,
+        )
     elif a.cmd == "deep":
         out = run_deep(
             a.max_stores,
@@ -1242,12 +1317,10 @@ def main(argv: list[str] | None = None) -> int:
             ),
         )
     elif a.cmd == "home":
-        out = run_home(
-            [x.strip() for x in open(a.domains) if x.strip()], a.workers, a.pause
-        )
+        out = run_home(_queue_or_file(ap, a, "web_store_home"), a.workers, a.pause)
     elif a.cmd == "best":
         out = run_best(
-            [x.strip() for x in open(a.domains) if x.strip()],
+            _queue_or_file(ap, a, "web_store_best", a.refresh),
             a.workers,
             a.pause,
             a.refresh,

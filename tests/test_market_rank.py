@@ -217,3 +217,59 @@ def test_summarize_best_aggregates_only():
     assert s["best_price_median"] == 200.0
     assert s["best_discount_share"] == 0.5 and s["best_added_90d_share"] == 0.5
     assert "title" not in s
+
+
+# --- queue selection for `stores home` / `stores best` ------------------------
+
+
+def _m(d, rank, cur="PKR", shop=True):
+    return {
+        "domain": d,
+        "tranco_rank": rank,
+        "currency": cur,
+        "shop_id": 1 if shop else None,
+    }
+
+
+def test_market_queue_picks_profiled_undone_pk_stores_most_popular_first():
+    metas = {
+        "a": _m("a", 900),  # pk, no crux bucket, best tranco
+        "b": _m("b", 5000),  # pk, crux 1k
+        "c": _m("c", 100, cur="USD"),  # other market
+        "d": _m("d", 50),  # pk but not profiled (no light row)
+        "e": _m("e", 7000),  # pk, crux 1k, worse tranco than b
+        "f": _m("f", 10),  # pk, already done
+        "g": _m("g", 1, shop=False),  # no working meta
+    }
+    light = {k: {"domain": k} for k in "abcefg"}
+    crux = {"b": 1000, "e": 1000, "a": 50000}
+    got = stores.market_queue(
+        "pk", "web_store_home", 10, metas=metas, light=light, crux=crux, done={"f"}
+    )
+    assert got == ["b", "e", "a"]
+    assert stores.market_queue(
+        "pk", "x", 2, metas=metas, light=light, crux=crux, done={"f"}
+    ) == ["b", "e"]
+    # refresh ignores done
+    assert "f" in stores.market_queue(
+        "pk", "x", 10, refresh=True, metas=metas, light=light, crux=crux, done={"f"}
+    )
+
+
+def test_market_queue_counts_gave_up_stores_as_done(monkeypatch):
+    rows = [{"domain": "a", "error": "ValueError"}] * 3 + [{"domain": "b", "x": 1}]
+    monkeypatch.setattr(stores, "_all_rows", lambda ds: rows)
+    metas = {k: _m(k, i) for i, k in enumerate("abc", 1)}
+    light = {k: {} for k in "abc"}
+    assert stores.market_queue(
+        "pk", "web_store_home", 10, metas=metas, light=light, crux={}
+    ) == ["c"]
+
+
+def test_home_and_best_need_domains_or_market(capsys):
+    import pytest
+
+    for cmd in ("home", "best"):
+        with pytest.raises(SystemExit):
+            stores.main([cmd])
+    assert "--domains FILE or --market M" in capsys.readouterr().err

@@ -124,3 +124,17 @@ Next, in order:
 4. Owner decisions: what the Pakistan list is for (sell inside Pakistan vs learn categories for eBay US; CJ does not fit the first); push the branch; swap the homegrown robots matcher for `protego`; paid referral-traffic estimators (SimilarWeb) need approval.
 
 Traps: pre-commit hooks must run from `.venv/bin` (`PATH=$PWD/.venv/bin:$PATH git commit`); never run `ruff check --fix` over the repo (newer ruff than pre-commit's rewrites 20 files, and `datetime.UTC` breaks Python 3.9); `tests/test_snapshots.py` and `test_snapshot_job.py` fail on Python 3.9 (pre-existing); `.env` is a symlink to the main checkout's file; the `stores light` loop and the `meta` loop each spawn a fresh Python per round, so code edits apply mid-run.
+
+## 2026-11-25 session: README dashboard, PK+US autopilot, north star (owner: "wrap up ... README is our interface ... CI/CD for Pakistan and USA ... ambitious plan ... iterative loop")
+
+**Done**
+- Plans: `docs/plan/north-star.md` (milestones M0 to M6 with gates and kill criteria; only M0 in scope) and `docs/plan/dev-loop.md` (intake, graph context, advisor triage S/M/L, smoke, parallel build, regression, independent QA, gate, ship, observe, learn; token-cost rules).
+- README is the public dashboard: `scripts/readme_build.py` (lake -> `docs/readme/stats.json` aggregates -> README.md + 6 theme-aware SVGs). Public-safe guard `assert_public_safe` (no domain, shop name or secret; checked against all lake domains). Shrink guard: a refresh that loses more than 10% of a market's stores keeps the committed snapshot (partial lake in CI).
+- Autopilot (`scout/autopilot.py` JOBS): US meta/light down to 3 workers; Pakistan jobs `crux` (monthly, no-op without credentials), `pk-discover`, `pk-meta` (`meta --outside-tranco`), `pk-light`, `pk-home`, `pk-best` (all 1 worker, pause 5; `home`/`best` gained `--market pk --max-stores N` queues), then `readme`. Workflow commits only README.md and docs/readme/ as github-actions[bot].
+- CI: pytest on Python 3.9 and 3.12, pre-commit, smoke (`market_rank --help`, `autopilot daily --dry-run`), readme-guard (rendering from stats.json must reproduce the committed README).
+- Python 3.9 fix: `datetime.UTC` -> `timezone.utc` in snapshots. Full suite green.
+- Local lake synced with the Supabase bucket (pull 73 files, push 171, 0 conflicts): the bucket now holds the Pakistan datasets.
+
+**Found:** the GitHub repo has **no `SUPABASE_URL` / `SUPABASE_SERVICE_KEY` secrets**, so every scheduled daily run started from an empty lake and kept nothing; the 6-hourly health job failed on "no heartbeat" for the same reason (now skips with `--need-storage` when storage is absent).
+
+**Owner actions open:** add repo secrets `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` (required for the autopilot to keep data) and optionally `GCP_SA_JSON` (CrUX); merge the PR into `main` (the autopilot runs from `main`). Pakistan held-out business-model check still due. Private Pakistan page refresh: rerun `scripts/ui_export_pk.py` and republish artifact 8Th3FfVt5ADaa1AuBDugqd.
