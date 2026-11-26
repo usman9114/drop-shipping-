@@ -24,8 +24,8 @@ import re
 import sys
 import time
 import xml.etree.ElementTree as ET
-from urllib import robotparser
 
+from scout.robots import RobotRules
 from scout import store
 
 UA = "dropship-poc-research/0.1 (+https://github.com/usman9114/drop-shipping-)"
@@ -143,11 +143,32 @@ def parse_sitemap(xml_text: str) -> tuple[list[str], list[str]]:
     return children, dates
 
 
-def _session():
+def proxy_url() -> str | None:
+    """Fixed SOCKS5 exit for store fetches, from SCOUT_PROXY in .env (it holds
+    the service credentials: never print or commit it). Owner decision
+    2026-11-23: a proxy is allowed for routing and geography; pacing and
+    back-off on HTTP 429 stay exactly the same, and there is no rotation."""
+    import os
+    from pathlib import Path
+
+    from dotenv import load_dotenv
+
+    load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+    url = (os.environ.get("SCOUT_PROXY") or "").strip()
+    if url.startswith("socks5://"):  # h = resolve names at the proxy, not here
+        url = "socks5h://" + url[len("socks5://") :]
+    return url or None
+
+
+def _session(via_proxy: bool = False):
+    """via_proxy: store-site fetches only. DNS-over-HTTPS and third-party APIs
+    stay direct."""
     import requests
 
     s = requests.Session()
     s.headers["User-Agent"] = UA
+    if via_proxy and (p := proxy_url()):
+        s.proxies = {"http": p, "https": p}
     return s
 
 
@@ -235,7 +256,7 @@ def sitemaps(max_stores: int, pause: float = 1.0) -> dict:
         base = f"https://{d}"
         row = {"domain": d, "tranco_rank": r["tranco_rank"], "allowed": None}
         try:
-            rp = robotparser.RobotFileParser()
+            rp = RobotRules()
             rp.parse(s.get(base + "/robots.txt", timeout=20).text.splitlines())
             row["allowed"] = rp.can_fetch(UA, base + "/sitemap.xml")
             if row["allowed"]:
@@ -315,7 +336,7 @@ def products(max_stores: int, pause: float = 1.0) -> dict:
         base = f"https://{d}"
         row = {"domain": d, "tranco_rank": r["tranco_rank"]}
         try:
-            rp = robotparser.RobotFileParser()
+            rp = RobotRules()
             rp.parse(s.get(base + "/robots.txt", timeout=20).text.splitlines())
             url = base + "/products.json?limit=250"
             row["allowed"] = rp.can_fetch(UA, url)
@@ -459,7 +480,7 @@ def footprint(max_stores: int, pause: float = 1.0) -> dict:
             "dns_signals": r.get("signals"),
         }
         try:
-            rp = robotparser.RobotFileParser()
+            rp = RobotRules()
             rp.parse(s.get(base + "/robots.txt", timeout=20).text.splitlines())
             row["allowed"] = rp.can_fetch(UA, base + "/")
             if row["allowed"]:

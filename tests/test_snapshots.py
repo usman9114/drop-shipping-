@@ -1,10 +1,12 @@
 """Tests for scout.snapshots (pure logic, no network)."""
 
 import copy
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from email.utils import format_datetime
 
 from scout import snapshots
+
+UTC = timezone.utc
 
 NOW = 1_700_000_000.0  # fixed clock for Retry-After tests
 

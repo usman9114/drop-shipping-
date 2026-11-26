@@ -1,6 +1,6 @@
 """Snapshot job: completeness gate and polite fetching (fake responses, no network)."""
 
-from urllib import robotparser
+from scout.robots import RobotRules
 
 from scout import snapshot_job as job
 
@@ -32,7 +32,7 @@ class Session:
 
 
 def rp(text=""):
-    r = robotparser.RobotFileParser()
+    r = RobotRules()
     r.parse(text.splitlines())
     return r
 

@@ -32,9 +32,9 @@ import re
 import statistics
 import sys
 import time
-import urllib.robotparser
 from collections import Counter, defaultdict
 
+from scout.robots import RobotRules
 from scout import store, stores, webmeta
 
 # --- signature table ---------------------------------------------------------
@@ -757,7 +757,7 @@ def fingerprint_host(domain: str, host: str | None, pause: float) -> dict:
     s = requests.Session()
     s.headers["User-Agent"] = webmeta.UA
     row: dict = {"domain": domain, "errors": [], "robots_blocked": []}
-    rp = urllib.robotparser.RobotFileParser()
+    rp = RobotRules()
     try:
         r = s.get(base + "/robots.txt", timeout=20)
         rp.parse(r.text.splitlines() if r.ok else [])

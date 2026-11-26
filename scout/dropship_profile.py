@@ -27,9 +27,9 @@ import asyncio
 import re
 import sys
 import time
-import urllib.robotparser
 from dataclasses import dataclass, field
 
+from scout.robots import RobotRules
 from scout import store, stores, webmeta
 
 POLICY_PATHS = {
@@ -167,7 +167,7 @@ async def _fetch_policies_async(domain: str, host: str | None, pause: float) -> 
     def work():
         s = requests.Session()
         s.headers["User-Agent"] = webmeta.UA
-        rp = urllib.robotparser.RobotFileParser()
+        rp = RobotRules()
         try:
             r = s.get(base + "/robots.txt", timeout=20)
             rp.parse(r.text.splitlines() if r.ok else [])

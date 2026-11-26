@@ -22,6 +22,8 @@ SCRAPINGBEE_API_KEY. A missing key skips that tier.
 
 from __future__ import annotations
 
+from scout.robots import RobotRules
+
 import argparse
 import json
 import os
@@ -29,7 +31,6 @@ import re
 import sys
 import threading
 import time
-import urllib.robotparser
 from urllib.parse import urlsplit
 
 ZENROWS_API = "https://api.zenrows.com/v1/"
@@ -97,7 +98,7 @@ def _key(name: str) -> str | None:
 
 def robots_allows(session, url: str, ua: str) -> bool:
     parts = urlsplit(url)
-    rp = urllib.robotparser.RobotFileParser()
+    rp = RobotRules()
     try:
         r = session.get(f"{parts.scheme}://{parts.netloc}/robots.txt", timeout=20)
         rp.parse(r.text.splitlines() if r.ok else [])

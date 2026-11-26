@@ -1,3 +1,5 @@
 # Extra packages the autopilot jobs need on a GitHub Actions runner (decision 0016).
 # tranco: the Tranco list client, adopted in decision 0008.
 tranco==0.8.1
+google-cloud-bigquery==3.41.0  # CrUX country popularity, decision 0020
+PySocks==1.7.1  # SOCKS5 proxy for store fetches, decision 0021

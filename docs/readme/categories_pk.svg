@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 314" width="640" height="314" role="img" aria-label="Top categories, PK">
+<style>.t{fill:#1f2328;font:12px -apple-system,Segoe UI,Helvetica,Arial,sans-serif}.h{font-weight:600;font-size:14px}.m{fill:#59636e}.g{stroke:#8c959f;stroke-opacity:.35}.s0{fill:#0969da}.s1{fill:#bf3989}@media (prefers-color-scheme:dark){.t{fill:#e6edf3}.m{fill:#9198a1}.s0{fill:#4493f8}.s1{fill:#db61a2}}</style>
+<text class="t h" x="12" y="22">Top categories, PK</text>
+<text class="t m" x="12" y="40">profiled stores by main category, rule-based [proxy]</text>
+<line class="g" x1="150" y1="54" x2="150" y2="310"/>
+<text class="t" x="142" y="72" text-anchor="end">apparel</text>
+<rect class="s0" x="150" y="58" width="420.0" height="16" rx="3"/><text class="t m" x="576.0" y="70">402</text>
+<text class="t" x="142" y="104" text-anchor="end">other</text>
+<rect class="s0" x="150" y="90" width="379.3" height="16" rx="3"/><text class="t m" x="535.3" y="102">363</text>
+<text class="t" x="142" y="136" text-anchor="end">skincare</text>
+<rect class="s0" x="150" y="122" width="153.6" height="16" rx="3"/><text class="t m" x="309.6" y="134">147</text>
+<text class="t" x="142" y="168" text-anchor="end">baby kids</text>
+<rect class="s0" x="150" y="154" width="110.7" height="16" rx="3"/><text class="t m" x="266.7" y="166">106</text>
+<text class="t" x="142" y="200" text-anchor="end">kitchen dining</text>
+<rect class="s0" x="150" y="186" width="87.8" height="16" rx="3"/><text class="t m" x="243.8" y="198">84</text>
+<text class="t" x="142" y="232" text-anchor="end">footwear</text>
+<rect class="s0" x="150" y="218" width="86.7" height="16" rx="3"/><text class="t m" x="242.7" y="230">83</text>
+<text class="t" x="142" y="264" text-anchor="end">jewelry watches</text>
+<rect class="s0" x="150" y="250" width="86.7" height="16" rx="3"/><text class="t m" x="242.7" y="262">83</text>
+<text class="t" x="142" y="296" text-anchor="end">bags accessories</text>
+<rect class="s0" x="150" y="282" width="82.5" height="16" rx="3"/><text class="t m" x="238.5" y="294">79</text>
+</svg>

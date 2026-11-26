@@ -60,18 +60,190 @@ def test_entry_points_print_only_through_say(module):
                 pytest.fail(f"sys.{node.attr} in {module} line {node.lineno}")
 
 
+def _workflow_commands(wf: str) -> list[str]:
+    """Every shell command of every `run:` step, block scalars flattened."""
+    cmds, lines = [], wf.splitlines()
+    for i, ln in enumerate(lines):
+        t = ln.strip()
+        if not t.startswith("run:"):
+            continue
+        rest = t[len("run:") :].strip()
+        if rest not in ("|", ">", "|-"):
+            cmds.append(rest)
+            continue
+        indent = len(ln) - len(ln.lstrip())
+        for nxt in lines[i + 1 :]:
+            if nxt.strip() and len(nxt) - len(nxt.lstrip()) <= indent:
+                break
+            if nxt.strip():
+                cmds.append(nxt.strip())
+    return cmds
+
+
 def test_workflow_uploads_no_artifacts_and_runs_only_quiet_entry_points():
     wf = (ROOT / ".github/workflows/autopilot.yml").read_text()
     assert "upload-artifact" not in wf
-    assert "set -x" not in wf
-    runs = [
-        ln.strip()[len("run:") :].strip()
-        for ln in wf.splitlines()
-        if ln.strip().startswith("run:")
-    ]
-    allowed = ("pip install", "python -m scout.autopilot", "python -m scout.lake_sync")
-    for cmd in runs:
+    assert "set -x" not in wf and "xtrace" not in wf
+    assert "echo $" not in wf  # never echo a variable
+    allowed = (
+        "pip install",
+        "python -m scout.autopilot",
+        "python -m scout.lake_sync",
+        "git config user.",
+        "git add README.md docs/readme/",
+        "git diff --cached --quiet",
+        "git commit -q -m",
+        "git pull -q --rebase",
+        "git push -q",
+        "if ",
+        "else",
+        "fi",
+        'echo "readme unchanged"',
+    )
+    for cmd in _workflow_commands(wf):
         assert cmd.startswith(allowed), f"unexpected step command: {cmd}"
+
+
+def test_readme_commit_step_is_limited_to_readme_paths():
+    wf = (ROOT / ".github/workflows/autopilot.yml").read_text()
+    allc = _workflow_commands(wf)
+    assert any("git diff --cached --quiet" in c for c in allc)
+    cmds = [c for c in allc if c.startswith("git ")]
+    for c in cmds:
+        if c.startswith("git add"):
+            assert c == "git add README.md docs/readme/"
+        if c.startswith("git commit"):
+            assert c.endswith("-- README.md docs/readme/")
+            assert "README: daily refresh" in c
+            for banned in ("Co-Authored", "Claude", "Generated with"):
+                assert banned not in c
+    assert "github-actions[bot]" in wf
+    # write access only on the daily job; the workflow default stays read-only
+    assert wf.count("contents: write") == 1
+    assert wf.index("contents: write") > wf.index("autopilot-daily")
+    top = wf[: wf.index("jobs:")]
+    assert "contents: read" in top and "write" not in top
+
+
+def test_actions_are_pinned_to_current_majors():
+    for name in ("autopilot", "ci"):
+        wf = (ROOT / f".github/workflows/{name}.yml").read_text()
+        assert "checkout@v4" not in wf and "setup-python@v5" not in wf
+
+
+def test_health_job_skips_without_lake_storage(lake, capsys, monkeypatch):
+    monkeypatch.delenv("SUPABASE_URL", raising=False)
+    monkeypatch.delenv("SUPABASE_SERVICE_KEY", raising=False)
+    assert ap.main(["health", "--no-drift", "--need-storage"]) == 0
+    assert "reason=no-lake-storage" in capsys.readouterr().out
+    # with storage configured a missing heartbeat is a real alert
+    monkeypatch.setenv("SUPABASE_URL", "x")
+    monkeypatch.setenv("SUPABASE_SERVICE_KEY", "y")
+    assert ap.main(["health", "--no-drift", "--need-storage"]) == 1
+
+
+def test_health_workflow_asks_for_storage():
+    wf = (ROOT / ".github/workflows/autopilot.yml").read_text()
+    assert "health --no-drift --need-storage" in wf
+
+
+# --- Pakistan jobs, crux and readme ---------------------------------------
+
+
+def _job(name):
+    return next(cmd for n, cmd, _ in ap.JOBS if n == name)
+
+
+def test_pakistan_jobs_are_slow_and_polite():
+    for name in ("pk-meta", "pk-light", "pk-home", "pk-best"):
+        cmd = _job(name)
+        assert cmd[cmd.index("--workers") + 1] == "1", name
+        assert cmd[cmd.index("--pause") + 1] == "5", name
+        assert "--max-stores" in cmd
+    for name in ("pk-light", "pk-home", "pk-best"):
+        assert _job(name)[_job(name).index("--market") + 1] == "pk"
+    assert "--outside-tranco" in _job("pk-meta")
+    for name in ("meta", "light"):  # six workers brought HTTP 429
+        assert int(_job(name)[_job(name).index("--workers") + 1]) <= 3
+
+
+def test_job_order_puts_fetching_before_build_and_readme_last():
+    names = [n for n, _, _ in ap.JOBS]
+    assert names[-1] == "readme" and names.index("report") < names.index("readme")
+    assert names.index("crux") < names.index("pk-discover") < names.index("pk-meta")
+    assert names.index("pk-light") < names.index("pk-home") < names.index("pk-best")
+    assert names.index("pk-best") < names.index("build")
+    assert "readme" in ap.ALWAYS
+
+
+def test_crux_is_a_quiet_noop_without_credentials_or_when_pulled(lake, monkeypatch):
+    from scout import crux
+
+    pulls = []
+    monkeypatch.setattr(crux, "pull", lambda c: pulls.append(c) or {})
+    assert ap.crux_monthly(env={}) == "no-credentials"
+    now = datetime(2026, 11, 25, tzinfo=timezone.utc)
+    runs = [
+        {
+            "dataset": "crux_origins",
+            "run_id": "20261103T010101",
+            "params": {"country": "pk"},
+        }
+    ]
+    env = {"GOOGLE_APPLICATION_CREDENTIALS": "x.json"}
+    assert ap.crux_monthly(env=env, runs=runs, now=now) == "pulled-this-month"
+    assert pulls == []
+    # last month's pull does not count: it pulls
+    old = [{**runs[0], "run_id": "20261003T010101"}]
+    assert ap.crux_monthly(env=env, runs=old, now=now) == "pulled"
+    assert pulls == ["pk"]
+
+    def boom(c):
+        raise SystemExit("stop: 9.0 GB is above MAX_GB")  # the cost guard
+
+    monkeypatch.setattr(crux, "pull", boom)
+    assert ap.crux_monthly(env=env, runs=[], now=now).startswith("failed-")
+
+
+def test_crux_command_exits_zero_without_credentials(lake, capsys, monkeypatch):
+    monkeypatch.delenv("GOOGLE_APPLICATION_CREDENTIALS", raising=False)
+    assert ap.main(["crux"]) == 0
+    assert "status=no-credentials" in capsys.readouterr().out
+
+
+def test_readme_job_skips_when_the_script_is_missing(tmp_path):
+    assert ap.readme_refresh(tmp_path / "nope.py") == "script-missing"
+    ok = tmp_path / "ok.py"
+    ok.write_text("")
+    assert ap.readme_refresh(ok) == "ok"
+    bad = tmp_path / "bad.py"
+    bad.write_text("raise SystemExit(3)")
+    assert ap.readme_refresh(bad) == "failed"
+
+
+def test_gcp_credentials_file_only_when_set_and_never_printed(tmp_path, capsys):
+    gh = tmp_path / "gh_env"
+    assert ap.gcp_credentials(env={"GITHUB_ENV": str(gh)}) == "not-set"
+    assert not gh.exists()
+    bad = {"GCP_SA_JSON": "{nope", "GITHUB_ENV": str(gh)}
+    assert ap.gcp_credentials(env=bad) == "not-json"
+    secret = '{"project_id": "p", "private_key": "TOPSECRET"}'
+    env = {"GCP_SA_JSON": secret, "GITHUB_ENV": str(gh)}
+    assert ap.gcp_credentials(env=env, tmp_dir=tmp_path) == "written"
+    line = gh.read_text().strip()
+    assert line.startswith("GOOGLE_APPLICATION_CREDENTIALS=")
+    path = Path(line.split("=", 1)[1])
+    assert path.read_text() == secret and (path.stat().st_mode & 0o077) == 0
+    assert "TOPSECRET" not in capsys.readouterr().out + line
+
+
+def test_ci_workflow_has_matrix_and_guards():
+    wf = (ROOT / ".github/workflows/ci.yml").read_text()
+    assert '"3.12"' in wf  # the autopilot's Python; pinned deps need >= 3.10
+    for job in ("test:", "lint:", "readme-guard:"):
+        assert job in wf
+    assert "autopilot daily --dry-run" in wf and "market_rank --help" in wf
+    assert "--from-stats docs/readme/stats.json" in wf
 
 
 def test_a_leaky_job_does_not_reach_the_public_log(lake, capfd):

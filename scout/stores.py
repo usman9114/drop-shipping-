@@ -36,8 +36,8 @@ import sys
 import time
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from urllib import robotparser
 
+from scout.robots import RobotRules
 from scout import store, webmeta
 
 RULES = Path("warehouse/seeds/store_category_rules.csv")
@@ -149,6 +149,79 @@ def vendor_is_shop(vendor: str, shop_name: str, domain: str) -> bool:
     return any(n and (v in n or n in v) for n in names)
 
 
+# Vendor values that name a product line of the store itself, not another brand.
+# Pakistani fashion brands fill the vendor field with lines and collections
+# ("Unstitched", "Pret", "Men"), which made one brand look like a 30-brand
+# retailer (hand check 2026-11-22, docs/decisions/0019). Whole value only.
+LINE_VENDOR = re.compile(
+    r"^(?:(?:un)?stitched|pret|ready[ -]?to[ -]?wear|rtw|luxury|lawn|kurta|eastern|"
+    r"western|festive|formals?|casuals?|basics|essentials|signature|premium|"
+    r"(?:wo)?men|ladies|gents|kids|girls|boys|baby|infants?|teens?|junior|home|"
+    r"fragrances?|perfumes?|accessories|jewel(?:le)?ry|footwear|shoes|bags|"
+    r"makeup|skin ?care|beauty|fabrics?|textiles?|bedding|towels|winter|summer|"
+    r"eid|wedding|bridal|collections?|new arrivals?|sale|outlet|default|"
+    r"vendor|unknown|na|n/?a)$",
+    re.I,
+)
+
+# Third-party brands sold by Pakistani department, baby, beauty and electronics
+# stores (hand check 2026-11-22). A title naming one of them, when the vendor is
+# the store's own name, means a resold product. Lower-case whole words.
+KNOWN_BRANDS = re.compile(
+    r"\b(?:xiaomi|redmi|samsung|apple|iphone|oppo|vivo|realme|infinix|tecno|"
+    r"huawei|honor|anker|baseus|ugreen|jbl|sony|lenovo|hp|dell|logitech|philips|"
+    r"panasonic|braun|tefal|kenwood|black ?\+? ?decker|westpoint|anex|dawlance|"
+    r"haier|pel|chicco|pigeon|philips avent|avent|tommee tippee|mee mee|"
+    r"huggies|pampers|molfix|johnson'?s|mothercare|fisher[- ]price|lego|"
+    r"hasbro|mattel|barbie|hot wheels|l'?or[eé]al|maybelline|garnier|nivea|"
+    r"dove|ponds?|olay|neutrogena|cetaphil|the ordinary|cerave|revlon|"
+    r"rimmel|nyx|mac|clinique|est[eé]e lauder|loreal|nestl[eé]|unilever|"
+    r"colgate|gillette|oral[- ]?b|dettol|lux|sunsilk|head ?& ?shoulders|"
+    r"pantene|tresemm[eé]|nike|adidas|puma|skechers|reebok|casio|"
+    r"tupperware|pyrex|corelle|luminarc|borosil)\b",
+    re.I,
+)
+
+
+# Pakistani brands name vendors after whole collections ("Lux Pret Vol-2 Winter
+# 2026", "Men Kurta", "Luxury Attars"), so for that market a line word anywhere
+# in the value counts. Used only when market == "pk" (business_model): in the US
+# "Nike Men" is another brand, not a line.
+LINE_WORDS_PK = re.compile(
+    r"(?:\b(?:(?:un)?stitched|pret|ready to wear|luxury|lux|lawn|kurtas?|kameez|"
+    r"shalwar|shirts?|trousers?|sweaters?|activewear|eastern|western|festive|"
+    r"formals?|casuals?|ethnic|fancy|basics|essentials|signature|premium|"
+    r"(?:wo)?mens?|ladies|gents|kids|girls|boys|baby|toddlers?|infants?|"
+    r"junior|home|fragrances?|perfumes?|attars?|bakhoor|testers?|deals?|kits?|"
+    r"accessories|jewel(?:le)?ry|footwear|shoes|bags|makeup|fabrics?|bedding|"
+    r"winter|summer|spring|autumn|eid|wedding|bridal|collections?|edit|drop|"
+    r"vol|boutique|limited edition|silk|khaddar|jalabiyas?)\b|"
+    r"(?:^|[\s'_-])(?:20)?2\d\b)",
+    re.I,
+)
+
+
+def line_share(s: dict, shop_name: str, domain: str) -> float | None:
+    """line_vendor_share recomputed from saved vendor_names (None if not saved)."""
+    names = s.get("vendor_names")
+    n = s.get("products_sampled") or 0
+    if not names or not n:
+        return None
+    hit = sum(c for v, c in names.items() if vendor_is_line(v, shop_name, domain))
+    return round(hit / n, 3)
+
+
+def vendor_is_line(vendor: str, shop_name: str, domain: str) -> bool:
+    """The store's own name, or a product-line or collection name of its label
+    (broad match; business_model trusts it only for the Pakistan market)."""
+    v = vendor.strip()
+    return (
+        vendor_is_shop(v, shop_name, domain)
+        or bool(LINE_VENDOR.match(v))
+        or bool(LINE_WORDS_PK.search(v))
+    )
+
+
 def _quantile(xs: list[float], q: float) -> float | None:
     if not xs:
         return None
@@ -178,7 +251,8 @@ def summarize_feed(
     cats: dict[str, int] = {}
     types: dict[str, int] = {}
     traces = {"ae_image": 0, "dropship_sku": 0, "dropship_vendor": 0, "pod_vendor": 0}
-    own_vendor = 0
+    own_vendor = line_vendor = brand_titles = 0
+    brands_seen: set[str] = set()
     for p in items:
         vs = [v for v in (p.get("variants") or []) if isinstance(v, dict)]
         variants += len(vs)
@@ -206,6 +280,12 @@ def summarize_feed(
         if vend:
             vendors[vend] = vendors.get(vend, 0) + 1
             own_vendor += vendor_is_shop(vend, shop_name, domain)
+            line_vendor += vendor_is_line(vend, shop_name, domain)
+        title = str(p.get("title") or "")
+        hit = KNOWN_BRANDS.search(title)
+        if hit and not vendor_is_shop(hit.group(0), shop_name, domain):
+            brand_titles += 1
+            brands_seen.add(_norm(hit.group(0)))
         c = product_category(p, rules)
         cats[c] = cats.get(c, 0) + 1
         t = (p.get("product_type") or "").strip().lower()
@@ -242,6 +322,12 @@ def summarize_feed(
         "vendors": len(vendors),
         "top_vendor_share": share(top_vendor),
         "own_vendor_share": share(own_vendor),
+        "line_vendor_share": share(line_vendor),
+        # every vendor with its count (capped): lets relabel re-score vendor
+        # rules from saved evidence, no refetch (principle 13)
+        "vendor_names": dict(sorted(vendors.items(), key=lambda kv: -kv[1])[:100]),
+        "brand_title_share": share(brand_titles),
+        "brands_named": len(brands_seen),
         "category_counts": cats,
         "top_category": top_cat,
         "top_category_share": share(real_cats[top_cat]) if top_cat else None,
@@ -276,6 +362,13 @@ def category_spread(s: dict) -> int:
 GENERAL_MIN_CATEGORIES = 4
 GENERAL_MIN_DISCOUNT = 0.5
 GENERAL_MIN_PRODUCTS = 50
+# Markets where the general-store pattern is not used: Pakistani brands run
+# near-permanent sales across apparel, home and kids lines, so the pattern
+# labelled real brands "general" (hand check 2026-11-22). Dropship traces still apply.
+GENERAL_UNVALIDATED = {"pk"}
+# Share of titles naming a known third-party brand that marks a store as a
+# reseller of other brands' goods (hand check 2026-11-22).
+RESOLD_MIN_BRAND_TITLES = 0.3
 
 
 def business_model(
@@ -318,12 +411,24 @@ def business_model(
         return "dropship", why
     if (s.get("pod_share") or 0) >= 0.3:
         return "pod", [f"print-on-demand vendor on {s['pod_share']:.0%} of products"]
+    # Resold goods under the store's own vendor name (Pakistani department and
+    # electronics stores, hand check 2026-11-22): titles name other brands.
+    bt = s.get("brand_title_share")
+    if bt is not None and bt >= RESOLD_MIN_BRAND_TITLES:
+        named = s.get("brands_named") or 0
+        kind = "retailer" if named >= 3 else "reseller"
+        return kind, [f"{bt:.0%} of titles name another brand ({named} brands)"]
     own = s.get("own_vendor_share") or 0
+    line = s.get("line_vendor_share") if s.get("market") == "pk" else None
+    if line is not None and line > own:
+        why.append(f"vendor is own name or a product line on {line:.0%}")
+        own = line
     top = s.get("top_vendor_share") or 0
     vendors = s.get("vendors") or 0
     spread = category_spread(s)
     if (
-        (own >= 0.5 or top >= 0.5)
+        s.get("market") not in GENERAL_UNVALIDATED
+        and (own >= 0.5 or top >= 0.5)
         and n >= GENERAL_MIN_PRODUCTS
         and spread >= GENERAL_MIN_CATEGORIES
         and (s.get("discount_share") or 0) >= GENERAL_MIN_DISCOUNT
@@ -336,7 +441,7 @@ def business_model(
             f"{s['discount_share']:.0%} of products discounted"
         ]
     if own >= 0.5:
-        return "brand", [f"own name is the vendor on {own:.0%} of products"]
+        return "brand", why or [f"own name is the vendor on {own:.0%} of products"]
     if top >= 0.5:
         return "brand", [f"one vendor holds {top:.0%} of {vendors} vendors"]
     if vendors <= 5:  # a handful of labels is a brand with sub-labels
@@ -379,7 +484,7 @@ def shop_started_by(shop_id: int | None, curve: list[tuple[int, str]]) -> str | 
 
 
 def _robots(s, base: str):
-    rp = robotparser.RobotFileParser()
+    rp = RobotRules()
     r = s.get(base + "/robots.txt", timeout=20)
     rp.parse(r.text.splitlines() if r.ok else [])
     return rp
@@ -455,10 +560,13 @@ MAX_FAILS = 3  # a store that failed this many fetches is left alone (no daily r
 
 
 def gave_up(rows: list[dict], max_fails: int = MAX_FAILS) -> set[str]:
-    """Domains with max_fails or more failed fetches and no good row."""
+    """Domains with max_fails or more failed fetches and no good row.
+
+    HTTP 429 is not counted: it means we were throttled (Shopify limits by our
+    user agent across all its stores), not that the store is broken."""
     fails: dict[str, int] = {}
     for r in rows:
-        if r.get("error"):
+        if r.get("error") and r.get("error") != "HTTP429":
             fails[r["domain"]] = fails.get(r["domain"], 0) + 1
     good = set(latest_good(rows))
     return {d for d, n in fails.items() if n >= max_fails and d not in good}
@@ -482,7 +590,7 @@ def _meta_one(hit: dict, pause: float) -> dict:
     d = hit["domain"]
     base = f"https://{d}"
     row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
-    s = webmeta._session()
+    s = webmeta._session(via_proxy=True)
     try:
         rp = _robots(s, base)
         row["meta_allowed"] = rp.can_fetch(webmeta.UA, base + "/meta.json")
@@ -505,9 +613,15 @@ def run_meta(
     pause: float,
     batch: int = 500,
     new_first: bool = False,
+    outside_tranco: bool = False,
 ) -> dict:
+    """outside_tranco: only stores found through CrUX (marker rank), not the Tranco scan."""
     done = _done("web_meta")
     todo = [h for h in _shop_hits() if h["domain"] not in done]
+    if outside_tranco:
+        from scout.crux import OUTSIDE_TRANCO
+
+        todo = [h for h in todo if h["tranco_rank"] >= OUTSIDE_TRANCO]
     if new_first:
         todo = _new_first(todo, new_hits())
     todo = todo[:max_stores]
@@ -555,12 +669,268 @@ def homepage_signals(html: str) -> dict:
     return {"traffic_tags": sorted(tags), "social_networks": sorted(socials)}
 
 
+BEST_NAME = re.compile(
+    r"best[- ]?sell|top[- ]?sell|most[- ]?popular|hot[- ]?sell|trending|fan[- ]?favou?rite",
+    re.I,
+)
+# evergreen handles beat the rest ("best-sellers" over "best-selling-collection")
+BEST_EVERGREEN = re.compile(
+    r"^(?:all-)?(?:best[- ]?sell(?:er|ing)s?(?:-products?)?|top[- ]?sell(?:er|ing)s?|most-popular)$",
+    re.I,
+)
+# Seasons, events, dated and numbered campaigns: never a standing best-seller list
+BEST_CAMPAIGN = re.compile(
+    r"sale|eid|summer|winter|spring|autumn|fall|festive|azadi|restock|hit-codes|"
+    r"(?:^|-)(?:ws|ss|aw|fw|w|s)-?\d{2}(?:-|$)|\d{1,2}-\d{1,2}(?:-\d{2,4})?",
+    re.I,
+)
+_GENERIC = re.compile(
+    r"(?:best|sell(?:er|ers|ing|ings)?|top|hot|most|popular|trending|fan|"
+    r"favou?rites?|products?|collection|all|our|the|\d+)+",
+    re.I,
+)
+
+
+def _unscoped(handle: str) -> bool:
+    """Only best-seller words: no category, gender or brand in the handle."""
+    return all(_GENERIC.fullmatch(t) for t in handle.split("-") if t)
+
+
+def pick_best_collection(collections: list[dict]) -> dict | None:
+    """The store's whole-store best-seller collection, or None.
+
+    Matches on the handle (not the title: "Eid Sale" collections are titled
+    "Best Sellers"), skips empty and campaign collections, and refuses scoped ones
+    (boys, accessories, one brand). None means "no clean best-seller list", which
+    is better than a wrong one (hand check 2026-11-22, decision 0021)."""
+    cands = [
+        c
+        for c in collections
+        if BEST_NAME.search(c.get("handle") or "")
+        and (c.get("products_count") or 0) > 0
+        and not BEST_CAMPAIGN.search(c.get("handle") or "")
+        and _unscoped(c.get("handle") or "")
+    ]
+    if not cands:
+        return None
+    green = [c for c in cands if BEST_EVERGREEN.match(c.get("handle") or "")]
+    return max(green or cands, key=lambda c: c.get("products_count") or 0)
+
+
+def summarize_best(products: list[dict], today: date) -> dict:
+    """Aggregates over a best-seller collection's products (ids only, no titles)."""
+    prices, disc, new90 = [], 0, 0
+    for p in products:
+        vs = [v for v in (p.get("variants") or []) if isinstance(v, dict)]
+        pp = []
+        for v in vs:
+            try:
+                x = float(v.get("price"))
+            except (TypeError, ValueError):
+                continue
+            if x > 0:
+                pp.append(x)
+        if pp:
+            prices.append(min(pp))
+        try:
+            disc += any(
+                float(v.get("compare_at_price") or 0) > float(v.get("price"))
+                for v in vs
+            )
+        except (TypeError, ValueError):
+            pass
+        try:
+            new90 += (
+                today - date.fromisoformat(str(p.get("created_at"))[:10])
+            ).days <= 90
+        except ValueError:
+            pass
+    n = len(products)
+    return {
+        "best_n": n,
+        "best_product_ids": [p.get("id") for p in products if p.get("id")],
+        "best_price_median": _quantile(prices, 0.5),
+        "best_discount_share": round(disc / n, 3) if n else None,
+        "best_added_90d_share": round(new90 / n, 3) if n else None,
+    }
+
+
+def _best_one(hit: dict, pause: float, today: date) -> dict:
+    """Two requests: /collections.json, then the best-seller collection's feed.
+    Never uses sort_by (robots.txt forbids it, decision 0021)."""
+    d = hit["domain"]
+    base = f"https://{hit.get('final_host') or d}"
+    row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
+    s = webmeta._session(via_proxy=True)
+    try:
+        rp = _robots(s, base)
+        url = base + "/collections.json?limit=250"
+        if not rp.can_fetch(webmeta.UA, url):
+            row["feed_allowed"] = False
+            return row
+        time.sleep(pause)
+        r = s.get(url, timeout=30)
+        if not r.ok:
+            row["error"] = f"HTTP{r.status_code}"
+            return row
+        cols = r.json().get("collections") or []
+        row["collections_seen"] = len(cols)
+        # every best-seller-named candidate, kept so the picker can be re-scored
+        # from saved evidence (principle 13)
+        row["best_candidates"] = [
+            [c.get("handle"), c.get("title"), c.get("products_count")]
+            for c in cols
+            if BEST_NAME.search((c.get("handle") or "") + " " + (c.get("title") or ""))
+        ][:12]
+        pick = pick_best_collection(cols)
+        if not pick:
+            row["best_collection"] = None
+            return row
+        row["best_collection"] = pick["handle"]
+        feed = f"{base}/collections/{pick['handle']}/products.json?limit=50"
+        if not rp.can_fetch(webmeta.UA, feed):
+            row["feed_allowed"] = False
+            return row
+        time.sleep(pause)
+        r = s.get(feed, timeout=30)
+        if not r.ok:
+            row["error"] = f"HTTP{r.status_code}"
+            return row
+        row.update(summarize_best(r.json().get("products") or [], today))
+    except Exception as exc:
+        row["error"] = type(exc).__name__
+    return row
+
+
+def market_queue(
+    market: str,
+    dataset: str,
+    max_stores: int,
+    refresh: bool = False,
+    metas: dict | None = None,
+    light: dict | None = None,
+    crux: dict | None = None,
+    done: set | None = None,
+) -> list[str]:
+    """Domains for a follow-up read (homepage, best sellers): profiled stores in
+    `market` with no good row in `dataset` yet, most popular first.
+
+    Profiled = has a good web_store_light row. Popularity = CrUX bucket inside the
+    market (smaller is better, no bucket sorts last), then Tranco rank. A store
+    that failed MAX_FAILS times counts as done. refresh: ignore `done`."""
+    metas = latest_good(_all_rows("web_meta")) if metas is None else metas
+    light = latest_good(_all_rows("web_store_light")) if light is None else light
+    if crux is None:
+        crux = {}
+        for r in _all_rows("crux_origins"):
+            if r["country"] == market and r["rank_bucket"] < crux.get(
+                r["domain"], 10**9
+            ):
+                crux[r["domain"]] = r["rank_bucket"]
+    if done is None:
+        rows = _all_rows(dataset)
+        done = set() if refresh else set(latest_good(rows)) | gave_up(rows)
+    elif refresh:
+        done = set()
+    cand = [
+        m
+        for d, m in metas.items()
+        if m.get("shop_id") and d in light and d not in done and in_market(m, market)
+    ]
+    cand.sort(
+        key=lambda m: (
+            crux.get(m["domain"], 10**9),
+            m.get("tranco_rank") or 10**9,
+            m["domain"],
+        )
+    )
+    return [m["domain"] for m in cand[:max_stores]]
+
+
+def run_best(
+    domains: list[str], workers: int, pause: float, refresh: bool = False
+) -> dict:
+    """Best-seller collection evidence for a chosen list of stores."""
+    metas = latest_good(_all_rows("web_meta"))
+    rows_all = _all_rows("web_store_best")
+    done = set() if refresh else set(latest_good(rows_all)) | gave_up(rows_all)
+    todo = [metas[d] for d in domains if d in metas and d not in done]
+    today = datetime.now(timezone.utc).date()
+    print(f"best: {len(todo)} to read", file=sys.stderr, flush=True)
+    rows = _parallel(lambda h: _best_one(h, pause, today), todo, workers)
+    run = store.record_run(
+        "web_store_best",
+        rows,
+        source="shopify_collections_json",
+        trust="data",
+        params={"n": len(rows)},
+        note="merchant best-seller collection; no sort_by (robots.txt); ids and aggregates only",
+    )
+    got = sum(1 for r in rows if r.get("best_n"))
+    print(
+        f"best: {len(rows)} stores, {got} with a best-seller collection",
+        file=sys.stderr,
+    )
+    return {"web_store_best": (run, len(rows))}
+
+
+def _home_one(hit: dict, pause: float) -> dict:
+    """Homepage only: social accounts linked, ad pixels, apps. One request."""
+    d = hit["domain"]
+    base = f"https://{hit.get('final_host') or d}"
+    row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
+    s = webmeta._session(via_proxy=True)
+    try:
+        rp = _robots(s, base)
+        if not rp.can_fetch(webmeta.UA, base + "/"):
+            row["home_allowed"] = False
+            return row
+        time.sleep(pause)
+        r = s.get(base + "/", timeout=30)
+        row["home_status"] = r.status_code
+        if not r.ok:
+            row["error"] = f"HTTP{r.status_code}"
+            return row
+        html = r.text
+        row.update(homepage_signals(html))
+        row["social_handles"] = webmeta.social_links(html)
+    except Exception as exc:
+        row["error"] = type(exc).__name__
+    return row
+
+
+def run_home(domains: list[str], workers: int, pause: float) -> dict:
+    """Homepage signals for a chosen list of stores (e.g. the top-ranked)."""
+    metas = latest_good(_all_rows("web_meta"))
+    done = set(latest_good(_all_rows("web_store_home"))) | gave_up(
+        _all_rows("web_store_home")
+    )
+    todo = [metas[d] for d in domains if d in metas and d not in done]
+    print(f"home: {len(todo)} to read", file=sys.stderr, flush=True)
+    rows = _parallel(lambda h: _home_one(h, pause), todo, workers)
+    run = store.record_run(
+        "web_store_home",
+        rows,
+        source="shopify_homepage",
+        trust="data",
+        params={"n": len(rows)},
+        note="one homepage request per store, robots.txt respected; social links, pixels, apps",
+    )
+    print(
+        f"home: {len(rows)} stores, {sum(1 for r in rows if not r.get('error'))} ok",
+        file=sys.stderr,
+    )
+    return {"web_store_home": (run, len(rows))}
+
+
 def _deep_one(hit: dict, pages: int, pause: float, rules, today: date) -> dict:
     d = hit["domain"]
     host = hit.get("final_host") or d
     base = f"https://{host}"
     row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
-    s = webmeta._session()
+    if pk_store(hit):
+        row["market"] = "pk"
+    s = webmeta._session(via_proxy=True)
     try:
         rp = _robots(s, base)
         prods: list[dict] = []
@@ -615,8 +985,27 @@ def us_store(m: dict) -> bool:
     )
 
 
+def pk_store(m: dict) -> bool:
+    """Sells to Pakistan in rupees: PKR storefront (owner, 2026-11-22).
+
+    Currency, not the registered country: Pakistani brands registered in the
+    UK, US or UAE still price in PKR for Pakistani buyers."""
+    return m.get("currency") == "PKR"
+
+
+MARKETS = {"us": us_store, "pk": pk_store}
+
+
+def in_market(m: dict, market: str | None) -> bool:
+    """True when the store sells in `market` ("us", "pk"); None means any market."""
+    return market is None or MARKETS[market](m)
+
+
 def deep_targets(
-    max_stores: int, us_only: bool = True, refresh: bool = False
+    max_stores: int,
+    us_only: bool = True,
+    refresh: bool = False,
+    market: str | None = None,
 ) -> list[dict]:
     """Stores with a working /meta.json, best Tranco rank first, not yet profiled."""
     done = set() if refresh else _done("web_store_deep")
@@ -628,7 +1017,7 @@ def deep_targets(
     for m in sorted(metas.values(), key=lambda r: r["tranco_rank"]):
         if m["domain"] in done:
             continue
-        if us_only and not us_store(m):
+        if not in_market(m, market or ("us" if us_only else None)):
             continue
         out.append(m)
     return out[:max_stores]
@@ -642,10 +1031,11 @@ def run_deep(
     us_only: bool,
     refresh: bool = False,
     batch: int = 100,
+    market: str | None = None,
 ) -> dict:
     rules = load_rules()
     today = datetime.now(timezone.utc).date()
-    todo = deep_targets(max_stores, us_only, refresh)
+    todo = deep_targets(max_stores, us_only, refresh, market)
     out = {}
     for i in range(0, len(todo), batch):
         chunk = todo[i : i + batch]
@@ -657,7 +1047,12 @@ def run_deep(
             rows,
             source="shopify_storefront+google_public_dns",
             trust="data",
-            params={"n": len(chunk), "pages": pages, "us_only": us_only},
+            params={
+                "n": len(chunk),
+                "pages": pages,
+                "us_only": us_only,
+                "market": market or ("us" if us_only else "all"),
+            },
             note="robots.txt respected; feed aggregates (no titles), homepage tags, DNS TXT/MX",
         )
         print(f"deep batch {i}: {len(rows)} stores", file=sys.stderr, flush=True)
@@ -671,7 +1066,9 @@ def _light_one(hit: dict, pause: float, rules, today: date) -> dict:
     d = hit["domain"]
     base = f"https://{hit.get('final_host') or d}"
     row = {"domain": d, "tranco_rank": hit["tranco_rank"]}
-    s = webmeta._session()
+    if pk_store(hit):
+        row["market"] = "pk"
+    s = webmeta._session(via_proxy=True)
     try:
         rp = _robots(s, base)
         url = base + "/products.json?limit=250"
@@ -706,15 +1103,21 @@ def run_light(
     stride: int = 1,
     batch: int = 300,
     new_first: bool = False,
+    market: str = "us",
+    domains: set[str] | None = None,
 ) -> dict:
+    """domains: re-read exactly these stores (any market, even if done), e.g. a
+    hand-check set after a rule change that needs new evidence."""
     rules = load_rules()
     today = datetime.now(timezone.utc).date()
-    done = _done("web_store_light")
+    done = set() if domains else _done("web_store_light")
     metas = latest_good(_all_rows("web_meta"))
     todo = [
         m
         for m in sorted(metas.values(), key=lambda r: r["tranco_rank"])
-        if m.get("shop_id") and us_store(m) and m["domain"] not in done
+        if m.get("shop_id")
+        and (m["domain"] in domains if domains else in_market(m, market))
+        and m["domain"] not in done
     ][::stride]  # stride spreads a sample over the whole rank range
     if new_first:
         todo = _new_first(todo, new_hits())
@@ -728,7 +1131,7 @@ def run_light(
             rows,
             source="shopify_products_json",
             trust="data",
-            params={"n": len(chunk)},
+            params={"n": len(chunk), "market": market},
             note="one feed page per store, robots.txt respected; aggregates only",
         )
         ok = sum(1 for r in rows if r.get("business_model"))
@@ -747,6 +1150,7 @@ def relabel() -> dict:
     Rule changes need no refetching: the evidence is already in the lake. Writes
     one new run per dataset (deep and light) holding the latest good row per domain."""
     out = {}
+    metas = latest_good(_all_rows("web_meta"))
     for ds in ("web_store_deep", "web_store_light"):
         latest = latest_good(_all_rows(ds))
         if not latest:
@@ -756,6 +1160,12 @@ def relabel() -> dict:
             if not r.get("products_sampled"):
                 rows.append(r)
                 continue
+            m = metas.get(r["domain"], {})
+            if pk_store(m):
+                r = {**r, "market": "pk"}
+            ls = line_share(r, m.get("shop_name") or "", r["domain"])
+            if ls is not None:
+                r = {**r, "line_vendor_share": ls}
             model, why = business_model(
                 r, "dropship_app" in (r.get("traffic_tags") or [])
             )
@@ -813,6 +1223,15 @@ def run_ranks(days_back: list[int]) -> dict:
     return {"web_ranks": (run, len(rows))}
 
 
+def _queue_or_file(ap, a, dataset: str, refresh: bool = False) -> list[str]:
+    """Domains from --domains FILE, or the market queue (--market M --max-stores N)."""
+    if a.domains:
+        return [x.strip() for x in open(a.domains) if x.strip()]
+    if a.market:
+        return market_queue(a.market, dataset, a.max_stores, refresh)
+    ap.error(f"{a.cmd}: give --domains FILE or --market M")
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Shopify store profiler (public records)")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -821,12 +1240,18 @@ def main(argv: list[str] | None = None) -> int:
     m.add_argument("--workers", type=int, default=4)
     m.add_argument("--pause", type=float, default=1.0)
     m.add_argument("--new-first", action="store_true", help="newly discovered first")
+    m.add_argument(
+        "--outside-tranco",
+        action="store_true",
+        help="only stores found through CrUX (not in the Tranco scan)",
+    )
     d = sub.add_parser("deep")
     d.add_argument("--max-stores", type=int, default=300)
     d.add_argument("--workers", type=int, default=4)
     d.add_argument("--pages", type=int, default=4)
     d.add_argument("--pause", type=float, default=1.0)
     d.add_argument("--all-countries", action="store_true")
+    d.add_argument("--market", choices=sorted(MARKETS), help="us (default) or pk")
     d.add_argument(
         "--refresh", action="store_true", help="re-profile stores already done"
     )
@@ -838,19 +1263,67 @@ def main(argv: list[str] | None = None) -> int:
     lt.add_argument("--pause", type=float, default=1.0)
     lt.add_argument("--stride", type=int, default=1, help="take every Nth store")
     lt.add_argument("--new-first", action="store_true", help="newly discovered first")
+    lt.add_argument("--market", choices=sorted(MARKETS), default="us")
+    lt.add_argument("--domains", help="file with one domain per line: re-read these")
+    hp = sub.add_parser("home", help="homepage signals for stores listed in a file")
+    hp.add_argument("--domains", help="file, one domain per line")
+    hp.add_argument("--market", choices=sorted(MARKETS), help="queue mode")
+    hp.add_argument("--max-stores", type=int, default=100, help="queue mode cap")
+    hp.add_argument("--workers", type=int, default=1)
+    hp.add_argument("--pause", type=float, default=4.0)
+    bp = sub.add_parser(
+        "best", help="best-seller collection of stores listed in a file"
+    )
+    bp.add_argument("--domains", help="file, one domain per line")
+    bp.add_argument("--market", choices=sorted(MARKETS), help="queue mode")
+    bp.add_argument("--max-stores", type=int, default=100, help="queue mode cap")
+    bp.add_argument("--workers", type=int, default=1)
+    bp.add_argument("--pause", type=float, default=4.0)
+    bp.add_argument(
+        "--refresh", action="store_true", help="re-read stores already done"
+    )
     sub.add_parser("relabel", help="recompute business_model from saved evidence")
     r = sub.add_parser("ranks")
     r.add_argument("--days-back", type=int, nargs="+", default=[90, 365])
     a = ap.parse_args(argv)
     if a.cmd == "meta":
-        out = run_meta(a.max_stores, a.workers, a.pause, new_first=a.new_first)
+        out = run_meta(
+            a.max_stores,
+            a.workers,
+            a.pause,
+            new_first=a.new_first,
+            outside_tranco=a.outside_tranco,
+        )
     elif a.cmd == "deep":
         out = run_deep(
-            a.max_stores, a.workers, a.pages, a.pause, not a.all_countries, a.refresh
+            a.max_stores,
+            a.workers,
+            a.pages,
+            a.pause,
+            not a.all_countries,
+            a.refresh,
+            market=a.market,
         )
     elif a.cmd == "light":
         out = run_light(
-            a.max_stores, a.workers, a.pause, a.stride, new_first=a.new_first
+            a.max_stores,
+            a.workers,
+            a.pause,
+            a.stride,
+            new_first=a.new_first,
+            market=a.market,
+            domains=(
+                {x.strip() for x in open(a.domains) if x.strip()} if a.domains else None
+            ),
+        )
+    elif a.cmd == "home":
+        out = run_home(_queue_or_file(ap, a, "web_store_home"), a.workers, a.pause)
+    elif a.cmd == "best":
+        out = run_best(
+            _queue_or_file(ap, a, "web_store_best", a.refresh),
+            a.workers,
+            a.pause,
+            a.refresh,
         )
     elif a.cmd == "relabel":
         out = relabel()

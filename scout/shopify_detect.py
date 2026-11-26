@@ -18,9 +18,9 @@ link to Shopify's CDN, so one HTML hit alone is not enough). The rule is
 from __future__ import annotations
 
 import time
-import urllib.robotparser
 from urllib.parse import urlparse
 
+from scout.robots import RobotRules
 from scout.webmeta import UA
 
 HTML_LIMIT = 50_000
@@ -72,7 +72,7 @@ def _robots_allows(domain: str, session) -> bool:
         return False
     if r.status_code >= 400:
         return True  # no robots.txt means no restrictions
-    rp = urllib.robotparser.RobotFileParser()
+    rp = RobotRules()
     rp.parse(r.text.splitlines())
     return rp.can_fetch(UA, f"https://{domain}/")
 

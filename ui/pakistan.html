@@ -1,0 +1,286 @@
+<title>Store Scout Pakistan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a working tool. Sticky tab bar, a filter row, a card grid; evidence opens in a right-hand panel. */
+:root{
+  --bg:#f3f5f4; --surface:#ffffff; --ink:#16211d; --muted:#5a6964; --line:#d7dedb;
+  --accent:#0d6b57; --accent-ink:#ffffff; --soft:#e6efec;
+  --data:#1d5fa8; --data-bg:#e3eefb; --proxy:#9a4b00; --proxy-bg:#fdeed9; --unk:#59636b; --unk-bg:#eceff1;
+  --good:#1b7a43; --warn:#a15c00; --bad:#b3261e;
+  --display:"Space Grotesk","Inter",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#101614; --surface:#18211e; --ink:#e8efec; --muted:#9db0a9; --line:#2c3a35;
+  --accent:#4fc3a6; --accent-ink:#06251d; --soft:#1f2d29;
+  --data:#8ec1ff; --data-bg:#17304d; --proxy:#ffbd73; --proxy-bg:#44290a; --unk:#b5c0c7; --unk-bg:#262f34;
+  --good:#6fd695; --warn:#ffc266; --bad:#ff8a80; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#101614; --surface:#18211e; --ink:#e8efec; --muted:#9db0a9; --line:#2c3a35;
+  --accent:#4fc3a6; --accent-ink:#06251d; --soft:#1f2d29;
+  --data:#8ec1ff; --data-bg:#17304d; --proxy:#ffbd73; --proxy-bg:#44290a; --unk:#b5c0c7; --unk-bg:#262f34;
+  --good:#6fd695; --warn:#ffc266; --bad:#ff8a80; color-scheme:dark }
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+h1{font-size:20px} h2{font-size:17px} h3{font-size:14px}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:12px 8px;border-bottom:1px solid var(--line)}
+.bar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.bar .sub{color:var(--muted);font-size:12px}
+nav.tabs{display:flex;flex-wrap:wrap;gap:4px;margin-left:auto}
+nav.tabs a{padding:6px 12px;border-radius:6px;text-decoration:none;color:var(--muted);font-weight:500}
+nav.tabs a[aria-current="page"]{background:var(--accent);color:var(--accent-ink)}
+main{padding-block:16px;display:flex;flex-direction:column;gap:16px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filters input,.filters select{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 8px;min-width:0}
+.filters input{flex:1 1 180px;max-width:260px}
+.seg{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:none;padding:6px 10px;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--soft);font-weight:600;color:var(--accent)}
+.count{color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card .head{display:flex;gap:8px;align-items:flex-start}
+.card .name{font-weight:600;overflow-wrap:anywhere;flex:1;min-width:0}
+.card .meta{color:var(--muted);font-size:12px}
+.grade{font-family:var(--display);font-weight:600;width:28px;height:28px;border-radius:6px;display:grid;place-items:center;background:var(--soft);color:var(--accent);flex:none}
+.grade.none{color:var(--muted);font-size:11px}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.num b{display:block;font-family:var(--display);font-size:16px;font-variant-numeric:tabular-nums}
+.num span{font-size:11px;color:var(--muted);display:block}
+.chip{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.04em;padding:1px 5px;border-radius:4px;vertical-align:middle}
+.chip.DATA{background:var(--data-bg);color:var(--data)}
+.chip.PROXY{background:var(--proxy-bg);color:var(--proxy)}
+.chip.UNKNOWN{background:var(--unk-bg);color:var(--unk);outline:1px dashed var(--unk)}
+.supply{font-size:12px;border-top:1px solid var(--line);padding-top:8px}
+.supply b{text-transform:capitalize}
+svg.spark{width:100%;height:34px;display:block}
+.actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.actions .why{margin-right:auto;background:none;border:0;color:var(--accent);font-weight:600;padding:4px 0}
+.dec{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:4px 8px;font-size:12px}
+.dec[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.more{align-self:center;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:8px 16px}
+aside.panel{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--surface);border-left:1px solid var(--line);z-index:20;display:flex;flex-direction:column;
+  padding:calc(12px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) 16px;gap:12px;overflow:auto}
+.panel .ph{display:flex;gap:8px;align-items:flex-start}
+.panel .ph h2{flex:1;overflow-wrap:anywhere;min-width:0}
+.panel .x{border:1px solid var(--line);background:none;border-radius:6px;padding:4px 10px}
+.ptabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--line)}
+.ptabs button{border:0;background:none;padding:6px 10px;color:var(--muted);border-bottom:2px solid transparent}
+.ptabs button[aria-selected="true"]{color:var(--accent);border-color:var(--accent);font-weight:600}
+.gaps{background:var(--unk-bg);border:1px dashed var(--unk);border-radius:6px;padding:8px 10px;font-size:12px}
+.gaps ul,.ev ul{margin:4px 0 0;padding-left:18px}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500;font-size:11.5px}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}
+.mono{font-family:var(--mono);font-size:12px;overflow-wrap:anywhere}
+.barrow{display:flex;height:10px;border-radius:3px;overflow:hidden;background:var(--unk-bg);min-width:80px}
+.barrow i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.note{color:var(--muted);font-size:12.5px;max-width:75ch}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11.5px;font-weight:600}
+.pill.ok{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.pill.failed,.pill.timeout{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad)}
+.pill.none{background:var(--unk-bg);color:var(--unk)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.kv b{display:block;font-family:var(--display);font-size:20px;font-variant-numeric:tabular-nums}
+.kv span{font-size:11.5px;color:var(--muted)}
+a{color:var(--accent)}
+.empty{padding:32px 0;color:var(--muted);text-align:center}
+table.rank td{white-space:nowrap}
+table.rank td.nm{white-space:normal;min-width:190px}
+table.rank tr:hover td{background:var(--soft)}
+.sub2{color:var(--muted);font-size:11.5px;display:block}
+.tag{display:inline-block;font-size:10.5px;padding:0 5px;border-radius:3px;background:var(--soft);color:var(--ink);margin-right:3px}
+.tag.ad{background:var(--proxy-bg);color:var(--proxy)}
+.up{color:var(--good)} .down{color:var(--bad)}
+.link{background:none;border:0;color:var(--accent);font-weight:600;padding:0}
+</style>
+<div class="wrap">
+<header class="top"><div class="bar">
+  <h1>Store Scout Pakistan</h1><span class="sub" id="asof">loading…</span>
+</div></header>
+<main id="view"><p class="empty">Loading Pakistan data…</p></main>
+</div>
+<aside class="panel" id="panel" hidden aria-label="Store details"></aside>
+
+<script>
+"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = n => n == null ? "–" : Number(n).toLocaleString("en-US");
+const pct = x => x == null ? "–" : Math.round(x * 100) + "%";
+const nice = s => String(s ?? "unclassified").replace(/_/g, " ");
+let decisions = {};
+try { decisions = JSON.parse(localStorage.getItem("scout-decisions") || "{}"); } catch (e) {}
+const saveDec = () => { try { localStorage.setItem("scout-decisions", JSON.stringify(decisions)); } catch (e) {} };
+function decButtons(d) {
+  return ["shortlist", "watch", "skip"].map(k => `<button class="dec" data-dec="${k}" data-dom="${esc(d)}" aria-pressed="${decisions[d] === k}">${k[0].toUpperCase() + k.slice(1)}</button>`).join("");
+}
+function opts(vals, cur, all) { return `<option value="">${all}</option>` + vals.map(v => `<option value="${esc(v)}" ${v === cur ? "selected" : ""}>${esc(nice(v))}</option>`).join(""); }
+// ---------- Pakistan tab (decisions 0019 to 0021): data lives in pakistan.json, loaded on first visit ----------
+let PK = null, pkErr = false;
+const pk = { seg: "scored", q: "", model: "", cat: "", bucket: "", sort: "score", shown: 100, view: "stores", open: null, tab: "story" };
+const rs = n => n == null ? "–" : "Rs " + Number(n).toLocaleString("en-US", { maximumFractionDigits: 0 });
+const BUCKET = { 1000: "top 1k", 5000: "top 5k", 10000: "top 10k", 50000: "top 50k", 100000: "top 100k", 500000: "top 500k" };
+const SOC = { instagram: "IG", facebook: "FB", tiktok: "TT", youtube: "YT", pinterest: "PI", x: "X" };
+const ADN = { meta_pixel: "Meta", tiktok_pixel: "TikTok", google_ads: "Google", pinterest_tag: "Pinterest", snap_pixel: "Snap", microsoft_ads: "Microsoft", reddit_pixel: "Reddit" };
+const pchip = k => { const l = (PK.labels || {})[k] || "UNKNOWN"; return `<span class="chip ${l}">${l}</span>`; };
+function loadPk() {
+  if (PK || pkErr || loadPk.busy) return; loadPk.busy = true;
+  fetch("pakistan.json").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(d => { PK = d; render(); }).catch(() => { pkErr = true; render(); });
+}
+const growthTxt = g => g == null ? "–" : (g >= 0 ? `<span class="up">▲ ${Math.exp(g).toFixed(1)}×</span>` : `<span class="down">▼ ${Math.exp(g).toFixed(1)}×</span>`);
+function pkFiltered() {
+  const q = pk.q.trim().toLowerCase();
+  const r = PK.stores.filter(s => {
+    if (pk.seg === "scored" && !s.scored) return false;
+    if (pk.seg === "crux" && s.via !== "crux") return false;
+    if (pk.seg === "unscored" && s.scored) return false;
+    if (pk.model && s.model !== pk.model) return false;
+    if (pk.cat && s.cat !== pk.cat) return false;
+    if (pk.bucket && String(s.crux) !== pk.bucket) return false;
+    if (q && !((s.d + " " + (s.name || "")).toLowerCase().includes(q) || nice(s.cat).includes(q))) return false;
+    return true;
+  });
+  const key = { score: s => s.n ?? 1e9, pop: s => (s.crux ?? 1e9) * 1e7 + (s.rank ?? 1e7), growth: s => -(s.growth ?? -9), added: s => -(s.added ? s.added[1] ?? -1 : -1), price: s => -(s.price ? s.price[1] ?? -1 : -1), ratio: s => s.best && s.best.ratio != null ? s.best.ratio : 9 }[pk.sort];
+  return r.sort((a, b) => key(a) - key(b));
+}
+function pkRow(s) {
+  const chans = (s.social || []).map(x => `<span class="tag">${esc(SOC[x] || x)}</span>`).join("") + (s.ads || []).map(x => `<span class="tag ad" title="ad pixel">${esc(ADN[x] || x)}</span>`).join("");
+  const br = s.best && s.best.ratio != null ? `<span title="median price of the store's own best-seller list vs its whole catalogue">${s.best.ratio.toFixed(2)}×</span>` : "–";
+  return `<tr><td class="n">${s.n ?? "–"}</td>
+    <td class="nm"><b>${esc(s.d)}</b><span class="sub2">${esc(nice(s.cat))} · ${esc(s.model || "not profiled")}${s.via === "crux" ? " · found via CrUX" : ""}</span></td>
+    <td>${s.crux ? esc(BUCKET[s.crux] || s.crux) : "–"}</td><td class="n">${fmt(s.rank)}</td><td class="n">${growthTxt(s.growth)}</td>
+    <td class="n">${s.added ? fmt(s.added[1]) : "–"}</td><td class="n">${s.price ? rs(s.price[1]) : "–"}</td><td class="n">${br}</td>
+    <td class="nm">${chans || "–"}</td><td class="n"><b>${s.score ? s.score.best.toFixed(3) : "–"}</b></td>
+    <td><button class="link" data-pkopen="${esc(s.d)}">Why</button></td></tr>`;
+}
+function pkStores() {
+  const uniq = f => [...new Set(PK.stores.map(f).filter(Boolean))].sort();
+  const seg = [["scored", "Ranked"], ["all", "All found"], ["crux", "Outside Tranco"], ["unscored", "Not profiled yet"]];
+  const rows = pkFiltered();
+  const bk = [...new Set(PK.stores.map(s => s.crux).filter(Boolean))].sort((a, b) => a - b);
+  return `<div class="filters">
+      <div class="seg" role="group" aria-label="Slice">${seg.map(([k, t]) => `<button data-pkseg="${k}" aria-pressed="${pk.seg === k}">${t}</button>`).join("")}</div>
+      <input id="p-q" type="search" placeholder="Search store or category" value="${esc(pk.q)}" aria-label="Search">
+      <select id="p-model" aria-label="Business model">${opts(uniq(s => s.model), pk.model, "Any model")}</select>
+      <select id="p-cat" aria-label="Category">${opts(uniq(s => s.cat), pk.cat, "Any category")}</select>
+      <select id="p-bucket" aria-label="Pakistan popularity"><option value="">Any popularity</option>${bk.map(b => `<option value="${b}" ${String(b) === pk.bucket ? "selected" : ""}>${esc(BUCKET[b] || b)}</option>`).join("")}</select>
+      <select id="p-sort" aria-label="Sort">${[["score", "Best score"], ["pop", "Pakistan popularity"], ["growth", "Fastest rising"], ["added", "Most products added"], ["price", "Highest price"], ["ratio", "Cheapest best-sellers"]].map(([k, t]) => `<option value="${k}" ${pk.sort === k ? "selected" : ""}>Sort: ${t}</option>`).join("")}</select>
+    </div>
+    <div class="bar"><span class="count">${fmt(rows.length)} of ${fmt(PK.stores.length)} stores · ${Object.keys(decisions).length} decided</span>
+      <button class="dec" id="copy-dec" ${Object.keys(decisions).length ? "" : "disabled"}>Copy decisions</button><span class="count" id="copy-msg"></span></div>
+    ${rows.length ? `<div class="box"><div class="scroll"><table class="rank"><thead><tr><th class="n">#</th><th>Store</th><th>Pakistan popularity ${pchip("popularity")}</th><th class="n">Global rank ${pchip("rank")}</th><th class="n">Rank change ${pchip("growth")}</th><th class="n">Added, 90 d ${pchip("added")}</th><th class="n">Median price ${pchip("price")}</th><th class="n">Best-seller price ${pchip("best")}</th><th>Channels ${pchip("social")}</th><th class="n">Score ${pchip("score")}</th><th></th></tr></thead><tbody>${rows.slice(0, pk.shown).map(pkRow).join("")}</tbody></table></div></div>` : `<p class="empty">No store matches these filters.</p>`}
+    ${rows.length > pk.shown ? `<button class="more" id="pk-more">Show 100 more</button>` : ""}`;
+}
+function pkCategories() {
+  return `<div class="box"><div class="scroll"><table><thead><tr><th>Category</th><th class="n">Ranked stores</th><th class="n">In top 5k ${pchip("popularity")}</th><th class="n">Median price ${pchip("price")}</th><th class="n">Median added, 90 d ${pchip("added")}</th><th class="n">Best-seller price vs catalogue ${pchip("best")}</th><th class="n">Own-label ${pchip("model")}</th><th class="n">Resell others ${pchip("model")}</th><th></th></tr></thead><tbody>
+    ${PK.categories.map(c => `<tr><td><b>${esc(nice(c.category))}</b></td><td class="n">${fmt(c.stores)}</td><td class="n">${fmt(c.top_bucket)}</td><td class="n">${rs(c.median_price)}</td><td class="n">${fmt(c.median_added_90d)}</td><td class="n">${c.median_best_ratio == null ? "–" : c.median_best_ratio + "×"}</td><td class="n">${fmt(c.brands)}</td><td class="n">${fmt(c.resold)}</td><td><button class="link" data-pkcat="${esc(c.category)}">See stores</button></td></tr>`).join("")}
+    </tbody></table></div></div>
+    <p class="note">One row per product category among the ranked Pakistani stores. Most rows are own-label brands: their success shows Pakistani demand, not that a store with no stock can copy it. Median added is capped at 250, the size of the product page we read.</p>`;
+}
+function viewPakistan() {
+  if (pkErr) return `<p class="empty">The Pakistan data file could not be loaded. Build it with <span class="mono">python scripts/ui_export_pk.py</span> and publish it beside this page as <span class="mono">pakistan.json</span>.</p>`;
+  if (!PK) { loadPk(); return `<p class="empty">Loading Pakistan data…</p>`; }
+  const C = PK.counts, V = PK.validation;
+  return `<h2>Pakistan: best Shopify stores selling in rupees</h2>
+    <div class="box"><div class="kv">
+      <div><b>${fmt(C.stores)}</b><span>stores found</span></div><div><b>${fmt(C.scored)}</b><span>ranked (profiled)</span></div>
+      <div><b>${fmt(C.found_by_crux)}</b><span>outside the Tranco top 1M</span></div><div><b>${fmt(C.with_homepage)}</b><span>homepage read (channels)</span></div>
+      <div><b>${fmt(C.with_best)}</b><span>best-seller list found</span></div></div>
+      <p class="note">Ranked by Pakistan popularity among Chrome users (35%), global traffic rank (20%), rank growth over a year (25%) and products added in 90 days (20%). All of it is a proxy for visits and activity. <b>Revenue, orders, ad spend and margin are not public</b> ${pchip("revenue")}. Business model is a rule label: ${esc(V.model)}. The popularity data is Google's Chrome UX Report (CC BY 4.0), the global rank is Tranco.</p></div>
+    <div class="seg" role="group" aria-label="View"><button data-pkview="stores" aria-pressed="${pk.view === "stores"}">Stores</button><button data-pkview="cats" aria-pressed="${pk.view === "cats"}">Categories</button></div>
+    ${pk.view === "stores" ? pkStores() : pkCategories()}`;
+}
+function pkStory(s) {
+  const bits = [];
+  bits.push(`${s.name || s.d} is ${s.crux ? "among the top " + (BUCKET[s.crux] || s.crux).replace("top ", "") + " websites visited by Chrome users in Pakistan" : "not in the Pakistan popularity data"}.`);
+  if (s.rank) bits.push(`Its global traffic rank is ${fmt(s.rank)}${s.growth != null ? ", " + (s.growth >= 0 ? "up" : "down") + " " + Math.exp(s.growth).toFixed(1) + "× over the last year" : ""}.`);
+  else bits.push("It is outside the Tranco top 1M, so it has no global rank or rank history.");
+  if (s.added) bits.push(`It added ${fmt(s.added[1])}${s.added[1] >= 250 ? "+" : ""} products in the last 90 days (we read the newest 250) and sells mostly ${nice(s.cat)} at a median of ${rs(s.price[1])}.`);
+  if (s.best) bits.push(`Its own best-seller list ("${s.best.collection}") has a median price ${s.best.ratio == null ? "" : s.best.ratio.toFixed(2) + "× "}its whole catalogue.`);
+  if (s.social) bits.push(`Homepage links: ${s.social.map(x => SOC[x] || x).join(", ") || "no social accounts"}; ad tracking: ${s.ads.map(x => ADN[x] || x).join(", ") || "none seen"}.`);
+  return bits.join(" ");
+}
+function panelPk(s) {
+  const tabs = [["story", "Story"], ["evidence", "Evidence"], ["score", "Score"], ["raw", "Raw numbers"]], base = "https://" + s.d;
+  let body = "";
+  if (pk.tab === "story") {
+    body = `<p>${esc(pkStory(s))}</p>
+      <div class="gaps"><b>Not known for this store</b> ${pchip("revenue")}<ul><li>Sales, orders and revenue</li><li>Ad spend and which ads run (Meta Ad Library is manual only for Pakistan)</li><li>How much traffic arrives from Instagram, TikTok or Facebook (no public source; links and ad pixels show effort, not visits)</li><li>Supplier and cost of goods</li><li>Sales through Daraz, Instagram or WhatsApp chat, which leave no trace on the store's pages</li></ul></div>
+      ${s.model ? `<p class="note">Business model "${esc(s.model)}" is a rule label ${pchip("model")}${s.model_why && s.model_why.length ? ": " + esc(s.model_why.join("; ")) : ""}. ${esc(PK.validation.model)}.</p>` : `<p class="note">Not profiled yet: no product page read.</p>`}`;
+  } else if (pk.tab === "evidence") {
+    const ev = [];
+    if (s.crux) ev.push(["Pakistan popularity bucket: " + (BUCKET[s.crux] || s.crux), "Chrome UX Report, Pakistan", PK.generated_at.slice(0, 7), "popularity", "https://developer.chrome.com/docs/crux"]);
+    if (s.rank) ev.push(["Global traffic rank " + fmt(s.rank), "Tranco list", PK.rank_dates[PK.rank_dates.length - 1], "rank", "https://tranco-list.eu/"]);
+    if (s.price) ev.push(["Prices " + rs(s.price[0]) + " to " + rs(s.price[2]) + ", median " + rs(s.price[1]) + "; discount on " + pct(s.disc) + " of products", "store product feed", s.seen, "price", base + "/products.json"]);
+    if (s.added) ev.push(["Products added: " + s.added.map(fmt).join(" / ") + " in 30 / 90 / 365 days (newest 250 read); " + fmt(s.products) + " published", "store product feed and /meta.json", s.seen, "added", base + "/meta.json"]);
+    if (s.social) ev.push(["Links: " + (s.social.join(", ") || "none") + "; ad tracking: " + (s.ads.join(", ") || "none") + "; other tools: " + (s.apps.join(", ") || "none"), "store homepage", "", "social", base + "/"]);
+    if (s.best) ev.push(["Best-seller list \"" + s.best.collection + "\": " + s.best.n + " products, median " + rs(s.best.price) + ", " + pct(s.best.disc) + " discounted, " + pct(s.best.new90) + " added in 90 days", "store collection page", "", "best", base + "/collections/" + s.best.collection]);
+    body = `<div class="scroll"><table><thead><tr><th>Claim</th><th>Where seen</th><th>Date</th><th></th></tr></thead><tbody>${ev.map(e => `<tr><td>${esc(e[0])} ${pchip(e[3])}</td><td>${esc(e[1])}</td><td>${esc(e[2] || "–")}</td><td><a href="${esc(e[4])}" target="_blank" rel="noopener noreferrer">Verify</a></td></tr>`).join("")}</tbody></table></div>
+      <p class="note">${esc(PK.validation.best_seller)}. ${esc(PK.credits)}</p>`;
+  } else if (pk.tab === "score") {
+    body = s.score ? `<h3>Score ${s.score.best.toFixed(3)} ${pchip("score")}</h3><div class="scroll"><table><thead><tr><th>Part</th><th class="n">Value (0 to 1)</th><th class="n">Weight</th><th class="n">Points</th></tr></thead><tbody>${Object.entries(PK.score_weights).map(([k, [w, t]]) => `<tr><td>${esc(t)}</td><td class="n">${(s.score[k] || 0).toFixed(2)}</td><td class="n">${w}</td><td class="n">${((s.score[k] || 0) * w).toFixed(3)}</td></tr>`).join("")}</tbody></table></div>
+      <p class="note">What would change the order: more weight on growth moves risers up; a store outside the Tranco top 1M can rank on Pakistani popularity and activity but earns no global-rank or growth points.</p>` : `<p class="note">No score: this store has no product page read yet, so release rhythm is unknown.</p>`;
+  } else {
+    body = `<div class="scroll"><table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>${Object.entries(s).filter(([k]) => k !== "spark").map(([k, v]) => `<tr><td class="mono">${esc(k)}</td><td class="mono">${esc(typeof v === "object" ? JSON.stringify(v) : v)}</td></tr>`).join("")}</tbody></table></div>
+      ${s.spark ? `<h3>Global rank by list date ${pchip("rank")}</h3><div class="scroll"><table><tbody>${PK.rank_dates.map((d, i) => `<tr><td class="mono">${d}</td><td class="n">${s.spark[i] != null ? fmt(s.spark[i]) : "outside top 1M"}</td></tr>`).join("")}</tbody></table></div>` : ""}`;
+  }
+  return `<div class="ph"><span class="grade ${s.n ? "" : "none"}">${esc(s.n ?? "–")}</span><h2>${esc(s.d)}</h2><button class="x" data-close="1" aria-label="Close details">Close</button></div>
+    <div class="meta">${esc(nice(s.cat))} · ${esc(s.model || "not profiled")} · ${esc(s.country || "country unknown")} · ${s.via === "crux" ? "found through Chrome UX Report" : "in the Tranco top 1M"}</div>
+    <div class="ptabs" role="tablist">${tabs.map(([k, t]) => `<button role="tab" data-pktab="${k}" aria-selected="${pk.tab === k}">${t}</button>`).join("")}</div>
+    <div style="display:flex;flex-direction:column;gap:12px">${body}</div>
+    <div class="actions" style="margin-top:auto;border-top:1px solid var(--line);padding-top:10px"><span class="why" style="color:var(--muted)">Decision</span>${decButtons(s.d)}</div>`;
+}
+
+function render() {
+  const focusId = document.activeElement && document.activeElement.id, pos = focusId === "p-q" ? document.activeElement.selectionStart : null;
+  $("#view").innerHTML = viewPakistan();
+  if (focusId && $("#" + focusId)) { $("#" + focusId).focus(); if (pos != null) $("#" + focusId).setSelectionRange(pos, pos); }
+  const s = pk.open && PK && PK.stores.find(x => x.d === pk.open);
+  $("#panel").hidden = !s;
+  if (s) $("#panel").innerHTML = panelPk(s);
+  if (PK) $("#asof").textContent = "Data as of " + PK.generated_at.slice(0, 16).replace("T", " ") + " UTC · " + fmt(PK.counts.scored) + " ranked of " + fmt(PK.counts.stores) + " found";
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("button");
+  if (!t) return;
+  if (t.dataset.pkseg) { pk.seg = t.dataset.pkseg; pk.shown = 100; }
+  else if (t.dataset.pkview) pk.view = t.dataset.pkview;
+  else if (t.dataset.pkopen) { pk.open = t.dataset.pkopen; pk.tab = "story"; }
+  else if (t.dataset.pktab) pk.tab = t.dataset.pktab;
+  else if (t.dataset.pkcat) { pk.cat = t.dataset.pkcat; pk.seg = "scored"; pk.view = "stores"; pk.shown = 100; }
+  else if (t.id === "pk-more") pk.shown += 100;
+  else if (t.dataset.close) pk.open = null;
+  else if (t.dataset.dec) { const d = t.dataset.dom; if (decisions[d] === t.dataset.dec) delete decisions[d]; else decisions[d] = t.dataset.dec; saveDec(); }
+  else if (t.id === "copy-dec") {
+    const txt = Object.entries(decisions).map(([d, k]) => k + "\t" + d).sort().join("\n");
+    const done = m => { const el = $("#copy-msg"); if (el) el.textContent = m; };
+    try { navigator.clipboard.writeText(txt).then(() => done("Copied " + Object.keys(decisions).length + " decisions"), () => done("Copy was blocked by the browser")); } catch (err) { done("Copy was blocked by the browser"); }
+    return;
+  } else return;
+  render();
+});
+document.addEventListener("input", e => {
+  const m = { "p-q": "q", "p-model": "model", "p-cat": "cat", "p-bucket": "bucket", "p-sort": "sort" }[e.target.id];
+  if (!m) return;
+  pk[m] = e.target.value; pk.shown = 100; render();
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && pk.open) { pk.open = null; render(); } });
+loadPk();
+</script>
