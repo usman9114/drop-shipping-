@@ -18,13 +18,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # 3.9 is the owner's local Python but is end of life: setup-python has no
+    # build for current Ubuntu, so that leg runs in the official container.
+    container: ${{ matrix.container }}
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.9", "3.12"]
+        include:
+          - python: "3.9"
+            container: python:3.9-slim
+          - python: "3.12"
+            container: ""
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
+        if: matrix.container == ''
         with:
           python-version: ${{ matrix.python }}
           cache: pip
