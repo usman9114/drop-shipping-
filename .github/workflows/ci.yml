@@ -28,12 +28,15 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
           cache: pip
-          cache-dependency-path: requirements-dev.txt
-      - run: pip install -r requirements-dev.txt
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+            requirements-autopilot.txt
+      - name: Install (project, autopilot and dev dependencies)
+        run: pip install -q -r requirements.txt -r requirements-autopilot.txt -r requirements-dev.txt
       - run: python -m pytest -q
       - name: Smoke
         run: |
-          pip install -q -r requirements.txt
           python -m scout.market_rank --help > /dev/null
           python -m scout.autopilot daily --dry-run > /dev/null
 
