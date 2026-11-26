@@ -239,7 +239,7 @@ def test_gcp_credentials_file_only_when_set_and_never_printed(tmp_path, capsys):
 
 def test_ci_workflow_has_matrix_and_guards():
     wf = (ROOT / ".github/workflows/ci.yml").read_text()
-    assert '"3.9"' in wf and '"3.12"' in wf
+    assert '"3.12"' in wf  # the autopilot's Python; pinned deps need >= 3.10
     for job in ("test:", "lint:", "readme-guard:"):
         assert job in wf
     assert "autopilot daily --dry-run" in wf and "market_rank --help" in wf
