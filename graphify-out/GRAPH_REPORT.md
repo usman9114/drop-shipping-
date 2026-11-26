@@ -1,7 +1,7 @@
 # Graph Report - drop-shipping-  (2026-11-26)
 
 ## Corpus Check
-- 205 files · ~178,012 words
+- 205 files · ~178,177 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 22 file(s) not represented in the graph (top: .csv 16, (none) 4, .example 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `89a06f04`
+- Built from commit: `4574efed`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -178,23 +178,23 @@
 3. `supply_estimate()` - 30 edges
 4. `feed_signals()` - 29 edges
 5. `column_types` - 24 edges
-6. `CJClient` - 21 edges
-7. `Inputs` - 21 edges
-8. `_runs()` - 21 edges
-9. `fetch()` - 21 edges
+6. `Inputs` - 21 edges
+7. `CJClient` - 21 edges
+8. `fetch()` - 21 edges
+9. `_runs()` - 21 edges
 10. `_all_rows()` - 20 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Where we are (2026-11-05)` --references--> `daily()`  [INFERRED]
-  docs/handoff/session-state.md → scout/autopilot.py
-- `Rules that make it deterministic` --references--> `classify()`  [INFERRED]
-  docs/decisions/0006-duckdb-warehouse.md → scout/classify.py
-- `Proposed WEIGHTS and rule changes (applied 2026-11-05 in `RULE_VERSION` 2026-11-05.3, see below)` --references--> `supply_estimate()`  [INFERRED]
-  docs/research/35-fingerprint-validation.md → scout/fingerprints.py
 - `1. Landed-cost ceiling table [data: scout.margin output]` --references--> `evaluate()`  [INFERRED]
   docs/research/13-sales-niche-economics.md → scout/margin.py
 - `2. Public logs (the repo is public)` --references--> `say()`  [INFERRED]
   docs/decisions/0017-lake-sync-supabase.md → scout/quiet.py
+- `Rounds` --references--> `latest_good()`  [INFERRED]
+  docs/reviews/2026-11-04-business-model-validation.md → scout/stores.py
+- `Method` --references--> `_shop_hits()`  [INFERRED]
+  docs/research/28-discovery-miss-rate.md → scout/stores.py
+- `Where we are (2026-11-05)` --references--> `daily()`  [INFERRED]
+  docs/handoff/session-state.md → scout/autopilot.py
 
 ## Import Cycles
 - 2-file cycle: `scout/stores.py -> scout/webmeta.py -> scout/stores.py`
@@ -766,7 +766,7 @@ Cohesion: 0.33
 Nodes (3): _added(), _fingerprint_signal_rows(), _checked_path()
 
 ## Knowledge Gaps
-- **6 isolated node(s):** `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
+- **6 isolated node(s):** `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL`, `ANTHROPIC_DEFAULT_OPUS_MODEL`, `ANTHROPIC_DEFAULT_SONNET_MODEL` (+1 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 1082 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -774,15 +774,15 @@ Nodes (3): _added(), _fingerprint_signal_rows(), _checked_path()
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `record_run()` connect `record_run` to `fingerprints.py`, `__init__.py`, `Autopilot: the store pipeline runs 24/7 on scripts`, `stores.py`, `unblock.py`, `Free models: GLM Flash + OpenRouter free lane`, `json`, `CJClient`, `reviews.py`, `test_autopilot_discovery.py`, `supply_sanity.py`, `daily`, `_shop_hits`, `autopilot.py`, `webmeta.py`?**
-  _High betweenness centrality (0.025) - this node is a cross-community bridge._
+  _High betweenness centrality (0.026) - this node is a cross-community bridge._
 - **Are the 4 inferred relationships involving `record_run()` (e.g. with `Shared rules for every AI team member` and `How to get good results`) actually correct?**
   _`record_run()` has 4 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `API_TIMEOUT_MS` to the rest of the system?**
+- **What connects `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_BASE_URL`, `ANTHROPIC_DEFAULT_HAIKU_MODEL` to the rest of the system?**
   _6 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `hooks` be split into smaller, more focused modules?**
   _Cohesion score 0.125 - nodes in this community are weakly interconnected._
-- **Why does `scan()` connect `_shop_hits` to `0009 — Step 1: find the best online stores and reconstruct what they do`, `record_run`, `webmeta.py`?**
-  _High betweenness centrality (0.010) - this node is a cross-community bridge._
+- **Why does `daily()` connect `daily` to `Session state: where the project stands`, `quiet.py`, `record_run`, `time`, `autopilot.py`?**
+  _High betweenness centrality (0.016) - this node is a cross-community bridge._
 - **Are the 3 inferred relationships involving `chat()` (e.g. with `main()` and `main()`) actually correct?**
   _`chat()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Should `json` be split into smaller, more focused modules?**
