@@ -57,7 +57,7 @@ Anything touching **public output** (README, Actions logs) or **secrets** is nev
 
 | Gate | Where | Fails when |
 |---|---|---|
-| Unit + regression tests | `pytest` in `ci.yml` (Python 3.9 and 3.12) | any test fails |
+| Unit + regression tests | `pytest` in `ci.yml` (Python 3.12, as the autopilot) | any test fails |
 | Lint, hygiene, secrets | `pre-commit` (ruff, detect-secrets, no-AI-attribution) | any hook fails |
 | Public-output guard | `tests/test_readme.py`, `tests/test_autopilot.py` | README or logs contain a store domain, a secret or row-level data |
 | Pipeline health | `autopilot health` every 6 h | a job missed its window or errors > 10% |

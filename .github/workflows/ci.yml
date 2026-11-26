@@ -18,21 +18,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # 3.9 is the owner's local Python but is end of life: setup-python has no
-    # build for current Ubuntu, so that leg runs in the official container.
-    container: ${{ matrix.container }}
+    # 3.12 is what the autopilot runs. 3.9 (the owner's local Python) cannot
+    # install the pinned dependencies (dbt-duckdb 1.11 needs >= 3.10).
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - python: "3.9"
-            container: python:3.9-slim
-          - python: "3.12"
-            container: ""
+        python: ["3.12"]
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
-        if: matrix.container == ''
         with:
           python-version: ${{ matrix.python }}
           cache: pip
