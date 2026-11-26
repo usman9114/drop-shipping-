@@ -5,7 +5,7 @@ Every agent in `.claude/agents/` reads this file first. It is not an agent itsel
 1. **Evidence or it didn't happen.** Every claim that drives a decision cites a source: a URL, a file under `data/evidence/`, or the output of a `scout/` command (with the exact command). Label each claim **[data]** (our own pull), **[primary]** (official source), **[secondary]** or **[estimate]**. Decisions resting only on [secondary]/[estimate] must say so.
 2. **Cheapest capable model first.**
    - Bulk work (classification, tagging, first drafts, image QA, scanning catalogs): **free OpenRouter models** via `python -m scout.llm` (see `docs/plan/ai-team.md` §4).
-   - Web search: Haiku (`market-researcher`).
+   - Web search: Haiku (`market-researcher`); sourced second opinion or graphics: `chatgpt-worker` (owner's ChatGPT plan, skill `chatgpt`).
    - Execution and analysis: Sonnet.
    - Strategy, synthesis and final calls: Opus (`head-of-marketing`).
    - Never use a paid model for a task a free model passes.

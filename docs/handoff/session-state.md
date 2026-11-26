@@ -18,6 +18,7 @@ Phase R1 re-scoped by the owner to **finding real dropshippers and their supply 
 | App-trace catalogue | vendors rarely document storefront traces; catalogue must come from observation | `docs/research/33a/33b/33c` |
 | **Validation (W3)** | 67 stores hand-checked: named source right 28/31 (90%); dropship-or-not 89%; strong rules 100% precision; several weak signals below 80% | `docs/research/35-fingerprint-validation.md`, truth CSV `data/private/research/fingerprint-truth.csv` |
 | Bug fixed | DSers SKU rule matched brand SKUs (tommyjohn.com); also in the business-model classifier | `scout/stores.py` `DSERS_SKU`, tests |
+| **ChatGPT lane** (owner 2026-11-26) | owner's ChatGPT Go plan via Codex CLI 0.169.0: research 8-15 s with cited URLs, images 25-35 s (1024 PNG); login per cloud session (device code, owner enters it) | `scout/chatgpt.py`, skill `chatgpt`, agent `chatgpt-worker`, decision 0019; owner to decide on SessionStart auto-install hook |
 | Free-model harness | `scout.llm --batch` (resumable), `--second-opinion`, `--usage`, answer cache; skill `free-llm`; agent `glm-worker` | `.claude/skills/free-llm/SKILL.md` |
 | Autopilot design (owner: pipeline runs 24/7 on scripts, only GLM/OpenRouter at runtime) | rule versions, SKU shapes, cached answers built; jobs, gaps, hosting options written | `docs/plan/autopilot.md`, principle 13 |
 | Parked ideas | underperforming-store leads and the owner's audit-SaaS blueprint reviewed; owner's tool shortlist mapped | `docs/plan/opportunity-store-rescue.md`, `docs/plan/tool-shortlist.md` |

@@ -90,3 +90,7 @@ lake-push:        ## data/private -> private Supabase bucket
 
 ui-data:          ## private data file for the Store Scout UI (decision 0018)
 	python3 scripts/ui_export.py
+
+chatgpt-setup:    ## install pinned Codex CLI and show ChatGPT lane status (decision 0019)
+	./scripts/install_codex.sh
+	python -m scout.chatgpt status
