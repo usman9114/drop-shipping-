@@ -46,6 +46,7 @@ Usage is logged (counts only) in `data/private/chatgpt_usage.jsonl`; images stop
 
 ## Rules
 
+- **Real-world image first; AI edits it, never invents it (owner 2026-11-26).** For any visual that stands for something real (a README hero, a product, a place, a car), start from a real photograph with a recorded licence (own photos, public domain or CC0 via the Wikimedia Commons API, the repo's own footage) and only crop, retouch, enhance, light, upscale or annotate it. Do not generate the main picture from a text prompt. Record source URL, author, licence and every edit in the sidecar JSON. Blur or remove incidental brand marks and licence plates. Generated images remain fine for abstract backgrounds or when the owner asks.
 - **Recompute every number it gives you.** Pilot 2026-11-26: a margin second opinion got its subtraction wrong by $1 ($24.99 - 9 - 4.25 - 0.40 = 11.34, it said 10.34). Use it for framing and risks; arithmetic goes in code (`scout/margin.py`).
 
 - **Generate images one at a time.** Pilot 2026-11-26: five `image` calls started in parallel returned three byte-identical files (the output of one run landed in two other runs' paths), while an earlier batch of four was fine. Each file looked correct on its own, so compare `md5sum` across outputs and look at every image. Run image calls sequentially (about 40 s each); parallel is fine for `research` and `ask`.
