@@ -48,6 +48,8 @@ Usage is logged (counts only) in `data/private/chatgpt_usage.jsonl`; images stop
 
 - **Recompute every number it gives you.** Pilot 2026-11-26: a margin second opinion got its subtraction wrong by $1 ($24.99 - 9 - 4.25 - 0.40 = 11.34, it said 10.34). Use it for framing and risks; arithmetic goes in code (`scout/margin.py`).
 
+- **Generate images one at a time.** Pilot 2026-11-26: five `image` calls started in parallel returned three byte-identical files (the output of one run landed in two other runs' paths), while an earlier batch of four was fine. Each file looked correct on its own, so compare `md5sum` across outputs and look at every image. Run image calls sequentially (about 40 s each); parallel is fine for `research` and `ask`.
+
 - **Research answers are leads.** Label them `[secondary]`/`[unverified]` until you open the cited URL; keep the URLs (CLAUDE.md research convention). Cross-check decision-driving facts with a second source.
 - **No CJ product image goes in as `--ref` to be "placed in a scene".** The model redraws every pixel. Product photos for listings need the Phase 1 compositor: cut out the product, generate only the background here, paste the original pixels back, keep the CJ source URL.
 - Never use competitor photos, Google Images or marketplace listing images as `--ref`.

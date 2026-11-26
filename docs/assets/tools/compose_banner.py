@@ -1,27 +1,30 @@
 """Compose a README banner and GitHub social preview from an AI illustration.
 
 The illustration (docs/assets/hero-art.png) has no text by design. All text is
-set here in real type so it is sharp and correct. Output: docs/assets/hero.png
-and docs/assets/social-preview.png, both 1280x640.
+set here in real type so it is sharp and correct. Output: docs/assets/hero.jpg
+and docs/assets/social-preview.jpg, both 1280x640 JPEG (GitHub limits the social preview to 1 MB). Colours and placement are set
+per repo because each illustration has its own palette.
 
 Example (from the repo root):
   python docs/assets/tools/compose_banner.py --title "Line one|Line two" \
-      --tagline "First line|Second line" --footer "Tech · stack" [--side right] [--flip]
+      --tagline "First line|Second line" --footer "Tech - stack" \
+      --fg "#FFFFFF" --muted "#D8C7FF" --accent "#C6FF3D" --title-size 46
 """
 
 import argparse
 from pathlib import Path
+
 from PIL import Image, ImageDraw, ImageFont
 
 W, H = 1280, 640
 INTER = "/usr/share/fonts/opentype/inter/Inter-{}.otf"
+SERIF = "/usr/share/fonts/truetype/liberation/LiberationSerif-{}.ttf"
 MONO = "/usr/share/fonts/truetype/jetbrains-mono/JetBrainsMono-Regular.ttf"
-WHITE, MUTED, TEAL = "#F1F5F9", "#94A3B8", "#5EEAD4"
 
 
-def font(weight, size):
+def load(path, size):
     try:
-        return ImageFont.truetype(INTER.format(weight), size)
+        return ImageFont.truetype(path, size)
     except OSError:
         return ImageFont.load_default()
 
@@ -33,30 +36,38 @@ def main():
     ap.add_argument("--title", required=True, help="lines separated by |")
     ap.add_argument("--tagline", required=True, help="lines separated by |")
     ap.add_argument("--footer", default="")
-    ap.add_argument("--side", choices=["left", "right"], default="left")
-    ap.add_argument(
-        "--flip", action="store_true", help="mirror the illustration horizontally"
-    )
+    ap.add_argument("--fg", default="#F1F5F9")
+    ap.add_argument("--muted", default="#94A3B8")
+    ap.add_argument("--accent", default="#5EEAD4")
+    ap.add_argument("--serif", action="store_true", help="serif title font")
+    ap.add_argument("--title-size", type=int, default=54)
+    ap.add_argument("--tag-size", type=int, default=24)
+    ap.add_argument("--x", type=int, default=64)
+    ap.add_argument("--y", type=int, default=140)
+    ap.add_argument("--footer-y", type=int, default=H - 70)
     a = ap.parse_args()
 
     img = Image.open(a.art).convert("RGB").resize((W, H), Image.LANCZOS)
-    if a.flip:
-        img = img.transpose(Image.FLIP_LEFT_RIGHT)
     d = ImageDraw.Draw(img)
-    x = 64 if a.side == "left" else 836
-    y = 150
+    tfont = load(
+        SERIF.format("Bold") if a.serif else INTER.format("Bold"), a.title_size
+    )
+    gfont = load(
+        SERIF.format("Italic") if a.serif else INTER.format("Regular"), a.tag_size
+    )
+    y = a.y
     for line in a.title.split("|"):
-        d.text((x, y), line, font=font("Bold", 54), fill=WHITE)
-        y += 66
-    y += 18
+        d.text((a.x, y), line, font=tfont, fill=a.fg)
+        y += int(a.title_size * 1.2)
+    y += 14
     for line in a.tagline.split("|"):
-        d.text((x, y), line, font=font("Regular", 26), fill=MUTED)
-        y += 36
+        d.text((a.x, y), line, font=gfont, fill=a.muted)
+        y += int(a.tag_size * 1.45)
     if a.footer:
-        d.text((x, H - 70), a.footer, font=ImageFont.truetype(MONO, 18), fill=TEAL)
+        d.text((a.x, a.footer_y), a.footer, font=load(MONO, 17), fill=a.accent)
     out = Path(a.out_dir)
-    for name in ("hero.png", "social-preview.png"):
-        img.save(out / name, optimize=True)
+    for name in ("hero.jpg", "social-preview.jpg"):
+        img.save(out / name, quality=90, optimize=True, progressive=True)
         print("wrote", out / name)
 
 

@@ -1,8 +1,8 @@
 {
-  "prompt": "Funnel of discovery: on the left of the subject area a wide field of hundreds of tiny dim grey-blue points (many online stores) converging through two translucent thin filter rings into three bright glowing points (a niche shortlist), one teal, one green, one amber. Faint perspective grid floor. Wide technical illustration, aspect about 2:1, deep navy ink background (#0B1020), high contrast, soft glow, minimal modern clean style, not photoreal. The subject sits in the right two-thirds; the left third is calm, dark, empty space. No robots, no brains, no people, no circuit boards. Absolutely no text, letters, numbers, logos, watermarks, borders or UI.",
+  "prompt": "Vintage engraved woodcut-style illustration in an old prospector's almanac, sepia ink cross-hatching on aged parchment. A wide river fills the scene, crowded with hundreds of tiny miniature shop storefronts and market stalls floating like pebbles. In the foreground right, a large round gold-panning pan is tipped and sifting, so that only three gleaming gold nuggets remain at the bottom of the pan, glowing. Limited colour: gold on the nuggets and a muted teal on the water, everything else sepia. Wide 2:1 composition. The left third of the canvas stays quiet and low-detail so a title can be placed there. No text, letters, numbers, logos, watermarks, borders, people or robots.",
   "driver_model": "gpt-6-luna",
   "image_model": "gpt-image via codex $imagegen",
-  "created": "2026-11-26T21:07:26",
+  "created": "2026-11-26T21:18:01",
   "refs": [],
   "tool": "scout.chatgpt (codex exec, ChatGPT plan)",
   "note": "AI-generated. Not a product photo."
