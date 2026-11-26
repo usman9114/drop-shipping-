@@ -37,3 +37,6 @@ data/lake/
 # dbt: per-user tracking id
 warehouse/.user.yml
 graphify-out/.rebuild.lock
+
+# Codex CLI local install (scripts/install_codex.sh)
+tools/codex/
