@@ -74,6 +74,17 @@ Running at hand-off time: the fingerprint backlog loop (see "Next" 1). It pushes
 3. Free Google API key for PageSpeed / Chrome UX Report.
 4. Older, still open: CJ supply option A/B/C (fact 6 below), eBay production keys, Terapeak session, key rotation, Meta Ad Library manual check of the top 20.
 
+## 2026-11-26 session: README visuals across the owner's repos (ChatGPT lane)
+
+Owner asked for AI visuals that explain each GitHub repo. Method per visual: research references, write a brief (`docs/assets/briefs/`), generate with `python -m scout.chatgpt image`, vision-QA against the brief, wire into the README. AI draws only the picture; text and labels are set by `docs/assets/tools/compose_banner.py` or written as Mermaid.
+
+- **Done, branch `docs/visuals` pushed (no PRs):** semantic-classification-api, ueba-anomaly-detection, eth-ai-trading-bot, seo-web-crawler (banners + diagrams); turbo-dollop, cnn-self-driving-toy-car, house-price-prediction-capstone, brake-light-detection, udacity-disaster-response-pipeline, NHS-JOB (Mermaid only). This repo: new `README.md` + banner on the working branch.
+- **Left alone on purpose:** tiny-tumor-detector, inbox-to-crm-agent, doc-extract, the `usman9114` profile repo (already have banners, charts, demos).
+- **Images used today:** 5 of the 20 cap. No rate-limit errors.
+- **Owner steps:** upload each repo's `docs/assets/social-preview.png` in Settings, Social preview (no API for it); review the `docs/visuals` branches and open PRs if wanted.
+- **Traps found:** the ChatGPT lane lives on `claude/eager-hawking-jmvcqj`, not main; Codex login is per container (device code). Mermaid blocks were not rendered here (browser check denied), so look at them on GitHub. eth-ai-trading-bot's README body still describes the old LSTM/XGBoost design; I added a "Current architecture" section pointing to the live `vv/` path.
+- **Not done:** the `atique443/*` and `Mobilinga002/*` private repos and the `securityonion-elastic` fork were out of scope; `Loan-prediction` is empty.
+
 ## Facts that change plans
 
 1. **eBay API License 9.6 (seller arbitrage):** no automated ordering from CJ, no posting tracking for CJ-sourced orders, no repricing or stock sync from CJ prices through the eBay API. Order forwarding and tracking upload are **manual**.

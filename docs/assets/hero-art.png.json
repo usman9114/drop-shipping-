@@ -1,0 +1,9 @@
+{
+  "prompt": "Funnel of discovery: on the left of the subject area a wide field of hundreds of tiny dim grey-blue points (many online stores) converging through two translucent thin filter rings into three bright glowing points (a niche shortlist), one teal, one green, one amber. Faint perspective grid floor. Wide technical illustration, aspect about 2:1, deep navy ink background (#0B1020), high contrast, soft glow, minimal modern clean style, not photoreal. The subject sits in the right two-thirds; the left third is calm, dark, empty space. No robots, no brains, no people, no circuit boards. Absolutely no text, letters, numbers, logos, watermarks, borders or UI.",
+  "driver_model": "gpt-6-luna",
+  "image_model": "gpt-image via codex $imagegen",
+  "created": "2026-11-26T21:07:26",
+  "refs": [],
+  "tool": "scout.chatgpt (codex exec, ChatGPT plan)",
+  "note": "AI-generated. Not a product photo."
+}
