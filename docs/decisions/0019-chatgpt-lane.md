@@ -28,5 +28,7 @@ Date: 2026-11-26. Owner request: use the owner's ChatGPT (Go plan) for graphics 
 
 ## Limits and follow-ups
 
+- Owner 2026-11-26: CLAUDE.md routing rule (use the lane unasked when it fits), not a per-prompt hook (privacy, latency, quota). Codex install saved in the "Crypto" environment setup script; unproven until the next fresh container.
+
 - Cloud containers are ephemeral: login per new cloud session (owner enters a code). On the owner's own machine the login persists.
 - Model output is research leads, not evidence; claims stay `[secondary]/[unverified]` until URLs are checked.

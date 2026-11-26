@@ -11,6 +11,9 @@ How it works: `scout/chatgpt.py` drives `codex exec` (OpenAI Codex CLI, Apache-2
 
 ## Setup (once per container)
 
+The "Crypto" cloud environment's setup script runs `scripts/install_codex.sh` in every fresh container (owner 2026-11-26), so Codex is normally already installed; only the login is per session.
+
+
 ```bash
 python -m scout.chatgpt status            # installed? logged in? images used today
 ./scripts/install_codex.sh                # if not installed (~10 s, pinned version)
